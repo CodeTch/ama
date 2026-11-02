@@ -7,6 +7,7 @@ import ama.db.TransactionRunner;
 import ama.storage.FileBackendCatalog;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -19,8 +20,19 @@ public final class JdbcMeetingDeletion implements AutoCloseable {
  private record Item(String kind,String id,StorageKey key,String token) {}
  private final JdbcTemplate j;private final TransactionRunner tx;private final JdbcMeetingAccess access;private final FileBackendCatalog backends;
  private final ScheduledExecutorService executor=Executors.newSingleThreadScheduledExecutor(r->{var t=new Thread(r,"meeting-deletion");t.setDaemon(true);return t;});
+ private final AtomicBoolean queued=new AtomicBoolean();
  public JdbcMeetingDeletion(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,FileBackendCatalog backends){this.j=new JdbcTemplate(source);j.setQueryTimeout(30);this.tx=tx;this.access=access;this.backends=backends;}
- public void start(){executor.scheduleWithFixedDelay(()->{try{for(int n=0;n<16&&runOnce(null);n++){} }catch(RuntimeException unavailable){System.getLogger(getClass().getName()).log(System.Logger.Level.WARNING,"Meeting cleanup deferred: "+unavailable.getClass().getSimpleName());}},1,1,TimeUnit.SECONDS);}
+ public void start(){executor.scheduleWithFixedDelay(this::wake,0,1,TimeUnit.SECONDS);}
+ /** Coalesce acceptance notifications; periodic polling still recovers work after a restart. */
+ public void wake(){
+  if(!queued.compareAndSet(false,true))return;
+  try{executor.execute(()->{queued.set(false);try{
+   for(int n=0;n<16;n++)if(!runOnce(null))return;
+   // Yield to queued work without adding a one-second pause to a busy cleanup queue.
+   wake();
+  }catch(RuntimeException unavailable){System.getLogger(getClass().getName()).log(System.Logger.Level.WARNING,"Meeting cleanup deferred: "+unavailable.getClass().getSimpleName());}});}
+  catch(RejectedExecutionException closed){queued.set(false);}
+ }
  @Override public void close(){executor.shutdownNow();}
  public Status forMeeting(Actor actor,String meeting){return read(actor,"meeting_id",meeting);}
  public Status status(Actor actor,String id){return read(actor,"id",id);}
@@ -74,19 +86,28 @@ public final class JdbcMeetingDeletion implements AutoCloseable {
   return j.update("INSERT INTO meeting_deletion_item(deletion_id,kind,source_id,backend_id,namespace,object_key,upload_token) SELECT ?,?,x.id,x.backend_id,x.namespace,x.object_key,x.token FROM ("+select+" AND NOT EXISTS (SELECT 1 FROM meeting_deletion_item d WHERE d.deletion_id=? AND d.kind=? AND d.source_id="+sourceId+") ORDER BY "+sourceId+" LIMIT 100) x",job.id,kind,job.meeting,job.id,kind);
  }
  private void storage(Job job){
-  Item item=tx.required(()->{lock(job);var rows=j.query("SELECT kind,source_id,backend_id,namespace,object_key,upload_token FROM meeting_deletion_item WHERE deletion_id=? AND state='PENDING' ORDER BY kind,source_id LIMIT 1",(r,n)->new Item(r.getString(1),r.getString(2),new StorageKey(r.getString(3),r.getString(4),r.getString(5)),r.getString(6)),job.id);return rows.isEmpty()?null:rows.getFirst();});
-  boolean complete=true;
-  if(item!=null){
+  List<Item> items=tx.required(()->{lock(job);return j.query("SELECT kind,source_id,backend_id,namespace,object_key,upload_token FROM meeting_deletion_item WHERE deletion_id=? AND state='PENDING' ORDER BY kind,source_id LIMIT 32",(r,n)->new Item(r.getString(1),r.getString(2),new StorageKey(r.getString(3),r.getString(4),r.getString(5)),r.getString(6)),job.id);});
+  var completed=new ArrayList<Item>();
+  // Storage calls remain outside database transactions. A failed batch is safe to replay:
+  // key retirement and upload discard are durable, idempotent operations.
+  for(Item item:items){
    var backend=backends.require(item.key.backendId(),false);if(!backend.type().equals("local"))throw new IllegalStateException("Online erasure is implemented for local storage only");var storage=backend.storage();
    if(item.kind.equals("RECORDING")){
     storage.fenceRecordingSession(item.key);var page=storage.list(item.key.backendId(),"recordings",item.key.objectKey()+"/",null,128);
     for(var blob:page.items()){var key=blob.key();if(!key.backendId().equals(item.key.backendId())||!key.namespace().equals("recordings")||!key.objectKey().startsWith(item.key.objectKey()+"/"))throw new IllegalStateException("Foreign prefix result");storage.retireKey(key);}
-    complete=page.items().isEmpty()&&page.nextCursor()==null;
+    if(page.items().isEmpty()&&page.nextCursor()==null)completed.add(item);
    }else{
-    storage.retireKey(item.key);
-    if(item.kind.equals("UPLOAD")){if(item.token==null||item.token.isBlank())throw new IllegalStateException("Upload inventory incomplete");storage.discardUpload(new UploadToken(item.key.backendId(),item.token),item.key);}
+    if(item.kind.equals("UPLOAD")){
+     if(item.token==null||item.token.isBlank())throw new IllegalStateException("Upload inventory incomplete");
+     // discardUpload already retires the key; a second retire RPC repeats fsyncs.
+     storage.discardUpload(new UploadToken(item.key.backendId(),item.token),item.key);
+    }else storage.retireKey(item.key);
+    completed.add(item);
    }
   }
-  final boolean done=complete;tx.required(()->{lock(job);if(item==null)j.update("UPDATE meeting_deletion SET phase='PURGE' WHERE id=?",job.id);else if(done)j.update("UPDATE meeting_deletion_item SET state='COMPLETE' WHERE deletion_id=? AND kind=? AND source_id=?",job.id,item.kind,item.id);release(job);return null;});
+  tx.required(()->{lock(job);if(items.isEmpty())j.update("UPDATE meeting_deletion SET phase='PURGE' WHERE id=?",job.id);
+   for(Item item:completed)j.update("UPDATE meeting_deletion_item SET state='COMPLETE' WHERE deletion_id=? AND kind=? AND source_id=?",job.id,item.kind,item.id);
+   release(job);return null;
+  });
  }
 }

@@ -14,3 +14,9 @@ test('topic 409 requires explicit discard; actor change hides originals and cann
 test('assignment original is read back before journal cleanup and later actor responses are fenced',async()=>{
  const f=fixture(),tools=useTopicCommands(f.api as any,f.actor,f.context);tools.synchronize();let accepted!:(value:any)=>void;f.api.memberships=async()=>new Promise(resolve=>{accepted=resolve;});const done=tools.assign(meeting,topic,'4');await new Promise(resolve=>setImmediate(resolve));assert.equal(tools.pending.value,true);f.setActor('other');tools.synchronize();accepted([{meetingId:meeting,topicId:topic}]);await assert.rejects(done);assert.equal(tools.pending.value,false);assert.equal(tools.topics.value.length,0);
 });
+test('rejected assignment can retry the same original request after the server restriction is resolved',async()=>{
+ const f=fixture(),manager=useTopicCommands(f.api as any,f.actor,f.context);manager.synchronize();
+ f.fail(new ApiError('http',422,'not published'));await assert.rejects(manager.assign(meeting,topic,'0'));
+ assert.equal(manager.command.state.value,'REJECTED');const original=f.calls[0];f.fail(null);
+ await manager.retry();assert.deepEqual(f.calls[1],original);assert.equal(manager.pending.value,false);
+});

@@ -86,7 +86,7 @@ final class JdbcSpeechExecutionObserver implements HttpSpeechModelPort.Execution
   return owners.size()==1&&ownerHash(owners.getFirst()).equals(row.get("lease_owner_sha256"));
  }
  private static String ownerHash(String owner){return ControlledSpeechProfile.digest(owner.getBytes(StandardCharsets.UTF_8));}
- private static String path(HttpSpeechModelPort.Stage stage){return switch(stage){case VAD->"/vad";case DIARIZATION->"/diarize";case ASR->"/inference/asr-nano/modelserving/asr";case PUNCTUATION->"/inference/asr-punc/modelserving/punc";case EMBEDDING->"/embed";};}
+ private static String path(HttpSpeechModelPort.Stage stage){return switch(stage){case VAD->"/vad";case DIARIZATION->"/diarize";case ASR->"/inference/asr-nano/modelserving/asr";case PUNCTUATION->"/inference/asr-punc/modelserving/punc";case EMBEDDING->"/embed";case CORRECTION->"/v1/chat/completions";};}
  private void check(){if(cancelled.getAsBoolean()||Thread.currentThread().isInterrupted())throw new CancellationException("Speech preparation cancelled");}
  private static void independent(){if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Speech HTTP requires independent execution");}
  private static long number(Map<String,Object> row,String name){var value=row.get(name);if(!(value instanceof Number number))throw unavailable();return number.longValue();}

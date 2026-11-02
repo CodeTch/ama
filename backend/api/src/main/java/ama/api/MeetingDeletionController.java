@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
   if(body==null||!body.isObject()||body.isEmpty())throw new IllegalArgumentException("Deletion revision required");body.fieldNames().forEachRemaining(field->{if(!Set.of("expectedRevisionToken","expectedRevision").contains(field))throw new IllegalArgumentException("Unknown deletion field");});
   var keys=Collections.list(request.getHeaders("Idempotency-Key"));if(keys.size()!=1)throw new IllegalArgumentException("One original deletion key required");
   meetings.delete(actor(request),id,keys.getFirst(),new DeleteMeeting(HttpRevisionTokens.expected(body)),UUID.randomUUID().toString());
+  deletions.wake();
   return ResponseEntity.accepted().header("Cache-Control","private, no-store").body(deletions.forMeeting(actor(request),id));
  }
  @GetMapping("/api/v1/deletions/{id}") ResponseEntity<JdbcMeetingDeletion.Status> status(@PathVariable String id,HttpServletRequest request){noQuery(request);ama.contract.MinutesContracts.uuid(id);return ResponseEntity.ok().header("Cache-Control","private, no-store").body(deletions.status(actor(request),id));}

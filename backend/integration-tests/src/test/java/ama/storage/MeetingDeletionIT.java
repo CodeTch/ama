@@ -40,6 +40,43 @@ class MeetingDeletionIT {
   void drain(String job){try(var w=worker()){for(int n=0;n<400&&!w.status(actor,job).state().equals("COMPLETE");n++){j.update("UPDATE meeting_deletion SET available_at=UTC_TIMESTAMP(6) WHERE id=?",job);assertTrue(w.runOnce(job));}assertEquals("COMPLETE",w.status(actor,job).state());}}
   public void close()throws Exception{files.close();}
  }
+ @Test void smallFilesAreCleanedInBoundedBatchesRatherThanOneLeasePerFile()throws Exception{
+  try(var f=new Fixture()){
+   var keys=new ArrayList<StorageKey>();
+   for(int n=0;n<24;n++){
+    String file=id();var key=f.key("batch/"+file);keys.add(key);f.put(key);
+    j.update("INSERT INTO file_object(id,meeting_id,backend_id,storage_type,namespace,object_key,display_name,size_bytes,sha256,state,created_at) VALUES (?,?,?,'local','files',?,'batch',3,?,'AVAILABLE',UTC_TIMESTAMP(6))",file,f.meeting,key.backendId(),key.objectKey(),HASH);
+   }
+   String job=f.accept();long started=System.nanoTime();f.drain(job);
+   var status=f.worker().status(f.actor,job);
+   System.out.println("DELETION_BATCH elapsedMs="+(System.nanoTime()-started)/1_000_000+" leases="+status.attempts());
+   assertTrue(status.attempts()<=6,"24 small files should not require one transaction/lease round trip per file: "+status.attempts());
+   for(var key:keys)assertEquals(ErrorCode.NOT_FOUND,assertThrows(StorageException.class,()->f.storage.stat(key)).code());
+  }
+ }
+ @Test void purgeBatchesKeepTheirRowBudgetAndResumeUntilAllHistoryIsErased()throws Exception{
+  try(var f=new Fixture()){
+   for(int n=0;n<1200;n++)j.update("INSERT INTO minutes_revision(id,meeting_id,revision,title,title_origin,body,created_by,created_at) VALUES (?,?,?,'history','HUMAN','private',?,UTC_TIMESTAMP(6))",id(),f.meeting,n,f.actor.enterpriseId());
+   String job=f.accept();
+   try(var w=f.worker()){
+    while(!w.status(f.actor,job).phase().equals("PURGE"))assertTrue(w.runOnce(job));
+    assertTrue(w.runOnce(job));
+    int remaining=j.queryForObject("SELECT COUNT(*) FROM minutes_revision WHERE meeting_id=?",Integer.class,f.meeting);
+    assertTrue(remaining>=700&&remaining<1200,"one purge transaction must delete at most 500 rows");
+   }
+   f.drain(job);
+   assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM minutes_revision WHERE meeting_id=?",Integer.class,f.meeting));
+  }
+ }
+ @Test void acceptedWorkCanWakeAnIdleWorkerWithoutWaitingForItsPeriodicScan()throws Exception{
+  try(var f=new Fixture();var w=f.worker()){
+   String job=f.accept();
+   // No periodic start: only the same wake signal used by the DELETE endpoint drives work.
+   w.wake();long deadline=System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(10);
+   while(!w.status(f.actor,job).state().equals("COMPLETE")&&System.nanoTime()<deadline)Thread.sleep(20);
+   assertEquals("COMPLETE",w.status(f.actor,job).state());
+  }
+ }
  @Test void acceptedDeletionCancelsActiveWorkRetiresUnregisteredFilesAndErasesOwnedBodyHistory()throws Exception{
   try(var f=new Fixture()){
    String foreign=f.meetings.create(f.actor,id(),id()).id(),upload=id(),file=id(),session=id(),part=id(),task=id(),body=id(),input=id(),artifact=id();

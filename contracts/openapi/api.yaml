@@ -7,6 +7,42 @@ servers:
   - url: http://127.0.0.1:8081
     description: Loopback management listener; never publish through the public ingress.
 paths:
+  /api/v1/operations/capabilities:
+    $ref: './operations.yaml#/capabilities'
+  /api/v1/operations/voiceprints:
+    $ref: './operations.yaml#/voiceprints'
+  /api/v1/operations/voiceprints/{id}/review:
+    $ref: './operations.yaml#/voiceReview'
+  /api/v1/operations/voiceprints/{id}/revocation:
+    $ref: './operations.yaml#/voiceRevoke'
+  /api/v1/operations/voiceprints/match:
+    $ref: './operations.yaml#/voiceMatch'
+  /api/v1/operations/datasets:
+    $ref: './operations.yaml#/datasets'
+  /api/v1/operations/evaluations:
+    $ref: './operations.yaml#/evaluations'
+  /api/v1/operations/evaluations/{id}:
+    $ref: './operations.yaml#/evaluation'
+  /api/v1/operations/evaluations/{id}/review:
+    $ref: './operations.yaml#/evaluationReview'
+  /api/v1/operations/configuration:
+    $ref: './operations.yaml#/configuration'
+  /api/v1/operations/configuration-releases:
+    $ref: './operations.yaml#/configurationRelease'
+  /api/v1/operations/configuration-rollbacks:
+    $ref: './operations.yaml#/configurationRollback'
+  /api/v1/operations/corpus:
+    $ref: './operations.yaml#/corpus'
+  /api/v1/operations/corpus/{id}/withdrawal:
+    $ref: './operations.yaml#/corpusWithdrawal'
+  /api/v1/meetings/{id}/feedback:
+    $ref: './operations.yaml#/feedback'
+  /api/v1/meetings/{id}/mail:
+    $ref: './operations.yaml#/mail'
+  /api/v1/meetings/{id}/mail-context:
+    $ref: './operations.yaml#/mailContext'
+  /api/v1/operations/mail/{id}:
+    $ref: './operations.yaml#/mailJob'
   /api/v1/meetings/{meetingId}/info-suggestions:
     $ref: './info-suggestions.yaml#/collection'
   /api/v1/meetings/{meetingId}/info-suggestions/{suggestionId}/decision:

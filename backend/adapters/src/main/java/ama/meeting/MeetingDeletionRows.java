@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 final class MeetingDeletionRows {
  record Owned(String table,String where) {}
  static final List<Owned> ORDER=List.of(
+  new Owned("corpus_feedback_binding","feedback_id IN (SELECT id FROM feedback WHERE meeting_id=?)"),
+  new Owned("minutes_mail_job","meeting_id=?"),
   new Owned("meeting_info_suggestion","meeting_id=?"),
   new Owned("generation_region_request","meeting_id=?"),
   new Owned("material_batch_receipt","meeting_id=?"),
@@ -123,7 +125,8 @@ final class MeetingDeletionRows {
   }return false;
  }
  static int purgePage(JdbcTemplate j,String meeting,int cursor){
-  while(cursor<ORDER.size()){
+  int remaining=500;
+  while(cursor<ORDER.size()&&remaining>0){
    var p=ORDER.get(cursor);
    if(p.table.equals("recording_chunk")) {
     // Its generation trigger updates recording_session. A DELETE whose subquery
@@ -131,10 +134,15 @@ final class MeetingDeletionRows {
     // under the deleted-root transaction, then delete by the bound session ID.
     var sessions=j.queryForList("SELECT s.session_id FROM recording_session s WHERE s.meeting_id=? AND EXISTS(SELECT 1 FROM recording_chunk c WHERE c.session_id=s.session_id) ORDER BY s.session_id LIMIT 1 FOR UPDATE",String.class,meeting);
     if(!sessions.isEmpty()) {
-     if(j.update("DELETE FROM recording_chunk WHERE session_id=? LIMIT 500",sessions.getFirst())>0)return cursor;
+     int deleted=j.update("DELETE FROM recording_chunk WHERE session_id=? LIMIT "+remaining,sessions.getFirst());
+     if(deleted>0){remaining-=deleted;continue;}
      throw new IllegalStateException("Recording cleanup source changed");
     }
-   } else if(j.update("DELETE FROM "+p.table+" WHERE "+p.where+" LIMIT 500",meeting)>0)return cursor;
+   } else {
+    int deleted=j.update("DELETE FROM "+p.table+" WHERE "+p.where+" LIMIT "+remaining,meeting);
+    remaining-=deleted;
+    if(remaining==0)return cursor;
+   }
    cursor++;
   }return cursor;
  }

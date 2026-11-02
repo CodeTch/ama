@@ -8,3 +8,18 @@ test('lost deletion ACK restores original key/body after refresh and cannot make
 test('cleanup failure remains unavailable until confirmed complete; polling never resends DELETE',async()=>{const f=fixture(),flow=useDeletion(f.api as any,f.actor,f.context);flow.synchronize();flow.open(meeting,'17','名称');await flow.start();f.state({state:'FAILED',phase:'STORAGE',errorCode:'CLEANUP_UNAVAILABLE'});await flow.poll();assert.equal(flow.job.value?.state,'FAILED');assert.equal(flow.blockedMeeting.value,meeting);f.state({state:'COMPLETE',phase:'COMPLETE',errorCode:null});await flow.poll();assert.equal(flow.job.value?.state,'COMPLETE');assert.equal(f.calls.length,1);});
 test('revoked or switched identity cannot expose old cleanup metadata',async()=>{const f=fixture(),flow=useDeletion(f.api as any,f.actor,f.context);flow.synchronize();flow.open(meeting,'17','私有名称');await flow.start();f.fail(new ApiError('http',403,'denied'));await assert.rejects(flow.poll());assert.equal(flow.job.value,null);assert.equal(flow.target.value,null);f.setActor('other');flow.synchronize();assert.equal(flow.command.snapshot.value,null);assert.equal(flow.blockedMeeting.value,null);});
 test('wire requires stable meeting, job and exact accepted revision',async()=>{const f=fixture(),flow=useDeletion(f.api as any,f.actor,f.context);flow.synchronize();flow.open(meeting,'17','title');await flow.start();const api=createDeletionsApi({json:async()=>({...await f.api.read(),revisionToken:'19'})} as any,f.actor);await assert.rejects(api.send(f.calls[0]),e=>e instanceof ApiError&&e.kind==='response');});
+
+for(const completedAt of ['acceptance','poll','recovery'])test(`completion at ${completedAt} closes the dialog and clears its recovery record`,async()=>{
+ const f=fixture();let flow=useDeletion(f.api as any,f.actor,f.context);flow.synchronize();flow.open(meeting,'17','名称');
+ if(completedAt==='acceptance')f.state({state:'COMPLETE',phase:'COMPLETE'});
+ if(completedAt==='recovery'){
+  f.fail(Error('lost ACK'));await assert.rejects(flow.start());flow.dispose();
+  flow=useDeletion(f.api as any,f.actor,f.context);flow.synchronize();f.fail(null);f.state({state:'COMPLETE',phase:'COMPLETE'});await flow.recover();
+ }else{
+  await flow.start();
+  if(completedAt==='poll'){assert.equal(flow.visible.value,true);f.state({state:'COMPLETE',phase:'COMPLETE'});await flow.poll();}
+ }
+ assert.equal(flow.visible.value,false);
+ flow.dispose();const restored=useDeletion(f.api as any,f.actor,f.context);restored.synchronize();
+ assert.equal(restored.visible.value,false);assert.equal(restored.command.snapshot.value,null);
+});

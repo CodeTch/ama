@@ -49,9 +49,9 @@ final class SpeechReviewRepository {
   for(int n=0;n<61;n++)budget.row(18);budget.capture(61*2048L,61*2048L,61*2048L,2);
   var audio=freeze(j.queryForList("SELECT id,meeting_id,input_id,task_id,file_id,clip_key,source_sha256,pcm_sha256,engine_sha256,source_samples,start_sample,sample_count,wav_sha256,byte_count,state FROM speech_pcm_artifact WHERE input_id=? ORDER BY file_id,start_sample LIMIT 61 FOR UPDATE",input));
   require(audio.size()<=60,BUDGET_EXCEEDED);
-  for(int n=0;n<121;n++)budget.row(3);budget.capture(121*96L,121*96L,121*96L,2);
-  var lengths=j.queryForList("SELECT clip_key,stage,OCTET_LENGTH(payload) bytes FROM speech_checkpoint WHERE input_id=? AND stage IN ('ASR','ENHANCEMENT') ORDER BY file_id,start_sample,stage LIMIT 121",input);
-  require(lengths.size()<=120&&lengths.size()==audio.size()*2,PROVENANCE_UNAVAILABLE);long payloadBytes=0;
+  for(int n=0;n<181;n++)budget.row(3);budget.capture(181*96L,181*96L,181*96L,2);
+  var lengths=j.queryForList("SELECT clip_key,stage,OCTET_LENGTH(payload) bytes FROM speech_checkpoint WHERE input_id=? AND stage IN ('ASR','ENHANCEMENT','CORRECTION') ORDER BY file_id,start_sample,stage LIMIT 181",input);
+  require(lengths.size()<=180&&lengths.size()>=audio.size()*2&&lengths.size()<=audio.size()*3,PROVENANCE_UNAVAILABLE);long payloadBytes=0;
   for(var row:lengths){long bytes=number(row,"bytes");require(bytes>0&&bytes<=1048576,BUDGET_EXCEEDED);payloadBytes=Math.addExact(payloadBytes,bytes);}
   for(int n=0;n<lengths.size();n++)budget.row(13);budget.capture(payloadBytes+lengths.size()*2048L,payloadBytes+lengths.size()*2048L,payloadBytes+lengths.size()*2048L,4);
   var stages=new ArrayList<SpeechReviewFacts.Stage>();
@@ -72,7 +72,7 @@ final class SpeechReviewRepository {
   var facts=graph.review();require(facts.modelsCaptured(),PROVENANCE_UNAVAILABLE);var raw=raw(graph);var rawSegments=graph.segments(raw.string("id"));var current=graph.segments(graph.selected());
   var stages=new HashMap<String,SpeechReviewFacts.Stage>();for(var stage:facts.stages())require(stages.put(text(stage.metadata(),"clip_key")+":"+text(stage.metadata(),"stage"),stage)==null,PROVENANCE_UNAVAILABLE);
   var members=new HashMap<String,String>();for(var member:graph.rows())if(member.table()==Table.INPUT_BATCH_FILE)require(members.put(member.string("file_id"),member.string("sha256"))==null,PROVENANCE_UNAVAILABLE);
-  var proposals=new ArrayList<Proposal>();var clips=new HashSet<String>();
+  var proposals=new ArrayList<Proposal>();var clips=new HashSet<String>();int expectedStages=0;
   for(var audio:facts.audio()){
    String clip=text(audio,"clip_key"),file=text(audio,"file_id");long start=number(audio,"start_sample"),samples=number(audio,"sample_count"),sourceSamples=number(audio,"source_samples");
    require(clips.add(clip)&&graph.meeting().equals(audio.get("meeting_id"))&&graph.input().string("id").equals(audio.get("input_id"))&&Objects.equals(graph.task().get("id"),audio.get("task_id"))&&Objects.equals(engine,audio.get("engine_sha256"))&&Objects.equals(members.get(file),audio.get("source_sha256"))&&"READY".equals(audio.get("state")),PROVENANCE_UNAVAILABLE);
@@ -80,7 +80,15 @@ final class SpeechReviewRepository {
    var recognized=stage(stages,audio,"ASR");var enhanced=stage(stages,audio,"ENHANCEMENT");
    var recognition=(SpeechPipeline.Recognition)SpeechCheckpointCodec.decode(SpeechPipeline.Stage.ASR,recognized.bytes());var enhancement=(SpeechPipeline.Enhancement)SpeechCheckpointCodec.decode(SpeechPipeline.Stage.ENHANCEMENT,enhanced.bytes());
    String before=recognition.result().text(),after=enhancement.text();scalars(before);scalars(after);require(before.length()<=65536&&after.length()<=65536,PROVENANCE_UNAVAILABLE);
-   var originals=rawSegments.stream().filter(s->file.equals(s.string("source_file_id"))&&s.number("source_paragraph")==start/1920000+1).toList();require(originals.size()==1,PROVENANCE_UNAVAILABLE);var original=originals.getFirst();String segment=original.string("segment_id");
+   expectedStages+=2;
+   if(stages.containsKey(clip+":CORRECTION")){
+    var corrected=stage(stages,audio,"CORRECTION");var correction=(SpeechPipeline.Correction)SpeechCheckpointCodec.decode(SpeechPipeline.Stage.CORRECTION,corrected.bytes());
+    require(correction.result().sourceText().equals(enhancement.text())&&correction.result().modelVersion().equals(ControlledSpeechProfile.CORRECTION_MODEL),PROVENANCE_UNAVAILABLE);
+    after=correction.result().correctedText();enhanced=corrected;expectedStages++;
+   }
+   var originals=rawSegments.stream().filter(s->file.equals(s.string("source_file_id"))&&s.number("source_paragraph")==start/1920000+1).toList();
+   if(before.isBlank()){require(after.isBlank()&&originals.isEmpty()&&facts.candidates().stream().noneMatch(c->clip.equals(c.get("clip_key"))),PROVENANCE_UNAVAILABLE);continue;}
+   require(originals.size()==1,PROVENANCE_UNAVAILABLE);var original=originals.getFirst();String segment=original.string("segment_id");
    require(before.equals(original.string("body"))&&Objects.equals(original.nullableNumber("start_ms"),start/16)&&Objects.equals(original.nullableNumber("end_ms"),(start+samples+15)/16),PROVENANCE_UNAVAILABLE);
    var saved=current.stream().filter(s->segment.equals(s.string("segment_id"))).toList();require(saved.size()==1,PROVENANCE_UNAVAILABLE);
    var existing=facts.candidates().stream().filter(c->segment.equals(c.get("segment_id"))).toList();require(existing.size()<=1,PROVENANCE_UNAVAILABLE);
@@ -89,7 +97,7 @@ final class SpeechReviewRepository {
    }
    if(before.equals(saved.getFirst().string("body"))&&!before.equals(after))proposals.add(new Proposal(UUID.randomUUID().toString(),segment,file,clip,engine,text(recognized.metadata(),"payload_sha256"),text(enhanced.metadata(),"payload_sha256"),before,after));
   }
-  require(facts.stages().size()==facts.audio().size()*2&&(facts.candidates().isEmpty()||!facts.audio().isEmpty()),PROVENANCE_UNAVAILABLE);
+  require(facts.stages().size()==expectedStages&&(facts.candidates().isEmpty()||!facts.audio().isEmpty()),PROVENANCE_UNAVAILABLE);
   return new Plan(this,graph,proposals,!facts.audio().isEmpty());
  }
  private static SpeechReviewFacts.Stage stage(Map<String,SpeechReviewFacts.Stage> stages,Map<String,Object> audio,String kind){

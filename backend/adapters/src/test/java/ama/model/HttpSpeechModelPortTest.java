@@ -15,6 +15,64 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HttpSpeechModelPortTest {
+    @Test void offlineCorrectionUsesChatContractAndKeepsTheOriginal() throws Exception {
+        var observed=new AtomicReference<com.fasterxml.jackson.databind.JsonNode>();
+        var mapper=new com.fasterxml.jackson.databind.ObjectMapper();
+        var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+        server.createContext("/v1/chat/completions",exchange->{
+            assertEquals("application/json",exchange.getRequestHeaders().getFirst("Content-Type"));
+            assertNull(exchange.getRequestHeaders().getFirst("Authorization"));
+            observed.set(mapper.readTree(exchange.getRequestBody().readAllBytes()));
+            String content="```json\n[{\"seg\":0,\"old\":\"因该\",\"new\":\"应该\",\"why\":\"同音错字\"}]\n```";
+            byte[] raw=mapper.writeValueAsBytes(Map.of("choices",List.of(Map.of("message",Map.of("role","assistant","content",content),"finish_reason","stop"))));
+            exchange.getResponseHeaders().set("Content-Type","application/json");exchange.sendResponseHeaders(200,raw.length);exchange.getResponseBody().write(raw);exchange.close();
+        });server.start();
+        try(var port=new HttpSpeechModelPort(HttpSpeechModelPort.Config.at(URI.create("http://127.0.0.1:"+server.getAddress().getPort()),"inference.test.invalid",null,"fixture",2,Duration.ofSeconds(2)),c->new ByteArrayInputStream(wav(32000)))) {
+            var result=port.correct("因该检查，因该复核。",List.of("应该（转写里常写成：因该）"));
+            assertEquals("因该检查，因该复核。",result.sourceText());
+            assertEquals("应该检查，应该复核。",result.correctedText());
+            assertEquals(1,result.corrections().size());
+            assertEquals("deepseek-v4-flash",observed.get().path("model").asText());
+            assertEquals(0,observed.get().path("temperature").intValue());
+            assertEquals("user",observed.get().path("messages").get(0).path("role").asText());
+            assertTrue(observed.get().path("messages").get(0).path("content").asText().contains("[0] ?：因该检查，因该复核。"));
+            assertTrue(observed.get().path("messages").get(0).path("content").asText().contains("应该纠正过来：\n应该（转写里常写成：因该）"));
+        }finally{server.stop(0);}
+    }
+    @Test void emptyAsrIsValidAndMissingTextStillFails() throws Exception {
+        var body=new AtomicReference<>("{\"text\":\"\",\"tokens\":[]}");
+        var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+        server.createContext("/",exchange->{exchange.getRequestBody().readAllBytes();byte[] raw=body.get().getBytes(StandardCharsets.UTF_8);exchange.getResponseHeaders().set("Content-Type","application/json");exchange.sendResponseHeaders(200,raw.length);exchange.getResponseBody().write(raw);exchange.close();});server.start();
+        try(var port=new HttpSpeechModelPort(HttpSpeechModelPort.Config.at(URI.create("http://127.0.0.1:"+server.getAddress().getPort()),"inference.test.invalid",null,"fixture",2,Duration.ofSeconds(2)),c->new ByteArrayInputStream(wav(32000)))) {
+            var result=port.recognize(new SpeechContracts.WavClip("silence",16000,32000));assertEquals("",result.text());assertEquals(List.of(),result.tokens());
+            body.set("{}");assertThrows(HttpSpeechModelPort.InvalidResponse.class,()->port.recognize(new SpeechContracts.WavClip("silence",16000,32000)));
+        }finally{server.stop(0);}
+    }
+    @Test void invalidCorrectionContentCannotBecomeAnEmptySuccess() throws Exception {
+        var content=new AtomicReference<>("[]");var finish=new AtomicReference<>("stop");var mapper=new com.fasterxml.jackson.databind.ObjectMapper();
+        var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+        server.createContext("/",exchange->{exchange.getRequestBody().readAllBytes();byte[] raw=mapper.writeValueAsBytes(Map.of("choices",List.of(Map.of("message",Map.of("content",content.get()),"finish_reason",finish.get()))));exchange.getResponseHeaders().set("Content-Type","application/json");exchange.sendResponseHeaders(200,raw.length);exchange.getResponseBody().write(raw);exchange.close();});server.start();
+        try(var port=new HttpSpeechModelPort(HttpSpeechModelPort.Config.at(URI.create("http://127.0.0.1:"+server.getAddress().getPort()),"inference.test.invalid",null,"fixture",2,Duration.ofSeconds(2)),c->new ByteArrayInputStream(wav(32000)))) {
+            assertEquals("因该检查",port.correct("因该检查").correctedText());
+            for(String invalid:List.of("已纠错","{}","[] {}","[{\"seg\":1,\"old\":\"因该\",\"new\":\"应该\",\"why\":\"错字\"}]","[{\"seg\":0,\"old\":\"没有\",\"new\":\"有\",\"why\":\"错字\"}]","[{\"seg\":0,\"old\":\"因该\",\"new\":\"应该\",\"why\":\"错字\"},{\"seg\":0,\"old\":\"该检\",\"new\":\"需要检\",\"why\":\"冲突\"}]")) {
+                content.set(invalid);assertThrows(HttpSpeechModelPort.InvalidResponse.class,()->port.correct("因该检查"),invalid);
+            }
+            content.set("[{\"seg\":0,\"old\":\"因该检查\",\"new\":\"\",\"why\":\"删除整句\"}]");assertThrows(HttpSpeechModelPort.InvalidResponse.class,()->port.correct("因该检查"));
+            content.set("[]");finish.set("length");assertThrows(HttpSpeechModelPort.InvalidResponse.class,()->port.correct("因该检查"));
+        }finally{server.stop(0);}
+    }
+    @Test void diarizationOptionsUseOfflineNamesAndIntegerClustersRemainAnonymous() throws Exception {
+        var observed=new AtomicReference<com.fasterxml.jackson.databind.JsonNode>();var mapper=new com.fasterxml.jackson.databind.ObjectMapper();
+        var server=HttpServer.create(new InetSocketAddress("127.0.0.1",0),0);
+        server.createContext("/diarize",exchange->{observed.set(mapper.readTree(exchange.getRequestBody().readAllBytes()));byte[] raw="{\"timeline\":[[0,1000,2]]}".getBytes(StandardCharsets.UTF_8);exchange.getResponseHeaders().set("Content-Type","application/json");exchange.sendResponseHeaders(200,raw.length);exchange.getResponseBody().write(raw);exchange.close();});server.start();
+        try(var port=new HttpSpeechModelPort(HttpSpeechModelPort.Config.at(URI.create("http://127.0.0.1:"+server.getAddress().getPort()),"inference.test.invalid",null,"fixture",2,Duration.ofSeconds(2)),c->new ByteArrayInputStream(wav(32000)))) {
+            var clip=new SpeechContracts.WavClip("source",16000,32000);var speech=List.of(new SpeechModelPort.SpeechSpan(16000,32000));
+            var speakers=port.diarize(clip,speech,new HttpSpeechModelPort.DiarizationOptions(3,null,null,0.2));
+            assertEquals(3,observed.get().path("speaker_count").asInt());assertEquals(0.2,observed.get().path("pval").asDouble());assertFalse(observed.get().has("min_speakers"));
+            assertEquals("2",speakers.getFirst().speakerId());assertEquals(16000,speakers.getFirst().startSample());assertNull(speakers.getFirst().enterpriseId());
+            port.diarize(clip,speech);assertEquals(Set.of("audio_b64","vad_segments"),mapper.convertValue(observed.get(),Map.class).keySet());
+        }finally{server.stop(0);}
+    }
     static byte[] wav(int samples) {
         var b=ByteBuffer.allocate(44+samples*2).order(ByteOrder.LITTLE_ENDIAN);
         b.put("RIFF".getBytes(StandardCharsets.US_ASCII)).putInt(36+samples*2).put("WAVEfmt ".getBytes(StandardCharsets.US_ASCII));

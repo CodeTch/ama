@@ -20,21 +20,28 @@ class SpeechReviewIT {
  @TempDir Path root;
  static final String ORIGINAL="本次核对原始文字没有增强标点",ENHANCED="本次核对，原始文字没有增强标点。";
  static final com.fasterxml.jackson.databind.ObjectMapper JSON=new com.fasterxml.jackson.databind.ObjectMapper();
+ final List<Integer> ownedScenarios=new ArrayList<>();
+ @AfterEach void clearScenarios()throws Exception {
+  try(var client=HttpClient.newHttpClient()){
+   for(int scenario:ownedScenarios){var response=client.send(HttpRequest.newBuilder(URI.create("http://127.0.0.1:8792/admin/api/scenarios/"+scenario)).timeout(Duration.ofSeconds(3)).DELETE().build(),HttpResponse.BodyHandlers.discarding());assertEquals(200,response.statusCode());}
+  }finally{ownedScenarios.clear();}
+ }
  @BeforeAll static void schema(){ControlledSpeechImportIT.schema();assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=1 AND version='057'",Integer.class));}
  void scenario(String module,String path,Map<String,Object> match,Object body)throws Exception {
   var value=Map.ofEntries(Map.entry("module",module),Map.entry("name","ama-owned-correction-"+id()),Map.entry("enabled",true),Map.entry("priority",1000),Map.entry("method","POST"),Map.entry("path",path),Map.entry("match",match),Map.entry("status_code",200),Map.entry("delay_ms",0),Map.entry("response_type","json"),Map.entry("response_body",body),Map.entry("response_headers",Map.of()));
   try(var client=HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).connectTimeout(Duration.ofSeconds(2)).build()){
-   var result=client.send(HttpRequest.newBuilder(URI.create("http://127.0.0.1:8792/admin/api/scenarios")).timeout(Duration.ofSeconds(3)).header("Content-Type","application/json").POST(HttpRequest.BodyPublishers.ofByteArray(JSON.writeValueAsBytes(value))).build(),HttpResponse.BodyHandlers.discarding());assertEquals(201,result.statusCode());
+   var result=client.send(HttpRequest.newBuilder(URI.create("http://127.0.0.1:8792/admin/api/scenarios")).timeout(Duration.ofSeconds(3)).header("Content-Type","application/json").POST(HttpRequest.BodyPublishers.ofByteArray(JSON.writeValueAsBytes(value))).build(),HttpResponse.BodyHandlers.ofByteArray());assertEquals(201,result.statusCode());ownedScenarios.add(JSON.readTree(result.body()).path("id").intValue());
   }
  }
  ControlledSpeechImportIT.Fixture fixture()throws Exception {return fixture(1);}
- ControlledSpeechImportIT.Fixture fixture(int count)throws Exception {
+ ControlledSpeechImportIT.Fixture fixture(int count)throws Exception {return fixture(count,ORIGINAL,ENHANCED);}
+ ControlledSpeechImportIT.Fixture fixture(int count,String original,String enhanced)throws Exception {
   var harness=new ControlledSpeechImportIT();harness.root=root;var audios=new ArrayList<byte[]>();
   for(int n=0;n<count;n++){byte[] audio=wav(128000);byte[] marker=new byte[16];new java.security.SecureRandom().nextBytes(marker);System.arraycopy(marker,0,audio,1000,marker.length);audios.add(audio);
    byte[] normalized;try(var prepared=new FfmpegNormalizer(file->new ByteArrayInputStream(audio)).prepare(List.of(new ama.contract.MediaContracts.OrderedSource(id(),0)),()->false);var clip=prepared.openClip(prepared.sources().getFirst().fileId(),0,128000)){normalized=clip.readAllBytes();}
-   scenario("asr","/inference/asr-nano/modelserving/asr",Map.of("binary_sha256",sha(normalized)),Map.of("text",ORIGINAL));
+   scenario("asr","/inference/asr-nano/modelserving/asr",Map.of("binary_sha256",sha(normalized)),Map.of("text",original));
   }
-  scenario("punctuation","/inference/asr-punc/modelserving/punc",Map.of("text_equals",ORIGINAL),Map.of("text",ENHANCED));
+  scenario("punctuation","/inference/asr-punc/modelserving/punc",Map.of("text_equals",original),Map.of("text",enhanced));
   var f=harness.new Fixture(audios);var lease=f.claim(f.queue);var carrier=TranscriptImportRuntime.prepare(f.queue,lease,f.settings,NEVER);assertTrue(f.queue.completeWithEffects(lease,carrier));return f;
  }
  JdbcSavedTranscripts service(ControlledSpeechImportIT.Fixture f){

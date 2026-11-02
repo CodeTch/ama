@@ -53,14 +53,12 @@ public final class JdbcTopics {
             if(claim.replay()){if(claim.status()!=204||claim.result()!=null)throw new IllegalStateException("Topic receipt unavailable");return null;}
             for(var target:targets)if(!roots.get(target.meetingId()).revisionToken().equals(Long.toString(target.expectedRevision())))throw new Conflict();
             if(topic!=null)owned(actor,topic);
-            if(!remove&&topic!=null&&roots.values().stream().anyMatch(root->!root.published()||!"PUBLISHED".equals(root.stage())))throw new ama.contract.MeetingContracts.TopicNotPublished();
             // Validate every existing edge before touching any meeting in the batch.
             var edges=new HashMap<String,List<String>>();for(var target:targets){var current=currentTopics(actor,target.meetingId());if(remove&&!current.isEmpty()&&!current.equals(List.of(topic)))throw new Conflict();edges.put(target.meetingId(),current);}
             for(var target:targets){
                 j.update("DELETE FROM meeting_topic WHERE meeting_id=?",target.meetingId());
                 if(!remove&&topic!=null)j.update("INSERT INTO meeting_topic(topic_id,meeting_id,added_at) VALUES (?,?,UTC_TIMESTAMP(6))",topic,target.meetingId());
-                // Personal grouping changes list order, not content/task/ACL revisions.
-                j.update("UPDATE meeting SET updated_at=UTC_TIMESTAMP(6) WHERE id=?",target.meetingId());
+                // Personal grouping preserves meeting order and content/task/ACL revisions.
                 record(actor,remove||topic==null?"TOPIC_UNASSIGNED":"TOPIC_ASSIGNED",target.meetingId(),target.expectedRevision());
             }
             receipts.accept(claim,204,null);return null;

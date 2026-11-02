@@ -3,6 +3,31 @@ import ama.contract.StorageContracts.*;import ama.file.*;import java.io.*;import
 /** Fresh test-owned native volume only; no retained fixture, DB, server or external service. */
 class Task11UploadDiscardIT {
  @TempDir Path temporary;
+ @Test void anExistingSessionWithMissingMetadataMustStillFailCleanup()throws Exception{
+  try(var fixture=new LocalFixture(temporary.resolve("incomplete"));var store=fixture.open(DurabilityHooks.NONE)){
+   var key=new StorageKey("local","files","incomplete");
+   var token=store.beginUpload(new UploadSpec("local","files",key.objectKey(),3));
+   java.nio.file.Files.delete(fixture.root.resolve("uploads").resolve(token.sessionId()).resolve("spec"));
+   assertThrows(StorageException.class,()->store.discardUpload(token,key));
+  }
+ }
+ @Test void missingUploadSessionStillRetiresItsKeyAndCompletesIdempotently()throws Exception{
+  var key=new StorageKey("local","files","missing-session");
+  var token=new UploadToken("local",UUID.randomUUID().toString());
+  String hash="ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
+  try(var fixture=new LocalFixture(temporary.resolve("missing"))){
+   try(var store=fixture.open(DurabilityHooks.NONE)){
+    store.put(key,new ByteArrayInputStream("abc".getBytes()),3,hash);
+    store.discardUpload(token,key);store.discardUpload(token,key);
+    assertEquals(ErrorCode.NOT_FOUND,assertThrows(StorageException.class,()->store.stat(key)).code());
+   }
+   try(var store=fixture.open(DurabilityHooks.NONE)){
+    store.discardUpload(token,key);
+    assertThrows(StorageException.class,()->store.put(key,new ByteArrayInputStream("abc".getBytes()),3,hash));
+    assertThrows(StorageException.class,()->store.discardUpload(new UploadToken("foreign",token.sessionId()),key));
+   }
+  }
+ }
  @Test void completedOrOpenSessionIsPermanentlyDiscardedAcrossStoreRestart()throws Exception{
   for(boolean complete:List.of(false,true)){var key=new StorageKey("local","files","orphan");UploadToken token;PartReceipt receipt;String hash="ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
    try(var fixture=new LocalFixture(temporary.resolve(complete?"completed":"open"))){try(var store=fixture.open(DurabilityHooks.NONE)){token=store.beginUpload(new UploadSpec("local","files","orphan",3));receipt=store.writePart(token,1,new ByteArrayInputStream("abc".getBytes()),3,hash);if(complete)store.complete(token,List.of(receipt),hash);assertThrows(StorageException.class,()->store.discardUpload(token,new StorageKey("local","files","wrong")));store.discardUpload(token,key);store.discardUpload(token,key);assertThrows(StorageException.class,()->store.stat(key));assertThrows(StorageException.class,()->store.complete(token,List.of(receipt),hash));assertThrows(StorageException.class,()->store.put(key,new ByteArrayInputStream("abc".getBytes()),3,hash));assertTrue(store.list("local","files","",null,10).items().isEmpty());}

@@ -9,7 +9,7 @@ import java.util.Objects;
 public final class TranscriptionHandler {
     @FunctionalInterface public interface StageStore { void save(String stage, Object value); }
     public record Result(List<SpeechModelPort.SpeechSpan> speech, List<SpeechContracts.SpeakerSpan> speakers,
-                         SpeechContracts.RecognitionResult raw, String enhancedText, SpeechContracts.VoiceEmbedding embedding) {
+                         SpeechContracts.RecognitionResult raw, String enhancedText, SpeechContracts.VoiceEmbedding embedding, SpeechContracts.CorrectionResult correction) {
         public Result {
             speech = List.copyOf(speech); speakers = List.copyOf(speakers); Objects.requireNonNull(raw); Objects.requireNonNull(enhancedText); Objects.requireNonNull(embedding);
         }
@@ -28,10 +28,16 @@ public final class TranscriptionHandler {
         store.save("DIARIZATION", speakers);
         var raw = Objects.requireNonNull(model.recognize(clip));
         store.save("ASR", raw);
-        var enhanced = Objects.requireNonNull(model.punctuate(raw.text()));
+        var enhanced = raw.text().isBlank() ? raw.text() : Objects.requireNonNull(model.punctuate(raw.text()));
         store.save("ENHANCEMENT", enhanced);
         var embedding = Objects.requireNonNull(model.embed(clip));
         store.save("EMBEDDING", embedding);
-        return new Result(speech, speakers, raw, enhanced, embedding);
+        SpeechContracts.CorrectionResult correction = null;
+        if (model.correctionModel().isPresent()) {
+            correction = enhanced.isBlank() ? new SpeechContracts.CorrectionResult(model.correctionModel().orElseThrow(), enhanced, List.of()) : Objects.requireNonNull(model.correct(enhanced));
+            if (!enhanced.equals(correction.sourceText()) || !model.correctionModel().orElseThrow().equals(correction.modelVersion())) throw new IllegalArgumentException("Correction source or model mismatch");
+            store.save("CORRECTION", correction);
+        }
+        return new Result(speech, speakers, raw, enhanced, embedding, correction);
     }
 }

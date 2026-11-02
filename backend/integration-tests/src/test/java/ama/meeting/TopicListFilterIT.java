@@ -29,6 +29,17 @@ class TopicListFilterIT {
  private MeetingListFilter filter(String topic){return new MeetingListFilter("",Set.of(),Set.of(),null,null,topic);}
  // Root-state fixture only; this is not a real final-confirmation/publication producer.
  void publishedFixture(String id){j.update("UPDATE meeting SET stage='PUBLISHED',ever_published=1 WHERE id=?",id);}
+ @Test void changingTopicMembershipPreservesMeetingOrderAndPagination(){
+  String second=meetings.create(actor,UUID.randomUUID().toString(),UUID.randomUUID().toString()).id(),topic=(String)topics.create(actor,UUID.randomUUID().toString(),"保持列表顺序",null).get("id");
+  j.update("UPDATE meeting SET updated_at='2026-10-31 08:00:00.000001' WHERE id=?",meeting);j.update("UPDATE meeting SET updated_at='2026-10-31 08:00:00.000002' WHERE id=?",second);
+  var reader=reader();var before=reader.list(actor,"owned",1,null);var timestamps=j.queryForList("SELECT id,updated_at FROM meeting WHERE id IN (?,?) ORDER BY id",meeting,second);
+  assertEquals(second,before.items().getFirst().id());assertTrue(before.hasMore());
+  topics.assign(actor,meeting,topic,UUID.randomUUID().toString(),0);
+  assertEquals(before.items(),reader.list(actor,"owned",1,null).items());
+  assertEquals(List.of(meeting),reader.list(actor,"owned",1,before.nextCursor()).items().stream().map(ama.contract.WorkspaceContracts.MeetingItem::id).toList());
+  topics.assignMany(actor,UUID.randomUUID().toString(),null,List.of(new JdbcTopics.MembershipTarget(meeting,0),new JdbcTopics.MembershipTarget(second,0)));
+  assertEquals(timestamps,j.queryForList("SELECT id,updated_at FROM meeting WHERE id IN (?,?) ORDER BY id",meeting,second));
+ }
  @Test void realOwnedMembershipFiltersBeforePaginationAndBindsCursorToTopic(){
   String topic=(String)topics.create(actor,UUID.randomUUID().toString(),"筛选专题",null).get("id");topics.assign(actor,meeting,topic,UUID.randomUUID().toString(),0);String second=meetings.create(actor,UUID.randomUUID().toString(),UUID.randomUUID().toString()).id();
   // Only the list-order timestamps of this test's new genuine meetings are controlled.

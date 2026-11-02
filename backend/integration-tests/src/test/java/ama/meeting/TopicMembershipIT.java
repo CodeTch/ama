@@ -49,7 +49,16 @@ class TopicMembershipIT {
  @Test void replayStillRequiresCurrentMeetingAuthority(){
   String topic=(String)topics.create(actor,UUID.randomUUID().toString(),"权限专题",null).get("id"),key=UUID.randomUUID().toString();topics.assign(actor,meeting,topic,key,0);j.update("UPDATE meeting SET lifecycle='DELETING' WHERE id=?",meeting);assertThrows(ama.access.MeetingAccess.AccessDeniedException.class,()->topics.assign(actor,meeting,topic,key,0));
  }
- @Test void unpublishedTargetRefusesTheWholeNewAssignmentWith422(){
-  j.update("UPDATE meeting SET stage='ENTRY',ever_published=0 WHERE id=?",meeting);String topic=(String)topics.create(actor,UUID.randomUUID().toString(),"未发布拒绝",null).get("id");var failure=assertThrows(ama.contract.MeetingContracts.TopicNotPublished.class,()->topics.assign(actor,meeting,topic,UUID.randomUUID().toString(),0));assertNotNull(failure);assertNull(topics.memberships(actor,List.of(meeting)).getFirst().get("topicId"));
+ @Test void newlyCreatedMeetingCanAssignMoveAndRemoveTopicsWithoutChangingContent(){
+  String created=meetings.create(actor,UUID.randomUUID().toString(),UUID.randomUUID().toString()).id();
+  String first=(String)topics.create(actor,UUID.randomUUID().toString(),"创建中专题",null).get("id"),second=(String)topics.create(actor,UUID.randomUUID().toString(),"调整后专题",null).get("id");
+  topics.assign(actor,created,first,UUID.randomUUID().toString(),0);
+  assertEquals(first,topics.memberships(actor,List.of(created)).getFirst().get("topicId"));
+  topics.assignMany(actor,UUID.randomUUID().toString(),second,List.of(new JdbcTopics.MembershipTarget(created,0),new JdbcTopics.MembershipTarget(meeting,0)));
+  assertTrue(topics.memberships(actor,List.of(created,meeting)).stream().allMatch(row->second.equals(row.get("topicId"))));
+  topics.unassign(actor,created,second,UUID.randomUUID().toString(),0);
+  assertNull(topics.memberships(actor,List.of(created)).getFirst().get("topicId"));
+  assertEquals("ENTRY",j.queryForObject("SELECT stage FROM meeting WHERE id=?",String.class,created));
+  assertEquals(0,j.queryForObject("SELECT revision FROM meeting WHERE id=?",Long.class,created));
  }
 }

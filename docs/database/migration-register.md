@@ -287,3 +287,10 @@ V060 recording_transcript_sources：独占`ama_c_recording_3b64241f569b`已成�
 ## 2026-11-02当前正常主库V060核验（覆盖上方待应用状态）
 
 `.tools/local-app/bcd-completion/bcd-final-database-readonly/report.json` PASS：50条SQL迁移全部success=1、最高V060，源码SHA仍为54fd3408912dbe5bd3c9d73fce68277696be4e0d58ace17ce09ae652cb9743cf；实际recording_transcript_source、recording_subtitle_job、recording_subtitle_event三表共59列。只SELECT，没有schema或业务写入，没有repair或重编号。正常源86a1c312d1b11c24b590c2aa8f6eef764b8c636ca82a0767142a29cd5a3f2ebd。上方主库尚未应用/完整RAW接线待验证为早期历史。正式C10/50/1800、完整30分钟独立RAW、native08归档/恢复和D07物理删除分别已有实际证据，元数据查询不替代业务验收。
+
+
+## 2026-11-02 E阶段V062治理与邮件增量
+
+V062 `operations_governance_mail`，SHA256 `824ce033bb73c35645521516898835a8d638bf11606b69c6a329cf380557d5d6`。在当前独占C测试库及本地ama_local_dev均已按序应用；保留已有V061，不改旧迁移、不repair或重置。新增八张表，列/ER/权限与生命周期见[治理邮件增量字典](2026-11-02-governance-mail-increment.md)。源反馈与邮件子行已经纳入MeetingDeletionRows显式清理顺序；实际会议删除8项回归通过。原E计划的V016—V019旧占位不再作为迁移路径。
+
+V063 `governance_dataset_metadata`：SHA `f15ee51bc16e987192e31e4841ddea44c904c45a46e204db808153be0bf9dfa3`。已在当前独占测试库和本地主库按序应用。增加JSON_LENGTH派生的STORED样本数和(created_at,id)索引，列表仅排序元数据；真实512KB以上样本先触发MySQL1038，再以相同默认sort buffer通过。原samples_json和V062字节均保留。

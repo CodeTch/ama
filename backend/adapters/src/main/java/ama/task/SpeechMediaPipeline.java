@@ -55,11 +55,13 @@ final class SpeechMediaPipeline implements AutoCloseable {
     var store=new JdbcSpeechCheckpoints(q,components.authority(),lease,material.proof(),clip,profile.sha256(),cancelled);var value=new SpeechPipeline(model).transcribe(clip,store);
     // RAW uses only the actual recognition. Enhanced text, vectors and anonymous
     // model clusters stay in typed checkpoints until a separate explicit adoption.
-    units=add(segments,file,hash,ordinal++,value.raw().text(),clip.startSample(),clip.endSampleExclusive(),units,budget);
+    if(!value.raw().text().isBlank())units=add(segments,file,hash,ordinal,value.raw().text(),clip.startSample(),clip.endSampleExclusive(),units,budget);
+    ordinal++;
    }
   }
   observer.recover(4);
-  check();return new MeasuredResult(new Result(segments,hash,parserVersion),new Usage(counted.count,units,segments.size(),material.proof().sampleCount()));
+  check();if(segments.isEmpty())throw new ParseException(NO_TEXT);
+  return new MeasuredResult(new Result(segments,hash,parserVersion),new Usage(counted.count,units,segments.size(),material.proof().sampleCount()));
  }
  private long add(List<Segment> segments,UUID file,String hash,long ordinal,String text,long start,long end,long units,ParseBudget budget)throws ParseException {
   if(segments.size()>=budget.maxSegments())throw new ParseException(SEGMENTS_EXCEEDED);if(text.length()+1L>budget.maxUtf16CodeUnits()-units)throw new ParseException(UTF16_CODE_UNITS_EXCEEDED);

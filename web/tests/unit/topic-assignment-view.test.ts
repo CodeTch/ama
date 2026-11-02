@@ -1,4 +1,20 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import {createServer} from 'vite';import {createSSRApp,h} from 'vue';import {renderToString} from 'vue/server-renderer';
+test('assignment close, cancel and primary action remain enabled in every command state',async()=>{
+ const server=await createServer({server:{middlewareMode:true},appType:'custom'});
+ try{
+  const View=(await server.ssrLoadModule('/src/features/meetings/TopicDialogView.vue')).default;
+  for(const state of ['EMPTY','PREPARED','SENDING','UNCERTAIN','ACKNOWLEDGED','CONFLICT','DENIED','REJECTED']){
+   for(const busy of [false,true]){
+    const html=await renderToString(createSSRApp({render:()=>h(View,{mode:'assign',name:'',description:'',selected:'',topics:[],meetingNames:['会议一'],pending:state!=='EMPTY',busy,composing:true,state,error:null})}));
+    const close=html.match(/<button[^>]*aria-label="关闭"[^>]*>/)?.[0];
+    const actions=html.match(/<footer[^>]*>(.*?)<\/footer>/s)?.[1]?.match(/<button\b[^>]*>/g);
+    assert.ok(close);assert.doesNotMatch(close,/disabled/);assert.equal(actions?.length,2);
+    for(const action of actions!)assert.doesNotMatch(action,/disabled/,`${state}, busy=${busy}`);
+    assert.match(html,/>确定<\/button>/);assert.doesNotMatch(html,/重试原专题请求|重新核实已受理专题/);
+   }
+  }
+ }finally{await server.close();}
+});
 test('batch topic defaults to keep and preserves the approved batch-only choices',async()=>{
  const server=await createServer({server:{middlewareMode:true},appType:'custom'});
  try{

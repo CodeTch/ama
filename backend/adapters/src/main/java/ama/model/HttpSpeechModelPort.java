@@ -18,7 +18,13 @@ import software.amazon.awssdk.http.apache5.ProxyConfiguration;
 
 /** Explicit speech endpoints, complete WAV payloads, bounded I/O and source sample mapping. */
 public final class HttpSpeechModelPort implements SpeechModelPort,AutoCloseable {
-    public enum Stage { VAD,DIARIZATION,ASR,PUNCTUATION,EMBEDDING }
+    public enum Stage { VAD,DIARIZATION,ASR,PUNCTUATION,EMBEDDING,CORRECTION }
+    public record DiarizationOptions(Integer speakerCount,Integer minSpeakers,Integer maxSpeakers,Double pval) {
+        public DiarizationOptions {
+            for(var count:Arrays.asList(speakerCount,minSpeakers,maxSpeakers))if(count!=null&&(count<1||count>100))throw new IllegalArgumentException("Bounded speaker count required");
+            if(minSpeakers!=null&&maxSpeakers!=null&&minSpeakers>maxSpeakers||speakerCount!=null&&(minSpeakers!=null&&speakerCount<minSpeakers||maxSpeakers!=null&&speakerCount>maxSpeakers)||pval!=null&&(!Double.isFinite(pval)||pval<=0||pval>1))throw new IllegalArgumentException("Invalid diarization options");
+        }
+    }
     public record Endpoint(URI uri,String host,String authorization) {
         public Endpoint {
             if(uri==null||!Set.of("http","https").contains(uri.getScheme())||uri.getHost()==null||uri.getUserInfo()!=null||uri.getQuery()!=null||uri.getFragment()!=null
@@ -26,14 +32,18 @@ public final class HttpSpeechModelPort implements SpeechModelPort,AutoCloseable 
         }
         @Override public String toString(){return "Endpoint[uri="+uri+", host="+host+", authorization=REDACTED]";}
     }
-    public record Config(Map<Stage,Endpoint> endpoints,int maxWavBytes,int maxResponseBytes,int concurrency,Duration timeout,String embeddingModelVersion,int embeddingDimension) {
+    public record Config(Map<Stage,Endpoint> endpoints,int maxWavBytes,int maxResponseBytes,int concurrency,Duration timeout,String embeddingModelVersion,int embeddingDimension,String correctionModel) {
+        public Config(Map<Stage,Endpoint> endpoints,int maxWavBytes,int maxResponseBytes,int concurrency,Duration timeout,String embeddingModelVersion,int embeddingDimension) {
+            this(endpoints,maxWavBytes,maxResponseBytes,concurrency,timeout,embeddingModelVersion,embeddingDimension,"deepseek-v4-flash");
+        }
         public Config {
             endpoints=Map.copyOf(endpoints);
+            if(correctionModel==null||!correctionModel.matches("[A-Za-z0-9_./:-]{1,128}"))throw new IllegalArgumentException("Explicit correction model required");
             if(!endpoints.keySet().equals(Set.of(Stage.values()))||maxWavBytes<46||maxWavBytes>4*1024*1024||maxResponseBytes<1||maxResponseBytes>1048576||concurrency<1||concurrency>100||timeout==null||timeout.toMillis()<1||timeout.toMillis()>30000||embeddingModelVersion==null||embeddingModelVersion.isBlank()||embeddingDimension<1||embeddingDimension>16384)throw new IllegalArgumentException("Bounded speech configuration required");
         }
         public static Config at(URI origin,String host,String authorization,String model,int dimension,Duration timeout) {
             if(origin==null||!Set.of("","/").contains(origin.getPath()))throw new IllegalArgumentException("Speech origin required");
-            var paths=Map.of(Stage.VAD,"/vad",Stage.DIARIZATION,"/diarize",Stage.ASR,"/inference/asr-nano/modelserving/asr",Stage.PUNCTUATION,"/inference/asr-punc/modelserving/punc",Stage.EMBEDDING,"/embed");
+            var paths=Map.of(Stage.VAD,"/vad",Stage.DIARIZATION,"/diarize",Stage.ASR,"/inference/asr-nano/modelserving/asr",Stage.PUNCTUATION,"/inference/asr-punc/modelserving/punc",Stage.EMBEDDING,"/embed",Stage.CORRECTION,"/v1/chat/completions");
             var endpoints=new EnumMap<Stage,Endpoint>(Stage.class);paths.forEach((stage,path)->endpoints.put(stage,new Endpoint(origin.resolve(path),host,authorization)));
             return new Config(endpoints,4*1024*1024,1048576,2,timeout,model,dimension);
         }
@@ -68,12 +78,20 @@ public final class HttpSpeechModelPort implements SpeechModelPort,AutoCloseable 
         var output=new ArrayList<SpeechSpan>();for(var item:array(response,"segments")) {range(item,2,clip);output.add(new SpeechSpan(sample(clip,item.get(0)),sample(clip,item.get(1))));}return List.copyOf(output);
     }
     @Override public List<SpeechContracts.SpeakerSpan> diarize(SpeechContracts.WavClip clip,List<SpeechSpan> speech) {
+        return diarize(clip,speech,new DiarizationOptions(null,null,null,null));
+    }
+    public List<SpeechContracts.SpeakerSpan> diarize(SpeechContracts.WavClip clip,List<SpeechSpan> speech,DiarizationOptions options) {
+        Objects.requireNonNull(options);
         var ranges=new ArrayList<List<Long>>();
         for(var span:List.copyOf(speech)) {
             if(span.startSample()<clip.startSample()||span.endSample()>clip.endSampleExclusive()||(span.startSample()-clip.startSample())%16!=0||(span.endSample()-clip.startSample())%16!=0)throw new IllegalArgumentException("Speech range outside exact clip milliseconds");
             ranges.add(List.of((span.startSample()-clip.startSample())/16,(span.endSample()-clip.startSample())/16));
         }
-        var response=exchange(Stage.DIARIZATION,()->payload(Map.of("audio_b64",Base64.getEncoder().encodeToString(wav(clip)),"vad_segments",ranges)),"application/json");
+        var response=exchange(Stage.DIARIZATION,()->{
+            var body=new LinkedHashMap<String,Object>();body.put("audio_b64",Base64.getEncoder().encodeToString(wav(clip)));body.put("vad_segments",ranges);
+            if(options.speakerCount()!=null)body.put("speaker_count",options.speakerCount());if(options.minSpeakers()!=null)body.put("min_speakers",options.minSpeakers());if(options.maxSpeakers()!=null)body.put("max_speakers",options.maxSpeakers());if(options.pval()!=null)body.put("pval",options.pval());
+            return payload(body);
+        },"application/json");
         var output=new ArrayList<SpeechContracts.SpeakerSpan>();for(var item:array(response,"timeline")) {
             range(item,3,clip);var speaker=item.get(2);if(!(speaker.isTextual()&&!speaker.textValue().isBlank()||speaker.isIntegralNumber()&&speaker.canConvertToLong()&&speaker.longValue()>=0))throw new InvalidResponse();
             output.add(new SpeechContracts.SpeakerSpan(sample(clip,item.get(0)),sample(clip,item.get(1)),speaker.asText()));
@@ -89,12 +107,22 @@ public final class HttpSpeechModelPort implements SpeechModelPort,AutoCloseable 
                 tokens.add(new SpeechContracts.Token(item.get(0).textValue(),sample(clip,item.get(1)),sample(clip,item.get(2)),null));
             }
         }
-        return new SpeechContracts.RecognitionResult(text,tokens);
+        try{return new SpeechContracts.RecognitionResult(text,tokens);}catch(IllegalArgumentException invalid){throw new InvalidResponse();}
     }
     @Override public String punctuate(String text) {
-        if(text==null||text.isBlank()||text.length()>65536)throw new IllegalArgumentException("Bounded text required");
-        return text(exchange(Stage.PUNCTUATION,()->payload(Map.of("text",text)),"application/json"));
+        boundedText(text);if(text.isBlank())return text;
+        String result=text(exchange(Stage.PUNCTUATION,()->payload(Map.of("text",text)),"application/json"));if(result.isBlank())throw new InvalidResponse();return result;
     }
+    @Override public Optional<String> correctionModel(){return Optional.of(config.correctionModel());}
+    @Override public SpeechContracts.CorrectionResult correct(String text){
+        return correct(text,List.of());
+    }
+    public SpeechContracts.CorrectionResult correct(String text,List<String> entities){
+        boundedText(text);if(text.isBlank())return new SpeechContracts.CorrectionResult(config.correctionModel(),text,List.of());
+        var response=exchange(Stage.CORRECTION,()->payload(OfflineCorrectionProtocol.request(config.correctionModel(),text,entities)),"application/json");
+        return OfflineCorrectionProtocol.response(json,response,config.correctionModel(),text);
+    }
+    private static void boundedText(String text){if(text==null||text.length()>65536)throw new IllegalArgumentException("Bounded text required");ama.contract.MinutesContracts.scalars(text);}
     @Override public SpeechContracts.VoiceEmbedding embed(SpeechContracts.WavClip clip) {
         var values=array(exchange(Stage.EMBEDDING,()->wav(clip),"application/octet-stream"),"embedding");
         if(values.size()!=config.embeddingDimension())throw new InvalidResponse();var vector=new ArrayList<Double>();
@@ -147,7 +175,7 @@ public final class HttpSpeechModelPort implements SpeechModelPort,AutoCloseable 
     }
     private static String sha256(byte[] bytes){try{return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));}catch(java.security.NoSuchAlgorithmException unavailable){throw new IllegalStateException(unavailable);}}
     private static JsonNode array(JsonNode value,String key){var result=value.get(key);if(result==null||!result.isArray())throw new InvalidResponse();return result;}
-    private static String text(JsonNode value){var text=value.get("text");if(text==null||!text.isTextual()||text.textValue().isBlank())throw new InvalidResponse();return text.textValue();}
+    private static String text(JsonNode value){var text=value.get("text");if(text==null||!text.isTextual()||text.textValue().length()>65536)throw new InvalidResponse();try{boundedText(text.textValue());}catch(IllegalArgumentException invalid){throw new InvalidResponse();}return text.textValue();}
     private static void range(JsonNode value,int size,SpeechContracts.WavClip clip){if(!value.isArray()||value.size()!=size)throw new InvalidResponse();rangeValues(value.get(0),value.get(1),clip);}
     private static void rangeValues(JsonNode start,JsonNode end,SpeechContracts.WavClip clip) {
         if(start==null||end==null||!start.isIntegralNumber()||!end.isIntegralNumber()||!start.canConvertToLong()||!end.canConvertToLong()||start.longValue()<0||end.longValue()<=start.longValue()||end.longValue()>clip.sampleCount()/16)throw new InvalidResponse();

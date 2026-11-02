@@ -35,25 +35,42 @@ class SpeechExecutionObserverIT {
  }
  private static JsonNode proof(String id)throws Exception{return request("GET","/v1/harness/speech-executions/"+id,null);}
  private static void scenario(String id,int status,int delay)throws Exception{
-  request("POST","/admin/api/scenarios",Map.ofEntries(Map.entry("module","asr"),Map.entry("name","ama-owned-execution-"+id),Map.entry("enabled",true),Map.entry("priority",1000),Map.entry("method","POST"),Map.entry("path",ASR),Map.entry("match",Map.of("header_equals",Map.of("x-ama-speech-execution",id))),Map.entry("status_code",status),Map.entry("delay_ms",delay),Map.entry("response_type","json"),Map.entry("response_body",status==200?Map.of("text","controlled completion"):Map.of("error","controlled limit")),Map.entry("response_headers",Map.of())));
+  scenario(id,status,delay,ASR,"asr");
+ }
+ private static void scenario(String id,int status,int delay,String path,String module)throws Exception{
+  request("POST","/admin/api/scenarios",Map.ofEntries(Map.entry("module",module),Map.entry("name","ama-owned-execution-"+id),Map.entry("enabled",true),Map.entry("priority",1000),Map.entry("method","POST"),Map.entry("path",path),Map.entry("match",Map.of("header_equals",Map.of("x-ama-speech-execution",id))),Map.entry("status_code",status),Map.entry("delay_ms",delay),Map.entry("response_type","json"),Map.entry("response_body",status==200?Map.of("text","controlled completion"):Map.of("error","controlled limit")),Map.entry("response_headers",Map.of())));
+ }
+ @Test void llmTimeoutRetainsUnknownUntilHarnessProvidesCompletionEvidence()throws Exception{
+  timeoutAfterObservedStart("/v1/chat/completions","llm");
+ }
+ private void timeoutAfterObservedStart(String path,String module)throws Exception{
+  String id=UUID.randomUUID().toString();scenario(id,200,5000,path,module);var trace=new Trace();trace.fixed=id;
+  try(var tasks=java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor();var port=new HttpSpeechModelPort(config(3000),c->new ByteArrayInputStream(SpeechPipelineIT.wav(32000)),trace)){
+   var call=tasks.submit(()->{if(module.equals("llm"))port.correct("本次核对模型超时。");else port.recognize(new SpeechContracts.WavClip("original",0,32000));});
+   long admissionDeadline=System.nanoTime()+Duration.ofSeconds(2).toNanos();boolean started=false;
+   do{
+    var response=CLIENT.send(HttpRequest.newBuilder(ORIGIN.resolve("/v1/harness/speech-executions/"+id)).timeout(Duration.ofSeconds(1)).GET().build(),HttpResponse.BodyHandlers.ofString());
+    if(response.statusCode()==200){assertEquals("STARTED",JSON.readTree(response.body()).path("state").asText());started=true;break;}
+    assertEquals(404,response.statusCode());Thread.sleep(25);
+   }while(System.nanoTime()<admissionDeadline);
+   assertTrue(started,"The delayed request must reach the harness before testing its timeout");
+   var failed=assertThrows(java.util.concurrent.ExecutionException.class,()->call.get(4,java.util.concurrent.TimeUnit.SECONDS));assertInstanceOf(CompanySpeechAdapter.TimedOut.class,failed.getCause());
+  }
+  assertEquals(List.of("RESERVE","UNKNOWN"),trace.events);assertTrue(trace.responses.isEmpty());assertEquals("STARTED",proof(id).path("state").asText());
+  long deadline=System.nanoTime()+Duration.ofSeconds(6).toNanos();JsonNode observed;
+  do{observed=proof(id);if(observed.path("state").asText().equals("COMPLETED"))break;Thread.sleep(25);}while(System.nanoTime()<deadline);
+  assertEquals("COMPLETED",observed.path("state").asText());assertEquals(path,observed.path("path").asText());assertEquals(trace.requests.get(id),observed.path("requestSha256").asText());
  }
  @Test void everyRealStageBindsTheExactRequestAndCompleteResponseDigests()throws Exception{
   var trace=new Trace();var clip=new SpeechContracts.WavClip("original-file",0,32000);
   try(var port=new HttpSpeechModelPort(config(3000),c->new ByteArrayInputStream(SpeechPipelineIT.wav(32000)),trace)){
    new TranscriptionHandler(port).transcribe(clip);
   }
-  assertEquals(5,trace.requests.size());assertEquals(5,trace.responses.size());assertEquals(5,trace.events.stream().filter("COMPLETED:200"::equals).count());
+  assertEquals(6,trace.requests.size());assertEquals(6,trace.responses.size());assertEquals(6,trace.events.stream().filter("COMPLETED:200"::equals).count());
   for(var entry:trace.requests.entrySet()){var actual=proof(entry.getKey());assertEquals("COMPLETED",actual.path("state").asText());assertEquals(entry.getValue(),actual.path("requestSha256").asText());assertEquals(trace.responses.get(entry.getKey()),actual.path("responseSha256").asText());}
  }
  @Test void timeoutKeepsUnknownUntilTheProviderActuallyFinishes()throws Exception{
-  String id=UUID.randomUUID().toString();scenario(id,200,1500);var trace=new Trace();trace.fixed=id;
-  try(var port=new HttpSpeechModelPort(config(200),c->new ByteArrayInputStream(SpeechPipelineIT.wav(32000)),trace)){
-   assertThrows(CompanySpeechAdapter.TimedOut.class,()->port.recognize(new SpeechContracts.WavClip("original",0,32000)));
-  }
-  assertEquals(List.of("RESERVE","UNKNOWN"),trace.events);assertTrue(trace.responses.isEmpty());assertEquals("STARTED",proof(id).path("state").asText());
-  long deadline=System.nanoTime()+Duration.ofSeconds(4).toNanos();JsonNode observed;
-  do{observed=proof(id);if(observed.path("state").asText().equals("COMPLETED"))break;Thread.sleep(25);}while(System.nanoTime()<deadline);
-  assertEquals("COMPLETED",observed.path("state").asText());assertEquals(trace.requests.get(id),observed.path("requestSha256").asText());
+  timeoutAfterObservedStart(ASR,"asr");
  }
  @Test void fullyRead429CanSettleWithoutPretendingTheStageSucceeded()throws Exception{
   String id=UUID.randomUUID().toString();scenario(id,429,0);var trace=new Trace();trace.fixed=id;

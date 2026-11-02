@@ -18,6 +18,8 @@ public final class CompanySpeechAdapter implements SpeechModelPort {
     public List<SpeechContracts.SpeakerSpan> diarize(SpeechContracts.WavClip clip, List<SpeechSpan> speech) { return List.copyOf(call(() -> exchange.diarize(clip, List.copyOf(speech)))); }
     public SpeechContracts.RecognitionResult recognize(SpeechContracts.WavClip clip) { return Objects.requireNonNull(call(() -> exchange.recognize(clip))); }
     public String punctuate(String text) { return Objects.requireNonNull(call(() -> exchange.punctuate(text))); }
+    public java.util.Optional<String> correctionModel() { return exchange.correctionModel(); }
+    public SpeechContracts.CorrectionResult correct(String text) { return Objects.requireNonNull(call(() -> exchange.correct(text))); }
     public SpeechContracts.VoiceEmbedding embed(SpeechContracts.WavClip clip) { return Objects.requireNonNull(call(() -> exchange.embed(clip))); }
     private <T> T call(Supplier<T> operation) { long deadlineNanos=System.nanoTime()+deadline.toNanos(); RateLimited limited=null; for(int attempt=1;attempt<=maxAttempts;attempt++){if(System.nanoTime()>deadlineNanos)throw new TimedOut();try{return operation.get();}catch(RateLimited e){limited=e;}}throw limited==null?new TimedOut():limited; }
 }

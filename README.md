@@ -81,6 +81,8 @@ java -jar backend/api/target/ama-api-0.1.0-SNAPSHOT-exec.jar
 
 ## 基本验证
 
+离线语音模型的六类接口、LLM 待确认纠错和本地 harness 联调命令见 [离线模型联调说明](docs/runbooks/offline-model-harness.md)。
+
 ```sh
 python3 tools/checks/run.py all
 npm --prefix web run typecheck

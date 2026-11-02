@@ -4,6 +4,312 @@
  */
 
 export interface paths {
+    "/api/v1/operations/capabilities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["capabilitiesGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/voiceprints": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["voiceprintsGet"];
+        put?: never;
+        post: operations["voiceprintsPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/voiceprints/{id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["voiceReviewPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/voiceprints/{id}/revocation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["voiceRevokePost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/voiceprints/match": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["voiceMatchPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/datasets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["datasetsGet"];
+        put?: never;
+        post: operations["datasetsPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/evaluations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["evaluationsGet"];
+        put?: never;
+        post: operations["evaluationsPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/evaluations/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get: operations["evaluationGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/evaluations/{id}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["evaluationReviewPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/configuration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["configurationGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/configuration-releases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["configurationReleasePost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/configuration-rollbacks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["configurationRollbackPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/corpus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["corpusGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/corpus/{id}/withdrawal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["corpusWithdrawalPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["feedbackPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/mail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get: operations["mailGet"];
+        put?: never;
+        post: operations["mailPost"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/mail-context": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get: operations["mailContextGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/mail/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get: operations["mailJobGet"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/meetings/{meetingId}/info-suggestions": {
         parameters: {
             query?: never;
@@ -2921,6 +3227,143 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        OperationsCapabilities: {
+            reviewer: boolean;
+            /** @constant */
+            voiceprintPurpose: "SPEAKER_CANDIDATE";
+            modelVersion: string;
+            promptVersion: string;
+        };
+        OperationsVoiceprint: {
+            /** Format: uuid */
+            id: string;
+            subjectId: string;
+            consentReference: string;
+            /** @constant */
+            purpose: "SPEAKER_CANDIDATE";
+            modelVersion: string;
+            dimension: number;
+            sampleCount: number;
+            /** Format: date-time */
+            expiresAt: string;
+            /** @enum {unknown} */
+            state: "PENDING" | "APPROVED" | "REJECTED" | "REVOKED";
+            revisionToken: string;
+            reviewReason: string | null;
+        };
+        OperationsVoiceprints: components["schemas"]["OperationsVoiceprint"][];
+        OperationsCandidateMatches: {
+            /** Format: uuid */
+            voiceprintId: string;
+            subjectId: string;
+            modelVersion: string;
+            score: number;
+        }[];
+        OperationsDataset: {
+            /** Format: uuid */
+            id: string;
+            version: string;
+            contentSha: string;
+            sampleCount: number;
+        };
+        OperationsDatasets: components["schemas"]["OperationsDataset"][];
+        OperationsEvaluationItem: {
+            /** Format: uuid */
+            id: string;
+            datasetVersion: string;
+            /** @enum {unknown} */
+            state: "PENDING" | "RUNNING" | "COMPLETED" | "CANCELLED";
+            reviewReason: string | null;
+        };
+        OperationsEvaluations: components["schemas"]["OperationsEvaluationItem"][];
+        OperationsModelConfiguration: {
+            modelVersion: string;
+            promptVersion: string;
+            voiceThreshold: number | null;
+        };
+        OperationsSampleResult: {
+            id: string;
+            succeeded: boolean;
+            score: number;
+            error: string | null;
+        };
+        OperationsEvaluationDetail: {
+            /** Format: uuid */
+            id: string;
+            datasetVersion: string;
+            /** @enum {unknown} */
+            state: "PENDING" | "RUNNING" | "COMPLETED" | "CANCELLED";
+            reviewReason: string | null;
+            reviewedBy: string | null;
+            configuration: components["schemas"]["OperationsModelConfiguration"];
+            metrics: {
+                sampleCount: number;
+                succeeded: number;
+                failed: number;
+                pending: number;
+                score: number;
+            };
+            results: components["schemas"]["OperationsSampleResult"][];
+        };
+        OperationsConfiguration: {
+            revisionToken: string;
+            configuration: components["schemas"]["OperationsModelConfiguration"];
+            history: {
+                revisionToken: string;
+                evaluationId: string | null;
+                rollbackOf: string | null;
+                reason: string;
+                /** Format: date-time */
+                createdAt: string;
+            }[];
+        };
+        OperationsCorpus: {
+            /** Format: uuid */
+            id: string;
+            category: string;
+            comment: string;
+            approvedRevisionToken: string;
+            sourceRevisionToken: string;
+            segmentIds: string;
+        }[];
+        /** @description Opaque canonical decimal revision, 0..9223372036854775806. Preserve the string exactly. Dual representations must agree. */
+        ExpectedRevisionToken: string;
+        Feedback: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meetingId: string;
+            category: string;
+            comment: string;
+            /** @enum {string} */
+            state: "PENDING" | "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+        };
+        OperationsMailJob: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            publicationId: string;
+            sourceRevisionToken: string;
+            /** @enum {unknown} */
+            state: "PENDING" | "UNKNOWN" | "SENT" | "FAILED" | "BLOCKED";
+            messageId: string | null;
+            lastError: string | null;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        OperationsMailJobs: components["schemas"]["OperationsMailJob"][];
+        OperationsMailContext: {
+            sourceRevisionToken: string;
+            /** Format: uuid */
+            publicationId: string;
+            recipients: {
+                enterpriseId: string;
+                displayName: string;
+            }[];
+        };
         InfoSuggestion: {
             /** Format: uuid */
             id: string;
@@ -2954,8 +3397,6 @@ export interface components {
                 traceId: string;
             };
         };
-        /** @description Opaque canonical decimal revision, 0..9223372036854775806. Preserve the string exactly. Dual representations must agree. */
-        ExpectedRevisionToken: string;
         Mutation: {
             /** Format: uuid */
             id: string;
@@ -3389,17 +3830,6 @@ export interface components {
         };
         PersonalTemplateRemoval: {
             expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
-        };
-        Feedback: {
-            /** Format: uuid */
-            id: string;
-            /** Format: uuid */
-            meetingId: string;
-            category: string;
-            comment: string;
-            /** @enum {string} */
-            state: "PENDING" | "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
-            revisionToken: components["schemas"]["ExpectedRevisionToken"];
         };
         FeedbackSummary: components["schemas"]["Feedback"] & {
             /** Format: date-time */
@@ -5851,9 +6281,9 @@ export interface components {
         };
     };
     parameters: {
-        Meeting: string;
         /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
         Key: string;
+        Meeting: string;
         /** @description Must exactly match the configured allowed origin */
         Origin: string;
         /** @description Independent session-bound token returned by currentSession */
@@ -5892,6 +6322,1088 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    capabilitiesGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCapabilities"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    voiceprintsGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsVoiceprints"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    voiceprintsPost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    consentReference: string;
+                    /** Format: date-time */
+                    expiresAt: string;
+                    wavBase64: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsVoiceprint"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    voiceReviewPost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    /** @enum {unknown} */
+                    decision: "APPROVED" | "REJECTED";
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsVoiceprint"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    voiceRevokePost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsVoiceprint"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    voiceMatchPost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    wavBase64: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCandidateMatches"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    datasetsGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsDatasets"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    datasetsPost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    version: string;
+                    samples: {
+                        id: string;
+                        /** @enum {unknown} */
+                        kind: "ASR" | "DIARIZATION" | "MINUTES" | "VOICE_SAME" | "VOICE_DIFFERENT";
+                        input: string;
+                        input2: string | null;
+                        expected: string;
+                    }[];
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        version: string;
+                    };
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    evaluationsGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsEvaluations"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    evaluationsPost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    datasetId: string;
+                    configuration: components["schemas"]["OperationsModelConfiguration"];
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        /** @constant */
+                        state: "PENDING";
+                    };
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    evaluationGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsEvaluationDetail"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    evaluationReviewPost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        reviewReason: string;
+                    };
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    configurationGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsConfiguration"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    configurationReleasePost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    /** Format: uuid */
+                    evaluationId: string;
+                    configuration: components["schemas"]["OperationsModelConfiguration"];
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        revisionToken: string;
+                        configuration: components["schemas"]["OperationsModelConfiguration"];
+                    };
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    configurationRollbackPost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    targetRevisionToken: string;
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        revisionToken: string;
+                        configuration: components["schemas"]["OperationsModelConfiguration"];
+                    };
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    corpusGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCorpus"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    corpusWithdrawalPost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": Record<string, never>;
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        id: string;
+                        /** @constant */
+                        withdrawn: true;
+                    };
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    feedbackPost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    sourceRevisionToken: string;
+                    segmentIds: string[];
+                    /** @enum {unknown} */
+                    category: "WORDING" | "LABEL" | "ACTION_OWNER";
+                    comment: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Feedback"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    mailGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsMailJobs"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    mailPost: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    sourceRevisionToken: string;
+                    /** Format: uuid */
+                    publicationId: string;
+                    recipientEnterpriseIds: string[];
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsMailJob"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    mailContextGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsMailContext"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    mailJobGet: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsMailJob"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     listInfoSuggestions: {
         parameters: {
             query?: never;
@@ -7145,21 +8657,12 @@ export interface operations {
             };
         };
         responses: {
-            /** @description All authorized meeting memberships changed atomically */
+            /** @description All owner meeting memberships changed atomically from creation onward */
             204: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-            /** @description A selected meeting is not published; the entire batch remains unchanged */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BusinessError"];
-                };
             };
         };
     };
@@ -7430,21 +8933,12 @@ export interface operations {
             };
         };
         responses: {
-            /** @description Assigned */
+            /** @description Owner meeting assigned from creation onward */
             204: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content?: never;
-            };
-            /** @description Only owner-published meetings can be assigned */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BusinessError"];
-                };
             };
         };
     };

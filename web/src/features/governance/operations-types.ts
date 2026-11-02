@@ -1,0 +1,10 @@
+import type {components} from '../../shared/api/generated';
+export type Voiceprint=components['schemas']['OperationsVoiceprint'];
+export type ModelConfiguration=components['schemas']['OperationsModelConfiguration'];
+export type Dataset=components['schemas']['OperationsDataset'];
+export type Evaluation=components['schemas']['OperationsEvaluationItem'];
+export type EvaluationDetail=components['schemas']['OperationsEvaluationDetail'];
+export type Configuration=components['schemas']['OperationsConfiguration'];
+export type Sample={id:string;kind:'ASR'|'DIARIZATION'|'MINUTES'|'VOICE_SAME'|'VOICE_DIFFERENT';input:string;input2:string|null;expected:string};
+export type MailContext=components['schemas']['OperationsMailContext'];
+export type MailJob=components['schemas']['OperationsMailJob'];

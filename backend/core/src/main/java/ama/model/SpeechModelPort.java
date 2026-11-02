@@ -2,6 +2,7 @@ package ama.model;
 
 import ama.contract.SpeechContracts;
 import java.util.List;
+import java.util.Optional;
 
 /** Provider-neutral speech pipeline boundary. Implementations must preserve absent optional values. */
 public interface SpeechModelPort {
@@ -16,4 +17,7 @@ public interface SpeechModelPort {
     SpeechContracts.RecognitionResult recognize(SpeechContracts.WavClip clip);
     String punctuate(String text);
     SpeechContracts.VoiceEmbedding embed(SpeechContracts.WavClip clip);
+    /** Absence is distinct from an empty successful correction response. */
+    default Optional<String> correctionModel() { return Optional.empty(); }
+    default SpeechContracts.CorrectionResult correct(String text) { throw new UnsupportedOperationException("Correction provider not installed"); }
 }

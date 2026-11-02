@@ -30,6 +30,9 @@ class MeetingDeleteWireTest {
         when(cleanup.forMeeting(actor,meeting)).thenReturn(expected);
         var result=assertDoesNotThrow(() -> controller.delete(meeting,request));assertEquals(202,result.getStatusCode().value());assertEquals(expected,result.getBody());assertEquals("private, no-store",result.getHeaders().getCacheControl());
         verify(repository).delete(eq(actor), eq(meeting), eq("delete-key"), eq(new DeleteMeeting(9007199254740993L)), anyString());
+        var order=inOrder(repository,cleanup);
+        order.verify(repository).delete(eq(actor),eq(meeting),eq("delete-key"),any(),anyString());
+        order.verify(cleanup).wake();
     }
     @Test void unknownBodyFieldsAndRepeatedKeysCannotAcceptADeletion(){
         var repository=mock(MeetingRepository.class);var cleanup=mock(JdbcMeetingDeletion.class);var controller=new MeetingDeletionController(new MeetingService(repository),cleanup);var request=new MockHttpServletRequest();request.setContent("{\"expectedRevisionToken\":\"0\",\"root\":\"/tmp/other\"}".getBytes());

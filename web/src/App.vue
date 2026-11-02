@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WorkspaceTopbar from './shared/WorkspaceTopbar.vue';
 import { computed,nextTick,onMounted,onUnmounted,ref,watch } from 'vue';
 import {useApplication} from './application';
 import {useRouter,onBeforeRouteLeave,onBeforeRouteUpdate} from 'vue-router';
@@ -16,7 +17,6 @@ import {fitSelectedTags,positionSelectedPopover} from './features/meetings/selec
 const {session,list,create,createDiscovery,options:useApplicationOptions,setMeetingScope,topics,topicCommands}=useApplication(),router=useRouter(),createOpen=ref(false),importAfterCreate=ref(false);
 const sessionChecking=ref(!session.current.value);
 const importMeeting=ref<string|null>(null),importOpen=ref(false),importPanel=ref<InstanceType<typeof UploadImportPanel>>();
-const localDevelopment=import.meta.env.DEV&&import.meta.env.VITE_LOCAL_DEV_LOGIN==='1';
 const createFlow=useMeetingCreateFlow(create,()=>session.current.value?.actor.enterpriseId??null,async id=>{if(importAfterCreate.value){setMeetingScope(id);importMeeting.value=id;const failure=await router.replace({path:'/meetings',query:{import:id,fresh:'1'}});if(failure)return false;await nextTick();return importPanel.value?.showModal()??false;}const path=`/meeting/${id}`;const failure=await router.push(path);return !failure&&router.currentRoute.value.path===path;});
 function goCasLogin(){window.location.assign('/login');}
 function startRecording(){if(!session.current.value){goCasLogin();return;}void router.push('/recording?start=1');}
@@ -87,15 +87,11 @@ function escapeFilters(event:KeyboardEvent){if(event.key!=='Escape')return;activ
 onMounted(()=>{document.addEventListener('click',closeFilterMenus);document.addEventListener('keydown',escapeFilters);});
 onUnmounted(()=>{document.removeEventListener('click',closeFilterMenus);document.removeEventListener('keydown',escapeFilters);});
 function clearFilters(){topicFilter.value='';keyword.value='';stageFilters.value=[];categoryFilters.value=[];fromDate.value='';toDate.value='';applyFilters();}
-const profile=ref<{displayName:string;department:string|null}|null>(null),profileLoading=ref(false);
 watch(()=>session.current.value?.actor.enterpriseId,(actor,_previous,cleanup)=>{
- profile.value=null;profileLoading.value=!!actor;categoryOptions.value=[];if(!actor)return;
+ categoryOptions.value=[];if(!actor)return;
  const request=new AbortController();cleanup(()=>request.abort());
  void useApplicationOptions.categories(null,request.signal).then(value=>{if(!request.signal.aborted&&session.current.value?.actor.enterpriseId===actor)categoryOptions.value=[...value.items];}).catch(()=>{});
- void useApplicationOptions.people(actor,null,request.signal).then(value=>{if(!request.signal.aborted&&session.current.value?.actor.enterpriseId===actor)profile.value=value.items.find(p=>p.stableId===actor)??null;}).catch(()=>{}).finally(()=>{if(!request.signal.aborted&&session.current.value?.actor.enterpriseId===actor)profileLoading.value=false;});
 },{immediate:true});
-const profilePending=computed(()=>sessionChecking.value||session.status.value==='LOADING'||profileLoading.value);
-const profileName=computed(()=>profile.value?.displayName||session.current.value?.actor.enterpriseId||'尚未登录');
 const totalPages=computed(()=>Math.max(1,Math.ceil((page.value?.total??0)/10)));
 
 
@@ -112,10 +108,7 @@ const future=ref<InstanceType<typeof FuturePanels>>();
 </script>
 <template>
  <div class="layout"><div class="main">
-  <header class="topbar"><nav class="topbar-heading" aria-label="主导航"><RouterLink to="/meetings" class="topbar-home" aria-current="page"><img class="topbar-logo" src="/cmf-login-logo.png" alt="招商基金" width="28" height="28"/> 智能会议助手</RouterLink><span v-if="importOpen" class="topbar-crumb">/ 会议详情</span></nav><div class="topbar-right">
-   <button class="btn sm ghost" @click="router.push('/feedback')"><Icon name="message" :size="15"/> 我的语料反馈</button>
-   <details class="home-profile"><summary class="role-chip" aria-label="当前用户" :aria-busy="profilePending" :title="profilePending?undefined:profileName"><div class="avatar o" :class="{'home-avatar-placeholder':profilePending}" aria-hidden="true">{{profilePending?'':Array.from(profileName)[0]}}</div><div class="rc-name"><span v-if="profilePending" class="home-name-placeholder" aria-hidden="true"></span><template v-else>{{profileName}}</template></div></summary><div class="home-profile-menu"><RouterLink to="/meeting-library" class="btn sm ghost">会议库</RouterLink><a v-if="session.current.value" class="btn sm ghost" href="/auth/cas/logout">退出登录</a><RouterLink v-else class="btn sm ghost" to="/login">企业登录</RouterLink></div></details>
-  </div></header>
+  <WorkspaceTopbar :breadcrumb="importOpen?'会议详情':''" :session-checking="sessionChecking"/>
   <main class="content"><div class="m19-page" :class="{'aci-import-background':importOpen}">
    <div class="page-head"><div><h1 class="page-title">我的会议</h1><div class="page-desc">集中管理你负责和参与的会议，从录音采集、AI增强转写到纪要生成与发布，让会议内容可核对、结论可追溯、成果随时回看。</div></div><div class="page-actions">
     <button class="btn primary" @click="startRecording"><Icon name="mic" :size="14"/> 开始录音</button>
@@ -128,7 +121,7 @@ const future=ref<InstanceType<typeof FuturePanels>>();
    </div><div v-if="scope==='owned'" class="flex m19-view"><button class="btn sm" :class="{navy:!groupView}" title="列表" aria-label="列表" :aria-pressed="!groupView" @click="groupView=false"><Icon name="list"/></button><button class="btn sm" :class="{navy:groupView}" title="专题分组" aria-label="专题分组" :aria-pressed="groupView" @click="groupView=true"><Icon name="layers"/></button></div></div>
    <div class="filterbar m19-filters" role="search"><div class="search-box"><Icon name="search" :size="14"/><input v-model="keyword" class="input" placeholder="搜索会议名称/编号/人员" aria-label="关键词" maxlength="128" @keydown.enter.prevent="applyFilters"/></div><div class="m19-filter-field"><span class="m19-filter-label">状态:</span><details class="m19-dropdown" :open="activeFilterMenu==='会议状态'" @toggle="filterMenuToggle($event,'会议状态')" :class="{'m19-multi-selected':stageFilters.length}"><summary class="select" aria-label="会议状态"><template v-if="stageFilters.length"><span class="m19-selected-main"><span class="m19-selected-track"><span v-for="key in stageFilters" :key="key" class="m19-filter-tag">{{stageOptions[key]}}</span></span><span class="m19-selected-more" hidden aria-hidden="true">...</span></span><span class="m19-selected-popover" role="tooltip" aria-label="全部已选选项"><span v-for="key in stageFilters" :key="key" class="m19-filter-tag">{{stageOptions[key]}}</span></span></template><template v-else>全部会议</template></summary><div class="m19-options" role="group" aria-label="会议状态"><label><input type="checkbox" :checked="!stageFilters.length" @change="stageFilters=[];applyFilters($event,'会议状态')"/>全部会议</label><label v-for="(name,key) in stageOptions" :key="key"><input v-model="stageFilters" type="checkbox" :value="key" @change="applyFilters($event,'会议状态')"/>{{name}}</label></div></details></div><div class="m19-filter-field"><span class="m19-filter-label">类别:</span><details class="m19-dropdown" :open="activeFilterMenu==='会议分类'" @toggle="filterMenuToggle($event,'会议分类')" :class="{'m19-multi-selected':categoryFilters.length}"><summary class="select" aria-label="会议分类"><template v-if="categoryFilters.length"><span class="m19-selected-main"><span class="m19-selected-track"><span v-for="key in categoryFilters" :key="key" class="m19-filter-tag">{{categoryOptions.find(c=>c.id===key)?.label??key}}</span></span><span class="m19-selected-more" hidden aria-hidden="true">...</span></span><span class="m19-selected-popover" role="tooltip" aria-label="全部已选选项"><span v-for="key in categoryFilters" :key="key" class="m19-filter-tag">{{categoryOptions.find(c=>c.id===key)?.label??key}}</span></span></template><template v-else>全部分类</template></summary><div class="m19-options" role="group" aria-label="会议分类"><label><input type="checkbox" :checked="!categoryFilters.length" @change="categoryFilters=[];applyFilters($event,'会议分类')"/>全部分类</label><label v-for="c in categoryOptions" :key="c.id"><input v-model="categoryFilters" type="checkbox" :value="c.id" @change="applyFilters($event,'会议分类')"/>{{c.label}}</label></div></details></div><div v-if="scope==='owned'" class="m19-filter-field"><label class="m19-filter-label" for="topic-filter">专题:</label><select id="topic-filter" class="select" aria-label="所属专题" v-model="topicFilter" @change="selectTopic"><option value="">全部专题</option><option value="__none">未归入专题</option><option v-for="topic in topicCommands.topics.value" :key="topic.id" :value="topic.id">{{topic.name}}</option><option value="__create">新建专题</option></select></div><div class="m19-filter-field"><span class="m19-filter-label">会议日期:</span><MeetingDateRange :from="fromDate" :to="toDate" @apply="(from,to)=>{fromDate=from;toDate=to;applyFilters();}"/></div><button type="button" class="btn sm ghost" @click="clearFilters"><Icon name="x" :size="13"/> 清空筛选</button></div>
 
-   <p v-if="topicMembershipError" class="banner error" role="alert">{{topicMembershipError}} <button class="btn sm" @click="readTopicMemberships">重新读取专题</button></p><button v-if="topicCommands.pending.value" class="btn" @click="topicWorkspace?.recover()">恢复原专题请求</button>
+   <p v-if="topicMembershipError" class="banner error" role="alert">{{topicMembershipError}} <button class="btn sm" @click="readTopicMemberships">重新读取专题</button></p>
    <div v-if="scope==='owned'&&selectedMeetingIds.length" class="banner info m19-selection-bar" role="region" aria-label="批量会议操作">已选 {{selectedMeetingIds.length}} 场会议<span class="ml-a"></span><button class="btn sm" @click="assignTopics((page?.items??[]).filter(item=>selectedMeetingIds.includes(item.id)))">批量调整专题</button><button class="btn sm ghost" @click="selectedMeetingIds=[]">取消选择</button></div>
    <section id="meeting-panel" :class="{card:homeLoading||!groupView||scope==='joined'}" role="tabpanel" :aria-labelledby="scope==='owned'?'owned-tab':'joined-tab'" :aria-busy="homeLoading||loading||topicMembershipLoading">
     <template v-if="homeLoading"><MeetingList :items="[]" :owned="scope==='owned'" loading/><div class="pager home-pager-placeholder" aria-hidden="true"><span class="home-name-placeholder"></span></div></template>
@@ -141,27 +134,17 @@ const future=ref<InstanceType<typeof FuturePanels>>();
      <div v-if="page&&!list.error.value&&(!groupView||scope==='joined'||page.hasMore||list.canPrevious.value)" class="pager">共 {{page.total}} 条 · {{list.pageNumber.value}}/{{totalPages}} 页 <button :disabled="loading||!list.canPrevious.value" aria-label="上一页" @click="list.previous">‹</button><button class="cur" :disabled="loading" :aria-label="'第 '+list.pageNumber.value+' 页'" @click="list.reload">{{list.pageNumber.value}}</button><button :disabled="loading||!page.hasMore" aria-label="下一页" @click="list.next">›</button></div>
     </template>
    </section>
-  </div><div v-if="localDevelopment" class="demo-note">当前页面数据均为产品演示用模拟数据，不代表招商基金真实业务信息。<br>当前原型为纯前端交互演示，不连接招商基金真实业务系统。当前原型仅展示会议负责人的相关功能。</div>
+  </div>
   </main>
  </div></div>
  <TopicWorkspace ref="topicWorkspace" @changed="topicsChanged"/><FuturePanels ref="future"/><UploadImportPanel v-if="importMeeting" ref="importPanel" :key="importMeeting" :meeting-id="importMeeting" :new-import="router.currentRoute.value.query.fresh==='1'" @opened="importOpen=true" @closed="closedImport" @saved="savedImport" @discarded="savedImport" @processed="processedImport" @background="kind=>future?.open(kind)"/>
 </template>
 
 <style scoped>
-.topbar-logo{display:block;flex-shrink:0;border-radius:50%}
-.topbar-home:hover{color:var(--navy)}
 .m19-filters :deep(summary.select:not(:focus-visible)){transition:none}
 
 
 .m19-page{padding-bottom:80px}.m19-selection-bar{position:fixed;left:24px;right:24px;bottom:20px;z-index:60;max-width:1552px;margin:0 auto;box-shadow:var(--shadow-lg);flex-wrap:wrap}
 .list-feedback{padding:16px;color:var(--muted)}.list-feedback .btn{margin-top:10px;margin-right:8px}
-.home-profile{position:relative;width:144px;flex-shrink:0}.home-profile>summary{cursor:pointer;list-style:none;border:0;width:100%;height:40px}.home-profile .rc-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.home-avatar-placeholder{background:var(--border)}.home-name-placeholder{display:block;width:72px;height:12px;background:var(--border);border-radius:4px}.home-pager-placeholder{height:42px}.home-profile>summary::-webkit-details-marker{display:none}.home-profile-menu{position:absolute;right:0;top:calc(100% + 4px);z-index:45;display:flex;flex-direction:column;align-items:stretch;min-width:150px;padding:8px;background:white;border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg)}
-@media(max-width:600px){
- .topbar-right{min-width:0;max-width:55%;overflow:hidden}
- .topbar-right>.btn{display:none}
- .home-profile{min-width:0;max-width:100%}
- .home-profile>summary{display:flex;align-items:center;gap:8px;max-width:100%}
- .home-profile>summary>div:last-child{min-width:0;overflow:hidden}
- .home-profile .rc-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-}
+.home-name-placeholder{display:block;width:72px;height:12px;background:var(--border);border-radius:4px}.home-pager-placeholder{height:42px}
 </style>

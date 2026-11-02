@@ -28,7 +28,7 @@ public final class SpeechCheckpointCodec {
  }
  private static Class<? extends SpeechPipeline.Snapshot> type(SpeechPipeline.Stage stage){return switch(stage){
   case VAD->SpeechPipeline.Vad.class;case DIARIZATION->SpeechPipeline.Diarization.class;case ASR->SpeechPipeline.Recognition.class;
-  case ENHANCEMENT->SpeechPipeline.Enhancement.class;case EMBEDDING->SpeechPipeline.Embedding.class;
+  case ENHANCEMENT->SpeechPipeline.Enhancement.class;case EMBEDDING->SpeechPipeline.Embedding.class;case CORRECTION->SpeechPipeline.Correction.class;
  };}
  private static IllegalArgumentException invalid(){return new IllegalArgumentException("Invalid speech checkpoint");}
 }

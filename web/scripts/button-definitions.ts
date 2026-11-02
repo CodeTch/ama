@@ -6,7 +6,7 @@ import {parse as parseTemplate,NodeTypes,type ElementNode,type TemplateChildNode
 export type ButtonDefinition={file:string;line:number;column:number;tag:string;role:string|null;label:string;classes:string;ancestors:string[];handler:string;condition:string;variants:string[]};
 
 /** Parse templates rather than grepping lines: branches and repeated controls keep their own source locations. */
-export function buttonInventory(root=resolve(import.meta.dirname,'../../src')):ButtonDefinition[]{
+export function buttonInventory(root=resolve(import.meta.dirname,'../src')):ButtonDefinition[]{
  function files(dir:string):string[]{return readdirSync(dir,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?files(resolve(dir,entry.name)):[resolve(dir,entry.name)]);}
  const rows:ButtonDefinition[]=[];
  for(const file of files(root).filter(file=>file.endsWith('.vue')).sort()){

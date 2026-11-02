@@ -1,0 +1,19 @@
+package ama.governance;
+import ama.contract.IdentityContracts.Actor;
+import ama.contract.MeetingContracts.Conflict;
+import ama.access.MeetingAccess;
+import ama.db.TransactionRunner;
+import ama.meeting.*;
+import javax.sql.DataSource;
+import java.util.*;
+/** Explicit submitted text only. No implicit training grant or source-document read. */
+public final class JdbcCorpusFeedback extends JdbcOperationsSupport {
+ private final JdbcFeedback feedback;
+ public JdbcCorpusFeedback(DataSource source,TransactionRunner tx,JdbcMeetingAccess access,JdbcFeedback feedback){super(source,tx,access);this.feedback=feedback;}
+ public Map<String,Object> submit(Actor actor,String key,String meeting,long revision,List<String> segments,String category,String comment){
+  id(meeting);expected(revision);segments=List.copyOf(segments);if(segments.size()>100||segments.stream().distinct().count()!=segments.size())throw new IllegalArgumentException("Bounded unique segment IDs required");segments.forEach(JdbcOperationsSupport::id);String ids=write(segments);access.prepareExternalRead(actor,meeting);
+  return command(actor,key,"CORPUS_SUBMIT",List.of(meeting,revision,segments,category,comment),false,()->{var created=feedback.create(actor,key,meeting,category,comment);var root=j.queryForMap("SELECT revision,transcript_revision_id FROM meeting WHERE id=?",meeting);if(((Number)root.get("revision")).longValue()!=revision)throw new Conflict();for(String segment:read(ids,String[].class))if(j.queryForObject("SELECT COUNT(*) FROM transcript_segment WHERE revision_id=? AND segment_id=?",Integer.class,root.get("transcript_revision_id"),segment)!=1)throw new IllegalArgumentException("Current source segments required");var submission=j.queryForMap("SELECT state,revision FROM feedback WHERE id=? FOR UPDATE",created.get("id"));if(!"PENDING".equals(submission.get("state"))||((Number)submission.get("revision")).longValue()!=0)throw new Conflict();j.update("INSERT INTO corpus_feedback_binding(feedback_id,source_revision,segment_ids) VALUES (?,?,?)",created.get("id"),revision,ids);return created;});
+ }
+ public Map<String,Object> withdraw(Actor actor,String id,String key){id(id);return command(actor,key,"CORPUS_WITHDRAW",List.of(id),false,()->{var rows=j.queryForList("SELECT f.submitted_by,b.withdrawn FROM feedback f JOIN corpus_feedback_binding b ON b.feedback_id=f.id WHERE f.id=? FOR UPDATE",id);if(rows.size()!=1||!actor.enterpriseId().equals(rows.getFirst().get("submitted_by")))throw new MeetingAccess.AccessDeniedException();j.update("UPDATE corpus_feedback_binding SET withdrawn=true,withdrawn_at=UTC_TIMESTAMP(6) WHERE feedback_id=?",id);audit(actor,"CORPUS_WITHDRAWN",id,0);return Map.of("id",id,"withdrawn",true);});}
+ public List<Map<String,Object>> approved(Actor actor){return tx.required(()->{requireAdmin(actor);var rows=j.queryForList("SELECT f.id,f.category,f.comment,CAST(f.revision AS CHAR) approvedRevisionToken,CAST(b.source_revision AS CHAR) sourceRevisionToken,CAST(b.segment_ids AS CHAR) segmentIds FROM corpus_feedback_binding b JOIN feedback f ON f.id=b.feedback_id JOIN meeting m ON m.id=f.meeting_id JOIN enterprise_identity i ON i.enterprise_id=f.submitted_by AND i.status='ACTIVE' WHERE f.state='ACCEPTED' AND b.withdrawn=false AND m.lifecycle='ACTIVE' AND m.governance_state='ACTIVE' AND m.revision=b.source_revision AND (m.owner_id=f.submitted_by OR EXISTS(SELECT 1 FROM meeting_access_grant g JOIN roster_revision r ON r.id=g.roster_id AND r.state='CONFIRMED' JOIN roster_member p ON p.roster_id=r.id AND p.enterprise_id=g.enterprise_id AND p.member_kind='ENTERPRISE' WHERE g.meeting_id=m.id AND g.enterprise_id=f.submitted_by AND g.action='READ' AND g.roster_id=m.roster_revision_id)) ORDER BY f.created_at DESC,f.id DESC LIMIT 100");rows.forEach(row->row.put("comment",CorpusFeedbackService.redact((String)row.get("comment"))));return rows;});}
+}

@@ -22,7 +22,7 @@ class ExternalReadPreparation implements WebMvcConfigurer,HandlerInterceptor {
   if(!(request.getAttribute(SessionSecurityFilter.SESSION) instanceof ResolvedSession session))return true;
   String path=request.getRequestURI();
   // Governance and deletion expose technical recovery metadata under independent owner gates.
-  if(handler instanceof org.springframework.web.method.HandlerMethod method && Set.of(GovernanceController.class,MeetingDeletionController.class,KnowledgeGovernanceEventController.class).contains(method.getBeanType()))return true;
+  if(handler instanceof org.springframework.web.method.HandlerMethod method && Set.of(GovernanceController.class,MeetingDeletionController.class,KnowledgeGovernanceEventController.class,OperationsController.class).contains(method.getBeanType()))return true;
   if(request.getMethod().equals("DELETE")&&path.matches("/api/v1/meetings/[0-9a-f-]{36}"))return true;
   String meeting=null;var matcher=java.util.regex.Pattern.compile("^/api/v1/meetings/([0-9a-f-]{36})(?:/.*)?$").matcher(path);
   if(matcher.matches())meeting=matcher.group(1);

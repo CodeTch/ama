@@ -2384,3 +2384,8 @@ R6 片段多选标记随转写版本冻结；不是纪要要素。所属 B-06/C-
 - FK `fk_publication_submission_execution`：`local_execution_id` → `external_execution(id)`。MySQL CHECK引用列省略显式action；InnoDB立即NO ACTION等同RESTRICT。
 
 更新/删除与完整性：固定绑定永不更新；只允许真实完整锁定证明下UNDECIDED一次CAS到NEVER_MARKED，重放原time/reason/actor/attempt，禁止回退/补造历史。FK不证明同会议/spec/marker；领域原子校验完整历史。无执行不造operation/attempt或provider proof；所有旧未决轮仍冻结。manifest内容与UTF16由运行时先界定；无自动清理。
+
+
+## 2026-11-02 E阶段追加
+
+V062八张新表及ER、权限和保留边界见[治理与邮件增量字典](2026-11-02-governance-mail-increment.md)。旧已应用字典与迁移保留。

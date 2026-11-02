@@ -363,6 +363,17 @@ def start(state):
     minutes, model_ready = prepare_minutes(RUNTIME, state, java, env, classpath)
     settings.update({key.removeprefix('--').split('=', 1)[0]: key.split('=', 1)[1] for key in options})
     settings.update(minutes)
+    operations_key = RUNTIME / 'operations-embedding.key'
+    if not operations_key.exists():
+        descriptor = os.open(operations_key, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(descriptor, 'wb') as handle:
+            handle.write(secrets.token_bytes(32))
+    settings.update({
+        'operations.enabled': 'true',
+        'operations.integration-origin': origins['model'],
+        'operations.web-origin': ORIGIN,
+        'operations.encryption-key-file': operations_key,
+    })
     settings.update({
         'exports.enabled': 'true',
         'publication.governance-enabled': 'true',

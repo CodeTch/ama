@@ -13,6 +13,7 @@ import java.util.*;
 /** Explicit local harness installation. It declares no company capability or quota. */
 public final class ControlledSpeechProfile {
  public static final String PARSER="ama.media-documents.v3",SERVICE="ama.harness-speech.v1";
+ public static final String CORRECTION_MODEL="deepseek-v4-flash";
  private static final ObjectMapper JSON=new ObjectMapper(JsonFactory.builder().enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION).disable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION)
   .streamReadConstraints(StreamReadConstraints.builder().maxNestingDepth(8).maxStringLength(4096).maxNumberLength(19).maxNameLength(64).build()).build()).enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
  private final String sha,documentSha;private final Path manifest;
@@ -20,7 +21,7 @@ public final class ControlledSpeechProfile {
  public String sha256(){return sha;}public String documentSha256(){return documentSha;}public Path manifest(){return manifest;}
  public int windowSamples(){return 1920000;}public int offlineSlots(){return 2;}public int realtimeSlots(){return 64;}public int totalSlots(){return 66;}public long quotaRevision(){return 1;}
  public URI origin(){return URI.create("http://127.0.0.1:8792");}
- public HttpSpeechModelPort.Config http(){return HttpSpeechModelPort.Config.at(origin(),"inference.dev.zsfund.com",null,"harness-fixture-embedding-v1",256,Duration.ofMillis(3000));}
+ public HttpSpeechModelPort.Config http(){var config=HttpSpeechModelPort.Config.at(origin(),"inference.dev.zsfund.com",null,"harness-fixture-embedding-v1",256,Duration.ofMillis(3000));return new HttpSpeechModelPort.Config(config.endpoints(),config.maxWavBytes(),config.maxResponseBytes(),config.concurrency(),config.timeout(),config.embeddingModelVersion(),config.embeddingDimension(),CORRECTION_MODEL);}
  public static ControlledSpeechProfile configured(String expected){String value=System.getenv("AMA_LOCAL_SPEECH_RUNTIME");if(value==null)throw unavailable();var profile=fromRuntime(Path.of(value));if(!profile.sha.equals(expected))throw unavailable();return profile;}
  public static ControlledSpeechProfile fromRuntime(Path runtime){
   try{

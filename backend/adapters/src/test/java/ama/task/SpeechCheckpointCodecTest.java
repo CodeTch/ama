@@ -9,11 +9,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SpeechCheckpointCodecTest {
- @Test void allFiveTypedSnapshotsRoundTripWithoutInventedOptionalFields(){
+ @Test void allSixTypedSnapshotsRoundTripWithoutInventedOptionalFields(){
   var values=List.of(new SpeechPipeline.Vad(List.of(new SpeechModelPort.SpeechSpan(16000,48000))),
    new SpeechPipeline.Diarization(List.of(new SpeakerSpan(16000,48000,"cluster-0"))),
    new SpeechPipeline.Recognition(new RecognitionResult("非常非常重要 123",null)),
-   new SpeechPipeline.Enhancement("非常非常重要 123。"),new SpeechPipeline.Embedding(new VoiceEmbedding("fixture-v1",2,List.of(0d,1d))));
+   new SpeechPipeline.Enhancement("非常非常重要 123。"),new SpeechPipeline.Embedding(new VoiceEmbedding("fixture-v1",2,List.of(0d,1d))),
+   new SpeechPipeline.Correction(new CorrectionResult("offline-llm","因该检查。",List.of(new TextCorrection(0,"因该","应该","同音错字")))));
   var stages=SpeechPipeline.Stage.values();for(int i=0;i<stages.length;i++){
    byte[] bytes=SpeechCheckpointCodec.encode(stages[i],values.get(i));assertEquals(values.get(i),SpeechCheckpointCodec.decode(stages[i],bytes));assertArrayEquals(bytes,SpeechCheckpointCodec.encode(stages[i],values.get(i)));
   }

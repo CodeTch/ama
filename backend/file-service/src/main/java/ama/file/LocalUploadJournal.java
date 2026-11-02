@@ -183,7 +183,20 @@ final class LocalUploadJournal {
     }
 
     void discard(UploadToken token, StorageKey key) {
-        try(var dir=session(token)) {
+        LinuxFiles.Fd directory;
+        try {
+            directory = session(token);
+        } catch (StorageException e) {
+            if (e.code() != ErrorCode.NOT_FOUND) throw e;
+            // An absent upload has no remaining parts. Still fence the exact object key
+            // so a late publication cannot recreate it, just as for a present session.
+            store.retire(key);
+            fs.sync(store.uploads, true);
+            fs.sync(store.root, true);
+            store.check();
+            return;
+        }
+        try(var dir=directory) {
             var spec=spec(dir);var expected=new StorageKey(spec.backendId(),spec.namespace(),spec.objectKey());
             if(!expected.equals(key))throw new StorageException(ErrorCode.INVALID_ARGUMENT);
             files.bytes(dir,"discarded",new byte[0]);ack(token.sessionId(),dir);

@@ -63,7 +63,7 @@ public final class JdbcFeedback {
             if(!actor.enterpriseId().equals(row.get("submitted_by"))&&!admin)throw new MeetingAccess.AccessDeniedException();
             var history=j.queryForList("SELECT id,action,actor_id actorId,CAST(revision_after AS CHAR) revisionToken,state_after state,text,DATE_FORMAT(created_at,'%Y-%m-%dT%H:%i:%s.%fZ') createdAt FROM feedback_history WHERE feedback_id=? ORDER BY revision_after LIMIT 51",id);
             if(history.size()>MAX_HISTORY)throw new IllegalStateException("Feedback history limit exceeded");
-            var result=new LinkedHashMap<String,Object>();result.put("feedback",view(row));result.put("submittedAt",row.get("submittedAt"));result.put("reviewReason",row.get("review_reason"));result.put("reviewedBy",row.get("reviewed_by"));result.put("history",history);return result;
+            var result=new LinkedHashMap<String,Object>();var displayed=view(row);if(admin&&!actor.enterpriseId().equals(row.get("submitted_by"))){displayed.put("comment",ama.governance.CorpusFeedbackService.redact((String)displayed.get("comment")));history.forEach(entry->entry.put("text",ama.governance.CorpusFeedbackService.redact((String)entry.get("text"))));}result.put("feedback",displayed);result.put("submittedAt",row.get("submittedAt"));result.put("reviewReason",row.get("review_reason"));result.put("reviewedBy",row.get("reviewed_by"));result.put("history",history);return result;
         });
     }
 
@@ -73,7 +73,7 @@ public final class JdbcFeedback {
             active(actor);requireAdmin(actor);var args=new ArrayList<Object>();String before="";
             if(cursor!=null){var rows=j.queryForList("SELECT created_at FROM feedback WHERE id=?",cursor);if(rows.size()!=1)throw new IllegalArgumentException("Invalid review cursor");Object time=rows.getFirst().get("created_at");before=" WHERE (created_at<? OR (created_at=? AND id<?))";Collections.addAll(args,time,time,cursor);}
             var rows=j.queryForList("SELECT "+FIELDS+" FROM feedback"+before+" ORDER BY created_at DESC,id DESC LIMIT 21",args.toArray());
-            var selected=List.copyOf(rows.subList(0,Math.min(20,rows.size())));var result=new LinkedHashMap<String,Object>();result.put("items",selected);result.put("nextCursor",rows.size()>20?selected.getLast().get("id"):null);return result;
+            var selected=List.copyOf(rows.subList(0,Math.min(20,rows.size())));var result=new LinkedHashMap<String,Object>();selected.forEach(entry->entry.put("comment",ama.governance.CorpusFeedbackService.redact((String)entry.get("comment"))));result.put("items",selected);result.put("nextCursor",rows.size()>20?selected.getLast().get("id"):null);return result;
         });
     }
 
@@ -91,7 +91,7 @@ public final class JdbcFeedback {
             String filter=scope;var args=new ArrayList<>(base);if(selectedState!=null){filter+=" AND state=?";args.add(selectedState);}
             if(cursor!=null){var lookup=new ArrayList<>(args);lookup.add(cursor);var rows=j.queryForList("SELECT created_at FROM feedback WHERE "+filter+" AND id=?",lookup.toArray());if(rows.size()!=1)throw new IllegalArgumentException("Invalid feedback cursor");Object time=rows.getFirst().get("created_at");filter+=" AND (created_at<? OR (created_at=? AND id<?))";Collections.addAll(args,time,time,cursor);}
             var rows=j.queryForList("SELECT "+FIELDS+",DATE_FORMAT(created_at,'%Y-%m-%dT%H:%i:%s.%fZ') submittedAt,review_reason reviewReason FROM feedback WHERE "+filter+" ORDER BY created_at DESC,id DESC LIMIT 21",args.toArray());
-            var selected=List.copyOf(rows.subList(0,Math.min(20,rows.size())));var result=new LinkedHashMap<String,Object>();result.put("items",selected);result.put("counts",counts);result.put("nextCursor",rows.size()>20?selected.getLast().get("id"):null);return result;
+            var selected=List.copyOf(rows.subList(0,Math.min(20,rows.size())));var result=new LinkedHashMap<String,Object>();if(reviewing)selected.forEach(entry->entry.put("comment",ama.governance.CorpusFeedbackService.redact((String)entry.get("comment"))));result.put("items",selected);result.put("counts",counts);result.put("nextCursor",rows.size()>20?selected.getLast().get("id"):null);return result;
         });
     }
 

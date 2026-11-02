@@ -15,8 +15,11 @@ export function useTopicCommands(api:Pick<ReturnType<typeof createTopicsApi>,'se
  function synchronize(){dispose();const who=actor();if(!who)return;owner=who;concealed.value=false;const found=journal.load(who,TOPIC_WORKSPACE);if(found.kind==='INVALID'||found.kind==='UNAVAILABLE')throw Error('专题恢复记录暂不可用，请保留页面重试。');available.value=true;if(found.kind==='RESTORED')command.restore(found.value);}
  async function reload(){const turn=epoch;if(!active(turn))return;read?.abort();const request=new AbortController();read=request;const rows=await api.list(request.signal);if(active(turn)&&!request.signal.aborted)topics.value=rows;}
  async function retry(){
-  const turn=epoch,snapshot=command.snapshot.value;if(!active(turn)||!available.value||!snapshot||busy.value||!['PREPARED','UNCERTAIN','ACKNOWLEDGED'].includes(command.state.value))throw Error('请先核对原专题操作和当前身份。');
+  const turn=epoch,snapshot=command.snapshot.value;
+  const retryRejected=!!snapshot&&['TOPIC_ASSIGN','TOPIC_UNASSIGN','TOPIC_BATCH_ASSIGN'].includes(snapshot.operation)&&['CONFLICT','REJECTED'].includes(command.state.value);
+  if(!active(turn)||!available.value||!snapshot||busy.value||(!retryRejected&&!['PREPARED','UNCERTAIN','ACKNOWLEDGED'].includes(command.state.value)))throw Error('请先核对原专题操作和当前身份。');
   if(journal.save(owner!,TOPIC_WORKSPACE,snapshot)!=='SAVED')throw Error('专题原请求无法保存，请保留页面重试。');
+  if(retryRejected){command.reconcileRejected();command.restore(snapshot);}
   try{const receipt=command.state.value==='ACKNOWLEDGED'?command.ack.value:await command.send();if(!active(turn))throw new DOMException('Topic scope changed','AbortError');reading.value=true;const request=new AbortController();read=request;const rows=await api.list(request.signal);
    if(!active(turn)||request.signal.aborted)throw new DOMException('Topic scope changed','AbortError');
    if(['TOPIC_ASSIGN','TOPIC_UNASSIGN'].includes(snapshot.operation))await api.memberships([snapshot.resource],request.signal);

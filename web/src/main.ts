@@ -11,6 +11,7 @@ import './shared/styles/prototype.css';
 import './shared/styles/parity.css';
 import MeetingLibraryPage from './features/meetings/MeetingLibraryPage.vue';
 import FeedbackPage from './features/meetings/FeedbackPage.vue';
+import OperationsPage from './features/governance/OperationsPage.vue';
 import RecordingPage from './features/meetings/RecordingPage.vue';
 import RecordingIndicator from './features/recording/RecordingIndicator.vue';
 import LoginPage from './features/auth/LoginPage.vue';
@@ -19,7 +20,7 @@ import KnowledgePublishDemoPage from './features/minutes/KnowledgePublishDemoPag
 import {DEMO_MEETING_ID} from './features/meetings/meeting-prototype-demo';
 import {syncNavigationScope} from './shared/navigation-scope';
 const router=createRouter({history:createWebHistory(),routes:[
- {path:'/',redirect:'/login'}, {path:'/login',component:LoginPage}, {path:'/meetings',component:App}, {path:'/feedback',component:FeedbackPage}, {path:'/meeting-library/:id?',component:MeetingLibraryPage}, {path:'/recording/:id?',name:'recording',component:RecordingPage}, {path:'/meeting/:id/:stage?',name:'meeting-detail',component:MeetingDetail}, {path:'/transcript-correction-demo',name:'transcript-correction-demo',component:TranscriptCorrectionDemoPage}, {path:'/knowledge-publish-demo',name:'knowledge-publish-demo',component:KnowledgePublishDemoPage},
+ {path:'/',redirect:'/login'}, {path:'/login',component:LoginPage}, {path:'/meetings',component:App}, {path:'/feedback',component:FeedbackPage}, {path:'/operations',component:OperationsPage}, {path:'/meeting-library/:id?',component:MeetingLibraryPage}, {path:'/recording/:id?',name:'recording',component:RecordingPage}, {path:'/meeting/:id/:stage?',name:'meeting-detail',component:MeetingDetail}, {path:'/transcript-correction-demo',name:'transcript-correction-demo',component:TranscriptCorrectionDemoPage}, {path:'/knowledge-publish-demo',name:'knowledge-publish-demo',component:KnowledgePublishDemoPage},
  {path:'/:pathMatch(.*)*',component:{render:()=>h('main',{class:'content'},[h('h1','页面暂不可用'),h(RouterLink,{to:'/meetings'},()=> '返回我的会议')])}}
 ]});
 const navigation=performance.getEntriesByType('navigation')[0];

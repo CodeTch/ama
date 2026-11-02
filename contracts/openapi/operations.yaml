@@ -1,0 +1,1881 @@
+{
+  "OperationsModelConfiguration": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "modelVersion",
+      "promptVersion",
+      "voiceThreshold"
+    ],
+    "properties": {
+      "modelVersion": {
+        "type": "string",
+        "maxLength": 128
+      },
+      "promptVersion": {
+        "type": "string",
+        "maxLength": 128
+      },
+      "voiceThreshold": {
+        "anyOf": [
+          {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "OperationsVoiceprint": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "subjectId",
+      "consentReference",
+      "purpose",
+      "modelVersion",
+      "dimension",
+      "sampleCount",
+      "expiresAt",
+      "state",
+      "revisionToken",
+      "reviewReason"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "subjectId": {
+        "type": "string"
+      },
+      "consentReference": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "purpose": {
+        "const": "SPEAKER_CANDIDATE"
+      },
+      "modelVersion": {
+        "type": "string"
+      },
+      "dimension": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "sampleCount": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "expiresAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "state": {
+        "enum": [
+          "PENDING",
+          "APPROVED",
+          "REJECTED",
+          "REVOKED"
+        ]
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "reviewReason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "OperationsVoiceprints": {
+    "type": "array",
+    "maxItems": 100,
+    "items": {
+      "$ref": "#/OperationsVoiceprint"
+    }
+  },
+  "OperationsDataset": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "version",
+      "contentSha",
+      "sampleCount"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "version": {
+        "type": "string"
+      },
+      "contentSha": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      },
+      "sampleCount": {
+        "type": "integer",
+        "minimum": 0
+      }
+    }
+  },
+  "OperationsDatasets": {
+    "type": "array",
+    "maxItems": 100,
+    "items": {
+      "$ref": "#/OperationsDataset"
+    }
+  },
+  "OperationsEvaluationItem": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "datasetVersion",
+      "state",
+      "reviewReason"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "datasetVersion": {
+        "type": "string"
+      },
+      "state": {
+        "enum": [
+          "PENDING",
+          "RUNNING",
+          "COMPLETED",
+          "CANCELLED"
+        ]
+      },
+      "reviewReason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "OperationsEvaluations": {
+    "type": "array",
+    "maxItems": 100,
+    "items": {
+      "$ref": "#/OperationsEvaluationItem"
+    }
+  },
+  "OperationsSampleResult": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "succeeded",
+      "score",
+      "error"
+    ],
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "succeeded": {
+        "type": "boolean"
+      },
+      "score": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "OperationsEvaluationDetail": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "datasetVersion",
+      "state",
+      "reviewReason",
+      "reviewedBy",
+      "configuration",
+      "metrics",
+      "results"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "datasetVersion": {
+        "type": "string"
+      },
+      "state": {
+        "enum": [
+          "PENDING",
+          "RUNNING",
+          "COMPLETED",
+          "CANCELLED"
+        ]
+      },
+      "reviewReason": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "reviewedBy": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "configuration": {
+        "$ref": "#/OperationsModelConfiguration"
+      },
+      "metrics": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sampleCount",
+          "succeeded",
+          "failed",
+          "pending",
+          "score"
+        ],
+        "properties": {
+          "sampleCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "succeeded": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "failed": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "pending": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      },
+      "results": {
+        "type": "array",
+        "maxItems": 50,
+        "items": {
+          "$ref": "#/OperationsSampleResult"
+        }
+      }
+    }
+  },
+  "OperationsConfiguration": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "revisionToken",
+      "configuration",
+      "history"
+    ],
+    "properties": {
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "configuration": {
+        "$ref": "#/OperationsModelConfiguration"
+      },
+      "history": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "revisionToken",
+            "evaluationId",
+            "rollbackOf",
+            "reason",
+            "createdAt"
+          ],
+          "properties": {
+            "revisionToken": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,18})$"
+            },
+            "evaluationId": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "rollbackOf": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "reason": {
+              "type": "string",
+              "maxLength": 2048
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      }
+    }
+  },
+  "OperationsMailJob": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "meetingId",
+      "publicationId",
+      "sourceRevisionToken",
+      "state",
+      "messageId",
+      "lastError",
+      "createdAt"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "meetingId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "publicationId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "sourceRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "state": {
+        "enum": [
+          "PENDING",
+          "UNKNOWN",
+          "SENT",
+          "FAILED",
+          "BLOCKED"
+        ]
+      },
+      "messageId": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "lastError": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "OperationsMailJobs": {
+    "type": "array",
+    "maxItems": 100,
+    "items": {
+      "$ref": "#/OperationsMailJob"
+    }
+  },
+  "OperationsMailContext": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "sourceRevisionToken",
+      "publicationId",
+      "recipients"
+    ],
+    "properties": {
+      "sourceRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "publicationId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "recipients": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "enterpriseId",
+            "displayName"
+          ],
+          "properties": {
+            "enterpriseId": {
+              "type": "string"
+            },
+            "displayName": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "OperationsCapabilities": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "reviewer",
+      "voiceprintPurpose",
+      "modelVersion",
+      "promptVersion"
+    ],
+    "properties": {
+      "reviewer": {
+        "type": "boolean"
+      },
+      "voiceprintPurpose": {
+        "const": "SPEAKER_CANDIDATE"
+      },
+      "modelVersion": {
+        "type": "string"
+      },
+      "promptVersion": {
+        "type": "string"
+      }
+    }
+  },
+  "OperationsCorpus": {
+    "type": "array",
+    "maxItems": 100,
+    "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "category",
+        "comment",
+        "approvedRevisionToken",
+        "sourceRevisionToken",
+        "segmentIds"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "category": {
+          "type": "string"
+        },
+        "comment": {
+          "type": "string",
+          "maxLength": 4096
+        },
+        "approvedRevisionToken": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,18})$"
+        },
+        "sourceRevisionToken": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,18})$"
+        },
+        "segmentIds": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "OperationsCandidateMatches": {
+    "type": "array",
+    "maxItems": 20,
+    "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "voiceprintId",
+        "subjectId",
+        "modelVersion",
+        "score"
+      ],
+      "properties": {
+        "voiceprintId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "subjectId": {
+          "type": "string"
+        },
+        "modelVersion": {
+          "type": "string"
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    }
+  },
+  "capabilities": {
+    "get": {
+      "operationId": "capabilitiesGet",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsCapabilities"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      }
+    }
+  },
+  "voiceprints": {
+    "get": {
+      "operationId": "voiceprintsGet",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsVoiceprints"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      }
+    },
+    "post": {
+      "operationId": "voiceprintsPost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsVoiceprint"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "consentReference",
+                "expiresAt",
+                "wavBase64"
+              ],
+              "properties": {
+                "consentReference": {
+                  "type": "string",
+                  "maxLength": 1024
+                },
+                "expiresAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "wavBase64": {
+                  "type": "string",
+                  "maxLength": 1280059
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "voiceReview": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "voiceReviewPost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsVoiceprint"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "expectedRevisionToken",
+                "decision",
+                "reason"
+              ],
+              "properties": {
+                "expectedRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                },
+                "decision": {
+                  "enum": [
+                    "APPROVED",
+                    "REJECTED"
+                  ]
+                },
+                "reason": {
+                  "type": "string",
+                  "maxLength": 2048
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "voiceRevoke": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "voiceRevokePost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsVoiceprint"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "expectedRevisionToken",
+                "reason"
+              ],
+              "properties": {
+                "expectedRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                },
+                "reason": {
+                  "type": "string",
+                  "maxLength": 2048
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "voiceMatch": {
+    "post": {
+      "operationId": "voiceMatchPost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsCandidateMatches"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "wavBase64"
+              ],
+              "properties": {
+                "wavBase64": {
+                  "type": "string",
+                  "maxLength": 1280059
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "datasets": {
+    "get": {
+      "operationId": "datasetsGet",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsDatasets"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      }
+    },
+    "post": {
+      "operationId": "datasetsPost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "version"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "version": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "version",
+                "samples"
+              ],
+              "properties": {
+                "version": {
+                  "type": "string",
+                  "maxLength": 128
+                },
+                "samples": {
+                  "type": "array",
+                  "maxItems": 50,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "id",
+                      "kind",
+                      "input",
+                      "input2",
+                      "expected"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "kind": {
+                        "enum": [
+                          "ASR",
+                          "DIARIZATION",
+                          "MINUTES",
+                          "VOICE_SAME",
+                          "VOICE_DIFFERENT"
+                        ]
+                      },
+                      "input": {
+                        "type": "string",
+                        "maxLength": 1400000
+                      },
+                      "input2": {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 1400000
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "expected": {
+                        "type": "string",
+                        "maxLength": 8192
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluations": {
+    "get": {
+      "operationId": "evaluationsGet",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsEvaluations"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      }
+    },
+    "post": {
+      "operationId": "evaluationsPost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "state"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "state": {
+                    "const": "PENDING"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "datasetId",
+                "configuration"
+              ],
+              "properties": {
+                "datasetId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "configuration": {
+                  "$ref": "#/OperationsModelConfiguration"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "evaluation": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "evaluationGet",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsEvaluationDetail"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      }
+    }
+  },
+  "evaluationReview": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "evaluationReviewPost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "reviewReason"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "reviewReason": {
+                    "type": "string",
+                    "maxLength": 2048
+                  }
+                }
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "reason"
+              ],
+              "properties": {
+                "reason": {
+                  "type": "string",
+                  "maxLength": 2048
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "configuration": {
+    "get": {
+      "operationId": "configurationGet",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsConfiguration"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      }
+    }
+  },
+  "configurationRelease": {
+    "post": {
+      "operationId": "configurationReleasePost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "revisionToken",
+                  "configuration"
+                ],
+                "properties": {
+                  "revisionToken": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,18})$"
+                  },
+                  "configuration": {
+                    "$ref": "#/OperationsModelConfiguration"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "expectedRevisionToken",
+                "evaluationId",
+                "configuration",
+                "reason"
+              ],
+              "properties": {
+                "expectedRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                },
+                "evaluationId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "configuration": {
+                  "$ref": "#/OperationsModelConfiguration"
+                },
+                "reason": {
+                  "type": "string",
+                  "maxLength": 2048
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "configurationRollback": {
+    "post": {
+      "operationId": "configurationRollbackPost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "revisionToken",
+                  "configuration"
+                ],
+                "properties": {
+                  "revisionToken": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9][0-9]{0,18})$"
+                  },
+                  "configuration": {
+                    "$ref": "#/OperationsModelConfiguration"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "expectedRevisionToken",
+                "targetRevisionToken",
+                "reason"
+              ],
+              "properties": {
+                "expectedRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                },
+                "targetRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                },
+                "reason": {
+                  "type": "string",
+                  "maxLength": 2048
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "corpus": {
+    "get": {
+      "operationId": "corpusGet",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsCorpus"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      }
+    }
+  },
+  "corpusWithdrawal": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "corpusWithdrawalPost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "withdrawn"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "withdrawn": {
+                    "const": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {}
+            }
+          }
+        }
+      }
+    }
+  },
+  "feedback": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "feedbackPost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./feedback.yaml#/Feedback"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sourceRevisionToken",
+                "segmentIds",
+                "category",
+                "comment"
+              ],
+              "properties": {
+                "sourceRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                },
+                "segmentIds": {
+                  "type": "array",
+                  "maxItems": 100,
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                },
+                "category": {
+                  "enum": [
+                    "WORDING",
+                    "LABEL",
+                    "ACTION_OWNER"
+                  ]
+                },
+                "comment": {
+                  "type": "string",
+                  "maxLength": 4096
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "mail": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "mailPost",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "202": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsMailJob"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./meetings.yaml#/Key"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "sourceRevisionToken",
+                "publicationId",
+                "recipientEnterpriseIds"
+              ],
+              "properties": {
+                "sourceRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                },
+                "publicationId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "recipientEnterpriseIds": {
+                  "type": "array",
+                  "maxItems": 20,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "get": {
+      "operationId": "mailGet",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsMailJobs"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      }
+    }
+  },
+  "mailContext": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "mailContextGet",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsMailContext"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      }
+    }
+  },
+  "mailJob": {
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "mailJobGet",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Private bounded operations response; current identities and resource rights rechecked",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsMailJob"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current identity or governance role required"
+        },
+        "409": {
+          "description": "Exact original request or resource revision conflict"
+        },
+        "503": {
+          "description": "Integration or authority unavailable; preserve original request"
+        }
+      }
+    }
+  }
+}

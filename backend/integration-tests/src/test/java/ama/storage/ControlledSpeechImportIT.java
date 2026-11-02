@@ -35,6 +35,16 @@ class ControlledSpeechImportIT {
  }
  static String id(){return UUID.randomUUID().toString();}
  static String sha(byte[] bytes)throws Exception{return HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes));}
+ static TaskLease claimAvailable(JdbcTaskQueue queue,String pool,String worker){
+  // The local MySQL wall clock can step backwards between enqueue and claim.
+  // Follow the real worker's bounded polling, without changing availability or task state.
+  long deadline=System.nanoTime()+Duration.ofSeconds(3).toNanos();
+  do{
+   var lease=queue.claim(pool,worker);if(lease.isPresent())return lease.get();
+   try{Thread.sleep(25);}catch(InterruptedException interrupted){Thread.currentThread().interrupt();throw new AssertionError(interrupted);}
+  }while(System.nanoTime()<deadline);
+  throw new AssertionError("No eligible task: "+j.queryForList("SELECT state,attempt,available_at,UTC_TIMESTAMP(6) database_now,last_error FROM durable_task WHERE pool=? AND state IN ('READY','RUNNING')",pool));
+ }
  final class Fixture implements AutoCloseable {
   final ManagedLocalFixture nativeFiles;final FileStoragePort storage;final FileBackendCatalog catalog;final TransactionRunner tx;
   final JdbcSubjectFences fences;final JdbcOutbox outbox;final JdbcMeetingAccess access;final MeetingService meetings;
@@ -57,20 +67,29 @@ class ControlledSpeechImportIT {
    settings=new TranscriptImportRuntime.Settings(()->snapshot,ama.minutes.ControlledMinutesAdmin.READ,new TranscriptDocumentParser.ParseBudget(1048576,1048576,4096),Duration.ofSeconds(60));
    var intake=new JdbcProcessingIntake(source,tx,access,components,fences,queue,outbox,new ama.audit.JdbcAuditAdapter(source),(a,m,r)->components.authority().prepare(components.intake().readDraft(a,m,r.orderedFileIds(),()->false),id(),id(),snapshot,processing,()->false));var imported=intake.accept(actor,meeting,id(),new ama.contract.ProcessingContracts.ImportRequest(0,List.copyOf(ordered)),"SPEECH_IMPORT");input=imported.inputId();task=imported.taskId();
   }
-  TaskLease claim(JdbcTaskQueue queue){var lease=queue.claim("TRANSCRIPT_IMPORT","SPEECH_IMPORT_IT").orElseThrow();assertEquals(task,lease.taskId());return lease;}
+  TaskLease claim(JdbcTaskQueue queue){var lease=claimAvailable(queue,"TRANSCRIPT_IMPORT","SPEECH_IMPORT_IT");assertEquals(task,lease.taskId());return lease;}
   int checkpoints(){return j.queryForObject("SELECT COUNT(*) FROM speech_checkpoint WHERE input_id=?",Integer.class,input);}
   void expire(){j.update("UPDATE durable_task SET expires_at=UTC_TIMESTAMP(6)-INTERVAL 1 SECOND WHERE id=?",task);}
   @Override public void close()throws Exception{nativeFiles.close();}
  }
- @Test void actualFiveStageTaskKeepsRawSeparateAndClosesEveryExecution()throws Exception {
+ @Test void silenceProducesNoRawTranscriptAndKeepsProviderExecutionsSettled()throws Exception {
+  byte[] silence=wav(128000);Arrays.fill(silence,44,silence.length,(byte)0);
+  try(var f=new Fixture(silence)){
+   var lease=f.claim(f.queue);var carrier=TranscriptImportRuntime.prepare(f.queue,lease,f.settings,NEVER);assertTrue(f.queue.completeWithEffects(lease,carrier));
+   assertEquals("FAILED",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,f.task));assertEquals("MEDIA_NO_TEXT",j.queryForObject("SELECT last_error FROM durable_task WHERE id=?",String.class,f.task));
+   assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM transcript_revision WHERE producer_task_id=?",Integer.class,f.task));
+   assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM speech_execution WHERE lease_task_id=? AND settled_at IS NULL",Integer.class,f.task));
+  }
+ }
+ @Test void actualSixStageTaskKeepsRawSeparateAndClosesEveryExecution()throws Exception {
   try(var f=new Fixture()){
-   var lease=f.claim(f.queue);var carrier=TranscriptImportRuntime.prepare(f.queue,lease,f.settings,NEVER);assertEquals(5,f.checkpoints());assertThrows(IllegalStateException.class,carrier::get);assertTrue(f.queue.completeWithEffects(lease,carrier));
+   var lease=f.claim(f.queue);var carrier=TranscriptImportRuntime.prepare(f.queue,lease,f.settings,NEVER);assertEquals(6,f.checkpoints());assertThrows(IllegalStateException.class,carrier::get);assertTrue(f.queue.completeWithEffects(lease,carrier));
    assertEquals("SUCCEEDED",j.queryForObject("SELECT state FROM durable_task WHERE id=?",String.class,f.task));
    String raw=j.queryForObject("SELECT output_id FROM durable_task WHERE id=?",String.class,f.task);String original=new ObjectMapper().readTree(j.queryForObject("SELECT payload FROM speech_checkpoint WHERE input_id=? AND stage='ASR'",byte[].class,f.input)).path("value").path("result").path("text").asText();
    assertFalse(original.isBlank());assertEquals(List.of(original),j.queryForList("SELECT body FROM transcript_segment WHERE revision_id=? ORDER BY ordinal",String.class,raw));
    assertEquals(List.of(0L),j.queryForList("SELECT start_ms FROM transcript_segment WHERE revision_id=?",Long.class,raw));assertEquals(List.of(8000L),j.queryForList("SELECT end_ms FROM transcript_segment WHERE revision_id=?",Long.class,raw));
    assertNull(j.queryForObject("SELECT transcript_revision_id FROM meeting WHERE id=?",String.class,f.meeting));
-   assertEquals(5,j.queryForObject("SELECT COUNT(*) FROM speech_execution WHERE lease_task_id=? AND state='COMPLETED' AND settled_at IS NOT NULL",Integer.class,f.task));
+   assertEquals(6,j.queryForObject("SELECT COUNT(*) FROM speech_execution WHERE lease_task_id=? AND state='COMPLETED' AND settled_at IS NOT NULL",Integer.class,f.task));
    var blob=j.queryForMap("SELECT backend_id,namespace,object_key,wav_sha256,byte_count FROM speech_pcm_artifact WHERE input_id=? AND state='READY'",f.input);var key=new ama.contract.StorageContracts.StorageKey((String)blob.get("backend_id"),(String)blob.get("namespace"),(String)blob.get("object_key"));try(var in=f.storage.read(key,0,((Number)blob.get("byte_count")).longValue())){assertEquals(blob.get("wav_sha256"),sha(in.readAllBytes()));}
   }
  }
@@ -101,8 +120,8 @@ class ControlledSpeechImportIT {
    assertThrows(CancellationException.class,()->TranscriptImportRuntime.prepare(f.queue,lease,f.settings,afterAsr));assertEquals(3,f.checkpoints());
    byte[] vad=j.queryForObject("SELECT payload FROM speech_checkpoint WHERE input_id=? AND stage='VAD'",byte[].class,f.input);String artifact=j.queryForObject("SELECT id FROM speech_pcm_artifact WHERE input_id=?",String.class,f.input);f.expire();
    var restarted=TranscriptImportRuntime.install(source,f.fences,f.outbox,f.components);var next=f.claim(restarted);assertEquals(2,next.attempt());var carrier=TranscriptImportRuntime.prepare(restarted,next,f.settings,NEVER);assertTrue(restarted.completeWithEffects(next,carrier));
-   assertEquals(5,f.checkpoints());assertArrayEquals(vad,j.queryForObject("SELECT payload FROM speech_checkpoint WHERE input_id=? AND stage='VAD'",byte[].class,f.input));assertEquals(artifact,j.queryForObject("SELECT id FROM speech_pcm_artifact WHERE input_id=?",String.class,f.input));
-   assertEquals(5,j.queryForObject("SELECT COUNT(*) FROM speech_execution WHERE lease_task_id=?",Integer.class,f.task));assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM transcript_revision WHERE producer_task_id=?",Integer.class,f.task));
+   assertEquals(6,f.checkpoints());assertArrayEquals(vad,j.queryForObject("SELECT payload FROM speech_checkpoint WHERE input_id=? AND stage='VAD'",byte[].class,f.input));assertEquals(artifact,j.queryForObject("SELECT id FROM speech_pcm_artifact WHERE input_id=?",String.class,f.input));
+   assertEquals(6,j.queryForObject("SELECT COUNT(*) FROM speech_execution WHERE lease_task_id=?",Integer.class,f.task));assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM transcript_revision WHERE producer_task_id=?",Integer.class,f.task));
   }
  }
  @Test void deletingPreparedTaskErasesNormalizedBytesAndRejectsLateRaw()throws Exception {
@@ -115,7 +134,7 @@ class ControlledSpeechImportIT {
    }
    assertEquals(0,f.checkpoints());assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM speech_pcm_artifact WHERE input_id=?",Integer.class,f.input));
    assertThrows(ama.contract.StorageContracts.StorageException.class,()->f.storage.stat(key));assertThrows(ama.contract.StorageContracts.StorageException.class,()->f.storage.put(key,new ByteArrayInputStream(original),original.length,(String)blob.get("wav_sha256")));
-   assertEquals(5,j.queryForObject("SELECT COUNT(*) FROM speech_execution WHERE lease_task_id=? AND settled_at IS NOT NULL",Integer.class,f.task));
+   assertEquals(6,j.queryForObject("SELECT COUNT(*) FROM speech_execution WHERE lease_task_id=? AND settled_at IS NOT NULL",Integer.class,f.task));
   }
  }
  static byte[] wav(int samples){var b=ByteBuffer.allocate(44+samples*2).order(ByteOrder.LITTLE_ENDIAN);b.put("RIFF".getBytes(java.nio.charset.StandardCharsets.US_ASCII)).putInt(36+samples*2).put("WAVEfmt ".getBytes(java.nio.charset.StandardCharsets.US_ASCII)).putInt(16).putShort((short)1).putShort((short)1).putInt(16000).putInt(32000).putShort((short)2).putShort((short)16).put("data".getBytes(java.nio.charset.StandardCharsets.US_ASCII)).putInt(samples*2);for(int n=0;n<samples;n++)b.putShort((short)(Math.sin(n*.1)*3000));return b.array();}
