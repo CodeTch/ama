@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import StableLabel from '../../shared/StableLabel.vue';
 import {computed} from 'vue';
 import type {CommandState} from '../../shared/composables/useCommand';
 const props=defineProps<{state:CommandState;busy:boolean;blocked:boolean;storageStatus:string;cleanupFailed:boolean;message:string|null;discovery:'FOUND'|'ABSENT'|null;discovering:boolean;discoveryError:boolean}>();
@@ -9,6 +10,13 @@ const label=computed(()=>props.state==='ACKNOWLEDGED'?'打开已创建会议':pr
 <template>
  <section class="card create-panel" aria-labelledby="meeting-create-title">
   <h2 id="meeting-create-title">新建会议</h2><p>先创建会议，再填写会议信息和参会人员。</p>
+  <div class="create-actions">
+   <button class="btn primary" :disabled="busy||blocked||terminal" @click="$emit('submit')"><StableLabel :labels="['创建并打开','重试原请求','打开已创建会议']">{{label}}</StableLabel></button>
+   <button v-if="state==='UNCERTAIN'" class="btn" :disabled="busy||discovering" @click="$emit('lookup')"><StableLabel :labels="['正在查询…','查询原请求']">{{discovering?'正在查询…':'查询原请求'}}</StableLabel></button>
+   <button v-if="blocked" class="btn" :disabled="busy" @click="$emit('recover')">重新读取恢复记录</button>
+   <button v-if="terminal" class="btn" :disabled="busy" @click="$emit('session')">重新检查登录</button>
+   <button v-if="state==='EMPTY'&&!blocked" class="btn" :disabled="busy" @click="$emit('close')">暂不创建</button>
+  </div>
   <p v-if="busy" role="status">正在处理，请稍候…</p>
   <p v-if="blocked" role="alert">恢复记录暂无法读取。请先恢复原请求，再创建其他会议。</p>
   <p v-else-if="state==='UNCERTAIN'" role="status">尚未确认创建结果。重试会使用原请求，不会重新生成创建请求。</p>
@@ -20,13 +28,7 @@ const label=computed(()=>props.state==='ACKNOWLEDGED'?'打开已创建会议':pr
   <p v-if="discovery==='FOUND'">查到原请求关联的会议。请重试原请求，取得确认后打开。</p>
   <p v-else-if="discovery==='ABSENT'">暂未查到原请求关联，请继续保留并重试原请求。</p>
   <p v-if="discoveryError" role="alert">暂时无法查询创建结果，请稍后重试。</p>
-  <div class="create-actions">
-   <button class="btn primary" :disabled="busy||blocked||terminal" @click="$emit('submit')">{{label}}</button>
-   <button v-if="state==='UNCERTAIN'" class="btn" :disabled="busy||discovering" @click="$emit('lookup')">{{discovering?'正在查询…':'查询原请求'}}</button>
-   <button v-if="blocked" class="btn" :disabled="busy" @click="$emit('recover')">重新读取恢复记录</button>
-   <button v-if="terminal" class="btn" :disabled="busy" @click="$emit('session')">重新检查登录</button>
-   <button v-if="state==='EMPTY'&&!blocked" class="btn" :disabled="busy" @click="$emit('close')">暂不创建</button>
-  </div>
+
  </section>
 </template>
 <style scoped>

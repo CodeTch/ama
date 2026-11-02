@@ -22,7 +22,7 @@ button{font-family:inherit}
 .page-desc{color:var(--muted);font-size:13px;margin-top:4px}
 .page-actions{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--border2);background:#fff;color:var(--text);border-radius:9px;padding:8px 16px;font-size:13px;cursor:pointer;transition:all .18s;font-weight:500;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--border2);background:#fff;color:var(--text);border-radius:9px;padding:8px 16px;font-size:13px;cursor:pointer;transition:color .18s,background-color .18s,border-color .18s,box-shadow .18s;font-weight:500;white-space:nowrap}
 .btn:hover{border-color:var(--orange);color:var(--orange)}
 .btn.primary{background:var(--orange);border-color:var(--orange);color:#fff;font-weight:600}
 .btn.primary:hover{background:var(--orange-d);border-color:var(--orange-d);color:#fff}
@@ -30,7 +30,7 @@ button{font-family:inherit}
 .btn.navy:hover{background:var(--navy2);color:#fff}
 .btn.sm{padding:4px 10px;font-size:12px;border-radius:7px}
 .tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:16px;flex-wrap:wrap}
-.tab{padding:9px 16px;font-size:13.5px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .18s;border:none;background:none;font-weight:500}
+.tab{padding:9px 16px;font-size:13.5px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .18s,background-color .18s,border-color .18s,box-shadow .18s;border:none;background:none;font-weight:500}
 .tab:hover{color:var(--text)}
 .tab.active{color:var(--orange);border-bottom-color:var(--orange);font-weight:600}
 /* Final meeting-list overrides, evaluated after the prototype's earlier page definitions. */

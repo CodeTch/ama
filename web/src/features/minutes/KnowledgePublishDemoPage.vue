@@ -2,6 +2,7 @@
 import {computed,onBeforeUnmount,ref} from 'vue';
 import {RouterLink} from 'vue-router';
 import Icon from '../../shared/Icon.vue';
+import StableLabel from '../../shared/StableLabel.vue';
 
 type PublishPhase='idle'|'publishing'|'failed'|'succeeded';
 type Folder={id:string;name:string;children?:Folder[]};
@@ -132,7 +133,7 @@ onBeforeUnmount(clearTimer);
       <div class="mt12"><button class="btn" type="button" @click="openPreview">最终文档预览</button></div>
      </div></section>
      <section class="card demo-preview-card" aria-labelledby="minutes-preview-title"><div class="card-h between"><h2 id="minutes-preview-title" class="card-t">纪要预览</h2><span class="small muted">已最终确认的版本</span></div><div class="card-p"><h3>{{documentTitle}}</h3><div v-for="minute in confirmedMinutes" :key="minute.heading" class="confirmed-minute"><h4>{{minute.heading}}</h4><p>{{minute.body}}</p></div></div></section>
-     <section class="card card-p publish-action-card"><div class="flex"><div style="flex:1"><div class="b" style="font-size:14px">{{phase==='failed'?'重试发布':'确认发布'}}</div><div class="small muted">发布以确认版纪要、证据关系和发布版本为最小单元 · 重复发布不会生成重复文档</div></div><button class="btn primary lg" :disabled="publishDisabled" type="button" @click="publish">{{publishLabel}}</button></div><div v-if="!currentFolder" class="small mt8 publish-hint">请选择发布知识库或库内文件夹</div></section>
+     <section class="card card-p publish-action-card"><div class="flex"><div style="flex:1"><div class="b" style="font-size:14px">{{phase==='failed'?'重试发布':'确认发布'}}</div><div class="small muted">发布以确认版纪要、证据关系和发布版本为最小单元 · 重复发布不会生成重复文档</div></div><button class="btn primary lg" :disabled="publishDisabled" type="button" @click="publish"><StableLabel :labels="['发布到知识库','重试发布']">{{publishLabel}}</StableLabel></button></div><div v-if="!currentFolder" class="small mt8 publish-hint">请选择发布知识库或库内文件夹</div></section>
      <section v-if="phase==='failed'" class="banner error publish-result" role="alert"><div><b>知识库发布失败：{{statusText}}</b><br/>已确认状态与发布位置均已保留，可直接重试，无需重新确认。</div></section>
      <section v-if="phase==='succeeded'" class="card publication-result-card" role="status"><div class="card-h"><div><b>发布成功，正式纪要已生成。</b><div class="small muted mt8"><span>当前会议已切换为只读</span>，重复发布不会生成重复知识文档。</div></div></div><div class="card-p"><h3 class="publication-result-title">{{submittedTitle}}</h3><dl class="publication-result-meta"><div><dt>文档编号</dt><dd>{{formalDocument.id}}</dd></div><div><dt>发布版本</dt><dd>{{formalDocument.version}}</dd></div><div><dt>发布位置</dt><dd>{{submittedDestination}}</dd></div><div><dt>发布人 / 时间</dt><dd>{{formalDocument.publisher}} · {{formalDocument.publishedAt}}</dd></div></dl><a class="btn" :href="`#knowledge-document-${formalDocument.id}`" aria-label="查看正式纪要 ↗">查看正式纪要 ↗</a></div></section>
     </div>
@@ -140,7 +141,7 @@ onBeforeUnmount(clearTimer);
   </div></main>
  </div></div>
 
- <footer class="acf-dock knowledge-publish-dock"><div class="acf-inner"><span class="acf-hint">{{phase==='succeeded'?'发布完成，当前会议已切换为只读。':'发布后会议将保持只读。'}}</span><div class="acf-actions"><button class="btn" type="button" :disabled="locked" @click="showNotice('返回会议确认')">上一步</button><button class="btn primary" :disabled="publishDisabled" type="button" @click="publish">{{publishLabel}}</button></div></div></footer>
+ <footer class="acf-dock knowledge-publish-dock"><div class="acf-inner"><span class="acf-hint">{{phase==='succeeded'?'发布完成，当前会议已切换为只读。':'发布后会议将保持只读。'}}</span><div class="acf-actions"><button class="btn" type="button" :disabled="locked" @click="showNotice('返回会议确认')">上一步</button><button class="btn primary" :disabled="publishDisabled" type="button" @click="publish"><StableLabel :labels="['发布到知识库','重试发布']">{{publishLabel}}</StableLabel></button></div></div></footer>
 
  <dialog ref="previewDialog" class="notice-dialog preview-dialog" aria-labelledby="preview-title"><form method="dialog"><h2 id="preview-title">最终文档预览（发布版）</h2><div class="preview-copy"><h3>{{documentTitle}}</h3><div v-for="minute in confirmedMinutes" :key="minute.heading" class="confirmed-minute"><h4>{{minute.heading}}</h4><p>{{minute.body}}</p></div></div><button class="btn primary" autofocus>关闭预览</button></form></dialog>
  <dialog ref="publishDialog" class="notice-dialog publish-dialog" aria-labelledby="publishing-title" @cancel.prevent><form method="dialog"><h2 id="publishing-title">正在发布</h2><div class="publish-progress"><div class="progress"><div class="bar" :style="{width:`${progress}%`}"></div></div><p class="small muted">{{publishMessage}}</p><p class="small muted">请稍候，发布完成后会显示最终结果。</p></div></form></dialog>

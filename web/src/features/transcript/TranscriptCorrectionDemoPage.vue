@@ -39,7 +39,7 @@ function reloadTranscript(){reloaded.value=true;}
      <section class="card card-p mt16"><div class="between"><b>说话人</b><button class="btn sm ghost" @click="showNotice('编辑说话人')">编辑</button></div><p class="small muted mt12">尚未关联说话人信息。</p></section>
     </div>
     <div class="transcript-main">
-     <section class="card transcript-feedback demo-transcript-card" aria-labelledby="demo-transcript-title"><h2 id="demo-transcript-title">转写正文</h2><p>尚无已保存转写。导入任务完成后重新读取。</p><button class="btn" @click="reloadTranscript">重新读取转写</button><p v-if="reloaded" class="small muted demo-status" role="status">已重新读取转写（演示）</p></section>
+     <section class="card transcript-feedback demo-transcript-card" aria-labelledby="demo-transcript-title"><h2 id="demo-transcript-title">转写正文</h2><p>尚无已保存转写。导入任务完成后重新读取。</p><button class="btn" @click="reloadTranscript">重新读取转写</button><p class="small muted demo-status" role="status">{{reloaded?'已重新读取转写（演示）':''}}</p></section>
      <details class="transcript-history demo-history"><summary>转写历史与原操作恢复</summary><section class="card transcript-feedback"><h2>转写历史</h2><button class="btn" @click="historyRead=true">读取历史版本</button><p v-if="historyRead" class="small muted mt12">当前演示没有可恢复的历史版本。</p></section></details>
     </div>
    </div>
@@ -56,7 +56,7 @@ function reloadTranscript(){reloaded.value=true;}
 .demo-transcript-card{min-height:136px;padding:24px;margin-bottom:20px}
 .demo-transcript-card h2{font-size:18px;margin-bottom:6px}
 .demo-transcript-card p{line-height:1.8}
-.demo-status{margin-top:10px}
+.demo-status{margin-top:10px;min-height:22px}
 .demo-history{margin:12px 0;color:var(--muted);font-size:12px}
 .demo-history summary{cursor:pointer}
 .demo-history .transcript-feedback{box-shadow:none}

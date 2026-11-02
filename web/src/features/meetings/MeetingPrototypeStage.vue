@@ -42,7 +42,7 @@ function regenerate(){regenerated.value=true;showNotice('重新生成');}
       <section class="card card-p mt16"><div class="between"><b>说话人</b><button class="btn sm ghost" @click="showNotice('编辑说话人')">编辑</button></div><p class="small muted mt12">尚未关联说话人信息。</p></section>
      </div>
      <div class="transcript-main">
-      <section class="card transcript-feedback prototype-transcript-card" aria-labelledby="prototype-transcript-title"><h2 id="prototype-transcript-title">转写正文</h2><p>尚无已保存转写。导入任务完成后重新读取。</p><button class="btn" @click="reloadTranscript">重新读取转写</button><p v-if="reloaded" class="small muted prototype-status" role="status">已重新读取转写（演示）</p></section>
+      <section class="card transcript-feedback prototype-transcript-card" aria-labelledby="prototype-transcript-title"><h2 id="prototype-transcript-title">转写正文</h2><p>尚无已保存转写。导入任务完成后重新读取。</p><button class="btn" @click="reloadTranscript">重新读取转写</button><p class="small muted prototype-status" role="status">{{reloaded?'已重新读取转写（演示）':''}}</p></section>
       <details class="prototype-history"><summary>转写历史与原操作恢复</summary><section class="card transcript-feedback"><h2>转写历史</h2><button class="btn" @click="historyRead=true">读取历史版本</button><p v-if="historyRead" class="small muted mt12">当前演示没有可恢复的历史版本。</p></section></details>
      </div>
     </div>
@@ -81,7 +81,7 @@ function regenerate(){regenerated.value=true;showNotice('重新生成');}
 .prototype-transcript-card{min-height:136px;padding:24px;margin-bottom:20px}
 .prototype-transcript-card h2{font-size:18px;margin-bottom:6px}
 .prototype-transcript-card p{line-height:1.8}
-.prototype-status{margin-top:10px}
+.prototype-status{margin-top:10px;min-height:22px}
 .prototype-history{margin:12px 0;color:var(--muted);font-size:12px}
 .prototype-history summary{cursor:pointer}
 .prototype-history .transcript-feedback{box-shadow:none}

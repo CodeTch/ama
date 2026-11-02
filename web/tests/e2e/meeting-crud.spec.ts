@@ -7,10 +7,12 @@ test('owner delete confirmation sends the command and reloads the list',async({p
  let deleted=false,deleteCalls=0;
  await page.route('**/api/v1/session',route=>route.fulfill({status:200,json:{actor:{enterpriseId:'owner',status:'ACTIVE',roles:['USER']},csrfToken:'X'.repeat(43),expiresAt:'2030-01-01T00:00:00Z'}}));
  await page.route('**/api/v1/meetings/categories*',route=>route.fulfill({status:200,json:{hasMore:false,items:[],nextCursor:null}}));
- await page.route('**/api/v1/directory/people*',route=>route.fulfill({status:200,json:{hasMore:false,items:[],nextCursor:null}}));
- await page.route('**/api/v1/meetings?*',route=>route.fulfill({status:200,json:{hasMore:false,items:deleted?[]:[item],nextCursor:null}}));
+ await page.route('**/api/v1/directory/people*',route=>route.fulfill({status:200,json:{items:[],nextCursor:null}}));
+ await page.route('**/api/v1/topics',route=>route.fulfill({json:[]}));
+ await page.route('**/api/v1/topics/memberships?*',route=>route.fulfill({json:[{meetingId:meeting,topicId:null}]}));
+ await page.route('**/api/v1/meetings?*',route=>route.fulfill({status:200,json:{hasMore:false,items:deleted?[]:[item],nextCursor:null,total:deleted?0:1,stageCounts:{ENTRY:deleted?0:1,TRANSCRIPT_PENDING:0,TRANSCRIPT_FAILED:0,MINUTES_PENDING:0,MINUTES_FAILED:0,READY_TO_PUBLISH:0,PUBLISH_FAILED:0,PUBLISHED:0},topicGroups:{__none:deleted?0:1}}}));
  await page.route(`**/api/v1/meetings/${meeting}`,async route=>{
-  if(route.request().method()==='DELETE'){deleteCalls++;deleted=true;await route.fulfill({status:200,json:{id:meeting,revision:2,revisionToken:'2'}});return;}
+  if(route.request().method()==='DELETE'){deleteCalls++;deleted=true;await route.fulfill({status:202,json:{meetingId:meeting,deletionTaskId:'00000000-0000-4000-8000-000000000009',revisionToken:'2',state:'COMPLETE',phase:'COMPLETE',attempts:1,errorCode:null}});return;}
   await route.fulfill({status:200,json:{id:meeting,revision:1,revisionToken:'1',accessRevision:0,accessRevisionToken:'0',stage:'ENTRY',name:'可删除会议',category:null,summary:null,occurredOn:null,confirmedRosterId:null,confirmedRoster:[],rosterDraftId:null,rosterDraft:[]}});
  });
  await page.goto('/meetings');
@@ -19,7 +21,10 @@ test('owner delete confirmation sends the command and reloads the list',async({p
  const dialog=page.getByRole('dialog',{name:'删除会议'});
  await expect(dialog).toContainText('确认删除“可删除会议”？');
  await dialog.getByRole('button',{name:'确认删除'}).click();
- await expect(dialog).toBeHidden();
+ const progress=page.getByRole('dialog',{name:'会议删除进度',exact:true});
+ await expect(progress).toContainText('在线数据已清理完成');
+ await progress.getByRole('button',{name:'关闭删除状态',exact:true}).click();
+ await expect(progress).toBeHidden();
  await expect(page.getByRole('button',{name:'可删除会议'})).toHaveCount(0);
  expect(deleteCalls).toBe(1);
 });

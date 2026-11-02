@@ -14,3 +14,9 @@
 .m19-published-page .published-transcript .wb3,.m19-published-page .published-transcript .col-sticky,.m19-published-page .published-transcript .transcript-main{display:contents}
 
 @media(max-width:900px){.content.minutes-stage{padding-top:12px}}
+
+/* The identity lookup must not move adjacent toolbar actions. */
+.topbar-right>details:has(.rc-role){width:216px;flex-shrink:0}
+.topbar-right>details:has(.rc-role)>.role-chip{width:100%}
+.topbar-right>details:has(.rc-role)>.role-chip>div:last-child{min-width:0;flex:1}
+.topbar-right .rc-name,.topbar-right .rc-role{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
