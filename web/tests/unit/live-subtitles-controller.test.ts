@@ -6,3 +6,16 @@ const page=(events:any[],cursor:string)=>({meetingId:meeting,sessionId:session,e
 test('live revisions replace one segment without deleting repeated words and reconnect uses its accepted cursor',async()=>{const f=fixture(),c=useLiveSubtitles(f.api as any,f.options);try{f.responses.push(page([event('1',1)],'1'));c.synchronize();await c.refresh();assert.equal(c.events.value[0]!.text,'非常非常重要12345');f.responses.push(page([event('2',2,'stable','非常非常重要12345。')],'2'));await c.refresh();assert.equal(c.events.value.length,1);assert.equal(c.events.value[0]!.revision,2);assert.deepEqual(f.calls,['0','1']);}finally{c.dispose();}});
 test('late data cannot return after actor or recording scope changes',async()=>{const f=fixture();let resolve!:(v:any)=>void;f.responses.push(()=>new Promise(r=>{resolve=r;}));const c=useLiveSubtitles(f.api as any,f.options);try{c.synchronize();const pending=c.refresh();f.actor(null);c.synchronize();resolve(page([event('1',1)],'1'));await pending;assert.deepEqual(c.events.value,[]);assert.equal(c.cursor.value,'0');}finally{c.dispose();}});
 test('current permission denial clears private captions and never advances an unverified cursor',async()=>{const f=fixture(),c=useLiveSubtitles(f.api as any,f.options);try{f.responses.push(page([event('1',1)],'1'));c.synchronize();await c.refresh();f.responses.push(new ApiError('http',403,'denied'));await c.refresh();assert.deepEqual(c.events.value,[]);assert.equal(c.cursor.value,'0');assert(c.error.value);}finally{c.dispose();}});
+for(const cause of [new ApiError('http',503,'temporarily unavailable'),new DOMException('timeout','TimeoutError'),new ApiError('response',200,'invalid page')])test(`transient ${cause.message} preserves verified captions and resumes from the accepted cursor`,async()=>{const f=fixture(),c=useLiveSubtitles(f.api as any,f.options);try{f.responses.push(page([event('1',1,'stable')],'1'));c.synchronize();await c.refresh();f.responses.push(cause);await c.refresh();assert.equal(c.events.value.length,1);assert.equal(c.cursor.value,'1');assert.equal(c.ready.value,true);assert(c.error.value);f.responses.push(page([event('2',2,'stable','恢复字幕')],'2'));await c.refresh();assert.deepEqual(f.calls,['0','1','1']);assert.equal(c.events.value[0]!.text,'恢复字幕');}finally{c.dispose();}});
+test('same recording scope updates preserve captions and the accepted replay cursor',async()=>{
+ const f=fixture(),c=useLiveSubtitles(f.api as any,f.options);try{
+  f.responses.push(page([event('1',1,'stable')],'1'));c.synchronize();await c.refresh();
+  c.synchronize();assert.equal(c.cursor.value,'1');assert.equal(c.events.value.length,1);assert.deepEqual(f.calls,['0']);
+  f.responses.push(page([event('2',2,'stable','新字幕')],'2'));await c.refresh();assert.deepEqual(f.calls,['0','1']);
+ }finally{c.dispose();}
+});
+test('same recording scope updates do not abandon an in-flight subtitle page',async()=>{
+ const f=fixture();let resolve!:(value:any)=>void;f.responses.push(()=>new Promise(r=>resolve=r));const c=useLiveSubtitles(f.api as any,f.options);try{
+  c.synchronize();const pending=c.refresh();c.synchronize();assert.deepEqual(f.calls,['0']);resolve(page([event('1',1)],'1'));await pending;assert.equal(c.cursor.value,'1');
+ }finally{resolve?.(page([],'0'));c.dispose();}
+});

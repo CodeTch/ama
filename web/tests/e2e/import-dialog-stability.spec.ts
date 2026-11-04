@@ -44,7 +44,7 @@ test('opening import keeps its position and size while the upload authorization 
  }finally{data.release();}
 });
 
-test('a failed upload authorization still exposes its recovery action',async({page})=>{
+test('a failed upload authorization shows its error without removed recovery modules',async({page})=>{
  const data=await setup(page,503);
  try{
   await page.getByRole('button',{name:'导入会议',exact:true}).click();
@@ -53,8 +53,8 @@ test('a failed upload authorization still exposes its recovery action',async({pa
   await expect(dialog.getByText('上传恢复记录暂不可用，请重新检查后操作。',{exact:true})).toBeHidden();
   data.workspace.release();
   await expect(dialog.getByText('上传恢复记录暂不可用，请重新检查后操作。',{exact:true})).toBeVisible();
-  await dialog.getByText('上传记录与恢复',{exact:true}).click();
-  await expect(dialog.getByRole('button',{name:'重新读取上传记录',exact:true})).toBeEnabled();
+  await expect(dialog.getByText('上传记录与恢复',{exact:true})).toHaveCount(0);
+  await expect(dialog.getByRole('button',{name:'重新读取上传记录',exact:true})).toHaveCount(0);
   await expect(page.getByRole('button',{name:'添加会议主文件',exact:true})).toHaveAttribute('aria-disabled','true');
  }finally{data.release();}
 });
@@ -78,4 +78,31 @@ test('closing a new import keeps its contents and size until discard finishes',a
   await expect(dialog).toBeHidden();
   await expect(page).toHaveURL(/\/meetings$/);
  }finally{data.release();}
+});
+
+test('an uncertain discard can close and resume the exact request after reload', async ({page}) => {
+ const data=await setup(page);
+ data.release();
+ const requests: string[][]=[];
+ await page.route(`**/api/v1/meetings/${meeting}/import-discard`, async route => {
+  const request=route.request();
+  requests.push([request.headers()['idempotency-key']!,request.postData()!]);
+  if(requests.length===1) await route.fulfill({status:503,json:{}});
+  else await route.fulfill({json:{meetingId:meeting,state:'DISCARDED',revisionToken:'1'}});
+ });
+ await page.getByRole('button',{name:'导入会议',exact:true}).click();
+ const dialog=page.getByRole('dialog',{name:'导入会议',exact:true});
+ await expect(dialog.getByRole('button',{name:'添加会议主文件'})).toHaveAttribute('aria-disabled','false');
+ await dialog.getByRole('button',{name:'关闭导入会议'}).click();
+ await expect(dialog.getByRole('button',{name:'重试放弃导入'})).toBeEnabled();
+ await page.keyboard.press('Escape');
+ await expect(dialog).toBeHidden();
+ await expect(page).toHaveURL(/\/meetings$/);
+ await page.reload();
+ await page.getByRole('button',{name:'继续处理',exact:true}).click();
+ await expect(dialog.getByText('上传恢复记录暂不可用，请重新检查后操作。')).toHaveCount(0);
+ await dialog.getByRole('button',{name:'重试放弃导入'}).click();
+ await expect(dialog).toBeHidden();
+ await expect(page.getByRole('button',{name:'继续处理',exact:true})).toHaveCount(0);
+ expect(requests).toEqual([requests[0],requests[0]]);
 });

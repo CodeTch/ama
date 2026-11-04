@@ -1,6 +1,6 @@
 import {ref,shallowRef,computed,watch,onScopeDispose} from 'vue';
 import type {TranscriptSource} from '../../shared/api/transcripts';
-export type MediaSource=TranscriptSource&{ordinal:number};
+export type MediaSource=TranscriptSource&{ordinal:number;name?:string};
 export type MediaScope={meeting:string;revisionId:string|null;accessRevisionToken:string;sources:MediaSource[]};
 export type SourceReader=(meeting:string,source:TranscriptSource,signal:AbortSignal)=>Promise<{blob:Blob;name:string|null}>;
 /** Own one verified media Blob. Neither a prior URL nor a late source read survives its actor/revision scope. */

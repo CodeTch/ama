@@ -36,17 +36,87 @@ async function setup(page:Page,send:(route:Route)=>Promise<void>){
  return {dialog,assigned:()=>{membership=topic;}};
 }
 
+test('topic selection avoids a second row border and keeps visible keyboard focus',async({page})=>{
+ const {dialog}=await setup(page,route=>route.fulfill({status:204}));
+ const row=dialog.getByRole('group',{name:'专题：年度复盘'});
+ const radio=row.getByRole('radio');
+ await expect(radio).toBeChecked();
+ await expect(row).toHaveCSS('border-top-width','1px');
+ await expect(row).toHaveCSS('outline-style','none');
+
+ await dialog.getByRole('button',{name:'快速创建一级专题'}).focus();
+ await page.keyboard.press('Tab');
+ await expect(radio).toBeFocused();
+ await expect(row.locator('.radio-dot')).toHaveCSS('outline-width','1px');
+ await expect(row.locator('.radio-dot')).toHaveCSS('outline-style','solid');
+ await expect(row).toHaveCSS('outline-style','none');
+});
+
 test('assignment actions keep their labels during send, close immediately, and refresh after completion',async({page})=>{
  let release!:()=>void,started!:()=>void,calls=0;
  const waiting=new Promise<void>(resolve=>{started=resolve;}),hold=new Promise<void>(resolve=>{release=resolve;});
  const {dialog,assigned}=await setup(page,async route=>{calls++;started();await hold;assigned();await route.fulfill({status:204});});
  await dialog.getByRole('button',{name:'确定',exact:true}).click();await waiting;
+ const success=page.getByRole('status').filter({hasText:'会议专题已调整'});
+ await expect(success).toHaveCount(0);
  for(const name of ['关闭','取消','确定'])await expect(dialog.getByRole('button',{name,exact:true})).toBeEnabled();
  await dialog.getByRole('button',{name:'确定',exact:true}).click();
  await expect(dialog.getByRole('alert')).toHaveCount(0);expect(calls).toBe(1);
  await dialog.getByRole('button',{name:'关闭',exact:true}).click();await expect(dialog).toBeHidden();
  release();await expect(page.getByRole('button',{name:'调整专题：年度复盘',exact:true})).toBeVisible();
+ await expect(success).toBeVisible();
  await expect(dialog).toBeHidden();expect(calls).toBe(1);
+});
+
+test('returning to meetings keeps the last confirmed topic visible during refresh',async({page})=>{
+ const {dialog}=await setup(page,route=>route.fulfill({status:204}));
+ await dialog.getByRole('button',{name:'取消',exact:true}).click();
+ await page.getByRole('button',{name:'我的语料反馈'}).click();
+ await expect(page).toHaveURL(/\/feedback$/);
+ let release!:()=>void;
+ const pending=new Promise<void>(resolve=>{release=resolve;});
+ await page.route('**/api/v1/topics/memberships?*',async route=>{
+  await pending;
+  await route.fulfill({json:[{meetingId:meeting,topicId:topic}]});
+ });
+ try{
+  const requested=page.waitForRequest('**/api/v1/topics/memberships?*');
+  await page.getByRole('link',{name:/智会助手/}).click();
+  await requested;
+  const row=page.getByRole('row').filter({hasText:'创建中会议'});
+  await expect(row).toBeVisible();
+  await expect(row.getByRole('button',{name:'调整专题：未归入专题',exact:true})).toBeVisible();
+  await expect(row.getByText('正在读取专题')).toHaveCount(0);
+  const topicCell=row.getByRole('cell').nth(7);
+  const before=await topicCell.boundingBox();
+  release();
+  await expect(topicCell.getByRole('button',{name:'调整专题：年度复盘',exact:true})).toBeVisible();
+  expect(await topicCell.boundingBox()).toEqual(before);
+ }finally{release();}
+});
+
+test('assignment displays the verified topic before the meeting list and its memberships refresh',async({page})=>{
+ let committed=false,verified=false,release!:()=>void;
+ const refresh=new Promise<void>(resolve=>{release=resolve;});
+ const {dialog,assigned}=await setup(page,async route=>{
+  assigned();committed=true;
+  await route.fulfill({status:204});
+ });
+ await page.route('**/api/v1/topics/memberships?*',async route=>{
+  if(committed&&verified)await refresh;
+  if(committed)verified=true;
+  await route.fulfill({json:[{meetingId:meeting,topicId:committed?topic:null}]});
+ });
+ await page.route('**/api/v1/meetings?*',async route=>{
+  if(committed)await refresh;
+  await route.fallback();
+ });
+ try{
+  await dialog.getByRole('button',{name:'确定',exact:true}).click();
+  await expect(dialog).toBeHidden();
+  await expect(page.getByRole('status').filter({hasText:'会议专题已调整'})).toBeVisible();
+  await expect(page.getByRole('button',{name:'调整专题：年度复盘',exact:true})).toBeVisible();
+ }finally{release();}
 });
 
 for(const status of [409,422])test(`assignment rejected with ${status} retries without discard control and cancel allows a new choice`,async({page})=>{
@@ -58,6 +128,7 @@ for(const status of [409,422])test(`assignment rejected with ${status} retries w
   else{assigned();await route.fulfill({status:204});}
  });
  await dialog.getByRole('button',{name:'确定',exact:true}).click();await expect(dialog.getByRole('alert')).toBeVisible();
+ await expect(page.getByRole('status').filter({hasText:'会议专题已调整'})).toHaveCount(0);
  await expect(dialog.getByText('正在恢复原专题请求，当前内容保持只读。')).toHaveCount(0);
  await expect(dialog.getByRole('button',{name:'放弃已拒绝的原请求'})).toHaveCount(0);
  await dialog.getByRole('button',{name:'确定',exact:true}).click();
@@ -189,4 +260,27 @@ for(const mode of ['create','update'] as const)test(`${mode} keeps its action la
  await input.fill('稳定专题');const handle=await button.elementHandle();await button.click();
  try{await expect.poll(()=>calls).toBe(1);await expect(button).toHaveText(mode==='create'?'创建专题':'保存');await expect(button).toHaveAccessibleName('重试原专题请求');await expect(child.getByText('正在恢复原专题请求，当前内容保持只读。')).toHaveCount(0);expect(await handle!.evaluate(el=>el.isConnected)).toBe(true);}finally{release();}
  await expect(dialog).toBeVisible();
+});
+
+test('an uncertain quick-create topic can close and recover the original request', async ({page}) => {
+ const {dialog}=await setup(page,route=>route.fulfill({status:204}));
+ const requests:string[][]=[];
+ await page.route('**/api/v1/topics',async route=>{
+  const request=route.request();
+  if(request.method()==='GET')return route.fulfill({json:[]});
+  requests.push([request.headers()['idempotency-key']!,request.postData()!]);
+  if(requests.length===1)return route.fulfill({status:503,json:{}});
+  return route.fulfill({status:201,json:{...request.postDataJSON(),id:topic,revision:0,revisionToken:'0'}});
+ });
+ await dialog.getByRole('button',{name:'快速创建一级专题'}).click();
+ const create=page.getByRole('dialog',{name:'新建会议专题'});
+ await create.locator('#topic-name').fill('待确认专题');
+ await create.getByRole('button',{name:'创建专题',exact:true}).click();
+ await expect(create.getByRole('button',{name:'重试原专题请求'})).toBeEnabled();
+ await page.keyboard.press('Escape');
+ await expect(create).toBeHidden();
+ await page.getByRole('button',{name:'恢复原专题请求',exact:true}).click();
+ await create.getByRole('button',{name:'重试原专题请求'}).click();
+ await expect(create).toBeHidden();
+ expect(requests).toEqual([requests[0],requests[0]]);
 });

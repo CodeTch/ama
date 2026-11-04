@@ -6,6 +6,8 @@ public interface CompleteReadPolicy extends FileReferencePolicy {
     Object prelock(FileRegistry.LockedMeeting gate, String meetingId,
                    FileRegistry.Reference reference, String fileId, FileRegistry.ReferenceContext context);
     interface ReadPreparation {}
+    /** Only an observed root change before source authorization permits bounded reacquisition. */
+    final class ReadSnapshotChanged extends RuntimeException {}
     ReadPreparation prepareRead(Actor actor, String meetingId, FileRegistry.ReadRequest request);
     /** Optional identity-complete prologue. The registry still validates its own gate and current READ. */
     default FileRegistry.LockedMeeting lockReadRoot(FileRegistry registry,Actor actor,String meetingId,ReadPreparation prepared){return registry.lock(actor,meetingId,ama.access.MeetingAccess.Action.READ);}

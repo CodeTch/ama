@@ -139,6 +139,18 @@
       "ordinal"
     ],
     "properties": {
+      "name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "kind": {
+        "enum": [
+          "AUDIO",
+          "VIDEO",
+          "SUBTITLE",
+          "DOCUMENT"
+        ]
+      },
       "fileId": {
         "type": "string",
         "format": "uuid",
@@ -162,6 +174,13 @@
         "type": "integer",
         "format": "int64",
         "minimum": 1
+      },
+      "recognitionOrigin": {
+        "enum": [
+          "FILE",
+          "LOCAL_HARNESS",
+          "UNKNOWN"
+        ]
       }
     }
   },
@@ -5135,6 +5154,17 @@
           "ACCEPT",
           "REJECT"
         ]
+      },
+      "additionalCandidateIds": {
+        "type": "array",
+        "maxItems": 59,
+        "uniqueItems": true,
+        "items": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "description": "Additional pending candidates decided atomically with candidateId in one immutable revision. No duplicates, including candidateId."
       }
     }
   },
@@ -5201,6 +5231,46 @@
       },
       "canUndo": {
         "type": "boolean"
+      },
+      "createdSourceRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "kind": {
+        "enum": [
+          "SPEECH_ENHANCEMENT"
+        ]
+      },
+      "range": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "startScalar",
+          "endScalar",
+          "original",
+          "replacement"
+        ],
+        "properties": {
+          "startScalar": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 65536
+          },
+          "endScalar": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 65536
+          },
+          "original": {
+            "type": "string",
+            "maxLength": 65536
+          },
+          "replacement": {
+            "type": "string",
+            "maxLength": 65536
+          }
+        }
       }
     }
   },
@@ -5991,6 +6061,10 @@
             "type": "null"
           }
         ]
+      },
+      "voiceprintId": {
+        "type": "string",
+        "format": "uuid"
       }
     }
   },

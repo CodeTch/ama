@@ -100,3 +100,29 @@ test('material close protection distinguishes known read refusal and settled bac
  const original=fetch;let mode:'refused'|'pending'|'ready'='refused';let state:ReturnType<typeof useMaterials>|undefined;
  try{globalThis.fetch=async()=>mode==='refused'?Response.json({error:{code:'FORBIDDEN'}},{status:403}):Response.json({items:[],materialSnapshotId:null,materialsPending:mode==='pending',meetingRevision:'0'});state=useMaterials(api(),()=> 'owner',()=>meeting,context());await state.reload();assert.equal(state.state.value.blocked,true);assert.equal(state.state.value.closeBlocked,false);state.dispose();state=undefined;mode='pending';state=useMaterials(api(),()=> 'owner',()=>meeting,context());await state.reload();assert.equal(state.state.value.blocked,true);assert.equal(state.state.value.closeBlocked,false);}finally{state?.dispose();globalThis.fetch=original;}
 });
+
+test('intake accepts new local files while a knowledge batch is parsing',async()=>{
+ let release!:()=>void;const waiting=new Promise<void>(r=>{release=r;});let parsing=false,uploads=0;
+ const fake={list:async()=>({items:[],materialSnapshotId:null,materialsPending:false,meetingRevision:'1'}),batch:async()=>{parsing=true;await waiting;},begin:async()=>{uploads++;throw Error('stop after proving upload starts');}} as unknown as ReturnType<typeof api>;
+ const state=useMaterials(fake,()=> 'owner',()=>meeting,context());
+ try{await state.reload();const first=state.addKnowledge([{id:'doc',libraryId:'lib',name:'doc',version:'a'.repeat(64),sha256:'a'.repeat(64),sizeBytesToken:'1'}]);await tick();assert.equal(parsing,true);
+ const next=state.addLocal([new File(['second'],'second.pdf')]);await next;assert.equal(uploads,1);assert.equal(state.busy.value,true);assert.equal(state.jobs.value.some(j=>j.name==='second.pdf'),true);release();await first;
+ }finally{release();state.dispose();}
+});
+
+test('local byte preparation is bounded across repeated additions and later files still run after failures',async()=>{
+ let release!:()=>void;const waiting=new Promise<void>(r=>{release=r;});let started=0;
+ const fake={list:async()=>({items:[],materialSnapshotId:null,materialsPending:false,meetingRevision:'1'}),begin:async()=>{started++;await waiting;throw Error('offline');}} as unknown as ReturnType<typeof api>;
+ const state=useMaterials(fake,()=> 'owner',()=>meeting,context());
+ try{await state.reload();const first=state.addLocal([new File(['a'],'a.pdf'),new File(['b'],'b.pdf')]);const second=state.addLocal([new File(['c'],'c.pdf')]);
+ for(let i=0;i<50&&started<2;i++)await tick();assert.equal(started,2);assert.equal(state.jobs.value.length,3);assert.equal(state.canAdd.value,true);release();await Promise.all([first,second]);assert.equal(started,3);assert.equal(state.busy.value,false);assert.equal(state.jobs.value.length,3);
+ }finally{release();state.dispose();}
+});
+
+test('queued knowledge batches capture the revision after previous mutations complete',async()=>{
+ let release!:()=>void;const waiting=new Promise<void>(r=>{release=r;});let revision=1;const revisions:string[]=[];
+ const fake={list:async()=>({items:[],materialSnapshotId:null,materialsPending:false,meetingRevision:String(revision)}),batch:async(command:any)=>{revisions.push(JSON.parse(command.body).expectedRevisionToken);if(revisions.length===1)await waiting;revision++;}} as unknown as ReturnType<typeof api>;
+ const state=useMaterials(fake,()=> 'owner',()=>meeting,context()),selection=(id:string)=>[{id,libraryId:'lib',name:id,version:'a'.repeat(64),sha256:'a'.repeat(64),sizeBytesToken:'1'}];
+ try{await state.reload();const first=state.addKnowledge(selection('a'));await tick();const second=state.addKnowledge(selection('b'));await tick();assert.deepEqual(revisions,['1']);release();await Promise.all([first,second]);assert.deepEqual(revisions,['1','2']);assert.equal(state.busy.value,false);assert.equal(state.jobs.value.length,0);
+ }finally{release();state.dispose();}
+});

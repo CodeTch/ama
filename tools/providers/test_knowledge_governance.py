@@ -4,6 +4,8 @@ import test_knowledge_location as location
 kb=location.kb
 
 class Governance(location.Location):
+ def setUp(self):
+  super().setUp();self.provider.manage(self.owner,'library',True)
  def call(self,actor,method,path,body=None):
   material=path.startswith('/v1/knowledge/material-')
   if not material and not path.startswith('/v1/knowledge/governance/'):return super().call(actor,method,path,body)
@@ -35,9 +37,9 @@ class Governance(location.Location):
    self.assertEqual(403,failure.exception.status)
   for action in ('ACTIVE','OBSOLETE','WITHDRAW'):
    with self.assertRaises(kb.Denied):self.apply(self.command(commandKey='other',expectedRevisionToken='1',action=action))
- def test_current_remote_publish_permission_and_exact_actor_are_required(self):
+ def test_current_space_management_permission_and_exact_actor_are_required(self):
   with self.assertRaises(kb.Denied):self.apply(self.command(actorId=self.viewer),self.viewer)
-  self.provider.administer(self.owner,'library','folder',False,True)
+  self.provider.manage(self.owner,'library',False)
   with self.assertRaises(kb.Denied):self.apply()
   self.assertEqual('ACTIVE',self.verify(self.state(),'ama.controlled-kb-governance-state.v1')['state'])
  def test_obsolete_survives_provider_reopen_and_old_command_stays_identical(self):

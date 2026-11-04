@@ -60,7 +60,7 @@ public final class JdbcMaterialAuthority implements AutoCloseable {
     return authority.transactionRunner().required(()->{
    var snapshot=local(actor,meeting);if(snapshot.items().isEmpty())return null;
    for(var item:snapshot.items())if(!client.identities().get("providerId").equals(item.provider()))throw new AuthorityUnavailableException();
-   var rows=j.queryForList("SELECT dependency_hash,pins_hash,state,verified_until>DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 2 SECOND) reusable FROM material_authority_cache WHERE meeting_id=? AND actor_id=? FOR UPDATE",meeting,actor.enterpriseId());
+   var rows=j.queryForList("SELECT dependency_hash,pins_hash,state,verified_until>DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 3 SECOND) reusable FROM material_authority_cache WHERE meeting_id=? AND actor_id=? FOR UPDATE",meeting,actor.enterpriseId());
    if(rows.isEmpty())j.update("INSERT INTO material_authority_cache(meeting_id,actor_id,dependency_hash,pins_hash,state,demand_until,next_check_at) VALUES(?,?,?,?,'UNKNOWN',DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 120 SECOND),UTC_TIMESTAMP(6))",meeting,actor.enterpriseId(),snapshot.fingerprint(),pins);
    else {var old=rows.getFirst();if(!snapshot.fingerprint().equals(old.get("dependency_hash"))||!pins.equals(old.get("pins_hash")))j.update("UPDATE material_authority_cache SET dependency_hash=?,pins_hash=?,state='UNKNOWN',proof_hash=NULL,verified_until=NULL,lease_owner=NULL,lease_until=NULL WHERE meeting_id=? AND actor_id=?",snapshot.fingerprint(),pins,meeting,actor.enterpriseId());}
    if(demand)j.update("UPDATE material_authority_cache SET demand_until=DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 120 SECOND) WHERE meeting_id=? AND actor_id=?",meeting,actor.enterpriseId());

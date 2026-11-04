@@ -92,6 +92,7 @@ class RecordingProtocolIT {
         original.accept(first.sessionId(),1,chunk(first,1));original.pause(first.sessionId(),1);
         var second=service().nextPart(first.sessionId(),1);
         assertNotEquals(first.partId(),second.partId());assertEquals(2,second.writerEpoch());
+        var restored=service().manifest(first.sessionId());assertEquals(java.util.List.of(first.partId(),second.partId()),restored.parts().stream().map(RecordingService.PartManifest::partId).toList());assertEquals(0,restored.parts().getLast().sampleCount());assertEquals(2,restored.parts().getFirst().sampleCount());
         assertThrows(RecordingService.StaleWriter.class,() -> service().accept(first.sessionId(),1,chunk(first,2)));
         service().accept(second.sessionId(),2,chunk(second,1));
         assertEquals(1,service().ack(first.sessionId(),first.partId()).highestContiguousSeq());

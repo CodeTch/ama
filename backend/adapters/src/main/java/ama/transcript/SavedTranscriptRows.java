@@ -66,17 +66,28 @@ final class SavedTranscriptRows {
  private List<Map<String,Object>> transfer(Shape shape,List<Measured> admitted){
   var result=new ArrayList<Map<String,Object>>();
   String exactWhere=String.join(" AND ",shape.keys.stream().map(k->k+"=?").toList());
-  for(var row:admitted){
-   budget.check();var found=j.query("SELECT "+String.join(",",shape.columns)+" FROM "+shape.table+" WHERE "+exactWhere+" FOR UPDATE",rs->{
-    require(rs.next(),READ_FAILED);var value=new LinkedHashMap<String,Object>();int i=0;
-    for(String col:shape.columns){
-     if(shape.numbers.contains(col))value.put(col,exact(rs,col));
-     else if(shape.timestamps.contains(col)){var time=rs.getObject(col,LocalDateTime.class);value.put(col,time==null?null:TIME.format(time));}
-     else {String text=rs.getString(col);var length=row.sizes.get(i++);if(text==null)require(length[0]==0&&length[1]==0&&length[2]==0,READ_FAILED);else {scalars(text);require(text.length()==length[2]&&text.codePointCount(0,text.length())==length[1]&&ama.canonical.CanonicalValueCodec.utf8Length(text,()->false)==length[0],READ_FAILED);}value.put(col,text);}
+  for(int offset=0;offset<admitted.size();offset+=128){
+   budget.check();var batch=admitted.subList(offset,Math.min(admitted.size(),offset+128));
+   var expected=new LinkedHashMap<List<Object>,Measured>();for(var row:batch)require(expected.put(row.key,row)==null,PROVENANCE_UNAVAILABLE);
+   String where=String.join(" OR ",Collections.nCopies(batch.size(),"("+exactWhere+")"));
+   Object[] args=batch.stream().flatMap(row->row.key.stream()).toArray();
+   var found=j.query("SELECT "+String.join(",",shape.columns)+" FROM "+shape.table+" WHERE "+where+" ORDER BY "+String.join(",",shape.keys)+" FOR UPDATE",rs->{
+    var values=new HashMap<List<Object>,Map<String,Object>>();
+    while(rs.next()){
+     budget.check();require(values.size()<batch.size(),READ_FAILED);
+     var key=new ArrayList<Object>();for(String column:shape.keys)key.add(shape.numbers.contains(column)?exact(rs,column):rs.getString(column));
+     var row=expected.get(key);require(row!=null&&!values.containsKey(key),READ_FAILED);
+     var value=new LinkedHashMap<String,Object>();int i=0;
+     for(String col:shape.columns){
+      if(shape.numbers.contains(col))value.put(col,exact(rs,col));
+      else if(shape.timestamps.contains(col)){var time=rs.getObject(col,LocalDateTime.class);value.put(col,time==null?null:TIME.format(time));}
+      else {String text=rs.getString(col);var length=row.sizes.get(i++);if(text==null)require(length[0]==0&&length[1]==0&&length[2]==0,READ_FAILED);else {scalars(text);require(text.length()==length[2]&&text.codePointCount(0,text.length())==length[1]&&ama.canonical.CanonicalValueCodec.utf8Length(text,()->false)==length[0],READ_FAILED);}value.put(col,text);}
+     }
+     for(int k=0;k<shape.keys.size();k++)require(Objects.equals(row.key.get(k),value.get(shape.keys.get(k))),READ_FAILED);
+     values.put(List.copyOf(key),Collections.unmodifiableMap(value));
     }
-    require(!rs.next(),READ_FAILED);for(int k=0;k<shape.keys.size();k++)require(Objects.equals(row.key.get(k),value.get(shape.keys.get(k))),READ_FAILED);
-    return Collections.unmodifiableMap(value);
-   },row.key.toArray());result.add(found);
+    require(values.size()==batch.size(),READ_FAILED);return batch.stream().map(row->values.get(row.key)).toList();
+   },args);result.addAll(found);
   }
   budget.check();return List.copyOf(result);
  }

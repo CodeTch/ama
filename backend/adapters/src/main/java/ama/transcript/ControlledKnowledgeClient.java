@@ -36,7 +36,7 @@ public final class ControlledKnowledgeClient implements AutoCloseable {
  static byte[] canonical(Object value){try{byte[] intermediate=JSON.writeValueAsBytes(value);return ama.config.CanonicalJson.encode(ama.model.BoundedModelJson.parse(intermediate,8454144),8454144,()->false);}catch(IOException failure){throw new IllegalArgumentException("Controlled JSON encoding");}}
  static byte[] canonical(Object value,TranscriptAcquisitionBudget.Ledger budget){long bound=jsonBound(value,budget);budget.capture(bound,bound,bound,5);return canonical(value);}
  private static long jsonBound(Object value,TranscriptAcquisitionBudget.Ledger budget){budget.check();if(value==null)return 4;if(value instanceof String text)return Math.addExact(2,Math.multiplyExact(text.length(),6L));if(value instanceof Number||value instanceof Boolean)return 32;if(value instanceof Map<?,?> map){budget.row(map.size());long n=2;for(var e:map.entrySet())n=Math.addExact(n,Math.addExact(2+jsonBound(e.getKey(),budget),jsonBound(e.getValue(),budget)));return n;}if(value instanceof Collection<?> list){budget.row(list.size());long n=2;for(var x:list)n=Math.addExact(n,1+jsonBound(x,budget));return n;}throw new IllegalArgumentException("Unsupported controlled JSON");}
- static Map<String,Object> parse(byte[] bytes,int limit){if(bytes.length>limit)throw new IllegalArgumentException("Controlled response budget");try{var node=JSON.readTree(bytes);if(!node.isObject())throw new IllegalArgumentException("Controlled object required");return JSON.convertValue(node,new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){});}catch(IOException malformed){throw new IllegalArgumentException("Invalid controlled JSON");}}
+ public static Map<String,Object> parse(byte[] bytes,int limit){if(bytes.length>limit)throw new IllegalArgumentException("Controlled response budget");try{var node=JSON.readTree(bytes);if(!node.isObject())throw new IllegalArgumentException("Controlled object required");return JSON.convertValue(node,new com.fasterxml.jackson.core.type.TypeReference<Map<String,Object>>(){});}catch(IOException malformed){throw new IllegalArgumentException("Invalid controlled JSON");}}
  static String string(Map<String,?> map,String key){var value=map.get(key);if(!(value instanceof String s)||s.isEmpty())throw new IllegalArgumentException("Missing controlled field");return s;}
  static String digest(byte[] bytes){try{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes));}catch(GeneralSecurityException impossible){throw new IllegalStateException(impossible);}}
  static String base64(byte[] bytes){return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);}
@@ -64,19 +64,26 @@ public final class ControlledKnowledgeClient implements AutoCloseable {
   return new MaterialProof(request,string(response,"assertion"));
  }
  Call governanceRead(PublicationGovernanceBinding.Prepared binding,String command){
+  return governanceRead(binding,command,binding.actorId());
+ }
+ Call governanceRead(PublicationGovernanceBinding.Prepared binding,String command,String actor){
   binding.require(this);if(command!=null&&!command.matches("[A-Za-z0-9_.:-]{1,128}"))throw new IllegalArgumentException("Governance command key");
   String path="/v1/knowledge/governance/documents/"+binding.documentId()+"/"+(command==null?"state":"commands/"+command);
-  return new Call(this,binding.actorId(),"GOVERNANCE_OBSERVE","GET",path,new byte[0],binding.budget());
+  return new Call(this,actor,"GOVERNANCE_OBSERVE","GET",path,new byte[0],binding.budget());
  }
+ Call governancePermissions(PublicationGovernanceBinding.Prepared binding,String actor){binding.require(this);return new Call(this,actor,"DOCUMENT_READ","GET","/v1/knowledge/documents/"+binding.documentId()+"?view=permissions",new byte[0],binding.budget());}
  Call governanceWrite(JdbcPublicationGovernance.Send send){
-  send.require(this);return new Call(this,send.binding.actorId(),"GOVERNANCE_CHANGE","POST","/v1/knowledge/governance/documents/"+send.binding.documentId()+"/commands",send.bytes(),send.binding.budget());
+  send.require(this);return new Call(this,send.actor(),"GOVERNANCE_CHANGE","POST","/v1/knowledge/governance/documents/"+send.binding.documentId()+"/commands",send.bytes(),send.binding.budget());
  }
  final class GovernanceProof {
   final Map<String,Object> claims;final String digest;final boolean fresh;
   private GovernanceProof(String token,boolean fresh){this.fresh=fresh;this.claims=KnowledgeGovernanceClaims.verify(assertion,identities,token,fresh,Instant.now().getEpochSecond());digest=ControlledKnowledgeClient.digest(token.getBytes(StandardCharsets.US_ASCII));}
   void require(PublicationGovernanceBinding.Prepared binding){
+   require(binding,binding.actorId());
+  }
+  void require(PublicationGovernanceBinding.Prepared binding,String actor){
    binding.require(ControlledKnowledgeClient.this);
-   if(!binding.documentId().equals(claims.get("documentId"))||!binding.publicationId().equals(claims.get("publicationId"))||!binding.actorId().equals(claims.get("actorId"))||fresh&&((Number)claims.get("expiresAt")).longValue()<=Instant.now().getEpochSecond())throw new IllegalArgumentException("Governance resource or freshness mismatch");
+   if(!binding.documentId().equals(claims.get("documentId"))||!binding.publicationId().equals(claims.get("publicationId"))||!actor.equals(claims.get("actorId"))||fresh&&((Number)claims.get("expiresAt")).longValue()<=Instant.now().getEpochSecond())throw new IllegalArgumentException("Governance resource or freshness mismatch");
   }
  }
  GovernanceProof governanceProof(String token,boolean fresh){return new GovernanceProof(token,fresh);}

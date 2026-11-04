@@ -102,3 +102,17 @@ test('a failed first meeting read leaves a working retry instead of a permanent 
   await expect(page.getByRole('button',{name:item.name,exact:true})).toBeVisible();
  }finally{data.release();}
 });
+
+test('the meetings scrollbar starts below the workspace header',async({page})=>{
+ await page.setViewportSize({width:1024,height:420});
+ await home(page);
+ const header=page.locator('.topbar');
+ const layout=page.locator('.layout');
+ const headerBox=(await header.boundingBox())!;
+ expect((await layout.boundingBox())!.y).toBe(headerBox.y+headerBox.height);
+ await page.getByRole('heading',{name:'我的会议'}).hover();
+ await page.mouse.wheel(0,300);
+ await expect.poll(()=>layout.evaluate(element=>element.scrollTop)).toBeGreaterThan(0);
+ expect((await header.boundingBox())!.y).toBe(headerBox.y);
+ expect(await page.evaluate(()=>window.scrollY)).toBe(0);
+});

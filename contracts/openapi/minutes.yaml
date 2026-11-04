@@ -3946,7 +3946,8 @@
           "MINUTES_SET_RESTORE",
           "MINUTES_TEMPLATE",
           "MINUTES_EXCLUSIONS",
-          "MINUTES_REVIEW"
+          "MINUTES_REVIEW",
+          "MINUTES_WORKSPACE_RESTORE"
         ]
       },
       "resultKind": {
@@ -5043,7 +5044,8 @@
           "MINUTES_SET_RESTORE",
           "MINUTES_TEMPLATE",
           "MINUTES_EXCLUSIONS",
-          "MINUTES_REVIEW"
+          "MINUTES_REVIEW",
+          "MINUTES_WORKSPACE_RESTORE"
         ]
       },
       "key": {
@@ -5468,6 +5470,9 @@
         "items": {
           "$ref": "#/MinutesEvidence_link"
         }
+      },
+      "presentation": {
+        "$ref": "#/SavedPresentation"
       }
     }
   },
@@ -6012,6 +6017,53 @@
             "const": "RECHECK_REQUIRED"
           }
         }
+      },
+      "context": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "materialRevisionToken",
+          "libraryId",
+          "documentId",
+          "externalVersion"
+        ],
+        "properties": {
+          "materialRevisionToken": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$",
+            "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+          },
+          "libraryId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "documentId": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "externalVersion": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
       }
     }
   },
@@ -6166,6 +6218,13 @@
       },
       "correction": {
         "$ref": "#/SavedCorrectionQualification"
+      },
+      "optionalReviews": {
+        "type": "array",
+        "maxItems": 100000,
+        "items": {
+          "$ref": "./publications.yaml#/OptionalReview"
+        }
       }
     },
     "description": "Current business assessment is separate from formal activation. ready remains false while Task11 is absent. Required scopes are exact latest WHOLE support and accepted nullable ACTION_FIELDS; SPANs never combine. Historical reviews do not imply current credit. Correction qualification is consumed from the exact actual saved-transcript component and same private boot identity rechecked in F; these projection strings confer no authority."
@@ -12041,6 +12100,951 @@
         "minLength": 1,
         "maxLength": 4096
       }
+    }
+  },
+  "SavedPresentation": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "modifiedBy",
+      "modifiedAt",
+      "appliedTemplateName",
+      "selectedTemplateName",
+      "sensitiveConflict",
+      "reviewStates",
+      "exclusions"
+    ],
+    "properties": {
+      "modifiedBy": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "modifiedAt": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "appliedTemplateName": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "selectedTemplateName": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "sensitiveConflict": {
+        "type": "boolean"
+      },
+      "reviewStates": {
+        "type": "array",
+        "maxItems": 250000,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "elementId",
+            "sourceSupported",
+            "actionFieldsConfirmed"
+          ],
+          "properties": {
+            "elementId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "sourceSupported": {
+              "type": "boolean"
+            },
+            "actionFieldsConfirmed": {
+              "oneOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "exclusions": {
+        "type": "array",
+        "maxItems": 250000,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "locatorId",
+            "category",
+            "selected",
+            "applied"
+          ],
+          "properties": {
+            "locatorId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "category": {
+              "type": "string",
+              "enum": [
+                "INTERNAL_BUSINESS_DATA",
+                "POLITICAL_SENSITIVE"
+              ]
+            },
+            "selected": {
+              "type": "boolean"
+            },
+            "applied": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  },
+  "SavedWorkspaceSnapshot": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "revisionToken",
+      "createdBy",
+      "createdAt",
+      "bodyRevisionId",
+      "elementSetId",
+      "templateRevisionId",
+      "exclusionRevisionId",
+      "needsGeneration"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+      },
+      "createdBy": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string"
+      },
+      "bodyRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "elementSetId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "templateRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "exclusionRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "needsGeneration": {
+        "type": "boolean"
+      }
+    }
+  },
+  "SavedWorkspaceHistory": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "hasMore",
+      "nextBeforeRevisionToken"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "maxItems": 50,
+        "items": {
+          "$ref": "#/SavedWorkspaceSnapshot"
+        }
+      },
+      "hasMore": {
+        "type": "boolean"
+      },
+      "nextBeforeRevisionToken": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$",
+            "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "SavedWorkspaceDetail": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "snapshot",
+      "body",
+      "elements",
+      "template",
+      "exclusions",
+      "background",
+      "canRestore",
+      "restoreReasons"
+    ],
+    "properties": {
+      "snapshot": {
+        "$ref": "#/SavedWorkspaceSnapshot"
+      },
+      "body": {
+        "$ref": "#/SavedBody"
+      },
+      "elements": {
+        "$ref": "#/SavedMemberElements"
+      },
+      "template": {
+        "$ref": "#/SavedTemplateRow"
+      },
+      "exclusions": {
+        "type": "array",
+        "maxItems": 250000,
+        "items": {
+          "$ref": "#/SavedExclusionMember"
+        }
+      },
+      "background": {
+        "type": "array",
+        "maxItems": 250000,
+        "items": {
+          "$ref": "#/SavedBackgroundDirectory"
+        }
+      },
+      "canRestore": {
+        "type": "boolean"
+      },
+      "restoreReasons": {
+        "type": "array",
+        "maxItems": 20,
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "SavedWorkspaceRestoreCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "snapshotId"
+    ],
+    "properties": {
+      "expectedRevision": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9223372036854775806
+      },
+      "expectedRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$",
+        "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+      },
+      "snapshotId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      }
+    },
+    "description": "Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized.",
+    "allOf": [
+      {
+        "anyOf": [
+          {
+            "type": "object",
+            "required": [
+              "expectedRevision"
+            ],
+            "properties": {
+              "expectedRevision": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9223372036854775806
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "expectedRevisionToken"
+            ],
+            "properties": {
+              "expectedRevisionToken": {
+                "type": "string",
+                "pattern": "^(0|[1-9][0-9]{0,18})$",
+                "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "savedWorkspaceHistory": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 20
+        }
+      },
+      {
+        "name": "beforeRevisionToken",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,18})$",
+          "description": "Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number."
+        }
+      }
+    ],
+    "get": {
+      "operationId": "SavedWorkspaceHistory",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Unsupported operation/content or unavailable enterprise selection.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Complete bounded private response; no-store on success and failure.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/SavedWorkspaceHistory"
+              }
+            }
+          }
+        }
+      },
+      "summary": "读取纪要完整版本快照"
+    }
+  },
+  "savedWorkspaceDetail": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "name": "snapshotId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "SavedWorkspaceDetail",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Unsupported operation/content or unavailable enterprise selection.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Complete bounded private response; no-store on success and failure.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/SavedWorkspaceDetail"
+              }
+            }
+          }
+        }
+      },
+      "summary": "读取纪要完整版本快照"
+    }
+  },
+  "savedWorkspaceRestore": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "$ref": "#/MinutesMeetingId"
+      },
+      {
+        "name": "Origin",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "X-CSRF-Token",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      },
+      {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      }
+    ],
+    "post": {
+      "operationId": "SavedWorkspaceRestore",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads.",
+      "responses": {
+        "400": {
+          "description": "Malformed request, query, UUID, revision representation or unknown field.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Missing or invalid enterprise session.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Authorized same-meeting entity not found.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Revision, immutable body or idempotency conflict.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Request or complete acquisition/response budget exceeded; no partial graph.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Required installed contribution, original provenance, archive or runtime unavailable; no speculative success.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Unsupported operation/content or unavailable enterprise selection.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Complete bounded private response; no-store on success and failure.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/SavedCommandAck"
+              }
+            }
+          }
+        }
+      },
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/SavedWorkspaceRestoreCommand"
+            }
+          }
+        }
+      },
+      "summary": "原子恢复正文、要素、模板和排除设置"
     }
   }
 }

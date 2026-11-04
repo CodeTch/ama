@@ -18,6 +18,7 @@ final class MinutesSavedDispatch {
    case "MINUTES_ELEMENT_EDIT" -> runtime.saved().saveElement(actor,meeting,key,expected,value[0],value[1],value[2],anchors(value),trace);
    case "MINUTES_OPEN_QUESTION" -> runtime.saved().openQuestion(actor,meeting,key,expected,value[0],value[1],value[2],anchors(value),trace);
    case "MINUTES_ACTION_FIELDS" -> runtime.saved().saveActionFields(actor,meeting,key,expected,value[0],value[1],new JdbcMinutesSavedCommands.ActionFields(value[3],value[4],value[5]),trace);
+   case "MINUTES_WORKSPACE_RESTORE" -> runtime.saved().restoreWorkspace(actor,meeting,key,expected,value[0],trace);
    case "MINUTES_BODY_RESTORE" -> runtime.saved().restoreBody(actor,meeting,key,expected,value[0],trace);
    case "MINUTES_SET_RESTORE" -> runtime.saved().restoreSet(actor,meeting,key,expected,value[0],trace);
    case "MINUTES_TEMPLATE" -> runtime.settings().selectTemplate(actor,meeting,key,expected,value[0],trace);

@@ -1,11 +1,14 @@
 <script setup lang="ts">
-defineProps<{name:'folder'|'eye'|'lock'|'user'|'merge'|'split'|'undo'|'check'|'sparkle'|'download'|'kb'|'list'|'mic'|'plus'|'layers'|'play'|'pause'|'file'|'refresh'|'edit'|'trash'|'search'|'x'|'copy'|'calendar'|'message'|'guide'|'reset'|'arrowL'|'arrowR'|'alert';size?:number}>();
+defineProps<{name:'folder'|'eye'|'lock'|'user'|'merge'|'split'|'undo'|'check'|'sparkle'|'download'|'kb'|'list'|'mic'|'plus'|'layers'|'play'|'pause'|'file'|'refresh'|'edit'|'trash'|'search'|'x'|'copy'|'calendar'|'message'|'guide'|'reset'|'arrowL'|'arrowR'|'alert'|'shield'|'users'|'book'|'settings';size?:number}>();
 </script>
 <template><svg :width="size||16" :height="size||16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px" aria-hidden="true">
  <template v-if="name==='folder'"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></template>
  <template v-else-if="name==='eye'"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></template>
  <template v-else-if="name==='lock'"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></template>
  <template v-else-if="name==='user'"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></template>
+ <template v-else-if="name==='users'"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c1.2-3 3.6-4.5 6.5-4.5s5.3 1.5 6.5 4.5"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 15.6c2.6.3 4.3 1.7 5 4.4"/></template>
+ <template v-else-if="name==='book'"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5Z"/><path d="M4 19a2 2 0 0 1 2-2h13"/></template>
+ <template v-else-if="name==='settings'"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2L14.2 3h-4l-.4 2.7a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2l.4 2.7h4l.4-2.7a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5c.1-.4.1-.8.1-1.2Z"/></template>
  <template v-else-if="name==='merge'"><path d="M7 4v6a4 4 0 0 0 4 4h6"/><path d="m14 11 3 3-3 3"/><path d="M7 20v-4"/></template>
  <template v-else-if="name==='split'"><path d="M12 4v6"/><path d="M12 10 6 16v4"/><path d="m12 10 6 6v4"/></template>
  <template v-else-if="name==='undo'"><path d="M8 5 4 9l4 4"/><path d="M4 9h9a6 6 0 0 1 0 12h-3"/></template>
@@ -27,6 +30,7 @@ defineProps<{name:'folder'|'eye'|'lock'|'user'|'merge'|'split'|'undo'|'check'|'s
  <template v-else-if="name==='copy'"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M5 16H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h11a1 1 0 0 1 1 1v1"/></template>
  <template v-else-if="name==='calendar'"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/><path d="M7 14h2M12 14h2M7 18h2M12 18h2"/></template>
  <path v-else-if="name==='message'" d="M4 5h16v11H9l-5 4V5Z"/>
+ <path v-else-if="name==='shield'" d="M12 22s7-3.5 7-9V5l-7-3-7 3v8c0 5.5 7 9 7 9Z"/>
  <template v-else-if="name==='alert'"><path d="M12 3 2.5 20h19L12 3Z"/><path d="M12 10v4"/><circle cx="12" cy="17" r=".6"/></template>
  <template v-else-if="name==='guide'"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.6 2.2c-.8.4-1.1.9-1.1 1.8"/><circle cx="12" cy="17" r=".6"/></template>
  <template v-else-if="name==='reset'"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></template>

@@ -9,6 +9,7 @@ final class MinutesSavedWire {
   case "MINUTES_ADOPT"->{fields.addAll(Set.of("inputId","inputFingerprint"));Collections.addAll(values,uuid(selected),uuid(text(root,"inputId",false)),text(root,"inputFingerprint",false));ama.contract.MinutesContracts.hash(values.getLast());}
   case "MINUTES_REJECT","MINUTES_DISPOSE"->values.add(uuid(selected));
   case "MINUTES_BODY_SAVE"->{fields.addAll(Set.of("sourceRevisionId","title","body","evidenceAnchors"));Collections.addAll(values,uuid(text(root,"sourceRevisionId",false)),text(root,"title",false),text(root,"body",false));anchors(root,values);}
+  case "MINUTES_WORKSPACE_RESTORE"->{fields.add("snapshotId");values.add(uuid(text(root,"snapshotId",false)));}
   case "MINUTES_BODY_RESTORE","MINUTES_SET_RESTORE"->{String field=operation.equals("MINUTES_BODY_RESTORE")?"sourceRevisionId":"sourceSetId";fields.add(field);Collections.addAll(values,uuid(text(root,field,false)),null,null);}
   case "MINUTES_ELEMENT_EDIT","MINUTES_OPEN_QUESTION"->{fields.addAll(Set.of("sourceSetId","body","evidenceAnchors"));Collections.addAll(values,uuid(text(root,"sourceSetId",false)),uuid(selected),text(root,"body",false));anchors(root,values);}
   case "MINUTES_ACTION_FIELDS"->{fields.addAll(Set.of("sourceSetId","ownerEnterpriseId","ownerDisplay","dueOn"));Collections.addAll(values,uuid(text(root,"sourceSetId",false)),uuid(selected),null,text(root,"ownerEnterpriseId",true),text(root,"ownerDisplay",true),text(root,"dueOn",true));}

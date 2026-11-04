@@ -373,3 +373,32 @@ workspace:
       '401': {$ref: './identity.yaml#/Unauthenticated'}
       '403': {$ref: './identity.yaml#/BusinessForbidden'}
       '503': {$ref: './meetings.yaml#/MeetingUnavailable'}
+
+access:
+  get:
+    operationId: renewWorkspaceContentAccess
+    summary: Recheck current access for an existing bounded content display
+    description: Uses the same current actor, meeting, grant, lifecycle and external material/publication authority gate as navigation. Omits private task/history composition. This response never substitutes for initial producer provenance, never grants write authority and never extends the existing 4.5 second client lease limit. Unknown queries are rejected.
+    security: [{enterpriseSession: []}]
+    parameters:
+      - {name: meetingId, in: path, required: true, schema: {type: string, format: uuid}}
+    responses:
+      '200':
+        description: Current access checked; private no-store response
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [meetingId, allowed]
+              properties:
+                meetingId: {type: string, format: uuid}
+                allowed: {type: boolean, const: true}
+      '400': {$ref: './identity.yaml#/Invalid'}
+      '401': {$ref: './identity.yaml#/Unauthenticated'}
+      '403':
+        description: Current access denied
+        content: {application/json: {schema: {$ref: './identity.yaml#/BusinessError'}}}
+      '503':
+        description: Current authority unavailable; cached content must be cleared
+        content: {application/json: {schema: {$ref: './identity.yaml#/BusinessError'}}}

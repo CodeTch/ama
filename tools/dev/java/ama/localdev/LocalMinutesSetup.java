@@ -16,6 +16,7 @@ public final class LocalMinutesSetup {
         Path configuration=Path.of(args[0]).toRealPath();
         var source=ControlledMinutesDataSource.create(url,System.getenv("DATABASE_USERNAME"),System.getenv("DATABASE_PASSWORD"));
         var installed=ControlledMinutesAdmin.install(source,configuration);
+        ama.minutes.BuiltinMinutesTemplates.install(source);
         var values=new TreeMap<String,String>();
         var properties=new Properties();
         try(var in=Files.newInputStream(configuration.resolveSibling("minutes.properties"))) { properties.load(in); }

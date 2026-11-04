@@ -10,12 +10,17 @@ final class MeetingDeletionRows {
  record Owned(String table,String where) {}
  static final List<Owned> ORDER=List.of(
   new Owned("corpus_feedback_binding","feedback_id IN (SELECT id FROM feedback WHERE meeting_id=?)"),
+  new Owned("meeting_voiceprint_history","application_id IN (SELECT id FROM meeting_voiceprint_application WHERE meeting_id=?)"),
+  new Owned("meeting_voiceprint_application","meeting_id=?"),
+  new Owned("minutes_workspace_snapshot","meeting_id=?"),
   new Owned("minutes_mail_job","meeting_id=?"),
   new Owned("meeting_info_suggestion","meeting_id=?"),
   new Owned("generation_region_request","meeting_id=?"),
+  new Owned("material_enhancement_candidate","meeting_id=?"),
   new Owned("material_batch_receipt","meeting_id=?"),
   new Owned("material_authority_cache","meeting_id=?"),
   new Owned("material_knowledge_location","reference_id IN (SELECT id FROM material_reference WHERE meeting_id=?)"),
+  new Owned("publication_configuration","meeting_id=?"),
   new Owned("publication_governance_command","meeting_id=?"),
   new Owned("publication_governance_authority","publication_id IN (SELECT id FROM publication WHERE meeting_id=?)"),
   new Owned("publication_governance_event","publication_id IN (SELECT id FROM publication WHERE meeting_id=?)"),
@@ -54,6 +59,7 @@ final class MeetingDeletionRows {
   new Owned("recording_archive","meeting_id=?"),
   new Owned("recording_archive_current","input_id IN (SELECT id FROM recording_archive_input WHERE meeting_id=?)"),
   new Owned("recording_chunk","session_id IN (SELECT session_id FROM recording_session WHERE meeting_id=?)"),
+  new Owned("recording_processing","meeting_id=?"),
   new Owned("recording_meeting_capture","meeting_id=?"),
   new Owned("recording_part","session_id IN (SELECT session_id FROM recording_session WHERE meeting_id=?)"),
   new Owned("result_review_evidence","review_id IN (SELECT id FROM result_review WHERE meeting_id=?)"),
@@ -119,7 +125,13 @@ final class MeetingDeletionRows {
   var edges=j.queryForList("SELECT table_name,referenced_table_name FROM information_schema.key_column_usage WHERE table_schema=DATABASE() AND referenced_table_name IS NOT NULL");
   for(var edge:edges)if(known.contains(edge.get("REFERENCED_TABLE_NAME"))&&!known.contains(edge.get("TABLE_NAME")))throw new IllegalStateException("Unreviewed dependent deletion schema");
  }
+ /** Keep the durable provider command until its revocation receipt is confirmed. */
+ static boolean feedbackEffectsSettled(JdbcTemplate j,String meeting){
+  return j.queryForObject("SELECT COUNT(*) FROM corpus_feedback_binding b JOIN feedback f ON f.id=b.feedback_id WHERE f.meeting_id=? AND (b.adoption_state='ADOPTED' OR b.adoption_pending IS NOT NULL)",Integer.class,meeting)==0;
+ }
  static boolean detachPage(JdbcTemplate j,String meeting){
+  var voices=j.queryForList("SELECT v.id FROM governed_voiceprint v JOIN meeting_voiceprint_application a ON a.id=v.id WHERE a.meeting_id=? AND (v.state<>'REVOKED' OR v.encrypted_embedding IS NOT NULL) ORDER BY v.id LIMIT 500",String.class,meeting);
+  if(!voices.isEmpty()){for(String id:voices)j.update("UPDATE governed_voiceprint SET state='REVOKED',encrypted_embedding=NULL,revision=revision+1,review_reason='来源会议已删除',updated_at=UTC_TIMESTAMP(6) WHERE id=?",id);return true;}
   for(String pair:List.of("transcription_input:source_revision_id","transcript_revision:parent_id","minutes_revision:parent_id","speaker:merged_into_id")){
    var p=pair.split(":");if(j.update("UPDATE "+p[0]+" SET "+p[1]+"=NULL WHERE meeting_id=? AND "+p[1]+" IS NOT NULL LIMIT 500",meeting)>0)return true;
   }return false;

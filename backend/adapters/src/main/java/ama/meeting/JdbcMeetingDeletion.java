@@ -52,7 +52,9 @@ public final class JdbcMeetingDeletion implements AutoCloseable {
   try{
    if(job.phase.equals("INVENTORY"))tx.required(()->{lock(job);MeetingDeletionRows.verifyCoverage(j);if(inventory(job)==0)j.update("UPDATE meeting_deletion SET phase='STORAGE' WHERE id=?",job.id);release(job);return null;});
    else if(job.phase.equals("STORAGE"))storage(job);
-   else if(job.phase.equals("PURGE"))tx.required(()->{lock(job);MeetingDeletionRows.verifyCoverage(j);if(!MeetingDeletionRows.detachPage(j,job.meeting)){
+   else if(job.phase.equals("PURGE"))tx.required(()->{lock(job);MeetingDeletionRows.verifyCoverage(j);
+    if(!MeetingDeletionRows.feedbackEffectsSettled(j,job.meeting)){release(job);j.update("UPDATE meeting_deletion SET available_at=TIMESTAMPADD(SECOND,2,UTC_TIMESTAMP(6)) WHERE id=?",job.id);return null;}
+    if(!MeetingDeletionRows.detachPage(j,job.meeting)){
     int next=MeetingDeletionRows.purgePage(j,job.meeting,job.cursor);j.update("UPDATE meeting_deletion SET purge_cursor=? WHERE id=?",next,job.id);
     if(next==MeetingDeletionRows.ORDER.size()){
      MeetingDeletionRows.finish(j,job.meeting);

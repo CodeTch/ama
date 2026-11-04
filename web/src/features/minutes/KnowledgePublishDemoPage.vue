@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import WorkspaceTopbar from '../../shared/WorkspaceTopbar.vue';
 import {computed,onBeforeUnmount,ref} from 'vue';
 import {RouterLink} from 'vue-router';
 import Icon from '../../shared/Icon.vue';
@@ -93,7 +92,7 @@ onBeforeUnmount(clearTimer);
 
 <template>
  <div class="layout knowledge-publish-demo-page"><div class="main">
-  <WorkspaceTopbar/>
+
   <main class="content detail-page"><div class="aci-detail ac-related knowledge-publish-detail">
    <div class="page-head aci-detail-head">
     <div class="ac-workspace-leading"><RouterLink to="/meetings" class="btn ac-workspace-back" aria-label="返回列表">‹</RouterLink><div class="aci-heading-text"><div class="aci-title-row"><h1 class="page-title">未命名会议</h1><span class="tag orange">待发布</span></div><div class="page-desc">{{meetingId}} · 会议信息已确认</div></div></div>

@@ -24,7 +24,7 @@ function application(){
 }
 
 test('meeting confirmation view keeps the prototype card structure and empty preview state',async()=>{
- const server=await createServer({server:{middlewareMode:true},appType:'custom'});
+ const server=await createServer({root:new URL('../../',import.meta.url).pathname,server:{middlewareMode:true,hmr:false},appType:'custom'});
  try{
   const {applicationKey}=await server.ssrLoadModule('/src/application.ts');
   const component=(await server.ssrLoadModule('/src/features/minutes/PublicationPanel.vue')).default;
@@ -33,20 +33,22 @@ test('meeting confirmation view keeps the prototype card structure and empty pre
   const html=await renderToString(app);
   assert.match(html,/会议信息/);
   assert.match(html,/纪要预览/);
-  assert.match(html,/确认检查/);
+  assert.doesNotMatch(html,/最终确认并继续发布/);
   assert.match(html,/尚无已保存纪要/);
   assert.doesNotMatch(html,/undefined/);
  }finally{await server.close();}
 });
 
-test('meeting confirmation source keeps readiness blocking and the real final-confirm handler',async()=>{
- const source=await readFile(new URL('../../src/features/minutes/PublicationPanel.vue',import.meta.url),'utf8');
- assert.match(source,/class="card card-p ac-confirm-check"/);
- assert.match(source,/BODY_REQUIRED/);
- assert.match(source,/请先生成或保存纪要正文/);
- assert.match(source,/最终确认并继续发布/);
- assert.match(source,/@click="confirmFinal"/);
- assert.match(source,/:disabled="[^"]*canPrepareFinal/);
+test('confirmation checks render all twelve outcomes and bind failed targets without exposing blocker codes',async()=>{
+ const server=await createServer({root:new URL('../../',import.meta.url).pathname,server:{middlewareMode:true,hmr:false},appType:'custom'});
+ try{
+  const component=(await server.ssrLoadModule('/src/features/minutes/FinalConfirmationChecks.vue')).default;
+  const {finalConfirmationChecks}=await import('../../src/features/minutes/final-confirmation-checks');
+  const checks=finalConfirmationChecks({ready:false,blockers:['REVIEW_REQUIRED'],required:[{targetId:meeting,reviewKind:'ACTION_FIELDS',satisfied:false}],pendingCandidateIds:[],outstandingTaskIds:[]} as any,true,{[meeting]:'确认交付负责人'});
+  const html=await renderToString(createSSRApp({render:()=>h(component,{checks,busy:false})}));
+  assert.match(html,/确认检查/);assert.match(html,/确认交付负责人/);assert.match(html,/负责人和截止信息/);
+  assert.doesNotMatch(html,/REVIEW_REQUIRED/);assert.equal(checks.length,12);assert.equal(checks.filter(c=>c.status==='failed').length,1);
+ }finally{await server.close();}
 });
 
 test('meeting confirmation styles preserve prototype geometry and narrow-screen stacking',async()=>{

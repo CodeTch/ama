@@ -6,6 +6,19 @@ import type {CommandSnapshot} from '../../src/shared/composables/useCommand.js';
 const id='cd2e160e-6b11-4f4e-871e-bb8aa90ecdee',other='00000000-0000-4000-8000-000000000000';
 const saved:SavedMeeting={id,revision:9007199254740992,revisionToken:'9007199254740993',accessRevision:0,accessRevisionToken:'0',stage:'ENTRY',name:'original',category:null,summary:null,occurredOn:null,confirmedRosterId:id,confirmedRoster:[{memberId:other,memberKind:'ENTERPRISE',enterpriseId:'member',displayName:'成员'}],rosterDraftId:null,rosterDraft:null};
 function fields(name:string):InfoFields{return {name,category:null,summary:'保留 😀',occurredOn:null,rosterDraftIds:['member'],externalRosterNames:[]};}
+test('a confirmed single-field suggestion merges into the draft without saving unrelated edits or granting a roster',async()=>{
+ let current=saved,sends=0;const editor=useMeetingInfoEditor({saved:async()=>current,send:async()=>{sends++;throw Error('must not write');}},()=> 'owner',()=>id,()=>true);
+ await editor.reload();editor.edit({...fields('local'),summary:'unsaved summary'});
+ current={...saved,name:'AI accepted',revisionToken:'9007199254740994'};await editor.reload();
+ assert.equal(editor.mergeSuggestedField('name',saved.revisionToken,current.revisionToken),true);
+ assert.equal(editor.draft.value?.value.value.name,'AI accepted');assert.equal(editor.draft.value?.value.value.summary,'unsaved summary');assert.equal(editor.draft.value?.dirty.value,true);assert.equal(editor.draft.value?.conflict.value,null);assert.equal(sends,0);editor.dispose();
+});
+test('suggestion merging refuses a concurrent change to another saved field',async()=>{
+ let current=saved;const editor=useMeetingInfoEditor({saved:async()=>current,send:async()=>{throw Error('must not write');}},()=> 'owner',()=>id,()=>true);
+ await editor.reload();editor.edit(fields('local'));
+ current={...saved,name:'AI accepted',summary:'other writer',revisionToken:'9007199254740995'};await editor.reload();
+ assert.equal(editor.mergeSuggestedField('name',saved.revisionToken,'9007199254740994'),false);assert.equal(editor.mergeSuggestedField('name',saved.revisionToken,current.revisionToken),false);assert.equal(editor.draft.value?.value.value.name,'local');assert.ok(editor.draft.value?.conflict.value);editor.dispose();
+});
 test('information save freezes token-only full fields; later keystrokes survive its ACK and readback',async()=>{
  const seen:CommandSnapshot[]=[];let accepted!:(v:MeetingMutation)=>void,current=saved;const editor=useMeetingInfoEditor({saved:async()=>current,send:request=>{seen.push(request);return new Promise(resolve=>{accepted=resolve;});}},()=> 'owner',()=>id,()=>true);
  await editor.reload();assert.deepEqual(editor.draft.value?.value.value.rosterDraftIds,['member']);editor.edit(fields('first'));const send=editor.save();editor.edit(fields('later'));current={...saved,name:'first',summary:'保留 😀',revisionToken:'9007199254740994'};accepted({id,revision:9007199254740994,revisionToken:'9007199254740994'});await send;

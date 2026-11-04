@@ -14,6 +14,8 @@ public final class RecordingService {
         default String backend(String requested) { return requested; }
         default void open(RecordingContracts.Session session) {}
         default RecordingContracts.Session openOrCurrent(RecordingContracts.Session session) { open(session);return session; }
+        /** Read-only meeting pointer; never opens a session or acquires a writer. */
+        default String currentSessionId(String meetingId) { return null; }
         void persist(RecordingContracts.Session session, RecordingContracts.Chunk chunk);
         default void pause(RecordingContracts.Session session, boolean paused) {}
         default void nextPart(RecordingContracts.Session previous, RecordingContracts.Session next) {}
@@ -72,6 +74,10 @@ public final class RecordingService {
     private final Persistence persistence;
     public RecordingService() { this((session, chunk) -> {}); }
     public RecordingService(Persistence persistence) { this.persistence = Objects.requireNonNull(persistence); }
+    public RecordingContracts.Session currentForMeeting(String meetingId) {
+        if(persistence.recoverable()) {String id=persistence.currentSessionId(meetingId);if(id==null)return null;return persistence.withinMeeting(id,meetingId,()->session(id));}
+        return persistence.locked(null,()->{var found=sessions.values().stream().filter(s->s.session.meetingId().equals(meetingId)).toList();if(found.size()>1)throw new StaleWriter();return found.isEmpty()?null:found.getFirst().session;});
+    }
     public RecordingContracts.Session open(String meetingId, String backendId) {
         if (meetingId == null || meetingId.isBlank() || backendId == null || backendId.isBlank()) throw new IllegalArgumentException("Invalid recording session");
         var session = new RecordingContracts.Session(UUID.randomUUID().toString(), meetingId, UUID.randomUUID().toString(), 1, persistence.backend(backendId));
@@ -168,6 +174,12 @@ public final class RecordingService {
             persistence.nextPart(s.session,next);s.session=next;s.parts.put(next.partId(),new HashMap<>());s.paused=false;return next;
         });
     }
+    public void discardEmpty(String id,long epoch){
+        persistence.locked(id,()->{var s=state(id,epoch);if(s.parts.values().stream().anyMatch(p->!p.isEmpty()))throw new Gap();
+            var finals=new java.util.LinkedHashMap<String,Long>();s.parts.keySet().forEach(part->finals.put(part,0L));
+            persistence.finish(s.session,finals);s.finished=true;return null;
+        });
+    }
     public Archive finish(String id,long epoch,Map<String,Long> finalSequences) {
         return persistence.locked(id, () -> {
             var s=state(id,epoch);
@@ -188,7 +200,11 @@ public final class RecordingService {
     private State state(String id) {
         if(persistence.recoverable()) {
             var snapshot=persistence.load(id);var s=new State(snapshot.session());s.paused=snapshot.paused();s.finished=snapshot.finished();
-            for(var part:snapshot.parts())s.parts.putIfAbsent(part,new HashMap<>());
+            // The persistence order is capture order. Seeding the current part first
+            // would reverse recovery manifests after a collector starts a new part.
+            if(!snapshot.parts().getLast().equals(snapshot.session().partId()))throw new IllegalStateException("Invalid current recording part");
+            s.parts.clear();
+            for(var part:snapshot.parts())s.parts.put(part,new HashMap<>());
             for(var proof:snapshot.chunks()) {requirePart(s,proof.partId());if(s.parts.get(proof.partId()).put(proof.seq(),proof)!=null)throw new IllegalStateException("Duplicate recording proof");}
             return s;
         }

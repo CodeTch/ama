@@ -50,6 +50,8 @@ public final class JdbcRecordingTranscriptSources implements AutoCloseable {
   independent();ama.contract.OutboxContracts.uuid(session);String meeting=recordings.meetingId(session);
   return tx.required(()->{access.require(access.lock(actor,meeting),MeetingAccess.Action.READ);return readHeld(session,meeting);});
  }
+ public RecordingArchiveRuntime.Status archiveStatus(Actor actor,String session){return RecordingArchiveRuntime.status(queue,actor,session);}
+ public RecordingArchiveRuntime.Status retryArchive(Actor actor,String session){return RecordingArchiveRuntime.accept(queue,actor,session);}
  public Map<String,Object> readCurrent(Actor actor,String meeting){
   independent();ama.contract.OutboxContracts.uuid(meeting);return tx.required(()->{access.require(access.lock(actor,meeting),MeetingAccess.Action.READ);String session=currentSession(meeting);if(session==null)return Map.of("meetingId",meeting,"state","NOT_RECORDED","archiveAvailable",false);return readHeld(session,meeting);});
  }

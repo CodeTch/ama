@@ -73,6 +73,37 @@ class RecordingAccessIT {
         headers.forEach(b::header);return client.send(b.method(method,HttpRequest.BodyPublishers.ofByteArray(bytes)).build(),HttpResponse.BodyHandlers.ofString());
     }
     JsonNode accepted(HttpResponse<String> response,int status) throws Exception {assertEquals(status,response.statusCode(),response.body());return json.readTree(response.body());}
+    HttpResponse<byte[]> binary(String path,String token,Map<String,String> headers)throws Exception{
+        var b=HttpRequest.newBuilder(URI.create("http://127.0.0.1:"+app.getEnvironment().getProperty("local.server.port")+"/api/v1"+path)).header("Origin",origin).header("Cookie","__Host-AMA_SESSION="+token);
+        headers.forEach(b::header);return client.send(b.GET().build(),HttpResponse.BodyHandlers.ofByteArray());
+    }
+    @Test void realPartSourcesPreserveOrderAndServeOnlyTheirOwnVerifiedPcm()throws Exception{
+        String token=identity("parts-http-"+UUID.randomUUID()),foreign=identity("parts-foreign-"+UUID.randomUUID());
+        String meeting=accepted(call("POST","/meetings",token,"{}".getBytes(StandardCharsets.UTF_8),Map.of("Idempotency-Key",UUID.randomUUID().toString(),"Content-Type","application/json")),201).path("id").asText();
+        assertTrue(accepted(call("GET","/meetings/"+meeting+"/recordings",token,new byte[0],Map.of()),200).path("session").isNull());
+        var session=accepted(call("POST","/meetings/"+meeting+"/recordings",token,new byte[0],Map.of()),201);
+        String sid=session.path("sessionId").asText(),first=session.path("partId").asText(),base="/recordings/"+sid,collector=UUID.randomUUID().toString();
+        accepted(call("POST",base+"/writer-lease",token,json.writeValueAsBytes(Map.of("expectedEpoch",1,"collectorId",collector,"requestId",UUID.randomUUID().toString())),Map.of("Content-Type","application/json")),200);
+        var ids=new java.util.ArrayList<String>();String current=first;
+        for(int n=0;n<2;n++){
+            long epoch=2+n;byte[] pcm={(byte)(1+n*2),0,(byte)(2+n*2),0};String hash=java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-256").digest(pcm));
+            accepted(call("POST",base+"/chunks",token,pcm,Map.of("Content-Type","application/octet-stream","X-Writer-Epoch",String.valueOf(epoch),"X-Collector-Id",collector,"X-Part-Id",current,"X-Seq","1","X-Sample-Start","0","X-Sample-Count","2","X-Sha256",hash)),200);
+            ids.add(current);var writer=Map.of("X-Expected-Epoch",String.valueOf(epoch),"X-Collector-Id",collector);
+            assertEquals(204,call("POST",base+"/pause",token,new byte[0],writer).statusCode());
+            String url=base+"/parts/"+current+"/audio";var full=binary(url,token,Map.of());assertEquals(200,full.statusCode());assertEquals(48,full.body().length);assertArrayEquals(pcm,java.util.Arrays.copyOfRange(full.body(),44,48));
+            var range=binary(url,token,Map.of("Range","bytes=44-47"));assertEquals(206,range.statusCode());assertArrayEquals(pcm,range.body());assertEquals("bytes 44-47/48",range.headers().firstValue("Content-Range").orElseThrow());
+            assertEquals(403,binary(url,foreign,Map.of()).statusCode());assertEquals(416,binary(url,token,Map.of("Range","bytes=90-")).statusCode());
+            if(n==0)current=accepted(call("POST",base+"/parts",token,new byte[0],writer),200).path("partId").asText();
+        }
+        assertEquals(sid,accepted(call("GET","/meetings/"+meeting+"/recordings",token,new byte[0],Map.of()),200).path("session").path("sessionId").asText());assertEquals(403,call("GET","/meetings/"+meeting+"/recordings",foreign,new byte[0],Map.of()).statusCode());
+        var sources=accepted(call("GET",base+"/part-sources",token,new byte[0],Map.of()),200);assertEquals(2,sources.path("parts").size());assertEquals(first,sources.path("parts").get(0).path("partId").asText());assertEquals(2,sources.path("parts").get(1).path("startSample").asLong());
+        var manifest=accepted(call("GET",base+"/manifest",token,new byte[0],Map.of()),200);assertEquals(ids,java.util.stream.StreamSupport.stream(manifest.path("parts").spliterator(),false).map(p->p.path("partId").asText()).toList());
+        // Corruption is detected after the WAV header was buffered. The API must
+        // replace the uncommitted binary response with a finite error, not hang.
+        jdbc.update("UPDATE recording_chunk SET pcm=? WHERE session_id=? AND part_id=?",new byte[]{9,9,9,9},sid,first);
+        var corrupt=binary(base+"/parts/"+first+"/audio",token,Map.of());assertEquals(503,corrupt.statusCode());assertEquals("RECORDING_UNAVAILABLE",json.readTree(corrupt.body()).path("error").path("code").asText());
+        jdbc.update("UPDATE meeting SET lifecycle='DELETING' WHERE id=?",meeting);assertEquals(403,binary(base+"/parts/"+first+"/audio",token,Map.of()).statusCode());
+    }
     @Test void foreignIdentityAndDeletedMeetingCannotWriteOrReadRecording() throws Exception {
         String owner="record-owner-"+UUID.randomUUID(),other="record-other-"+UUID.randomUUID();String token=identity(owner),foreign=identity(other);
         var meeting=accepted(call("POST","/meetings",token,"{}".getBytes(StandardCharsets.UTF_8),Map.of("Idempotency-Key",UUID.randomUUID().toString(),"Content-Type","application/json")),201).get("id").asText();

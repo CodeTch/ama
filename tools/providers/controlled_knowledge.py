@@ -60,8 +60,26 @@ def validate_publication_binding(r):
  for key in ('actorId','libraryId','folderId'):
   if not isinstance(r[key],str) or not 1<=len(r[key])<=255 or not r[key].strip():raise Denied(400)
  if type(r['executionNo'])!=int or not 1<=r['executionNo']<2**63-1:raise Denied(400)
- value=r['payload'];exact(value,'schemaVersion title meeting minutes provenance sections')
- if value['schemaVersion']!='ama.controlled-knowledge-document.v1':raise Denied(400)
+ value=r['payload']
+ extended=isinstance(value,dict) and value.get('schemaVersion')=='ama.controlled-knowledge-document.v2'
+ exact(value,'schemaVersion title meeting minutes provenance sections'+(' publicationMetadata' if extended else ''))
+ if not extended and value['schemaVersion']!='ama.controlled-knowledge-document.v1':raise Denied(400)
+ if extended:
+  metadata=exact(value['publicationMetadata'],'schema configurationVersionToken providerId libraryId folderId libraryName description visibility pathNames pathIds tagRules tags')
+  if metadata['schema']!='ama.publication-configuration.v1' or any(metadata[k]!=r[k] for k in ('providerId','libraryId','folderId')) or not isinstance(metadata['configurationVersionToken'],str) or not re.fullmatch('[1-9][0-9]{0,18}',metadata['configurationVersionToken']) or int(metadata['configurationVersionToken'])>=2**63-1:raise Denied(400)
+  rules=exact(metadata['tagRules'],'maxCount maxLength allowEmpty trim caseSensitive')
+  if any(type(rules[k])!=int or not 1<=rules[k]<=256 for k in ('maxCount','maxLength')) or any(type(rules[k])!=bool for k in ('allowEmpty','trim','caseSensitive')):raise Denied(400)
+  tags=metadata['tags']
+  if not isinstance(tags,list) or len(tags)>rules['maxCount'] or not tags and not rules['allowEmpty']:raise Denied(400)
+  identities=[]
+  for tag in tags:
+   if not isinstance(tag,str) or not tag.strip() or len(tag)>rules['maxLength'] or any(ord(c)<32 or 127<=ord(c)<=159 for c in tag) or rules['trim'] and tag!=tag.strip():raise Denied(400)
+   identities.append(tag if rules['caseSensitive'] else tag.lower())
+  if len(set(identities))!=len(identities):raise Denied(400)
+  if not isinstance(metadata['pathNames'],list) or not isinstance(metadata['pathIds'],list) or len(metadata['pathNames'])!=len(metadata['pathIds'])+2 or not 2<=len(metadata['pathNames'])<=129:raise Denied(400)
+  if any(not isinstance(x,str) or not x.strip() or len(x)>255 for x in metadata['pathNames']+metadata['pathIds']):raise Denied(400)
+  if metadata['pathNames'][0]!=metadata['libraryName'] or metadata['pathIds'] and metadata['pathIds'][-1]!=r['folderId']:raise Denied(400)
+  if not isinstance(metadata['description'],str) or len(metadata['description'])>2048 or not isinstance(metadata['visibility'],str) or not metadata['visibility'].strip() or len(metadata['visibility'])>1024:raise Denied(400)
  provenance=exact(value['provenance'],'confirmationId elementSetId inputFingerprint minutesRevisionId renderArtifact sourceManifestHash transcriptConfirmationId')
  if provenance['confirmationId']!=r['confirmationId']:raise Denied(400)
  exact(provenance['renderArtifact'],'version sha256')
@@ -125,7 +143,12 @@ COMMIT;""")
   self.db.executescript("""BEGIN IMMEDIATE;
 CREATE TABLE IF NOT EXISTS document_governance(document TEXT PRIMARY KEY REFERENCES document(id),state TEXT NOT NULL CHECK(state IN ('ACTIVE','WITHDRAWN','OBSOLETE')),revision INTEGER NOT NULL CHECK(revision>=0),event_id TEXT NOT NULL UNIQUE,changed_at INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS governance_command(document TEXT NOT NULL REFERENCES document(id),command_key TEXT NOT NULL,actor TEXT NOT NULL,request_hash TEXT NOT NULL,receipt BLOB NOT NULL,PRIMARY KEY(document,command_key));
+CREATE TABLE IF NOT EXISTS library_profile(library TEXT PRIMARY KEY REFERENCES library(id),description TEXT NOT NULL,visibility TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS governance_grant(actor TEXT NOT NULL,library TEXT NOT NULL REFERENCES library(id),can_manage INTEGER NOT NULL CHECK(can_manage IN (0,1)),PRIMARY KEY(actor,library));
 COMMIT;""")
+  self.tag_rules=config.get('publicationTagRules',dict(maxCount=20,maxLength=64,allowEmpty=True,trim=True,caseSensitive=True))
+  exact(self.tag_rules,'maxCount maxLength allowEmpty trim caseSensitive')
+  if any(type(self.tag_rules[k])!=int or not 1<=self.tag_rules[k]<=256 for k in ('maxCount','maxLength')) or any(type(self.tag_rules[k])!=bool for k in ('allowEmpty','trim','caseSensitive')):raise RuntimeError('Explicit publication tag rules required')
  def create_child_folder(self,folder):
   if not re.fullmatch(r'[a-z][a-z0-9-]{0,127}',folder) or folder=='controlled-root':raise RuntimeError('Bounded new child destination required')
   expected=(folder,'controlled-library','controlled-root',folder,0)
@@ -143,6 +166,11 @@ COMMIT;""")
   with self.lock:
    if not self.db.execute('SELECT 1 FROM folder WHERE id=? AND library=?',(folder,library)).fetchone():raise RuntimeError('Actual destination required')
    self.db.execute('INSERT INTO grant_record VALUES(?,?,?,?,?,1) ON CONFLICT(actor,library,folder) DO UPDATE SET can_publish=excluded.can_publish,can_read=excluded.can_read,version=grant_record.version+1',(actor,library,folder,int(publish),int(read)))
+ def manage(self,actor,library,allowed):
+  with self.lock:
+   self.db.execute('INSERT INTO governance_grant VALUES(?,?,?) ON CONFLICT(actor,library) DO UPDATE SET can_manage=excluded.can_manage',(actor,library,int(allowed)))
+ def manager(self,actor,library):
+  return bool(self.db.execute('SELECT 1 FROM governance_grant WHERE actor=? AND library=? AND can_manage=1',(actor,library)).fetchone())
  def sign(self,value):
   raw=canonical(value);return b64(raw)+'.'+b64(self.key.sign(raw))
  def verify(self,token,key,schema):
@@ -177,6 +205,7 @@ COMMIT;""")
   if method=='POST' and not isinstance(body,dict):raise Denied(400,'INVALID_PROVIDER_RECEIPT')
   if body is not None and body.get('actorId')!=actor:raise Denied()
   with self.lock:
+   if method=='GET' and (path.startswith('/v1/knowledge/documents/index?') or re.fullmatch(r'/v1/knowledge/documents/doc-[0-9a-f]{32}\?view=permissions',path)):return self.publication_index(actor,path)
    if path.startswith('/v1/knowledge/governance/'):return self.governance(method,path,actor,body)
    if method=='POST' and path=='/v1/knowledge/material-authorizations':return self.material_authority(actor,body)
    if method=='POST' and path=='/v1/knowledge/destination-authorizations':
@@ -202,9 +231,32 @@ COMMIT;""")
       value.encode('utf-8','strict');return value
      cursor=identifier(query['cursor'][0]) if 'cursor' in query else ''
      parts=parsed.path.split('/')
+     if parsed.path=='/v1/knowledge/libraries/publication-rules':
+      if query:raise Denied(400)
+      return dict(providerId=self.ids['providerId'],storeInstanceId=self.ids['storeInstanceId'],tagRules=self.tag_rules)
+     if len(parts)==6 and parts[1:4]==['v1','knowledge','libraries'] and parts[5]=='configuration':
+      if set(query)!={'folderId'}:raise Denied(400)
+      library=identifier(urllib.parse.unquote(parts[4],encoding='utf-8',errors='strict'));folder=identifier(query['folderId'][0]);self.grant(actor,library,folder)
+      lib=self.library_metadata(actor,library)
+      chain=[];seen=set();current=folder
+      while current is not None:
+       if len(chain)>=128 or current in seen:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+       seen.add(current);node=self.db.execute('SELECT id,name,parent,is_root FROM folder WHERE id=? AND library=?',(current,library)).fetchone()
+       if not node:raise Denied(409,'DESTINATION_UNAVAILABLE')
+       chain.append(dict(node))
+       if node['is_root']:
+        if node['id']!=lib['rootFolderId'] or node['parent'] is not None:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+        break
+       current=node['parent']
+      if not chain or not chain[-1]['is_root']:raise Denied(409,'DESTINATION_UNAVAILABLE')
+      chain.reverse()
+      return dict(providerId=self.ids['providerId'],storeInstanceId=self.ids['storeInstanceId'],libraryId=library,folderId=folder,libraryName=lib['name'],description=lib['description'],visibility=lib['visibility'],pathNames=[lib['name']]+[x['name'] for x in chain],pathIds=[x['id'] for x in chain[1:]],tagRules=self.tag_rules)
      if parsed.path=='/v1/knowledge/libraries':
-      if set(query)-{'limit','cursor'}:raise Denied(400)
-      rows=self.db.execute('SELECT DISTINCT l.id,l.name,l.root rootFolderId FROM library l JOIN grant_record g ON g.library=l.id WHERE g.actor=? AND g.can_publish=1 AND l.id>? ORDER BY l.id LIMIT ?',(actor,cursor,limit+1)).fetchall()
+      if set(query)-{'limit','cursor','search'}:raise Denied(400)
+      search=query.get('search',[''])[0]
+      if len(search)>255 or any(ord(c)<32 for c in search):raise Denied(400)
+      rows=self.db.execute("SELECT DISTINCT l.id FROM library l JOIN grant_record g ON g.library=l.id LEFT JOIN library_profile p ON p.library=l.id WHERE g.actor=? AND (g.can_publish=1 OR g.can_read=1) AND l.id>? AND (instr(lower(l.name),lower(?))>0 OR instr(lower(COALESCE(p.description,'')),lower(?))>0) ORDER BY l.id LIMIT ?",(actor,cursor,search,search,limit+1)).fetchall()
+      rows=[self.library_metadata(actor,row['id']) for row in rows]
      elif len(parts)==6 and parts[1:4]==['v1','knowledge','libraries'] and parts[5]=='folders':
       if set(query)-{'limit','cursor','parentFolderId'}:raise Denied(400)
       parent=identifier(query['parentFolderId'][0]) if 'parentFolderId' in query else None
@@ -258,15 +310,45 @@ COMMIT;""")
     if document:result['payload']=strict(row['payload'],MAX_PAYLOAD)
     return result
    raise Denied(404)
+ def library_metadata(self,actor,library):
+  row=self.db.execute("SELECT l.id,l.name,l.root rootFolderId,COALESCE(p.description,'') description,COALESCE(p.visibility,'具有该知识库阅读权限的成员') visibility,MAX(g.can_publish) canPublish FROM library l JOIN grant_record g ON g.library=l.id LEFT JOIN library_profile p ON p.library=l.id WHERE l.id=? AND g.actor=? AND (g.can_publish=1 OR g.can_read=1) GROUP BY l.id",(library,actor)).fetchone()
+  if not row:raise Denied()
+  item=dict(row);item['canPublish']=bool(item['canPublish']);item['unavailableReason']='' if item['canPublish'] else '当前账号没有该知识库的发布权限';return item
  def require_document_active(self,document):
   row=self.db.execute('SELECT state FROM document_governance WHERE document=?',(document,)).fetchone()
   if row and row['state']!='ACTIVE':raise Denied(403,'DOCUMENT_NOT_ACTIVE')
+ def publication_index(self,actor,path):
+  from urllib.parse import urlsplit,parse_qs
+  parts=urlsplit(path);query=parse_qs(parts.query,keep_blank_values=True)
+  identity=dict(providerId=self.ids['providerId'],storeInstanceId=self.ids['storeInstanceId'])
+  if parts.path!='/v1/knowledge/documents/index':
+   document=parts.path.rsplit('/',1)[1];row=self.db.execute('SELECT library,folder,publication FROM document WHERE id=? AND client=?',(document,self.ids['clientId'])).fetchone()
+   if not row:raise Denied(404)
+   can_manage=self.manager(actor,row['library']);can_read=bool(self.db.execute('SELECT 1 FROM grant_record WHERE actor=? AND library=? AND folder=? AND can_read=1',(actor,row['library'],row['folder'])).fetchone())
+   if not can_manage and not can_read:raise Denied()
+   return dict(**identity,documentId=document,publicationId=row['publication'],libraryId=row['library'],canManage=can_manage)
+  if set(query)-{'view','cursor','limit'} or any(len(v)!=1 for v in query.values()) or query.get('view',[''])[0] not in ('read','manage'):raise Denied(400)
+  view=query['view'][0];cursor=query.get('cursor',[''])[0];limit=query.get('limit',['20'])[0]
+  if not re.fullmatch('(?:[1-9]|[1-4][0-9]|50)',limit) or cursor and not re.fullmatch('doc-[0-9a-f]{32}',cursor):raise Denied(400)
+  limit=int(limit)
+  rows=self.db.execute("SELECT d.id,d.publication,d.library,d.folder,d.payload_hash,substr(json_extract(CAST(d.payload AS TEXT),'$.title'),1,512) title,substr(json_extract(CAST(d.payload AS TEXT),'$.meeting.name'),1,512) meeting_name,COALESCE(g.state,'ACTIVE') state,COALESCE(r.can_read,0) can_read,COALESCE(a.can_manage,0) can_manage FROM document d LEFT JOIN document_governance g ON g.document=d.id LEFT JOIN grant_record r ON r.actor=? AND r.library=d.library AND r.folder=d.folder LEFT JOIN governance_grant a ON a.actor=? AND a.library=d.library WHERE d.client=? AND d.id>? AND ((?='manage' AND a.can_manage=1) OR (?='read' AND r.can_read=1 AND COALESCE(g.state,'ACTIVE')='ACTIVE')) ORDER BY d.id LIMIT ?",(actor,actor,self.ids['clientId'],cursor,view,view,limit+1)).fetchall()
+  items=[]
+  for row in rows[:limit]:
+   library=self.db.execute("SELECT l.name,COALESCE(p.description,'') description FROM library l LEFT JOIN library_profile p ON p.library=l.id WHERE l.id=?",(row['library'],)).fetchone();chain=[];seen=set();current=row['folder']
+   while current is not None:
+    if current in seen or len(chain)>=32:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+    seen.add(current);folder=self.db.execute('SELECT name,parent FROM folder WHERE id=? AND library=?',(current,row['library'])).fetchone()
+    if not folder:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+    chain.append(folder['name']);current=folder['parent']
+   if not library or not chain:raise Denied(503,'INVALID_PROVIDER_RECEIPT')
+   items.append(dict(documentId=row['id'],publicationId=row['publication'],libraryId=row['library'],folderId=row['folder'],libraryName=library['name'],libraryDescription=library['description'],folderPath=list(reversed(chain)),title=row['title'],meetingName=row['meeting_name'],payloadSha256=row['payload_hash'],state=row['state'],canManage=bool(row['can_manage']),canRead=bool(row['can_read']) and row['state']=='ACTIVE'))
+  return dict(**identity,items=items,cursor=items[-1]['documentId'] if len(rows)>limit else None,hasManagedLibraries=bool(self.db.execute('SELECT 1 FROM governance_grant WHERE actor=? AND can_manage=1 LIMIT 1',(actor,)).fetchone()))
  def governance(self,method,path,actor,body):
   match=re.fullmatch(r'/v1/knowledge/governance/documents/(doc-[0-9a-f]{32})/(state|commands(?:/[A-Za-z0-9_.:-]{1,128})?)',path)
   if not match:raise Denied(404)
   document,tail=match.groups();row=self.db.execute('SELECT id,publication,client,actor,library,folder FROM document WHERE id=?',(document,)).fetchone()
   if not row:raise Denied(404)
-  if row['client']!=self.ids['clientId'] or row['actor']!=actor:raise Denied()
+  if row['client']!=self.ids['clientId'] or row['actor']!=actor and not self.manager(actor,row['library']):raise Denied()
   def envelope(claims):return dict(providerId=self.ids['providerId'],storeInstanceId=self.ids['storeInstanceId'],assertion=self.sign(claims))
   if method=='GET' and tail.startswith('commands/'):
    saved=self.db.execute('SELECT actor,receipt FROM governance_command WHERE document=? AND command_key=?',(document,tail.split('/')[1])).fetchone()
@@ -286,7 +368,8 @@ COMMIT;""")
    if old:
     if old['actor']!=actor or old['request_hash']!=request_hash:raise Denied(409,'GOVERNANCE_CONFLICT')
     result=strict(old['receipt'],8192);self.db.commit();return result
-   self.grant(actor,row['library'],row['folder']);now=int(time.time());self.db.execute("INSERT OR IGNORE INTO document_governance VALUES(?,'ACTIVE',0,?,?)",(document,secrets.token_hex(16),now));current=self.db.execute('SELECT * FROM document_governance WHERE document=?',(document,)).fetchone()
+   if not self.manager(actor,row['library']):raise Denied(403,'SPACE_MANAGEMENT_REQUIRED')
+   now=int(time.time());self.db.execute("INSERT OR IGNORE INTO document_governance VALUES(?,'ACTIVE',0,?,?)",(document,secrets.token_hex(16),now));current=self.db.execute('SELECT * FROM document_governance WHERE document=?',(document,)).fetchone()
    if current['state']!='ACTIVE' or current['revision']!=int(version):raise Denied(409,'GOVERNANCE_CONFLICT')
    state='WITHDRAWN' if body['action']=='WITHDRAW' else 'OBSOLETE';event=secrets.token_hex(16);revision=current['revision']+1
    claims=dict(schema='ama.controlled-kb-governance-receipt.v1',**self.ids,documentId=document,publicationId=row['publication'],actorId=actor,commandKey=key,requestSha256=request_hash,reasonSha256=digest(reason.encode('utf-8')),action=body['action'],state=state,revisionToken=str(revision),eventId=event,verifiedAt=now)

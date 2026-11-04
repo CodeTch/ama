@@ -5,6 +5,36 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RecordingServiceTest {
+    @Test void discardOnlySealsAnEmptySessionAndNeverDropsAudio() {
+        var service=new RecordingService();var empty=service.open("empty","backend");
+        service.discardEmpty(empty.sessionId(),empty.writerEpoch());
+        assertTrue(service.manifest(empty.sessionId()).finished());
+        service.discardEmpty(empty.sessionId(),empty.writerEpoch());
+        var recorded=service.open("recorded","backend");
+        service.accept(recorded.sessionId(),recorded.writerEpoch(),new RecordingContracts.Chunk(recorded.partId(),1,0,2,new byte[4]));
+        assertThrows(RecordingService.Gap.class,()->service.discardEmpty(recorded.sessionId(),recorded.writerEpoch()));
+        assertFalse(service.manifest(recorded.sessionId()).finished());
+        assertEquals(2,service.manifest(recorded.sessionId()).parts().getFirst().sampleCount());
+    }
+    @Test void reconstructedManifestPreservesPersistedOrderIncludingEmptyCurrentPart() {
+        for (int size : new int[]{2,3,16}) {
+            var parts=java.util.stream.IntStream.rangeClosed(1,size).mapToObj(i->String.format("00000000-0000-0000-0000-%012d",i)).toList();
+            var session=new RecordingContracts.Session("session","meeting",parts.getLast(),size,"backend");
+            var proofs=java.util.stream.IntStream.range(0,size-1).mapToObj(i->new RecordingService.Proof(parts.get(i),1,0,2,"a".repeat(64))).toList();
+            var snapshot=new RecordingService.Snapshot(session,true,false,proofs,parts);
+            var persistence=new RecordingService.Persistence(){
+                public boolean recoverable(){return true;}
+                public RecordingService.Snapshot load(String id){return snapshot;}
+                public void persist(RecordingContracts.Session s,RecordingContracts.Chunk c){throw new AssertionError("read only");}
+            };
+            for(int read=0;read<2;read++) {
+                var manifest=new RecordingService(persistence).manifest("session");
+                assertEquals(parts,manifest.parts().stream().map(RecordingService.PartManifest::partId).toList());
+                assertTrue(manifest.paused());assertFalse(manifest.finished());
+                for(int i=0;i<size;i++){var p=manifest.parts().get(i);assertEquals(i==size-1?0:1,p.highestContiguousSeq());assertEquals(i==size-1?0:2,p.sampleCount());}
+            }
+        }
+    }
     @Test void routingDoesNotInspectProtectedProofsAndBindingStopsForeignWork(){
         var called=new java.util.concurrent.atomic.AtomicBoolean();
         var persistence=new RecordingService.Persistence(){

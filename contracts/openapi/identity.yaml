@@ -198,6 +198,8 @@ Person:
       type: [string, 'null']
     active:
       type: boolean
+    title:
+      type: [string, 'null']
 Department:
   type: object
   additionalProperties: false

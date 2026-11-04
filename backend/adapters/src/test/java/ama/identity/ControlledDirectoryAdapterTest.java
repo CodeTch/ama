@@ -28,9 +28,9 @@ class ControlledDirectoryAdapterTest {
  });}
  static InputStream bytes(String body){return new ByteArrayInputStream(body.getBytes(StandardCharsets.UTF_8));}
  @Test void readsActualProviderPeopleAndPreservesDepartmentAndInactiveStatus()throws Exception {
-  var client=client(200,bytes("{\"items\":[{\"stableId\":\"person-one\",\"displayName\":\"真实目录姓名\",\"department\":\"真实目录部门\",\"active\":false,\"email\":\"person@example.invalid\"}],\"nextCursor\":\"opaque-cursor\"}"));
+  var client=client(200,bytes("{\"items\":[{\"stableId\":\"person-one\",\"displayName\":\"真实目录姓名\",\"department\":\"真实目录部门\",\"title\":\"真实目录职务\",\"active\":false,\"email\":\"person@example.invalid\"}],\"nextCursor\":\"opaque-cursor\"}"));
   try(var directory=new ControlledDirectoryAdapter(ORIGIN,Duration.ofSeconds(3),client)){
-   var page=directory.search("某人%_",null,1);assertEquals(1,page.items().size());assertEquals("person-one",page.items().getFirst().stableId());assertEquals("真实目录部门",page.items().getFirst().department());assertFalse(page.items().getFirst().active());assertEquals("opaque-cursor",page.nextCursor());
+   var page=directory.search("某人%_",null,1);assertEquals(1,page.items().size());assertEquals("person-one",page.items().getFirst().stableId());assertEquals("真实目录部门",page.items().getFirst().department());assertEquals("真实目录职务",page.items().getFirst().title());assertFalse(page.items().getFirst().active());assertEquals("opaque-cursor",page.nextCursor());
    var request=client.request;assertNotNull(request);assertEquals("GET",request.method());assertEquals("127.0.0.1",request.uri().getHost());assertEquals(8792,request.uri().getPort());assertEquals("/v1/directory/people",request.uri().getPath());assertTrue(request.uri().getRawQuery().contains("%25%5F")||request.uri().getRawQuery().contains("%25_"));
   }
  }

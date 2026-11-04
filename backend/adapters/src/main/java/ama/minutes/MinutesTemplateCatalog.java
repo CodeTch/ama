@@ -7,9 +7,12 @@ public final class MinutesTemplateCatalog {
  private MinutesTemplateCatalog(){}
  public record Page(List<Map<String,Object>> items,String nextCursor){public Page{items=List.copyOf(items);}}
  public static Page merge(Map<String,Object> builtin,JdbcPersonalTemplates.Page personal,int limit,String after,boolean capable){
+  return merge(List.of(builtin),personal,limit,after,capable);
+ }
+ public static Page merge(List<Map<String,Object>> builtins,JdbcPersonalTemplates.Page personal,int limit,String after,boolean capable){
   if(limit<1||limit>50||personal.items().size()>limit)throw new IllegalArgumentException("Bounded template page required");
-  var choices=new TreeMap<String,Map<String,Object>>();String defaultId=(String)builtin.get("templateId");
-  if(after==null||defaultId.compareTo(after)>0)choices.put(defaultId,Map.copyOf(builtin));
+  var choices=new TreeMap<String,Map<String,Object>>();
+  for(var builtin:builtins){String defaultId=(String)builtin.get("templateId");if(after==null||defaultId.compareTo(after)>0)choices.put(defaultId,Map.copyOf(builtin));}
   for(var value:personal.items()){
    if(value.deleted()||after!=null&&value.id().compareTo(after)<=0)throw new IllegalArgumentException("Active forward template page required");
    var item=Map.<String,Object>of("templateId",value.id(),"revisionId",value.revisionId(),"name",value.name(),"themes",value.themes(),"themeCount",value.themes().size(),"selectable",capable,"default",false);

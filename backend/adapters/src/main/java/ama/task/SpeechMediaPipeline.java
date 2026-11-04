@@ -52,7 +52,12 @@ final class SpeechMediaPipeline implements AutoCloseable {
   try(var model=new HttpSpeechModelPort(profile.http(),clip->{if(!bound.clips().contains(clip))throw new IOException("Unissued clip");return audio.open(bound.proof(),clip);},observer)){
    for(var clip:material.clips()){
     check();try(var verified=audio.open(material.proof(),clip)){verified.transferTo(OutputStream.nullOutputStream());}
-    var store=new JdbcSpeechCheckpoints(q,components.authority(),lease,material.proof(),clip,profile.sha256(),cancelled);var value=new SpeechPipeline(model).transcribe(clip,store);
+    var runtime=new ama.governance.JdbcGovernanceRuntime(q.jdbc.getDataSource());
+    var store=new JdbcSpeechCheckpoints(q,components.authority(),lease,material.proof(),clip,profile.sha256(),cancelled);var value=new SpeechPipeline(model).transcribe(clip,store,()->runtime.entities(lease.spec().input().id()));
+    if(runtime.required(lease.spec().input().id()).configuration().modelVersion().equals(profile.http().embeddingModelVersion())){
+     byte[] original;try(var stream=audio.open(material.proof(),clip)){original=stream.readNBytes(Math.toIntExact(44+clip.sampleCount()*2));}
+     ama.governance.GovernanceRuntimeVoice.candidates(runtime,lease.spec().input().id(),clip,value.speakers(),original,sample->{check();try(var speakerModel=new HttpSpeechModelPort(profile.http(),ignored->new ByteArrayInputStream(sample),observer)){return speakerModel.embed(new WavClip(clip.fileId(),0,(sample.length-44)/2));}});
+    }
     // RAW uses only the actual recognition. Enhanced text, vectors and anonymous
     // model clusters stay in typed checkpoints until a separate explicit adoption.
     if(!value.raw().text().isBlank())units=add(segments,file,hash,ordinal,value.raw().text(),clip.startSample(),clip.endSampleExclusive(),units,budget);

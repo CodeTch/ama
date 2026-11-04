@@ -1,0 +1,813 @@
+{
+  "EnhancementInput": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "expectedRevisionToken",
+      "sourceRevisionId",
+      "materialSnapshotId"
+    ],
+    "properties": {
+      "expectedRevisionToken": {
+        "type": "string",
+        "pattern": "^(0|[1-9][0-9]{0,18})$"
+      },
+      "sourceRevisionId": {
+        "type": "string",
+        "format": "uuid",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "materialSnapshotId": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "MaterialEnhancement": {
+    "oneOf": [
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "expectedRevisionToken",
+          "sourceRevisionId",
+          "materialSnapshotId",
+          "candidateId",
+          "profile",
+          "state"
+        ],
+        "properties": {
+          "expectedRevisionToken": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$"
+          },
+          "sourceRevisionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "materialSnapshotId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "candidateId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "profile": {
+            "type": "string",
+            "const": "ama-material-enhancement.v1"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "STALE",
+              "APPLYING",
+              "APPLIED"
+            ]
+          }
+        }
+      },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "expectedRevisionToken",
+          "sourceRevisionId",
+          "materialSnapshotId",
+          "candidateId",
+          "profile",
+          "state",
+          "canApply",
+          "changes"
+        ],
+        "properties": {
+          "expectedRevisionToken": {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$"
+          },
+          "sourceRevisionId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "materialSnapshotId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "candidateId": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "profile": {
+            "type": "string",
+            "const": "ama-material-enhancement.v1"
+          },
+          "state": {
+            "type": "string",
+            "const": "READY"
+          },
+          "canApply": {
+            "type": "boolean"
+          },
+          "changes": {
+            "type": "array",
+            "maxItems": 4096,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "segmentId",
+                "before",
+                "after"
+              ],
+              "properties": {
+                "segmentId": {
+                  "type": "string",
+                  "format": "uuid",
+                  "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                },
+                "before": {
+                  "type": "string",
+                  "maxLength": 65536
+                },
+                "after": {
+                  "type": "string",
+                  "maxLength": 65536
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "proposals": {
+    "parameters": [
+      {
+        "name": "meetingId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "generateMaterialEnhancement",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Malformed envelope",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session unavailable",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current owner/material authority denied",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Candidate not in current actor and meeting",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Source, material, revision or idempotency conflict; no new save",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Bounded source or material limit",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Material parsing not ready, empty changes or budget exhausted",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Not installed or outcome unknown; replay original key and body",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Verified private result",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MaterialEnhancement"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          }
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/EnhancementInput"
+            }
+          }
+        }
+      },
+      "description": "Owner-only independently pinned ama-material-enhancement.v1 controlled profile. Source and material snapshots are revalidated around model I/O. Model receives only authorized bounded parsed text. Original RAW and WORKING are untouched; result is review-only. Replay persists exact model request bytes before external I/O. Fixed sibling harness is a controlled surrogate, not production model qualification."
+    }
+  },
+  "candidate": {
+    "parameters": [
+      {
+        "name": "meetingId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        }
+      },
+      {
+        "name": "candidateId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "readMaterialEnhancement",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Malformed envelope",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session unavailable",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current owner/material authority denied",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Candidate not in current actor and meeting",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Source, material, revision or idempotency conflict; no new save",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Bounded source or material limit",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Material parsing not ready, empty changes or budget exhausted",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Not installed or outcome unknown; replay original key and body",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Verified private result",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/MaterialEnhancement"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "adoption": {
+    "parameters": [
+      {
+        "name": "meetingId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        }
+      },
+      {
+        "name": "candidateId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "adoptMaterialEnhancement",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Malformed envelope",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Session unavailable",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Current owner/material authority denied",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Candidate not in current actor and meeting",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Source, material, revision or idempotency conflict; no new save",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "413": {
+          "description": "Bounded source or material limit",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "422": {
+          "description": "Material parsing not ready, empty changes or budget exhausted",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Not installed or outcome unknown; replay original key and body",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./identity.yaml#/BusinessError"
+              }
+            }
+          }
+        },
+        "200": {
+          "description": "Verified private result",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              }
+            }
+          },
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./transcripts.yaml#/Receipt"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          }
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "maxProperties": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

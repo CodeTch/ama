@@ -55,7 +55,7 @@ public final class JdbcLiveSubtitles implements AutoCloseable {
   recordings.withinMeeting(session,meeting,()->recordings.locked(session,()->{
    var current=session(session);if(!current.meeting().equals(meeting)||current.state().equals("FINISHED"))throw new IllegalArgumentException("Live recording required");long epoch=epoch(meeting);
    var old=jobs(session,true);if(old.isEmpty())j.update("INSERT INTO recording_subtitle_job(id,session_id,meeting_id,owner_id,cancel_epoch,state,next_run_at,created_at,updated_at) VALUES (?,?,?,?,?,'IDLE',UTC_TIMESTAMP(6),UTC_TIMESTAMP(6),UTC_TIMESTAMP(6))",UUID.randomUUID().toString(),session,meeting,actor.enterpriseId(),epoch);
-   else{var value=old.getFirst();if(!value.route().owner().equals(actor.enterpriseId())||value.epoch()!=epoch)throw new MeetingAccess.AccessDeniedException();if(value.state().equals("CANCELLED"))j.update("UPDATE recording_subtitle_job SET state='IDLE',error_code=NULL,next_run_at=UTC_TIMESTAMP(6),updated_at=UTC_TIMESTAMP(6) WHERE id=?",value.id());}
+   else{var value=old.getFirst();if(!value.route().owner().equals(actor.enterpriseId())||value.epoch()!=epoch)throw new MeetingAccess.AccessDeniedException();if(Set.of("CANCELLED","DEFERRED","DELAYED").contains(value.state()))j.update("UPDATE recording_subtitle_job SET state='IDLE',error_code=NULL,next_run_at=UTC_TIMESTAMP(6),updated_at=UTC_TIMESTAMP(6) WHERE id=?",value.id());}
    return null;
   }));
  }

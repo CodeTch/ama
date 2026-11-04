@@ -17,6 +17,19 @@ try{
  const root=`/api/v1/meetings/${meeting}/transcript`;
  await expect(page.locator('audio')).toHaveAttribute('src',/^blob:/);await page.getByRole('button',{name:'播放或暂停录音',exact:true}).click();await expect.poll(()=>page.locator('audio').evaluate(a=>a.currentTime)).toBeGreaterThan(0);await page.getByRole('button',{name:'播放或暂停录音',exact:true}).click();check('original-audio-playback');
  await page.getByRole('button',{name:'定位原录音第 2 段',exact:true}).click();await expect.poll(()=>page.locator('audio').evaluate(a=>a.currentTime)).toBeGreaterThan(119);check('audio-seek');
+ await page.getByRole('button',{name:'快进 10 秒',exact:true}).click();
+ await expect.poll(()=>page.locator('audio').evaluate(a=>a.currentTime)).toBeGreaterThan(129);
+ await page.getByRole('button',{name:'后退 10 秒',exact:true}).click();
+ await expect.poll(()=>page.locator('audio').evaluate(a=>a.currentTime)).toBeLessThan(129);
+ await expect(page.getByRole('slider',{name:'播放进度'})).toBeEnabled();
+ check('playback-skip-and-seek-slider');
+ await page.getByRole('slider',{name:'播放进度'}).fill('5');
+ await expect.poll(()=>page.locator('audio').evaluate(a=>a.currentTime)).toBeLessThan(6);
+ await expect(page.locator('.p-wave i')).toHaveCount(64);
+ await page.getByRole('button',{name:'播放速度'}).click();
+ await expect.poll(()=>page.locator('audio').evaluate(a=>a.playbackRate)).toBe(1.25);
+ check('real-waveform-slider-and-speed');
+
  await page.reload();await expect(page.locator('.s-text')).toHaveCount(2);check('raw-readback-after-refresh');
  for(const width of [1440,1024]){await page.setViewportSize({width,height:width===1440?900:768});await page.screenshot({path:`${out}/${width}.png`,fullPage:true});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}check('two-desktop-viewports');
  const foreign=await browser.newContext(),other=await foreign.newPage();await login(other,'dev-viewer','dev-password');assert.equal((await get(root,other)).status,403);await foreign.close();check('foreign-user-denied');assert.deepEqual(errors,[]);

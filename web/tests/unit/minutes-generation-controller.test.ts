@@ -6,6 +6,10 @@ const meeting='00000000-0000-4000-8000-000000000001',id='00000000-0000-4000-8000
 const current=(eligible:boolean):GenerationCurrent=>({saved:{transcriptConfirmationId:eligible?id:null,templateRevisionId:id,exclusionRevisionId:id,elementSetId:null},scope:'FULL',materials:'EMPTY',activeTaskIds:[],eligible,reasons:eligible?[]:['TRANSCRIPT_CONFIRMATION_REQUIRED'],observation:{revision:3,revisionToken:'3',accessRevision:0,accessRevisionToken:'0',currentConfirmationId:null,currentMinutesRevisionId:null}});
 const receipt:GenerationReceipt={result:{kind:'GENERATION_TASK',meetingId:meeting,inputId:id,taskId:id,inputFingerprint:'a'.repeat(64)},replayed:true,observation:current(true).observation};
 const storage=()=>{const data=new Map<string,string>();return {getItem:(k:string)=>data.get(k)??null,setItem:(k:string,v:string)=>{data.set(k,v);},removeItem:(k:string)=>{data.delete(k);}};};
+test('a recovered running task prevents another generation even before eligibility refresh',async()=>{
+ let sends=0;const state=useMinutesGeneration({current:async()=>({...current(true),activeTaskIds:[id]}),templates:async()=>({items:[],nextCursor:null,observation:current(true).observation}),send:async()=>{sends++;return receipt;}},()=> 'owner',()=>meeting,()=>true);
+ await state.reload();await state.generate();assert.equal(sends,0);assert.match(String(state.error.value),/任务/);state.dispose();
+});
 test('region recovery preserves original category instructions and base after the source changes',async()=>{
  const seen:CommandSnapshot[]=[],context={tab:'region',storage:storage(),recovery:'RESUME_NAMESPACE' as const};let base=id;
  const api={current:async()=>({...current(true),saved:{...current(true).saved,elementSetId:base}}),templates:async()=>({items:[],nextCursor:null,observation:current(true).observation}),send:async(c:CommandSnapshot)=>{seen.push(c);if(seen.length===1)throw new Error('lost region ACK');return receipt;}};

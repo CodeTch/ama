@@ -18,6 +18,7 @@ final class PublicationGovernanceBinding {
   String meetingId(){return meeting;}String publicationId(){return publication;}String documentId(){return (String)snapshot.mapping().get("external_document_id");}String actorId(){return owner;}
   long revision(){return n(snapshot.root(),"revision");}long accessRevision(){return n(snapshot.root(),"access_revision");}long cancelEpoch(){return n(snapshot.root(),"cancel_epoch");}
   String governanceState(){return (String)snapshot.root().get("governance_state");}
+  String libraryId(){return (String)snapshot.publication().get("library_id");}
   TranscriptAcquisitionBudget.Ledger budget(){return plan.budget();}
   private PublicationGovernanceBinding issuer(){return PublicationGovernanceBinding.this;}
   void require(ControlledKnowledgeClient expected){if(client!=expected||System.nanoTime()-expires>=0)throw new IllegalArgumentException("Foreign or expired publication governance binding");}

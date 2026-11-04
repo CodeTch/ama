@@ -8,7 +8,7 @@ import {prepareUpload,UPLOAD_FILE_BYTES,UPLOAD_PART_COUNT} from './upload-bytes'
 import {knowledgeKey,materialFormat,materialUuid,validKnowledgeDocument,validMaterialBegin,validMaterialCommand,type createMaterialsApi,type KnowledgeDocument,type MaterialItem,type MaterialLibrary,type MaterialListing} from '../../shared/api/materials';
 
 type Api=ReturnType<typeof createMaterialsApi>;
-export type MaterialState=Readonly<{busy:boolean;blocked:boolean;failed:boolean;hasFiles:boolean;closeBlocked:boolean}>;
+export type MaterialState=Readonly<{busy:boolean;blocked:boolean;failed:boolean;hasFiles:boolean;count?:number;closeBlocked:boolean;dismissBlocked?:boolean}>;
 type JobKind='LOCAL'|'KNOWLEDGE'|'BATCH'|'RETRY'|'REMOVE';
 type StoredJob=Readonly<{id:string;kind:JobKind;name:string;begin:CommandSnapshot|null;completion:CommandSnapshot|null;command:CommandSnapshot|null;uploadId:string|null;selection:KnowledgeDocument|null}>;
 export type MaterialJob=StoredJob&Readonly<{status:string;error:string|null;needsFile:boolean;canRemove:boolean}>;
@@ -41,14 +41,22 @@ export function useMaterials(api:Api,actor:()=>string|null,meeting:()=>string,co
  const items=shallowRef<readonly MaterialItem[]>([]),jobs=shallowRef<readonly MaterialJob[]>([]),ready=shallowRef(false),busy=shallowRef(false),loading=shallowRef(false),error=shallowRef<string|null>(null),storageBlocked=shallowRef(false),listing=shallowRef<MaterialListing|null>(null);
  const journal=createScopedPrivateJournal(context,'import-materials',validJobs),files=new Map<string,File>();
  let epoch=0,disposed=false,controller=new AbortController(),restored=false,reloadFlight:Promise<void>|null=null,readSequence=0;
- const state=computed<MaterialState>(()=>({busy:busy.value||loading.value,closeBlocked:busy.value||loading.value||storageBlocked.value||jobs.value.some(job=>!job.canRemove),blocked:!ready.value||storageBlocked.value||busy.value||loading.value||jobs.value.length>0||!!listing.value?.materialsPending,failed:!!error.value||jobs.value.some(j=>!!j.error)||items.value.some(i=>i.state==='FAILED'),hasFiles:items.value.length>0||jobs.value.length>0}));
+ // Bound byte preparation independently of serialized meeting mutations.
+ let uploadTails=[Promise.resolve(),Promise.resolve()],uploadSlot=0,mutationTail=Promise.resolve(),running=0,reservedKnowledge=0;
+ const canAdd=computed(()=>ready.value&&!storageBlocked.value&&!!actor()&&eligible()&&!disposed);
+ function serialized<T>(work:()=>Promise<T>):Promise<T>{const result=mutationTail.then(work);mutationTail=result.then(()=>{},()=>{});return result;}
+ function uploadWork(id:string,turn:number){const slot=uploadSlot++%2;const result=uploadTails[slot]!.then(()=>{active(turn);return localUpload(id,turn);});uploadTails[slot]=result.catch(()=>{});return result;}
+ async function tracking<T>(work:()=>Promise<T>):Promise<T>{const turn=epoch;running++;busy.value=true;try{return await work();}finally{if(turn===epoch){running--;busy.value=running>0;}}}
+ function capacity(count:number){const pending=jobs.value.reduce((n,j)=>n+(j.kind==='BATCH'?JSON.parse(j.command!.body).items.length:['LOCAL','KNOWLEDGE'].includes(j.kind)?1:0),0);if(items.value.length+pending+reservedKnowledge+count>64)throw new Error('背景材料最多64份。');}
+ function intake(){if(!canAdd.value)throw new Error('请先重新读取材料并恢复原操作。');}
+ const state=computed<MaterialState>(()=>({busy:busy.value||loading.value,dismissBlocked:busy.value||storageBlocked.value,closeBlocked:busy.value||storageBlocked.value||jobs.value.some(job=>!job.canRemove),blocked:!ready.value||storageBlocked.value||busy.value||loading.value||jobs.value.length>0||!!listing.value?.materialsPending,failed:!!error.value||jobs.value.some(j=>!!j.error)||items.value.some(i=>i.state==='FAILED'),hasFiles:items.value.length>0||jobs.value.length>0,count:items.value.length+jobs.value.length}));
  const stored=(values:readonly MaterialJob[])=>values.map(({id,kind,name,begin,completion,command,uploadId,selection})=>({id,kind,name,begin,completion,command,uploadId,selection}));
  function active(turn:number){if(disposed||turn!==epoch||!actor()||!materialUuid(meeting())||!eligible())throw aborted();}
  function persist(values=jobs.value){if(!actor()||!materialUuid(meeting()))throw aborted();if(journal.save(actor()!,meeting(),stored(values))!=='SAVED'){storageBlocked.value=true;throw new Error('无法保存材料原请求，请保持页面打开并恢复存储后重试。');}storageBlocked.value=false;}
  function patch(id:string,change:Partial<MaterialJob>){jobs.value=Object.freeze(jobs.value.map(j=>j.id===id?Object.freeze({...j,...change}):j));}
  function createCommand(operation:string,path:string,body:string):CommandSnapshot{return Object.freeze({actor:actor()!,resource:meeting(),operation,path,key:crypto.randomUUID(),body});}
  async function fresh(turn:number){const serial=++readSequence,value=await api.list(meeting(),controller.signal);active(turn);if(serial===readSequence){items.value=value.items;listing.value=value;ready.value=true;}return value;}
- function invalidate(){epoch++;controller.abort();controller=new AbortController();reloadFlight=null;readSequence++;items.value=[];jobs.value=[];listing.value=null;ready.value=false;busy.value=false;loading.value=false;error.value=null;storageBlocked.value=false;restored=false;files.clear();}
+ function invalidate(){epoch++;running=0;reservedKnowledge=0;mutationTail=Promise.resolve();uploadTails=[Promise.resolve(),Promise.resolve()];controller.abort();controller=new AbortController();reloadFlight=null;readSequence++;items.value=[];jobs.value=[];listing.value=null;ready.value=false;busy.value=false;loading.value=false;error.value=null;storageBlocked.value=false;restored=false;files.clear();}
  function reload():Promise<void>{
   if(reloadFlight)return reloadFlight;if(disposed||!actor()||!materialUuid(meeting())||!eligible())return Promise.resolve();const turn=epoch;loading.value=true;
   const run=async()=>{try{
@@ -92,27 +100,32 @@ export function useMaterials(api:Api,actor:()=>string|null,meeting:()=>string,co
   job=get(id);if(job.command){if(JSON.parse(job.command.body).fileId!==current.completedFileId)throw new Error('材料关联与原完成回执不一致。');}
   else{patch(id,{command:createCommand('MATERIAL_ADD',`/api/v1/meetings/${meeting()}/materials`,JSON.stringify({fileId:current.completedFileId})),needsFile:false});persist();}
  }
- async function perform(id:string,turn:number):Promise<boolean>{
-  try{active(turn);patch(id,{error:null});if(get(id).kind==='LOCAL')await localUpload(id,turn);active(turn);const job=get(id);if(!job.command)throw new Error('材料原请求缺失。');patch(id,{status:job.kind==='REMOVE'?'移除中':'解析并关联材料中'});
+ async function perform(id:string,turn:number,mutationOwned=false):Promise<boolean>{
+  try{active(turn);patch(id,{error:null});if(get(id).kind==='LOCAL')await uploadWork(id,turn);active(turn);const associate=async()=>{active(turn);const job=get(id);if(!job.command)throw new Error('材料原请求缺失。');patch(id,{status:job.kind==='REMOVE'?'移除中':'解析并关联材料中'});
    if(job.kind==='REMOVE')await api.remove(job.command);else if(job.kind==='BATCH')await api.batch(job.command);else await api.send(job.command);active(turn);
    await fresh(turn);active(turn);
-   const remaining=jobs.value.filter(j=>j.id!==id);persist(remaining);jobs.value=Object.freeze(remaining);files.delete(id);error.value=null;return true;
+   const remaining=jobs.value.filter(j=>j.id!==id);persist(remaining);jobs.value=Object.freeze(remaining);files.delete(id);error.value=null;return true;};return await (mutationOwned?associate():serialized(associate));
   }catch(cause){if(turn===epoch){const job=get(id);patch(id,{canRemove:job.canRemove||job.kind==='BATCH'&&cause instanceof ApiError&&cause.status===409&&cause.code==='MATERIAL_BATCH_VERSION_REJECTED',status:'操作未完成',error:message(cause),needsFile:job.kind==='LOCAL'&&!job.command&&!job.completion&&!files.has(id)});error.value=message(cause);}return false;}
  }
- async function run(ids:readonly string[]){writable();const turn=epoch;busy.value=true;try{for(const id of ids){active(turn);await perform(id,turn);}}finally{if(turn===epoch)busy.value=false;}}
- async function addLocal(selected:readonly File[]){writable();if(jobs.value.length)throw new Error('请先恢复已有材料操作。');if(items.value.length+selected.length>64)throw new Error('背景材料最多64份。');
-  const added=selected.map(file=>{const id=crypto.randomUUID();files.set(id,file);return freezeJob({id,kind:'LOCAL',name:file.name,begin:null,completion:null,command:null,uploadId:null,selection:null},'等待校验');});jobs.value=Object.freeze([...jobs.value,...added]);persist();await run(added.map(j=>j.id));
+ async function run(ids:readonly string[]){const turn=epoch;return tracking(async()=>{await Promise.all(ids.map(id=>perform(id,turn)));});}
+ async function addLocal(selected:readonly File[]){intake();capacity(selected.length);
+  const added=selected.map(file=>{const id=crypto.randomUUID();files.set(id,file);return freezeJob({id,kind:'LOCAL',name:file.name,begin:null,completion:null,command:null,uploadId:null,selection:null},'等待上传');});jobs.value=Object.freeze([...jobs.value,...added]);persist();await run(added.map(j=>j.id));
  }
- async function addKnowledge(selected:readonly KnowledgeDocument[]){writable();if(!selected.length||selected.some(d=>!validKnowledgeDocument(d))||new Set(selected.map(knowledgeKey)).size!==selected.length)throw new Error('知识库选择缺少明确版本。');if(items.value.length+selected.length>64)throw new Error('背景材料最多64份。');if(jobs.value.length)throw new Error('请先恢复已有材料操作。');
-  const command=createCommand('MATERIAL_BATCH',`/api/v1/meetings/${meeting()}/materials/batches`,JSON.stringify({expectedRevisionToken:listing.value!.meetingRevision,items:selected.map(d=>({libraryId:d.libraryId,documentId:d.id,version:d.version}))}));
-  const job=freezeJob({id:crypto.randomUUID(),kind:'BATCH',name:`知识库材料（${selected.length}份）`,begin:null,completion:null,uploadId:null,selection:null,command});jobs.value=Object.freeze([job]);persist();await run([job.id]);return jobs.value.some(j=>j.id===job.id)?[]:selected.map(knowledgeKey);
+ async function addKnowledge(selected:readonly KnowledgeDocument[]){intake();if(!selected.length||selected.some(d=>!validKnowledgeDocument(d))||new Set(selected.map(knowledgeKey)).size!==selected.length)throw new Error('知识库选择缺少明确版本。');capacity(selected.length);
+  const turn=epoch;let reserved=true;reservedKnowledge+=selected.length;
+  return tracking(()=>serialized(async()=>{try{active(turn);
+   // Capture the revision only after preceding mutations finish; retries keep this command unchanged.
+   await fresh(turn);active(turn);
+   const command=createCommand('MATERIAL_BATCH',`/api/v1/meetings/${meeting()}/materials/batches`,JSON.stringify({expectedRevisionToken:listing.value!.meetingRevision,items:selected.map(d=>({libraryId:d.libraryId,documentId:d.id,version:d.version}))}));
+   const job=freezeJob({id:crypto.randomUUID(),kind:'BATCH',name:`知识库材料（${selected.length}份）`,begin:null,completion:null,uploadId:null,selection:null,command});reservedKnowledge-=selected.length;reserved=false;jobs.value=Object.freeze([...jobs.value,job]);persist();return await perform(job.id,turn,true)?selected.map(knowledgeKey):[];
+  }finally{if(turn===epoch&&reserved)reservedKnowledge-=selected.length;}}));
  }
  async function retryJob(id:string,file?:File){writable();if(file)files.set(id,file);persist();await run([get(id).id]);}
  async function removeJob(id:string){writable();if(!get(id).canRemove)throw new Error('原请求结果尚未确认，不能丢弃该材料操作。');const batch=get(id).kind==='BATCH',remaining=jobs.value.filter(j=>j.id!==id);persist(remaining);jobs.value=Object.freeze(remaining);files.delete(id);if(!remaining.length)error.value=null;if(batch)discardedBatch();}
  async function materialAction(id:string,kind:'RETRY'|'REMOVE'){writable();if(jobs.value.length)throw new Error('请先恢复已有材料操作。');const material=items.value.find(i=>i.id===id);if(!material)throw new Error('材料已变化，请重新读取。');if(kind==='RETRY'&&material.state!=='FAILED')throw new Error('仅失败材料可重试解析。');
   const j=freezeJob({id:crypto.randomUUID(),kind,name:material.name,begin:null,completion:null,uploadId:null,selection:null,command:createCommand(kind==='RETRY'?'MATERIAL_RETRY':'MATERIAL_REMOVE',`/api/v1/meetings/${meeting()}/materials/${id}`+(kind==='RETRY'?'/retry':''),'')});jobs.value=Object.freeze([...jobs.value,j]);persist();await run([j.id]);
  }
- return {items:shallowReadonly(items),jobs:shallowReadonly(jobs),ready:shallowReadonly(ready),busy:shallowReadonly(busy),loading:shallowReadonly(loading),error:shallowReadonly(error),listing:shallowReadonly(listing),state,reload,addLocal,addKnowledge,retryJob,removeJob,retry:(id:string)=>materialAction(id,'RETRY'),remove:(id:string)=>materialAction(id,'REMOVE'),async ensureReady(){await reload();return !state.value.blocked;},logout(){invalidate();journal.clear();},dispose(){disposed=true;stop();invalidate();}};
+ return {canAdd,items:shallowReadonly(items),jobs:shallowReadonly(jobs),ready:shallowReadonly(ready),busy:shallowReadonly(busy),loading:shallowReadonly(loading),error:shallowReadonly(error),listing:shallowReadonly(listing),state,reload,addLocal,addKnowledge,retryJob,removeJob,retry:(id:string)=>materialAction(id,'RETRY'),remove:(id:string)=>materialAction(id,'REMOVE'),async ensureReady(){await reload();return !state.value.blocked;},logout(){invalidate();journal.clear();},dispose(){disposed=true;stop();invalidate();}};
 }
 
 type PickerDraft={search:string;library:string;review:boolean;selected:KnowledgeDocument[]};

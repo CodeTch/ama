@@ -1,0 +1,55 @@
+{
+  "capturedAt": "2026-11-03T11:53:44.968465+00:00",
+  "branch": "main",
+  "sources": {
+    "designDocs/智能会议助手一期需求说明文档.md": "e5b11f49373418e7b4ea9b74071fed035f320612a4783de075980c13223cf783",
+    "designDocs/智能会议助手1021版.html": "ab21d0b73f4e48bbf701ee8bca5e958940b61f6e6f680d4ced02de0ce4bab867"
+  },
+  "viewports": [
+    [
+      1440,
+      900
+    ],
+    [
+      1024,
+      768
+    ]
+  ],
+  "prototypeOverrides": [
+    {
+      "lines": [
+        1993,
+        2128
+      ],
+      "purpose": "配置页与正式文档原始区域"
+    },
+    {
+      "lines": [
+        2431,
+        2433
+      ],
+      "purpose": "任务持久化，成功只读跳转"
+    },
+    {
+      "lines": [
+        3135,
+        3163
+      ],
+      "purpose": "统一底栏、根目录选择、搜索保留选择、成功可点击库路径"
+    }
+  ],
+  "existingScreenshots": "/home/tanren/ama/.tools/local-app/knowledge-publish-audit-2026-11-03",
+  "allowedDifferences": [
+    "真实业务文字/数量/时间/服务端状态",
+    "需求文档要求的标签/权限/失败恢复字段",
+    "共享常驻顶栏"
+  ],
+  "forbidden": [
+    "发布页编辑标题",
+    "AI推荐位置",
+    "首次强制失败",
+    "重复正文内确认卡片",
+    "发布成功后再次发布",
+    "固定演示时间和证据比例"
+  ]
+}

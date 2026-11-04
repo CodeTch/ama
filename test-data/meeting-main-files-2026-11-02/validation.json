@@ -1,0 +1,411 @@
+{
+  "schema": "ama.meeting-main-file-validation.v1",
+  "passed": true,
+  "sampleCount": 32,
+  "standardAudioCount": 7,
+  "standardTextCount": 4,
+  "durationSeconds": 136.404125,
+  "multipartTextReconstructsReference": true,
+  "multipartAudioReconstructsOriginalPcm": true,
+  "boundaryFileBytes": 33554433,
+  "scope": "File-level verification; no app upload, ASR recognition or end-to-end claims",
+  "samples": [
+    {
+      "path": "files/01_audio/meeting.zh-CN.wav",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "pcm_s16le",
+      "container": "wav",
+      "sampleRate": 16000,
+      "channels": 1,
+      "decodedDurationSeconds": 136.404125,
+      "pcmRms": 1873.27
+    },
+    {
+      "path": "files/01_audio/meeting.zh-CN.mp3",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "mp3",
+      "container": "mp3",
+      "sampleRate": 16000,
+      "channels": 1,
+      "decodedDurationSeconds": 136.4069375,
+      "pcmRms": 1782.67
+    },
+    {
+      "path": "files/01_audio/meeting.zh-CN.m4a",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "aac",
+      "container": "mov,mp4,m4a,3gp,3g2,mj2",
+      "sampleRate": 16000,
+      "channels": 1,
+      "decodedDurationSeconds": 136.448,
+      "pcmRms": 1869.46
+    },
+    {
+      "path": "files/01_audio/meeting.zh-CN.aac",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "aac",
+      "container": "aac",
+      "sampleRate": 16000,
+      "channels": 1,
+      "decodedDurationSeconds": 136.512,
+      "pcmRms": 1869.02
+    },
+    {
+      "path": "files/01_audio/meeting.zh-CN.flac",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "flac",
+      "container": "flac",
+      "sampleRate": 16000,
+      "channels": 1,
+      "decodedDurationSeconds": 136.404125,
+      "pcmRms": 1873.27
+    },
+    {
+      "path": "files/01_audio/meeting.zh-CN.ogg",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "vorbis",
+      "container": "ogg",
+      "sampleRate": 16000,
+      "channels": 1,
+      "decodedDurationSeconds": 136.404125,
+      "pcmRms": 1883.57
+    },
+    {
+      "path": "files/01_audio/meeting.zh-CN.webm",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "opus",
+      "container": "matroska,webm",
+      "sampleRate": 48000,
+      "channels": 1,
+      "decodedDurationSeconds": 136.404125,
+      "pcmRms": 1867.57
+    },
+    {
+      "path": "files/02_text/meeting.zh-CN.txt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "utf8_readback"
+      ]
+    },
+    {
+      "path": "files/02_text/meeting.zh-CN.docx",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "zip_integrity",
+        "docx_readback",
+        "reference_text_match"
+      ]
+    },
+    {
+      "path": "files/02_text/meeting.zh-CN.srt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "project_subtitle_parser"
+      ],
+      "cues": 10,
+      "durationMs": 135904
+    },
+    {
+      "path": "files/02_text/meeting.zh-CN.vtt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "project_subtitle_parser"
+      ],
+      "cues": 10,
+      "durationMs": 135904
+    },
+    {
+      "path": "files/03_variants/中文 文件名_UTF8_BOM_CRLF.txt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "utf8_readback"
+      ]
+    },
+    {
+      "path": "files/03_variants/unicode_emoji.txt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "utf8_readback"
+      ]
+    },
+    {
+      "path": "files/03_variants/stereo_48khz.wav",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "pcm_s16le",
+      "container": "wav",
+      "sampleRate": 48000,
+      "channels": 2,
+      "decodedDurationSeconds": 136.404125,
+      "pcmRms": 1324.6
+    },
+    {
+      "path": "files/03_variants/中文 文件名_大写扩展名.MP3",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "mp3",
+      "container": "mp3",
+      "sampleRate": 16000,
+      "channels": 1,
+      "decodedDurationSeconds": 136.4069375,
+      "pcmRms": 1782.67
+    },
+    {
+      "path": "files/03_variants/multiline_BOM_CRLF.srt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "project_subtitle_parser"
+      ],
+      "cues": 10,
+      "durationMs": 135904
+    },
+    {
+      "path": "files/03_variants/metadata_settings.vtt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "project_subtitle_parser"
+      ],
+      "cues": 10,
+      "durationMs": 135904
+    },
+    {
+      "path": "files/04_multi_file/01_part1.wav",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "pcm_s16le",
+      "container": "wav",
+      "sampleRate": 16000,
+      "channels": 1,
+      "decodedDurationSeconds": 66.158,
+      "pcmRms": 1881.1
+    },
+    {
+      "path": "files/04_multi_file/01_part1.txt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "utf8_readback"
+      ]
+    },
+    {
+      "path": "files/04_multi_file/02_part2.wav",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "pcm_s16le",
+      "container": "wav",
+      "sampleRate": 16000,
+      "channels": 1,
+      "decodedDurationSeconds": 70.246125,
+      "pcmRms": 1865.87
+    },
+    {
+      "path": "files/04_multi_file/02_part2.txt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "utf8_readback"
+      ]
+    },
+    {
+      "path": "files/05_negative/empty.txt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256"
+      ]
+    },
+    {
+      "path": "files/05_negative/invalid_utf8.txt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "strict_utf8_rejection"
+      ]
+    },
+    {
+      "path": "files/05_negative/utf16le.txt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "strict_utf8_rejection"
+      ]
+    },
+    {
+      "path": "files/05_negative/text_disguised_as_audio.mp3",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "ffprobe_rejects_fake_mp3"
+      ]
+    },
+    {
+      "path": "files/05_negative/corrupted.docx",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "intentionally_invalid_office_container"
+      ]
+    },
+    {
+      "path": "files/05_negative/end_before_start.srt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "project_subtitle_parser"
+      ],
+      "observedError": "INVALID_TEXT"
+    },
+    {
+      "path": "files/05_negative/missing_header.vtt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "project_subtitle_parser"
+      ],
+      "observedError": "INVALID_TEXT"
+    },
+    {
+      "path": "files/05_negative/no_cues.vtt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "project_subtitle_parser"
+      ],
+      "observedError": "NO_TEXT"
+    },
+    {
+      "path": "files/05_negative/silence_5s.wav",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "exactly_5_seconds_silence",
+        "actual_container_and_codec",
+        "full_audio_decode",
+        "pcm_signal"
+      ],
+      "codec": "pcm_s16le",
+      "container": "wav",
+      "sampleRate": 16000,
+      "channels": 1,
+      "decodedDurationSeconds": 5.0,
+      "pcmRms": 0.0
+    },
+    {
+      "path": "files/05_negative/unsupported.md",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "unsupported_extension_sample"
+      ]
+    },
+    {
+      "path": "files/05_negative/over_32MiB_by_1byte.txt",
+      "passed": true,
+      "checks": [
+        "size",
+        "sha256",
+        "exact_upload_limit_plus_one_byte"
+      ]
+    }
+  ]
+}

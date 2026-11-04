@@ -99,7 +99,7 @@ FeedbackHistory:
   required: [id, action, actorId, revisionToken, state, text, createdAt]
   properties:
     id: {type: string, format: uuid}
-    action: {type: string, enum: [SUPPLEMENT, REVIEW, UNDO_REVIEW]}
+    action: {type: string, enum: [SUPPLEMENT, REVIEW, UNDO_REVIEW, RESAMPLE]}
     actorId: {type: string, minLength: 1, maxLength: 255}
     revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
     state: {type: string, enum: [PENDING, ACCEPTED, REJECTED, NEEDS_MORE]}
@@ -110,6 +110,18 @@ FeedbackDetail:
   additionalProperties: false
   required: [feedback, submittedAt, reviewReason, reviewedBy, history]
   properties:
+    usage: {$ref: '#/FeedbackUsage'}
+    submission:
+      type: object
+      additionalProperties: false
+      required: [feedbackType, originalValue, suggestedValue, note, sourceRevisionToken, segmentIds]
+      properties:
+        feedbackType: {type: string}
+        originalValue: {type: string, maxLength: 2048}
+        suggestedValue: {type: string, maxLength: 2048}
+        note: {type: string, maxLength: 4096}
+        sourceRevisionToken: {type: [string, "null"]}
+        segmentIds: {type: [string, "null"], maxLength: 5000}
     feedback: {$ref: '#/Feedback'}
     submittedAt: {type: string, format: date-time}
     reviewReason: {type: [string, 'null'], maxLength: 2048}
@@ -124,34 +136,46 @@ FeedbackReceipt:
     historyId: {type: string, format: uuid}
     revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
     state: {type: string, enum: [PENDING, ACCEPTED, REJECTED, NEEDS_MORE]}
-    operation: {type: string, enum: [SUPPLEMENT, REVIEW, UNDO_REVIEW]}
+    operation: {type: string, enum: [SUPPLEMENT, REVIEW, UNDO_REVIEW, RESAMPLE]}
 summaries:
   get:
     operationId: readFeedbackOverview
     description: Metadata-only overview with current private scope, server state filter and complete counts. Reviewing=true requires a current database administrator role.
     security: [{enterpriseSession: []}]
     parameters:
-      - {name: cursor, in: query, schema: {type: string, format: uuid}}
+      - {name: cursor, in: query, schema: {type: string, maxLength: 260}}
       - {name: state, in: query, schema: {type: string, enum: [PENDING, ACCEPTED, REJECTED, NEEDS_MORE]}}
       - {name: reviewing, in: query, schema: {type: string, enum: ['true', 'false']}}
       - {name: limit, in: query, schema: {type: string, enum: ['20']}}
     responses:
       '200': {description: Feedback overview, content: {application/json: {schema: {$ref: '#/FeedbackOverview'}}}}
 FeedbackSummary:
-  allOf:
-    - {$ref: '#/Feedback'}
-    - type: object
-      required: [submittedAt, reviewReason]
-      properties:
-        submittedAt: {type: string, format: date-time}
-        reviewReason: {type: [string, 'null'], maxLength: 2048}
+  type: object
+  additionalProperties: false
+  required: [id, meetingId, category, comment, state, revisionToken, submittedAt, reviewReason, kind, feedbackType, originalValue, suggestedValue, note]
+  properties:
+    usageState: {$ref: '#/FeedbackUsageState'}
+    usageVersion: {type: [string, 'null'], maxLength: 256}
+    id: {type: string, format: uuid}
+    meetingId: {type: string, format: uuid}
+    category: {type: string}
+    comment: {type: string}
+    state: {type: string, enum: [PENDING, ACCEPTED, REJECTED, NEEDS_MORE]}
+    revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
+    submittedAt: {type: string, format: date-time}
+    reviewReason: {type: [string, 'null'], maxLength: 2304}
+    kind: {type: string, enum: [CORPUS, VOICEPRINT]}
+    feedbackType: {type: [string, 'null'], enum: [PERSON, DEPARTMENT, PRODUCT, FINANCIAL_TERM, PRODUCT_ALIAS, TERM_PRONUNCIATION, VOICEPRINT, null]}
+    originalValue: {type: [string, 'null'], maxLength: 2048}
+    suggestedValue: {type: [string, 'null'], maxLength: 2048}
+    note: {type: [string, 'null'], maxLength: 4096}
 FeedbackOverview:
   type: object
   additionalProperties: false
   required: [items, nextCursor, counts]
   properties:
     items: {type: array, maxItems: 20, items: {$ref: '#/FeedbackSummary'}}
-    nextCursor: {type: [string, 'null'], format: uuid}
+    nextCursor: {type: [string, 'null'], maxLength: 260}
     counts:
       type: object
       additionalProperties: false
@@ -162,3 +186,16 @@ FeedbackOverview:
         ACCEPTED: {type: integer, minimum: 0, maximum: 1000000000}
         REJECTED: {type: integer, minimum: 0, maximum: 1000000000}
         NEEDS_MORE: {type: integer, minimum: 0, maximum: 1000000000}
+FeedbackUsageState:
+  type: string
+  enum: [LEGACY, WITHDRAWN, NOT_APPLIED, INVALID_SOURCE, EFFECTIVE, PENDING_ADOPTION, REVOKED, EXPIRED, DISABLED, INCOMPATIBLE, MATCHING_DISABLED]
+FeedbackUsage:
+  type: object
+  additionalProperties: false
+  required: [usageState, usageVersion, canWithdraw, withdrawalReason, withdrawnAt]
+  properties:
+    usageState: {$ref: '#/FeedbackUsageState'}
+    usageVersion: {type: [string, 'null'], maxLength: 256}
+    canWithdraw: {type: boolean}
+    withdrawalReason: {type: [string, 'null'], maxLength: 2048}
+    withdrawnAt: {type: [string, 'null'], format: date-time}

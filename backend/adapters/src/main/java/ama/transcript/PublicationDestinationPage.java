@@ -24,11 +24,11 @@ public final class PublicationDestinationPage {
   for(int i=0;i<raw.length();i++) {char c=raw.charAt(i);if(c>127)throw invalid();if(c=='%') {if(i+2>=raw.length())throw invalid();int a=Character.digit(raw.charAt(++i),16),b=Character.digit(raw.charAt(++i),16);if(a<0||b<0)throw invalid();bytes.write(a*16+b);}else bytes.write(c=='+'&&query?' ':c);}
   try{return StandardCharsets.UTF_8.newDecoder().onMalformedInput(java.nio.charset.CodingErrorAction.REPORT).onUnmappableCharacter(java.nio.charset.CodingErrorAction.REPORT).decode(java.nio.ByteBuffer.wrap(bytes.toByteArray())).toString();}catch(java.nio.charset.CharacterCodingException bad){throw invalid();}
  }
- public record Query(String meeting, String library, String parent, int limit, String after, String path) {}
+ public record Query(String meeting, String library, String parent, int limit, String after, String path, String search) {}
  public static Query request(String meeting, String library, Map<String,String[]> parameters) {
   uuid(meeting);
   if(library!=null) id(library);
-  var allowed=library==null?Set.of("limit","cursor"):Set.of("limit","cursor","parentFolderId");
+  var allowed=library==null?Set.of("limit","cursor","search"):Set.of("limit","cursor","parentFolderId");
   for(var entry:parameters.entrySet()) {
    if(!allowed.contains(entry.getKey())||entry.getValue()==null||entry.getValue().length!=1||entry.getValue()[0]==null||entry.getValue()[0].isEmpty())throw invalid();
   }
@@ -36,20 +36,23 @@ public final class PublicationDestinationPage {
   if(count!=null&&!count.matches("[1-9][0-9]?"))throw invalid();
   int limit=count==null?20:Integer.parseInt(count);if(limit>50)throw invalid();
   String parent=value(parameters,"parentFolderId");if(parent!=null)id(parent);
+  String search=value(parameters,"search");if(search!=null)text(search,255);
   String cursor=value(parameters,"cursor"),after=null;
   if(cursor!=null) {
    if(cursor.length()>4096)throw invalid();
    byte[] bytes=ControlledKnowledgeClient.unbase64(cursor);
    var decoded=ControlledKnowledgeClient.parse(bytes,3072);
-   exact(decoded,Set.of("meetingId","libraryId","parentFolderId","after"));
+   exact(decoded,search==null?Set.of("meetingId","libraryId","parentFolderId","after"):Set.of("meetingId","libraryId","parentFolderId","after","search"));
+   if(!Objects.equals(search,decoded.get("search")))throw invalid();
    if(!Arrays.equals(bytes,ControlledKnowledgeClient.canonical(decoded))||!meeting.equals(decoded.get("meetingId"))||!Objects.equals(library,decoded.get("libraryId"))||!Objects.equals(parent,decoded.get("parentFolderId")))throw invalid();
    after=id(decoded.get("after"));
   }
   String path="/v1/knowledge/libraries"+(library==null?"":"/"+encode(library)+"/folders")+"?limit="+limit;
   if(parent!=null)path+="&parentFolderId="+encode(parent);
   if(after!=null)path+="&cursor="+encode(after);
+  if(search!=null)path+="&search="+encode(search);
   if(path.getBytes(StandardCharsets.UTF_8).length>2048)throw invalid();
-  return new Query(meeting,library,parent,limit,after,path);
+  return new Query(meeting,library,parent,limit,after,path,search);
  }
  static Map<String,Object> validate(Query q, Map<String,Object> response, Map<String,String> identities) {
   exact(response,Set.of("providerId","storeInstanceId","items","cursor"));
@@ -59,11 +62,15 @@ public final class PublicationDestinationPage {
   var result=new ArrayList<Map<String,Object>>();String previous=q.after();
   for(Object item:items) {
    if(!(item instanceof Map<?,?> raw))throw invalid();
-   exact(raw,q.library()==null?Set.of("id","name","rootFolderId"):Set.of("id","libraryId","parentFolderId","isRoot","name"));
+   boolean metadata=q.library()==null&&raw.containsKey("canPublish");
+   exact(raw,q.library()==null?(metadata?Set.of("id","name","rootFolderId","description","visibility","canPublish","unavailableReason"):Set.of("id","name","rootFolderId")):Set.of("id","libraryId","parentFolderId","isRoot","name"));
    String selected=id(raw.get("id"));text(raw.get("name"),255);
    if(previous!=null&&compare(selected,previous)<=0)throw invalid();previous=selected;
    var copy=new LinkedHashMap<String,Object>();raw.forEach((k,v)->copy.put((String)k,v));
-   if(q.library()==null)id(raw.get("rootFolderId"));
+   if(q.library()==null){id(raw.get("rootFolderId"));if(metadata){
+    optionalText(raw.get("description"),2048);text(raw.get("visibility"),1024);optionalText(raw.get("unavailableReason"),1024);
+    if(!(raw.get("canPublish") instanceof Boolean b)||b!=((String)raw.get("unavailableReason")).isEmpty())throw invalid();
+   }}
    else {
     if(!q.library().equals(raw.get("libraryId"))||!Objects.equals(q.parent(),raw.get("parentFolderId")))throw invalid();
     Object root=raw.get("isRoot");boolean isRoot;
@@ -78,11 +85,13 @@ public final class PublicationDestinationPage {
   if(next!=null) {
    if(items.size()!=q.limit()||previous==null||!previous.equals(id(next)))throw invalid();
    var binding=new LinkedHashMap<String,Object>();binding.put("meetingId",q.meeting());binding.put("libraryId",q.library());binding.put("parentFolderId",q.parent());binding.put("after",next);
+   if(q.search()!=null)binding.put("search",q.search());
    cursor=ControlledKnowledgeClient.base64(ControlledKnowledgeClient.canonical(binding));
   }
   var page=new LinkedHashMap<String,Object>();page.put("providerId",response.get("providerId"));page.put("items",List.copyOf(result));page.put("nextCursor",cursor);page.put("hasMore",cursor!=null);return Collections.unmodifiableMap(page);
  }
  private static int compare(String a,String b) {return Arrays.compareUnsigned(a.getBytes(StandardCharsets.UTF_8),b.getBytes(StandardCharsets.UTF_8));}
+ static String optionalText(Object value,int bound){if("".equals(value))return "";return text(value,bound);}
  private static String value(Map<String,String[]> map,String key){return map.containsKey(key)?map.get(key)[0]:null;}
  static String text(Object value,int bound) {
   if(!(value instanceof String s)||s.isBlank()||s.codePointCount(0,s.length())>bound)throw invalid();

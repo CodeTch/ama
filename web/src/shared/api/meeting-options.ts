@@ -9,7 +9,7 @@ const shape=(v:unknown,keys:string):v is Record<string,unknown>=>typeof v==='obj
 const text=(v:unknown):v is string=>typeof v==='string'&&fitsUtf8(v,16384);
 const identity=(v:unknown):v is string=>typeof v==='string'&&v.trim().length>0&&fitsUtf8(v,1020)&&[...v].length<=255;
 const cursor=(v:unknown):v is string|null=>v===null||typeof v==='string'&&v.length>0&&fitsUtf8(v,4096);
-const person=(v:unknown):v is Person=>shape(v,'active,department,displayName,stableId')&&identity(v.stableId)&&text(v.displayName)&&(v.department===null||text(v.department))&&typeof v.active==='boolean';
+const person=(v:unknown):v is Person=>(shape(v,'active,department,displayName,stableId')||shape(v,'active,department,displayName,stableId,title')&&(v.title===null||text(v.title)))&&identity(v.stableId)&&text(v.displayName)&&(v.department===null||text(v.department))&&typeof v.active==='boolean';
 const department=(v:unknown):v is Department=>shape(v,'active,id,name,parentId')&&identity(v.id)&&text(v.name)&&v.name.trim().length>0&&(v.parentId===null||identity(v.parentId))&&v.parentId!==v.id&&typeof v.active==='boolean';
 const category=(v:unknown):v is Category=>shape(v,'id,label')&&identity(v.id)&&text(v.label);
 function freeze<T>(value:T):T{if(typeof value==='object'&&value!==null){Object.values(value).forEach(freeze);Object.freeze(value);}return value;}

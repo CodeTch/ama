@@ -18,6 +18,12 @@ class RecordingSubtitleController {
     RecordingSubtitleController(RecordingSubtitleRuntime runtime,RecordingService recordings,TransactionRunner transactions,MeetingAccess access) {
         this.runtime=runtime;this.recordings=recordings;this.transactions=transactions;this.access=access;
     }
+    @PostMapping("/api/v1/recordings/{sessionId}/subtitles/retry")
+    ResponseEntity<Void> retry(@PathVariable String sessionId,HttpServletRequest request){
+        if(!(request.getAttribute(SessionSecurityFilter.SESSION) instanceof ResolvedSession resolved))throw new MeetingAccess.AccessDeniedException();
+        if(runtime.service()==null)throw new IllegalStateException("Live subtitles unavailable");
+        runtime.service().start(resolved.actor(),sessionId);return ResponseEntity.noContent().build();
+    }
     @GetMapping("/api/v1/recordings/{sessionId}/subtitles")
     ResponseEntity<Map<String,Object>> read(@PathVariable String sessionId,@RequestParam(defaultValue="0") String afterEventId,
             @RequestParam(defaultValue="64") int limit,HttpServletRequest request) {

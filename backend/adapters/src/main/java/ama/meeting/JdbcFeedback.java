@@ -12,17 +12,27 @@ public final class JdbcFeedback {
     private static final String FIELDS="id,meeting_id meetingId,category,comment,state,CAST(revision AS CHAR) revisionToken";
     // At most ~700KiB of explicitly submitted text, including history, in a detail response.
     private static final int MAX_HISTORY=50;
+    public static final Set<String> TYPES=Set.of("PERSON","DEPARTMENT","PRODUCT","FINANCIAL_TERM","PRODUCT_ALIAS","TERM_PRONUNCIATION");
     public JdbcFeedback(DataSource source,TransactionRunner tx,JdbcMeetingAccess access){j=new JdbcTemplate(source);j.setQueryTimeout(5);this.tx=tx;this.access=access;}
     public Map<String,Object> create(Actor actor,String key,String meeting,String category,String comment){
+        return create(actor,key,meeting,category,comment,null,null,null);
+    }
+    public Map<String,Object> createStructured(Actor actor,String key,String meeting,String type,String original,String suggested,String note){
+        if(!TYPES.contains(Objects.requireNonNullElse(type,"")))throw new IllegalArgumentException("Prototype feedback type required");
+        bounded(original,2048);bounded(suggested,2048);
+        if(note==null||note.length()>4096||note.indexOf(0)>=0)throw new IllegalArgumentException("Bounded optional note required");
+        return create(actor,key,meeting,type,note,original,suggested,note);
+    }
+    private Map<String,Object> create(Actor actor,String key,String meeting,String category,String comment,String original,String suggested,String note){
         ama.contract.MinutesContracts.uuid(meeting);ama.transcript.JdbcProcessingIntake.key(key);
-        if(category==null||!Set.of("WORDING","LABEL","ACTION_OWNER").contains(category)||comment==null||comment.isBlank()||comment.length()>4096)
+        if(original==null&&(category==null||!Set.of("WORDING","LABEL","ACTION_OWNER").contains(category)||comment==null||comment.isBlank()||comment.length()>4096||comment.indexOf(0)>=0))
             throw new IllegalArgumentException("Bounded feedback content required");
         String scope=MeetingDigests.fields("feedback-command-scope-v1",actor.enterpriseId(),meeting,"CREATE",key);
-        String keyHash=MeetingDigests.fields(key),request=MeetingDigests.fields("feedback-create-v1",meeting,category,comment);
+        String keyHash=MeetingDigests.fields(key),request=original==null?MeetingDigests.fields("feedback-create-v1",meeting,category,comment):MeetingDigests.fields("feedback-create-v2",meeting,category,original,suggested,note);
         return tx.required(()->{
             j.update("INSERT INTO idempotency_record(scope_hash,actor_id,resource_id,operation,key_hash,request_hash,state,http_status,created_at) VALUES (?,?,?,'FEEDBACK_CREATE',?,?,'SUCCEEDED',0,UTC_TIMESTAMP(6)) ON DUPLICATE KEY UPDATE scope_hash=idempotency_record.scope_hash",scope,actor.enterpriseId(),meeting,keyHash,request);
             var stored=j.queryForMap("SELECT actor_id,resource_id,operation,key_hash,request_hash,result_id,http_status,state FROM idempotency_record WHERE scope_hash=? FOR UPDATE",scope);
-            var gate=access.lock(actor,meeting);access.require(gate,MeetingAccess.Action.READ);
+            var gate=access.lock(actor,meeting);access.require(gate,MeetingAccess.Action.EDIT);
             if(!actor.enterpriseId().equals(stored.get("actor_id"))||!meeting.equals(stored.get("resource_id"))||!"FEEDBACK_CREATE".equals(stored.get("operation"))||!keyHash.equals(stored.get("key_hash"))||!request.equals(stored.get("request_hash"))||!"SUCCEEDED".equals(stored.get("state")))throw new ama.contract.MeetingContracts.Conflict();
             if(stored.get("result_id") instanceof String id){
                 if(((Number)stored.get("http_status")).intValue()!=201)throw new IllegalStateException("Feedback receipt unavailable");
@@ -34,6 +44,7 @@ public final class JdbcFeedback {
             if(((Number)stored.get("http_status")).intValue()!=0)throw new IllegalStateException("Feedback receipt unavailable");
             String id=UUID.randomUUID().toString();
             j.update("INSERT INTO feedback(id,meeting_id,submitted_by,category,comment,state,revision,created_at) VALUES (?,?,?,?,?,'PENDING',0,UTC_TIMESTAMP(6))",id,meeting,actor.enterpriseId(),category,comment);
+            if(original!=null)j.update("UPDATE feedback SET feedback_type=?,original_value=?,suggested_value=?,note=? WHERE id=?",category,original,suggested,note,id);
             if(j.update("UPDATE idempotency_record SET result_id=?,http_status=201 WHERE scope_hash=? AND result_id IS NULL AND http_status=0",id,scope)!=1)throw new IllegalStateException("Feedback receipt unavailable");
             new ama.audit.JdbcAuditAdapter(j.getDataSource()).append(new ama.contract.AuditContracts.AuditEvent(actor.enterpriseId(),"FEEDBACK_SUBMITTED",id,0,"SUCCEEDED",UUID.randomUUID().toString(),java.time.Instant.now()));
             return j.queryForMap("SELECT "+FIELDS+" FROM feedback WHERE id=?",id);
@@ -63,7 +74,11 @@ public final class JdbcFeedback {
             if(!actor.enterpriseId().equals(row.get("submitted_by"))&&!admin)throw new MeetingAccess.AccessDeniedException();
             var history=j.queryForList("SELECT id,action,actor_id actorId,CAST(revision_after AS CHAR) revisionToken,state_after state,text,DATE_FORMAT(created_at,'%Y-%m-%dT%H:%i:%s.%fZ') createdAt FROM feedback_history WHERE feedback_id=? ORDER BY revision_after LIMIT 51",id);
             if(history.size()>MAX_HISTORY)throw new IllegalStateException("Feedback history limit exceeded");
-            var result=new LinkedHashMap<String,Object>();var displayed=view(row);if(admin&&!actor.enterpriseId().equals(row.get("submitted_by"))){displayed.put("comment",ama.governance.CorpusFeedbackService.redact((String)displayed.get("comment")));history.forEach(entry->entry.put("text",ama.governance.CorpusFeedbackService.redact((String)entry.get("text"))));}result.put("feedback",displayed);result.put("submittedAt",row.get("submittedAt"));result.put("reviewReason",row.get("review_reason"));result.put("reviewedBy",row.get("reviewed_by"));result.put("history",history);return result;
+            var result=new LinkedHashMap<String,Object>();var displayed=view(row);if(admin&&!actor.enterpriseId().equals(row.get("submitted_by"))){displayed.put("comment",ama.governance.CorpusFeedbackService.redact((String)displayed.get("comment")));history.forEach(entry->entry.put("text",ama.governance.CorpusFeedbackService.redact((String)entry.get("text"))));}result.put("feedback",displayed);result.put("submittedAt",row.get("submittedAt"));result.put("reviewReason",row.get("review_reason"));result.put("reviewedBy",row.get("reviewed_by"));result.put("history",history);
+            var structured=j.queryForList("SELECT f.feedback_type feedbackType,f.original_value originalValue,f.suggested_value suggestedValue,f.note,CAST(b.source_revision AS CHAR) sourceRevisionToken,CAST(b.segment_ids AS CHAR) segmentIds FROM feedback f LEFT JOIN corpus_feedback_binding b ON b.feedback_id=f.id WHERE f.id=? AND f.feedback_type IS NOT NULL",id);
+            if(!structured.isEmpty()){var submitted=structured.getFirst();if(admin&&!actor.enterpriseId().equals(row.get("submitted_by")))for(String field:List.of("originalValue","suggestedValue","note"))submitted.put(field,ama.governance.CorpusFeedbackService.redact((String)submitted.get(field)));result.put("submission",submitted);}
+            result.put("usage",ama.governance.GovernanceUsage.feedback(j,id,actor.enterpriseId()));
+            return result;
         });
     }
 
@@ -79,20 +94,7 @@ public final class JdbcFeedback {
 
     /** Metadata-only overview; avoid reading every history merely to paint the feedback table. */
     public Map<String,Object> summaries(Actor actor,String cursor,String selectedState,boolean reviewing){
-        if(cursor!=null)ama.contract.MinutesContracts.uuid(cursor);
-        var states=List.of("PENDING","ACCEPTED","REJECTED","NEEDS_MORE");
-        if(selectedState!=null&&!states.contains(selectedState))throw new IllegalArgumentException("Invalid feedback state");
-        return tx.required(()->{
-            active(actor);if(reviewing)requireAdmin(actor);
-            String scope=reviewing?"1=1":"submitted_by=?";var base=new ArrayList<Object>();if(!reviewing)base.add(actor.enterpriseId());
-            var counts=new LinkedHashMap<String,Object>();for(String state:states)counts.put(state,0L);long total=0;
-            for(var row:j.queryForList("SELECT state,COUNT(*) amount FROM feedback WHERE "+scope+" GROUP BY state",base.toArray())){long amount=((Number)row.get("amount")).longValue();if(amount<0||amount>1000000000L||!states.contains(row.get("state")))throw new IllegalStateException("Feedback count unavailable");counts.put((String)row.get("state"),amount);total=Math.addExact(total,amount);}
-            if(total>1000000000L)throw new IllegalStateException("Feedback count unavailable");counts.put("ALL",total);
-            String filter=scope;var args=new ArrayList<>(base);if(selectedState!=null){filter+=" AND state=?";args.add(selectedState);}
-            if(cursor!=null){var lookup=new ArrayList<>(args);lookup.add(cursor);var rows=j.queryForList("SELECT created_at FROM feedback WHERE "+filter+" AND id=?",lookup.toArray());if(rows.size()!=1)throw new IllegalArgumentException("Invalid feedback cursor");Object time=rows.getFirst().get("created_at");filter+=" AND (created_at<? OR (created_at=? AND id<?))";Collections.addAll(args,time,time,cursor);}
-            var rows=j.queryForList("SELECT "+FIELDS+",DATE_FORMAT(created_at,'%Y-%m-%dT%H:%i:%s.%fZ') submittedAt,review_reason reviewReason FROM feedback WHERE "+filter+" ORDER BY created_at DESC,id DESC LIMIT 21",args.toArray());
-            var selected=List.copyOf(rows.subList(0,Math.min(20,rows.size())));var result=new LinkedHashMap<String,Object>();if(reviewing)selected.forEach(entry->entry.put("comment",ama.governance.CorpusFeedbackService.redact((String)entry.get("comment"))));result.put("items",selected);result.put("counts",counts);result.put("nextCursor",rows.size()>20?selected.getLast().get("id"):null);return result;
-        });
+        return tx.required(()->{active(actor);if(reviewing)requireAdmin(actor);return new JdbcMyFeedbackOverview(j).read(actor,cursor,selectedState,reviewing);});
     }
 
     public Map<String,Object> supplement(Actor actor,String id,String key,long expected,String text){
@@ -124,6 +126,7 @@ public final class JdbcFeedback {
             }
             if(((Number)receipt.get("http_status")).intValue()!=0)throw new IllegalStateException("Feedback receipt unavailable");
             long revision=Long.parseLong((String)row.get("revisionToken"));String state=(String)row.get("state");
+            if(j.queryForObject("SELECT COUNT(*) FROM corpus_feedback_binding WHERE feedback_id=? AND withdrawn=TRUE",Integer.class,id)>0)throw new ama.contract.MeetingContracts.Conflict();
             if(expected!=revision||revision>=MAX_HISTORY||j.queryForObject("SELECT COUNT(*) FROM feedback_history WHERE feedback_id=?",Integer.class,id)>=MAX_HISTORY)throw new ama.contract.MeetingContracts.Conflict();
             String next=action.equals("SUPPLEMENT")?(state.equals("NEEDS_MORE")?"PENDING":state):action.equals("UNDO_REVIEW")?"PENDING":decision;
             if(action.equals("REVIEW")&&!state.equals("PENDING")||action.equals("UNDO_REVIEW")&&state.equals("PENDING"))throw new ama.contract.MeetingContracts.Conflict();

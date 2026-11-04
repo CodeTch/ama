@@ -3,7 +3,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.*;
-@Order(0) @RestControllerAdvice(assignableTypes=OperationsController.class)
+@Order(0) @RestControllerAdvice(assignableTypes={OperationsController.class,MeetingVoiceprintController.class,GovernanceWorkbenchController.class})
 class OperationsErrors {
  @ExceptionHandler(ama.access.MeetingAccess.AccessDeniedException.class) void denied(HttpServletResponse r)throws IOException{BusinessErrors.write(r,403,"MEETING_FORBIDDEN","Operations access denied");}
  @ExceptionHandler(ama.contract.MeetingContracts.Conflict.class) void conflict(HttpServletResponse r)throws IOException{BusinessErrors.write(r,409,"MEETING_CONFLICT","Original request or resource version changed");}

@@ -4,6 +4,799 @@
  */
 
 export interface paths {
+    "/api/v1/operations/configuration/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operationsConfigurationHistoryPage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/candidates/{candidate}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operationsCandidateHistoryPage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/my-voiceprints/page": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["operationsMyVoiceprintsPage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/voiceprints/{id}/resampling": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["operationsVoiceResampling"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/datasets/page": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceDatasetsPage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/evaluations/page": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceEvaluationsPage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/candidates/page": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceCandidatesPage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/voiceprints/page": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceVoiceprintsPage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/corpus/page": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceCorpusPage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/catalog": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceCatalog"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/sample-assets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceSampleAssets"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/datasets/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceDatasetDetail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/datasets/{id}/copies": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceDatasetCopies"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/reports/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceReport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/voiceprints/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceVoiceDetail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{id}/speaker-candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceSpeakerCandidates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/evaluations/{id}/cancellation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceEvaluationCancellation"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/evaluations/{id}/retries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceEvaluationRetries"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/evaluations/{id}/samples/{sample}/review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceEvaluationSampleReview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceCandidates"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/candidates/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["governanceCandidate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/candidates/{id}/edits": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceCandidateEdits"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/candidates/{id}/evaluations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceCandidateEvaluations"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/candidates/{id}/approval": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceCandidateApproval"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/candidates/{id}/publication": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceCandidatePublication"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/rollback-candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["governanceRollbackCandidates"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/knowledge-documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["publicationLibraryRecords"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publications/{publicationId}/governance-capabilities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["schemas"]["Uuid"];
+                publicationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        get: operations["publicationGovernanceCapabilities"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/publication-configuration": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Read saved meeting publication configuration */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                    meetingId: components["schemas"]["Uuid"];
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Meeting configuration and authoritative tag rules */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PublicationConfiguration"];
+                    };
+                };
+                /** @description Forbidden, stale configuration, unavailable destination, or service failure */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden, stale configuration, unavailable destination, or service failure */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden, stale configuration, unavailable destination, or service failure */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden, stale configuration, unavailable destination, or service failure */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden, stale configuration, unavailable destination, or service failure */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        /** Save publication configuration using its optimistic version */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    /** @description Requested meeting; fresh B03 relation/lifecycle checked on every read/replay. */
+                    meetingId: components["schemas"]["Uuid"];
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["PublicationConfigurationCommand"];
+                };
+            };
+            responses: {
+                /** @description Meeting configuration and authoritative tag rules */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PublicationConfiguration"];
+                    };
+                };
+                /** @description Forbidden, stale configuration, unavailable destination, or service failure */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden, stale configuration, unavailable destination, or service failure */
+                401: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden, stale configuration, unavailable destination, or service failure */
+                403: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden, stale configuration, unavailable destination, or service failure */
+                409: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+                /** @description Forbidden, stale configuration, unavailable destination, or service failure */
+                503: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["Error"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/processing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    sessionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Durable recording processing state */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["RecordingProcessing"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    /** @description Must exactly match the configured allowed origin */
+                    Origin: components["parameters"]["Origin"];
+                    /** @description Independent session-bound token returned by currentSession */
+                    "X-CSRF-Token": components["parameters"]["Csrf"];
+                    "Idempotency-Key": string;
+                };
+                path: {
+                    sessionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        expectedRevisionToken: string;
+                        /** Format: uuid */
+                        materialSnapshotId: string | null;
+                    };
+                };
+            };
+            responses: {
+                /** @description Durable recording processing state */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["RecordingProcessing"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/processing/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    /** @description Must exactly match the configured allowed origin */
+                    Origin: components["parameters"]["Origin"];
+                    /** @description Independent session-bound token returned by currentSession */
+                    "X-CSRF-Token": components["parameters"]["Csrf"];
+                };
+                path: {
+                    sessionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        expectedTaskId: string | null;
+                    };
+                };
+            };
+            responses: {
+                /** @description Durable recording processing state */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["RecordingProcessing"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/subtitles/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header: {
+                    /** @description Must exactly match the configured allowed origin */
+                    Origin: components["parameters"]["Origin"];
+                    /** @description Independent session-bound token returned by currentSession */
+                    "X-CSRF-Token": components["parameters"]["Csrf"];
+                };
+                path: {
+                    sessionId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Live recognition resumed for the original session */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/discard-empty": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Finish an empty capture before importing into the same meeting */
+        post: operations["discardEmptyRecording"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/operations/capabilities": {
         parameters: {
             query?: never;
@@ -238,6 +1031,25 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/meetings/{id}/voiceprint-applications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Meeting owner applies for the named subject. Server verifies subject consent through the configured integration provider and assembles immutable same-speaker source PCM. No vector is returned. */
+        post: operations["submitMeetingVoiceprintApplication"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/meetings/{id}/feedback": {
         parameters: {
             query?: never;
@@ -249,6 +1061,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
+        /** @description Meeting EDIT required. New requests preserve separate prototype fields and exact source segments. Legacy requests and original command receipts remain compatible. */
         post: operations["feedbackPost"];
         delete?: never;
         options?: never;
@@ -319,7 +1132,7 @@ export interface paths {
             };
             cookie?: never;
         };
-        /** @description Owner-private pending NAME/SUMMARY proposals from genuine asynchronous candidates. Full provenance and current confirmation/material/template/exclusion are verified. Summary is ordered OVERVIEW content, never the complete minutes body. Loading never modifies human information. Category remains an explicit dictionary selection. */
+        /** @description Owner-private NAME/SUMMARY/CATEGORY proposals with explicit decision states from genuine asynchronous candidates. Full provenance and current confirmation/material/template/exclusion are verified. Summary is ordered OVERVIEW content, never the complete minutes body. Loading never modifies human information. CATEGORY is an input-bound, independently versioned model proposal limited to the configured dictionary. Missing or unavailable proposals retain manual dictionary selection. */
         get: operations["listInfoSuggestions"];
         put?: never;
         post?: never;
@@ -341,7 +1154,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description Explicit ACCEPT writes only the selected saved information field, preserves roster drafts/grants, advances the aggregate fence and retains an immutable receipt. REJECT records the decision without modifying human information. Original-key replay returns the original revision under current owner authority; different body conflicts. No client-supplied suggestion value is accepted. Human drafts must be saved before deciding. */
+        /** @description Explicit ACCEPT writes only the selected saved information field, preserves roster drafts/grants, advances the aggregate fence and retains an immutable receipt. REJECT records the decision without modifying human information. Original-key replay returns the original revision under current owner authority; different body conflicts. No client-supplied suggestion value is accepted. The client rebases only the selected field after the exact receipt; unrelated human draft fields are preserved, and conflicting external changes require explicit reconciliation. */
         post: operations["decideInfoSuggestion"];
         delete?: never;
         options?: never;
@@ -764,6 +1577,26 @@ export interface paths {
          * @description One genuine READ gate and cumulative bounded metadata budget. Installed combined runtime supplies distinct owner-only saved input, current settings/final/publication references, first task page and pending candidate page. All declared control/domain parents lock before any tasks. Members receive only effective saved references, never privateSections fields. If combined runtime is absent, saved navigation is returned with explicit owner privateSectionsState UNAVAILABLE; absence never proves no work. No contents, readiness, command ACK or write authority. Producer reads remain separately authorized and may observe later changes. No query parameters.
          */
         get: operations["readWorkspaceNavigation"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/workspace/access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Recheck current access for an existing bounded content display
+         * @description Uses the same current actor, meeting, grant, lifecycle and external material/publication authority gate as navigation. Omits private task/history composition. This response never substitutes for initial producer provenance, never grants write authority and never extends the existing 4.5 second client lease limit. Unknown queries are rejected.
+         */
+        get: operations["renewWorkspaceContentAccess"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1528,6 +2361,63 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/meetings/{meetingId}/transcript/material-enhancements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Owner-only independently pinned ama-material-enhancement.v1 controlled profile. Source and material snapshots are revalidated around model I/O. Model receives only authorized bounded parsed text. Original RAW and WORKING are untouched; result is review-only. Replay persists exact model request bytes before external I/O. Fixed sibling harness is a controlled surrogate, not production model qualification. */
+        post: operations["generateMaterialEnhancement"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/transcript/material-enhancements/{candidateId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["readMaterialEnhancement"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/transcript/material-enhancements/{candidateId}/adoption": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["adoptMaterialEnhancement"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/meetings/{meetingId}/transcript/correction-proposals": {
         parameters: {
             query?: never;
@@ -2073,6 +2963,80 @@ export interface paths {
         put?: never;
         /** @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads. */
         post: operations["SavedIntents"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/workspace-versions": {
+        parameters: {
+            query?: {
+                limit?: number;
+                beforeRevisionToken?: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        /**
+         * 读取纪要完整版本快照
+         * @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback.
+         */
+        get: operations["SavedWorkspaceHistory"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/workspace-versions/{snapshotId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                snapshotId: string;
+            };
+            cookie?: never;
+        };
+        /**
+         * 读取纪要完整版本快照
+         * @description Owner EDIT saved-history/readiness projection with original archive/source verification where required; no candidate fallback.
+         */
+        get: operations["SavedWorkspaceDetail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meetingId}/minutes/workspace-restorations": {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 原子恢复正文、要素、模板和排除设置
+         * @description Authenticated replay first, independent of current archives/config/new-effect capability. New effects remain 503 until genuine Task11 publication/final integration. No browser handshake is implied by reads.
+         */
+        post: operations["SavedWorkspaceRestore"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2920,7 +3884,8 @@ export interface paths {
             };
             cookie?: never;
         };
-        get?: never;
+        /** @description Read-only current meeting recording pointer, including a finished session; never creates a recording or acquires a writer lease. Owner EDIT authorization is required. Null means this meeting has no recording. */
+        get: operations["readCurrentMeetingRecording"];
         put?: never;
         post: operations["createRecording"];
         delete?: never;
@@ -3165,6 +4130,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/recordings/{sessionId}/part-sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getRecordingPartSources"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/parts/{partId}/audio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+                partId: string;
+            };
+            cookie?: never;
+        };
+        get: operations["getRecordingPartAudio"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/recordings/{sessionId}/manifest": {
         parameters: {
             query?: never;
@@ -3227,12 +4229,525 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        OperationsConfigurationHistoryPage: {
+            items: {
+                revisionToken: string;
+                evaluationId: string | null;
+                rollbackOf: string | null;
+                reason: string;
+                /** Format: date-time */
+                createdAt: string;
+                actorId: string;
+            }[];
+            total: number;
+            nextCursor: string | null;
+        };
+        OperationsModelConfiguration: {
+            modelVersion: string;
+            promptVersion: string;
+            voiceThreshold: number | null;
+        };
+        OperationsQualificationRules: {
+            maxCer: number;
+            maxDer: number;
+            minEntityF1: number;
+            minEvidenceCoverage: number;
+            minEvidenceCorrectness: number;
+            minMinutesRubric: number;
+            maxFar: number;
+            maxFrr: number;
+            minimumPerKind: number;
+        };
+        OperationsCandidate: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            revisionToken: string;
+            configuration: components["schemas"]["OperationsModelConfiguration"];
+            rules: components["schemas"]["OperationsQualificationRules"];
+            contentSha: string;
+            creatorId: string;
+            /** @enum {string} */
+            state: "DRAFT" | "APPROVED" | "PUBLISHED";
+            evaluationId: string | null;
+            approvedBy: string | null;
+            approvalReason: string | null;
+        };
+        OperationsCandidateHistoryPage: {
+            items: {
+                revisionToken: string;
+                actorId: string;
+                action: string;
+                reason: string;
+                createdAt: string;
+                snapshot: components["schemas"]["OperationsCandidate"];
+            }[];
+            total: number;
+            nextCursor: string | null;
+        };
+        OperationsVoiceprintsPage: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                title: string;
+                state: string;
+                createdAt: string;
+                revisionToken: string;
+                subjectId: string;
+                subjectName: string;
+                applicantId: string;
+                /** @enum {unknown} */
+                origin: "SELF" | "MEETING";
+                modelVersion: string;
+                sampleCount: number;
+                expiresAt: string;
+                usageState: string;
+                reviewReason: string | null;
+            }[];
+            counts: {
+                [key: string]: number;
+            };
+            total: number;
+            nextCursor: string | null;
+        };
+        OperationsSubmissionReceipt: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meetingId: string;
+            /** @enum {string} */
+            category: "WORDING" | "LABEL" | "ACTION_OWNER" | "PERSON" | "DEPARTMENT" | "PRODUCT" | "FINANCIAL_TERM" | "PRODUCT_ALIAS" | "TERM_PRONUNCIATION" | "VOICEPRINT";
+            comment: string;
+            /** @constant */
+            state: "PENDING";
+            /** @constant */
+            revisionToken: "0";
+        };
+        OperationsDatasetsPage: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                title: string;
+                state: string;
+                createdAt: string;
+                contentSha: string;
+                sampleCount: number;
+            }[];
+            counts: {
+                [key: string]: number;
+            };
+            total: number;
+            nextCursor: string | null;
+        };
+        OperationsEvaluationsPage: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                title: string;
+                state: string;
+                createdAt: string;
+                reviewReason: string | null;
+                candidateRevision: string | null;
+                candidateId: string | null;
+            }[];
+            counts: {
+                [key: string]: number;
+            };
+            total: number;
+            nextCursor: string | null;
+        };
+        OperationsCandidatesPage: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                title: string;
+                state: string;
+                createdAt: string;
+                revisionToken: string;
+                contentSha: string;
+                creatorId: string;
+                evaluationId: string | null;
+                approvedBy: string | null;
+            }[];
+            counts: {
+                [key: string]: number;
+            };
+            total: number;
+            nextCursor: string | null;
+        };
+        OperationsCorpusPage: {
+            items: {
+                /** Format: uuid */
+                id: string;
+                title: string;
+                state: string;
+                createdAt: string;
+                revisionToken: string;
+                feedbackType: string | null;
+                originalValue: string | null;
+                suggestedValue: string | null;
+                note: string | null;
+                submitterId: string;
+                submitterName: string;
+                sourceRevisionToken: string | null;
+                usageState: string;
+                corpusVersion: string | null;
+                reviewReason: string | null;
+            }[];
+            counts: {
+                [key: string]: number;
+            };
+            total: number;
+            nextCursor: string | null;
+        };
+        OperationsCatalog: {
+            models: {
+                id: string;
+                name: string;
+                dimension: number;
+                /** @constant */
+                mode: "LOCAL_SIMULATION";
+            }[];
+            prompts: {
+                id: string;
+                name: string;
+                content: string;
+                sha256: string;
+            }[];
+            limits: {
+                datasetSamples: number;
+                audioBytes: number;
+                asrMinSeconds: number;
+                asrMaxSeconds: number;
+                voiceMinSeconds: number;
+                voiceMaxSeconds: number;
+                concurrency: number;
+            };
+            /** @constant */
+            mode: "LOCAL_SIMULATION";
+        };
+        OperationsAssetReceipt: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            sha256: string;
+            sampleCount: number;
+            bytes: number;
+        };
+        OperationsWorkbenchSample: {
+            id: string;
+            /** @enum {string} */
+            kind: "ASR" | "DIARIZATION" | "MINUTES" | "VOICE_SAME" | "VOICE_DIFFERENT" | "ENTITY" | "EVIDENCE";
+            input: string;
+            input2: string | null;
+            expected: string;
+        };
+        OperationsDatasetDetail: {
+            /** Format: uuid */
+            id: string;
+            version: string;
+            contentSha: string;
+            samples: components["schemas"]["OperationsWorkbenchSample"][];
+        };
+        OperationsDatasetReceipt: {
+            /** Format: uuid */
+            id: string;
+            version: string;
+        };
+        OperationsSampleResult: {
+            id: string;
+            succeeded: boolean;
+            score: number;
+            error: string | null;
+            actual?: string | null;
+            measures?: {
+                [key: string]: number;
+            };
+            durationMillis?: number;
+            modelVersion?: string | null;
+            promptVersion?: string | null;
+            requiresHumanReview?: boolean;
+        };
+        OperationsQualification: {
+            eligible: boolean;
+            /** @enum {string} */
+            mode: "OBSERVATION" | "QUALIFICATION";
+            kinds: {
+                [key: string]: {
+                    sampleCount: number;
+                    failed: number;
+                    pending: number;
+                    metric: string;
+                    value: number;
+                    limit: number;
+                    passed: boolean;
+                    sufficient: boolean;
+                };
+            };
+            blockers: string[];
+        };
+        OperationsReport: {
+            /** Format: uuid */
+            id: string;
+            datasetVersion: string;
+            /** @enum {unknown} */
+            state: "PENDING" | "RUNNING" | "COMPLETED" | "CANCELLED";
+            reviewReason: string | null;
+            reviewedBy: string | null;
+            configuration: components["schemas"]["OperationsModelConfiguration"];
+            metrics: {
+                sampleCount: number;
+                succeeded: number;
+                failed: number;
+                pending: number;
+                score: number;
+            };
+            results: components["schemas"]["OperationsSampleResult"][];
+            /** Format: uuid */
+            datasetId: string;
+            actorId: string;
+            rules: components["schemas"]["OperationsQualificationRules"] | null;
+            candidateRevision: string | null;
+            candidateId: string | null;
+            parentRunId: string | null;
+            createdAt: string;
+            finishedAt: string | null;
+            samples: components["schemas"]["OperationsWorkbenchSample"][];
+            qualification: components["schemas"]["OperationsQualification"];
+            sampleReviews: {
+                sampleId: string;
+                reviewerId: string;
+                rubric: {
+                    factuality: number;
+                    actions: number;
+                    evidence: number;
+                };
+                reason: string;
+            }[];
+        };
+        OperationsVoiceDetail: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            state: string;
+            revisionToken: string;
+            subjectId: string;
+            subjectName: string;
+            applicantId: string;
+            /** @enum {unknown} */
+            origin: "SELF" | "MEETING";
+            modelVersion: string;
+            sampleCount: number;
+            expiresAt: string;
+            usageState: string;
+            reviewReason: string | null;
+            history: {
+                revisionToken: string;
+                actorId: string;
+                state: string;
+                reason: string;
+                createdAt: string;
+            }[];
+        };
+        OperationsSpeakerCandidates: {
+            /** Format: uuid */
+            meetingId: string;
+            groups: {
+                /** Format: uuid */
+                fileId: string;
+                startSample: string;
+                speakerId: string;
+                configurationRevisionToken: string;
+                candidates: {
+                    /** Format: uuid */
+                    voiceprintId: string;
+                    subjectId: string;
+                    modelVersion: string;
+                    score: number;
+                    displayName: string;
+                }[];
+            }[];
+        };
+        OperationsCancellationReceipt: {
+            /** Format: uuid */
+            id: string;
+            /** @constant */
+            state: "CANCELLED";
+        };
+        OperationsEvaluationReceipt: {
+            /** Format: uuid */
+            id: string;
+            /** @constant */
+            state: "PENDING";
+        };
+        OperationsSampleReviewReceipt: {
+            /** Format: uuid */
+            id: string;
+            sampleId: string;
+            rubric: {
+                factuality: number;
+                actions: number;
+                evidence: number;
+            };
+            reason: string;
+        };
+        OperationsCandidateDetail: {
+            /** Format: uuid */
+            id: string;
+            title: string;
+            revisionToken: string;
+            configuration: components["schemas"]["OperationsModelConfiguration"];
+            rules: components["schemas"]["OperationsQualificationRules"];
+            contentSha: string;
+            creatorId: string;
+            /** @enum {string} */
+            state: "DRAFT" | "APPROVED" | "PUBLISHED";
+            evaluationId: string | null;
+            approvedBy: string | null;
+            approvalReason: string | null;
+            history: {
+                revisionToken: string;
+                actorId: string;
+                action: string;
+                reason: string;
+                createdAt: string;
+                snapshot: components["schemas"]["OperationsCandidate"];
+            }[];
+        };
+        OperationsConfigurationReceipt: {
+            revisionToken: string;
+            configuration: components["schemas"]["OperationsModelConfiguration"];
+        };
+        /** Format: uuid */
+        Uuid: string;
+        /** @description UTC stored timestamp in ISO-8601 representation; no locale formatting. */
+        Timestamp: string;
+        /** @description Canonical ASCII decimal0..9223372036854775806, no leading zero/sign/space/exponent. Browser preserves string digits; never coerce to Number. */
+        CounterToken: string;
+        PublicationLibraryRecord: {
+            providerId: string;
+            storeInstanceId: string;
+            libraryId: string;
+            libraryName: string;
+            folderId: string;
+            title: string;
+            meetingName: string;
+            publishedBy: string;
+            meetingId: components["schemas"]["Uuid"];
+            publicationId: components["schemas"]["Uuid"];
+            confirmationId: components["schemas"]["Uuid"];
+            libraryDescription: string;
+            folderPath: string[];
+            documentId: string;
+            payloadSha256: string;
+            versionToken: string;
+            /** @constant */
+            publishedVersion: "1";
+            documentUrl: string;
+            publishedAt: components["schemas"]["Timestamp"] | null;
+            meetingRevisionToken: components["schemas"]["CounterToken"];
+            /** @enum {unknown} */
+            state: "ACTIVE" | "UNKNOWN" | "WITHDRAW_PENDING" | "WITHDRAWN" | "OBSOLETE_PENDING" | "OBSOLETE";
+            canRead: boolean;
+            canManage: boolean;
+        };
+        PublicationLibraryRecords: {
+            items: components["schemas"]["PublicationLibraryRecord"][];
+            hasMore: boolean;
+            hasManagedLibraries: boolean;
+            nextCursor: string | null;
+        };
+        PublicationTagRules: {
+            maxCount: number;
+            maxLength: number;
+            allowEmpty: boolean;
+            trim: boolean;
+            caseSensitive: boolean;
+        };
+        PublicationConfigurationMetadata: {
+            /** @constant */
+            schema: "ama.publication-configuration.v1";
+            configurationVersionToken: components["schemas"]["CounterToken"];
+            providerId: string;
+            libraryId: string;
+            folderId: string;
+            libraryName: string;
+            description: string;
+            visibility: string;
+            pathNames: string[];
+            pathIds: string[];
+            tagRules: components["schemas"]["PublicationTagRules"];
+            tags: string[];
+        };
+        PublicationConfiguration: {
+            meetingId: components["schemas"]["Uuid"];
+            configurationVersionToken: components["schemas"]["CounterToken"];
+            configuration: components["schemas"]["PublicationConfigurationMetadata"] | null;
+            tagRules: components["schemas"]["PublicationTagRules"];
+        };
+        Error: {
+            error: {
+                code: string;
+                message: string;
+                /** Format: uuid */
+                traceId: string;
+            };
+        };
+        PublicationConfigurationCommand: {
+            expectedConfigurationVersionToken: components["schemas"]["CounterToken"];
+            providerId: string;
+            libraryId: string;
+            folderId: string;
+            tags: string[];
+        };
+        RecordingProcessing: {
+            /** Format: uuid */
+            sessionId: string;
+            /** Format: uuid */
+            meetingId: string;
+            /** @enum {unknown} */
+            state: "NOT_REQUESTED" | "WAITING_ARCHIVE" | "COPYING" | "TRANSCRIBING" | "ENHANCING" | "SUCCEEDED" | "FAILED" | "STALE";
+            /** Format: uuid */
+            materialSnapshotId?: string | null;
+            /** Format: uuid */
+            taskId?: string | null;
+            errorCode?: string | null;
+            materialsChanged?: boolean;
+            materialFiles?: {
+                /** Format: uuid */
+                materialRevisionId: string;
+                name: string;
+                /** @enum {unknown} */
+                state: "READY" | "FAILED" | "UNSUPPORTED";
+            }[];
+        };
+        RecordingError: {
+            error: {
+                /** @enum {string} */
+                code: "RECORDING_CONFLICT" | "RECORDING_GAP" | "RECORDING_PAUSED" | "RECORDING_UNAVAILABLE" | "RECORDING_RATE_LIMITED" | "RECORDING_READ_ONLY" | "RECORDING_ARCHIVE_NOT_READY" | "RECORDING_ARCHIVE_CONFLICT" | "RECORDING_ARCHIVE_UNAVAILABLE" | "INVALID_RANGE" | "FORBIDDEN" | "INVALID_ARGUMENT" | "REQUEST_TOO_LARGE" | "UNAUTHENTICATED";
+                message: string;
+                /** Format: uuid */
+                traceId: string;
+            };
+        };
         OperationsCapabilities: {
             reviewer: boolean;
             /** @constant */
             voiceprintPurpose: "SPEAKER_CANDIDATE";
             modelVersion: string;
             promptVersion: string;
+            actions?: {
+                enrollSelf: boolean;
+                submitFeedback: boolean;
+                reviewCorpus: boolean;
+                reviewVoiceprints: boolean;
+                manageDatasets: boolean;
+                runEvaluations: boolean;
+                reviewEvaluations: boolean;
+                manageConfiguration: boolean;
+                publishConfiguration: boolean;
+            };
+            datasetSampleLimit?: number;
         };
         OperationsVoiceprint: {
             /** Format: uuid */
@@ -3276,17 +4791,6 @@ export interface components {
             reviewReason: string | null;
         };
         OperationsEvaluations: components["schemas"]["OperationsEvaluationItem"][];
-        OperationsModelConfiguration: {
-            modelVersion: string;
-            promptVersion: string;
-            voiceThreshold: number | null;
-        };
-        OperationsSampleResult: {
-            id: string;
-            succeeded: boolean;
-            score: number;
-            error: string | null;
-        };
         OperationsEvaluationDetail: {
             /** Format: uuid */
             id: string;
@@ -3304,6 +4808,11 @@ export interface components {
                 score: number;
             };
             results: components["schemas"]["OperationsSampleResult"][];
+        };
+        OperationsEvaluationReviewReceipt: {
+            /** Format: uuid */
+            id: string;
+            reviewReason: string;
         };
         OperationsConfiguration: {
             revisionToken: string;
@@ -3326,18 +4835,12 @@ export interface components {
             sourceRevisionToken: string;
             segmentIds: string;
         }[];
-        /** @description Opaque canonical decimal revision, 0..9223372036854775806. Preserve the string exactly. Dual representations must agree. */
-        ExpectedRevisionToken: string;
-        Feedback: {
+        OperationsWithdrawalReceipt: {
             /** Format: uuid */
             id: string;
-            /** Format: uuid */
-            meetingId: string;
-            category: string;
-            comment: string;
-            /** @enum {string} */
-            state: "PENDING" | "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
-            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+            /** @constant */
+            withdrawn: true;
+            revisionToken: string;
         };
         OperationsMailJob: {
             /** Format: uuid */
@@ -3368,7 +4871,12 @@ export interface components {
             /** Format: uuid */
             id: string;
             /** @enum {string} */
-            field: "NAME" | "SUMMARY";
+            field: "NAME" | "SUMMARY" | "CATEGORY";
+            /**
+             * @description Legacy responses without state are pending.
+             * @enum {string}
+             */
+            state?: "PENDING" | "ACCEPTED" | "REJECTED";
             value: string;
             /** Format: date-time */
             createdAt: string;
@@ -3384,8 +4892,8 @@ export interface components {
             /** Format: uuid */
             meetingId: string;
             revisionToken: string;
-            /** @constant */
-            categoryStatus: "SELECT_REQUIRED";
+            /** @enum {string} */
+            categoryStatus: "SELECT_REQUIRED" | "AVAILABLE" | "UNAVAILABLE";
             items: components["schemas"]["InfoSuggestion"][];
         };
         BusinessError: {
@@ -3397,6 +4905,8 @@ export interface components {
                 traceId: string;
             };
         };
+        /** @description Opaque canonical decimal revision, 0..9223372036854775806. Preserve the string exactly. Dual representations must agree. */
+        ExpectedRevisionToken: string;
         Mutation: {
             /** Format: uuid */
             id: string;
@@ -3529,6 +5039,7 @@ export interface components {
             displayName: string;
             department: string | null;
             active: boolean;
+            title?: string | null;
         };
         PeoplePage: {
             items: components["schemas"]["Person"][];
@@ -3831,14 +5342,44 @@ export interface components {
         PersonalTemplateRemoval: {
             expectedRevisionToken: components["schemas"]["ExpectedRevisionToken"];
         };
-        FeedbackSummary: components["schemas"]["Feedback"] & {
+        Feedback: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meetingId: string;
+            category: string;
+            comment: string;
+            /** @enum {string} */
+            state: "PENDING" | "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
+        };
+        /** @enum {string} */
+        FeedbackUsageState: "LEGACY" | "WITHDRAWN" | "NOT_APPLIED" | "INVALID_SOURCE" | "EFFECTIVE" | "PENDING_ADOPTION" | "REVOKED" | "EXPIRED" | "DISABLED" | "INCOMPATIBLE" | "MATCHING_DISABLED";
+        FeedbackSummary: {
+            usageState?: components["schemas"]["FeedbackUsageState"];
+            usageVersion?: string | null;
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meetingId: string;
+            category: string;
+            comment: string;
+            /** @enum {string} */
+            state: "PENDING" | "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
+            revisionToken: components["schemas"]["ExpectedRevisionToken"];
             /** Format: date-time */
             submittedAt: string;
             reviewReason: string | null;
+            /** @enum {string} */
+            kind: "CORPUS" | "VOICEPRINT";
+            /** @enum {string|null} */
+            feedbackType: "PERSON" | "DEPARTMENT" | "PRODUCT" | "FINANCIAL_TERM" | "PRODUCT_ALIAS" | "TERM_PRONUNCIATION" | "VOICEPRINT" | null;
+            originalValue: string | null;
+            suggestedValue: string | null;
+            note: string | null;
         };
         FeedbackOverview: {
             items: components["schemas"]["FeedbackSummary"][];
-            /** Format: uuid */
             nextCursor: string | null;
             counts: {
                 ALL: number;
@@ -3848,11 +5389,19 @@ export interface components {
                 NEEDS_MORE: number;
             };
         };
+        FeedbackUsage: {
+            usageState: components["schemas"]["FeedbackUsageState"];
+            usageVersion: string | null;
+            canWithdraw: boolean;
+            withdrawalReason: string | null;
+            /** Format: date-time */
+            withdrawnAt: string | null;
+        };
         FeedbackHistory: {
             /** Format: uuid */
             id: string;
             /** @enum {string} */
-            action: "SUPPLEMENT" | "REVIEW" | "UNDO_REVIEW";
+            action: "SUPPLEMENT" | "REVIEW" | "UNDO_REVIEW" | "RESAMPLE";
             actorId: string;
             revisionToken: components["schemas"]["ExpectedRevisionToken"];
             /** @enum {string} */
@@ -3862,6 +5411,15 @@ export interface components {
             createdAt: string;
         };
         FeedbackDetail: {
+            usage?: components["schemas"]["FeedbackUsage"];
+            submission?: {
+                feedbackType: string;
+                originalValue: string;
+                suggestedValue: string;
+                note: string;
+                sourceRevisionToken: string | null;
+                segmentIds: string | null;
+            };
             feedback: components["schemas"]["Feedback"];
             /** Format: date-time */
             submittedAt: string;
@@ -3878,7 +5436,7 @@ export interface components {
             /** @enum {string} */
             state: "PENDING" | "ACCEPTED" | "REJECTED" | "NEEDS_MORE";
             /** @enum {string} */
-            operation: "SUPPLEMENT" | "REVIEW" | "UNDO_REVIEW";
+            operation: "SUPPLEMENT" | "REVIEW" | "UNDO_REVIEW" | "RESAMPLE";
         };
         UploadSummary: {
             /** Format: uuid */
@@ -4214,6 +5772,9 @@ export interface components {
             isCurrent: boolean;
         };
         Source: {
+            name?: string;
+            /** @enum {unknown} */
+            kind?: "AUDIO" | "VIDEO" | "SUBTITLE" | "DOCUMENT";
             /** Format: uuid */
             fileId: string;
             sha256: string;
@@ -4223,6 +5784,8 @@ export interface components {
             sizeBytesToken: string;
             /** Format: int64 */
             ordinal: number;
+            /** @enum {unknown} */
+            recognitionOrigin?: "FILE" | "LOCAL_HARNESS" | "UNKNOWN";
         };
         Segment: {
             /** Format: uuid */
@@ -4374,6 +5937,8 @@ export interface components {
             segmentIds: string[];
             label: string;
             enterpriseId: string | null;
+            /** Format: uuid */
+            voiceprintId?: string;
         };
         /** @description The immutable created WORKING revision is the operation ID; operationId equals revisionId. */
         TranscriptOperationResult: {
@@ -4410,6 +5975,16 @@ export interface components {
             canAccept: boolean;
             canReject: boolean;
             canUndo: boolean;
+            /** Format: uuid */
+            createdSourceRevisionId?: string;
+            /** @enum {unknown} */
+            kind?: "SPEECH_ENHANCEMENT";
+            range?: {
+                startScalar: number;
+                endScalar: number;
+                original: string;
+                replacement: string;
+            };
         };
         SpeechCorrections: {
             /** Format: uuid */
@@ -4420,6 +5995,42 @@ export interface components {
             items: components["schemas"]["SpeechCorrectionItem"][];
             pendingCount: number;
             canPropose: boolean;
+        };
+        EnhancementInput: {
+            expectedRevisionToken: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            materialSnapshotId: string | null;
+        };
+        MaterialEnhancement: {
+            expectedRevisionToken: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            materialSnapshotId: string | null;
+            /** Format: uuid */
+            candidateId: string;
+            /** @constant */
+            profile: "ama-material-enhancement.v1";
+            /** @enum {string} */
+            state: "PENDING" | "STALE" | "APPLYING" | "APPLIED";
+        } | {
+            expectedRevisionToken: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            materialSnapshotId: string | null;
+            /** Format: uuid */
+            candidateId: string;
+            /** @constant */
+            profile: "ama-material-enhancement.v1";
+            /** @constant */
+            state: "READY";
+            canApply: boolean;
+            changes: {
+                /** Format: uuid */
+                segmentId: string;
+                before: string;
+                after: string;
+            }[];
         };
         CorrectionProposalRequest: {
             expectedRevisionToken: string;
@@ -4447,6 +6058,8 @@ export interface components {
             candidateId: string;
             /** @enum {unknown} */
             decision: "ACCEPT" | "REJECT";
+            /** @description Additional pending candidates decided atomically with candidateId in one immutable revision. No duplicates, including candidateId. */
+            additionalCandidateIds?: string[];
         };
         TranscriptOccurrence: {
             occurrenceId: string;
@@ -5077,6 +6690,27 @@ export interface components {
             body: string;
             locatorIds: string[];
         };
+        SavedPresentation: {
+            modifiedBy: string | null;
+            modifiedAt: string | null;
+            appliedTemplateName: string | null;
+            selectedTemplateName: string | null;
+            sensitiveConflict: boolean;
+            reviewStates: {
+                /** Format: uuid */
+                elementId: string;
+                sourceSupported: boolean;
+                actionFieldsConfirmed: boolean | null;
+            }[];
+            exclusions: {
+                /** Format: uuid */
+                locatorId: string;
+                /** @enum {string} */
+                category: "INTERNAL_BUSINESS_DATA" | "POLITICAL_SENSITIVE";
+                selected: boolean;
+                applied: boolean;
+            }[];
+        };
         SavedCurrent: {
             body: components["schemas"]["SavedBody"] | null;
             setId: string | null;
@@ -5085,6 +6719,7 @@ export interface components {
             sensitive: components["schemas"]["SavedSensitiveDirectory"][];
             background: components["schemas"]["SavedBackgroundDirectory"][];
             evidence: components["schemas"]["MinutesEvidence_link"][];
+            presentation?: components["schemas"]["SavedPresentation"];
         };
         SavedIntentProjection: {
             /** Format: uuid */
@@ -5122,14 +6757,73 @@ export interface components {
             };
             current: components["schemas"]["SavedIntentProjection"];
         };
-        SavedBodyHistoryItem: {
+        SavedWorkspaceSnapshot: {
             /** Format: uuid */
             id: string;
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
             revisionToken: string;
+            createdBy: string;
             createdAt: string;
-            titleOrigin: ("HUMAN" | "LINKED" | "AI") | null;
+            /** Format: uuid */
+            bodyRevisionId: string;
+            /** Format: uuid */
+            elementSetId: string;
+            /** Format: uuid */
+            templateRevisionId: string;
+            /** Format: uuid */
+            exclusionRevisionId: string;
+            needsGeneration: boolean;
         };
+        SavedWorkspaceHistory: {
+            items: components["schemas"]["SavedWorkspaceSnapshot"][];
+            hasMore: boolean;
+            nextBeforeRevisionToken: string | null;
+        };
+        SavedTemplateRow: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            template_id: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            revisionToken: string;
+            owner_id: string | null;
+            name: string;
+            themes: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            theme_countToken: string;
+            created_at: string;
+        };
+        SavedExclusionMember: {
+            /** Format: uuid */
+            revision_id: string;
+            /** Format: uuid */
+            locator_id: string;
+            category: string;
+            reason: string | null;
+        };
+        SavedWorkspaceDetail: {
+            snapshot: components["schemas"]["SavedWorkspaceSnapshot"];
+            body: components["schemas"]["SavedBody"];
+            elements: components["schemas"]["SavedMemberElements"];
+            template: components["schemas"]["SavedTemplateRow"];
+            exclusions: components["schemas"]["SavedExclusionMember"][];
+            background: components["schemas"]["SavedBackgroundDirectory"][];
+            canRestore: boolean;
+            restoreReasons: string[];
+        };
+        /** @description Token-only preferred. Equal dual representations accepted; unequal forms rejected before semantic digest. Unknown/duplicate/inapplicable fields and trailing JSON rejected. Text is not normalized. */
+        SavedWorkspaceRestoreCommand: {
+            expectedRevision?: number;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken?: string;
+            /** Format: uuid */
+            snapshotId: string;
+        } & ({
+            expectedRevision: number;
+        } | {
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            expectedRevisionToken: string;
+        });
         SavedCommandObservation: {
             revision: number;
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
@@ -5145,6 +6839,26 @@ export interface components {
             exclusionRevisionId: string | null;
             needsGeneration: boolean;
             readOnlyReason: string | null;
+        };
+        SavedCommandAck: {
+            /** @enum {string} */
+            operation: "MINUTES_ADOPT" | "MINUTES_REJECT" | "MINUTES_DISPOSE" | "MINUTES_BODY_SAVE" | "MINUTES_BODY_RESTORE" | "MINUTES_ELEMENT_EDIT" | "MINUTES_ACTION_FIELDS" | "MINUTES_OPEN_QUESTION" | "MINUTES_SET_RESTORE" | "MINUTES_TEMPLATE" | "MINUTES_EXCLUSIONS" | "MINUTES_REVIEW" | "MINUTES_WORKSPACE_RESTORE";
+            /** @enum {string} */
+            resultKind: "GENERATION_CANDIDATE" | "MINUTES_REVISION" | "ELEMENT_SET" | "TEMPLATE_REVISION" | "EXCLUSION_REVISION" | "RESULT_REVIEW";
+            /** Format: uuid */
+            resultId: string;
+            /** @constant */
+            httpStatus: 200;
+            replayed: boolean;
+            observation: components["schemas"]["SavedCommandObservation"];
+        };
+        SavedBodyHistoryItem: {
+            /** Format: uuid */
+            id: string;
+            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+            revisionToken: string;
+            createdAt: string;
+            titleOrigin: ("HUMAN" | "LINKED" | "AI") | null;
         };
         SavedHistory: {
             items: components["schemas"]["SavedBodyHistoryItem"][];
@@ -5198,20 +6912,6 @@ export interface components {
             sensitive: components["schemas"]["SavedSensitiveDirectory"][];
             background: components["schemas"]["SavedBackgroundDirectory"][];
         };
-        SavedTemplateRow: {
-            /** Format: uuid */
-            id: string;
-            /** Format: uuid */
-            template_id: string;
-            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
-            revisionToken: string;
-            owner_id: string | null;
-            name: string;
-            themes: string;
-            /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
-            theme_countToken: string;
-            created_at: string;
-        };
         SavedExclusionRow: {
             /** Format: uuid */
             id: string;
@@ -5220,14 +6920,6 @@ export interface components {
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
             revisionToken: string;
             created_at: string;
-        };
-        SavedExclusionMember: {
-            /** Format: uuid */
-            revision_id: string;
-            /** Format: uuid */
-            locator_id: string;
-            category: string;
-            reason: string | null;
         };
         SavedSettings: {
             template: components["schemas"]["SavedTemplateRow"] | null;
@@ -5254,6 +6946,18 @@ export interface components {
             readiness: "NOT_APPLICABLE" | "UNAVAILABLE" | "READY";
             qualificationId: string | null;
         };
+        OptionalReview: {
+            /** Format: uuid */
+            id: string;
+            /** @enum {string} */
+            targetKind: "BODY" | "ELEMENT";
+            /** Format: uuid */
+            targetId: string;
+            /** @enum {string} */
+            reviewKind: "SOURCE_SUPPORT" | "ACTION_FIELDS";
+            outcome: string;
+            targetAnchor: string | null;
+        };
         /** @description Current business assessment is separate from formal activation. ready remains false while Task11 is absent. Required scopes are exact latest WHOLE support and accepted nullable ACTION_FIELDS; SPANs never combine. Historical reviews do not imply current credit. Correction qualification is consumed from the exact actual saved-transcript component and same private boot identity rechecked in F; these projection strings confer no authority. */
         SavedReadiness: {
             /** @constant */
@@ -5267,6 +6971,7 @@ export interface components {
             outstandingTaskIds: string[];
             observation: components["schemas"]["SavedReadObservation"];
             correction: components["schemas"]["SavedCorrectionQualification"];
+            optionalReviews?: components["schemas"]["OptionalReview"][];
         };
         SavedSource: {
             locator: components["schemas"]["MinutesSource_locator"];
@@ -5280,6 +6985,13 @@ export interface components {
                 route: string;
                 /** @constant */
                 eligibility: "RECHECK_REQUIRED";
+            };
+            context?: {
+                /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
+                materialRevisionToken: string;
+                libraryId: string | null;
+                documentId: string | null;
+                externalVersion: string | null;
             };
         };
         SavedReviewRow: {
@@ -5373,18 +7085,6 @@ export interface components {
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
             expectedRevisionToken: string;
         }));
-        SavedCommandAck: {
-            /** @enum {string} */
-            operation: "MINUTES_ADOPT" | "MINUTES_REJECT" | "MINUTES_DISPOSE" | "MINUTES_BODY_SAVE" | "MINUTES_BODY_RESTORE" | "MINUTES_ELEMENT_EDIT" | "MINUTES_ACTION_FIELDS" | "MINUTES_OPEN_QUESTION" | "MINUTES_SET_RESTORE" | "MINUTES_TEMPLATE" | "MINUTES_EXCLUSIONS" | "MINUTES_REVIEW";
-            /** @enum {string} */
-            resultKind: "GENERATION_CANDIDATE" | "MINUTES_REVISION" | "ELEMENT_SET" | "TEMPLATE_REVISION" | "EXCLUSION_REVISION" | "RESULT_REVIEW";
-            /** Format: uuid */
-            resultId: string;
-            /** @constant */
-            httpStatus: 200;
-            replayed: boolean;
-            observation: components["schemas"]["SavedCommandObservation"];
-        };
         SavedReviewDetail: {
             review: components["schemas"]["SavedReviewRow"];
             evidence: components["schemas"]["MinutesEvidence_link"][];
@@ -5394,7 +7094,7 @@ export interface components {
         };
         SavedDiscoveryCommand: {
             /** @enum {string} */
-            operation: "MINUTES_ADOPT" | "MINUTES_REJECT" | "MINUTES_DISPOSE" | "MINUTES_BODY_SAVE" | "MINUTES_BODY_RESTORE" | "MINUTES_ELEMENT_EDIT" | "MINUTES_ACTION_FIELDS" | "MINUTES_OPEN_QUESTION" | "MINUTES_SET_RESTORE" | "MINUTES_TEMPLATE" | "MINUTES_EXCLUSIONS" | "MINUTES_REVIEW";
+            operation: "MINUTES_ADOPT" | "MINUTES_REJECT" | "MINUTES_DISPOSE" | "MINUTES_BODY_SAVE" | "MINUTES_BODY_RESTORE" | "MINUTES_ELEMENT_EDIT" | "MINUTES_ACTION_FIELDS" | "MINUTES_OPEN_QUESTION" | "MINUTES_SET_RESTORE" | "MINUTES_TEMPLATE" | "MINUTES_EXCLUSIONS" | "MINUTES_REVIEW" | "MINUTES_WORKSPACE_RESTORE";
             key: string;
         };
         SavedDiscoveryResult: components["schemas"]["SavedCommandAck"] | {
@@ -5544,12 +7244,6 @@ export interface components {
             /** @description Canonical decimal in 0..9223372036854775806. Never convert browser tokens to Number. */
             expectedRevisionToken: string;
         });
-        /** Format: uuid */
-        Uuid: string;
-        /** @description Canonical ASCII decimal0..9223372036854775806, no leading zero/sign/space/exponent. Browser preserves string digits; never coerce to Number. */
-        CounterToken: string;
-        /** @description UTC stored timestamp in ISO-8601 representation; no locale formatting. */
-        Timestamp: string;
         FinalHeader: {
             confirmationId: components["schemas"]["Uuid"];
             meetingRevisionToken: components["schemas"]["CounterToken"];
@@ -5563,14 +7257,6 @@ export interface components {
             items: components["schemas"]["FinalHeader"][];
             hasMore: boolean;
             nextCursor: string | null;
-        };
-        Error: {
-            error: {
-                code: string;
-                message: string;
-                /** Format: uuid */
-                traceId: string;
-            };
         };
         /** @description Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header. */
         FinalCommand: {
@@ -5611,6 +7297,16 @@ export interface components {
             confirmation: components["schemas"]["FinalHeader"];
             observation: components["schemas"]["FinalObservation"];
         };
+        /** @description Validated command rejection. Code and HTTP status must match: INVALID_OPTIONAL_REVIEW=422, other listed codes=409. Network/5xx/unverifiable replies retain the original intent for recovery. */
+        PublicationCommandRejection: {
+            error: {
+                /** @enum {string} */
+                code: "FINAL_NOT_READY" | "REVISION_CONFLICT" | "REVISION_EXHAUSTED" | "INVALID_OPTIONAL_REVIEW" | "PUBLICATION_NOT_READY" | "IDEMPOTENCY_CONFLICT" | "MEETING_NOT_WRITABLE" | "CURRENT_REVISION_REQUIRED";
+                message: string;
+                /** Format: uuid */
+                traceId: string;
+            };
+        };
         ReviewRequirement: {
             targetKind: string;
             targetId: components["schemas"]["Uuid"];
@@ -5636,6 +7332,7 @@ export interface components {
             pendingCandidateIds: components["schemas"]["Uuid"][];
             outstandingTaskIds: components["schemas"]["Uuid"][];
             observation: components["schemas"]["SavedReadObservation"];
+            optionalReviews?: components["schemas"]["OptionalReview"][];
         };
         FrozenFinal: {
             id: components["schemas"]["Uuid"];
@@ -5767,6 +7464,7 @@ export interface components {
             reviews?: components["schemas"]["FrozenReview"][];
             profiles?: components["schemas"]["OriginalProfiles"][];
             information?: components["schemas"]["FrozenInformation"];
+            background?: components["schemas"]["SavedBackgroundDirectory"][];
         };
         /** @description Strict JSON object, max65536UTF8 bytes. Duplicate/unknown/inapplicable fields, malformed Unicode and trailing tokens fail. Numeric/token/equal-dual normalize identically before unchanged semantic digest; unequal dual400. Tokens preferred beyond2^53; no2^53 cap. Exactly one Idempotency-Key header. */
         SubmitCommand: {
@@ -5776,6 +7474,7 @@ export interface components {
             providerId: string;
             libraryId: string;
             folderId: string;
+            configurationVersionToken?: components["schemas"]["CounterToken"];
         } & ({
             expectedRevision: number;
         } | {
@@ -5803,7 +7502,7 @@ export interface components {
             officialDocumentUrl: string | null;
             /** @enum {unknown} */
             documentViewAvailability: "READY" | "UNAVAILABLE";
-            allowedActions: ("VIEW_FROZEN" | "REFRESH_STATUS" | "VIEW_ATTEMPTS")[];
+            allowedActions: ("VIEW_FROZEN" | "REFRESH_STATUS" | "VIEW_ATTEMPTS" | "RETRY_ZERO_EFFECT" | "RESUBMIT" | "RECOVER_LOCAL")[];
             /** @enum {unknown} */
             readOnlyReason: "PUBLICATION_MANUAL" | "PUBLISHED" | "PUBLICATION_FROZEN";
             /** @constant */
@@ -5815,6 +7514,20 @@ export interface components {
             executionId?: components["schemas"]["Uuid"] | null;
             executionNoToken?: components["schemas"]["CounterToken"] | null;
             operationId?: components["schemas"]["Uuid"] | null;
+            /** @enum {unknown} */
+            phase?: "VALIDATING" | "CREATING_DOCUMENT" | "WRITING_RECORDS" | "COMPLETED" | "FAILED";
+            /** @enum {unknown} */
+            governanceState?: "ACTIVE" | "UNKNOWN" | "WITHDRAW_PENDING" | "WITHDRAWN" | "OBSOLETE_PENDING" | "OBSOLETE";
+            configurationSnapshot?: components["schemas"]["PublicationConfigurationMetadata"] | null;
+            providerId?: string | null;
+            libraryId?: string | null;
+            folderId?: string | null;
+            publishedBy?: string | null;
+            documentId?: string | null;
+            documentVersion?: string | null;
+            failureCode?: string | null;
+            submittedAt?: components["schemas"]["Timestamp"] | null;
+            publishedAt?: components["schemas"]["Timestamp"] | null;
         };
         PublicationCurrent: {
             publication: components["schemas"]["PublicationStatus"] | null;
@@ -5983,6 +7696,7 @@ export interface components {
             folderId: string;
             expectedPublicationRevision?: number;
             expectedPublicationRevisionToken?: components["schemas"]["CounterToken"];
+            configurationVersionToken?: components["schemas"]["CounterToken"];
         } & (({
             expectedRevision: number;
         } | {
@@ -5998,6 +7712,10 @@ export interface components {
             name: string;
             /** @description Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity. */
             rootFolderId: string;
+            description?: string;
+            visibility?: string;
+            canPublish?: boolean;
+            unavailableReason?: string;
         };
         DestinationLibraryPage: {
             providerId: string;
@@ -6042,15 +7760,6 @@ export interface components {
             partId: string;
             writerEpoch: number;
             backendId: string;
-        };
-        RecordingError: {
-            error: {
-                /** @enum {string} */
-                code: "RECORDING_CONFLICT" | "RECORDING_GAP" | "RECORDING_PAUSED" | "RECORDING_UNAVAILABLE" | "RECORDING_RATE_LIMITED" | "RECORDING_READ_ONLY" | "RECORDING_ARCHIVE_NOT_READY" | "RECORDING_ARCHIVE_CONFLICT" | "RECORDING_ARCHIVE_UNAVAILABLE" | "INVALID_RANGE" | "FORBIDDEN" | "INVALID_ARGUMENT" | "REQUEST_TOO_LARGE" | "UNAUTHENTICATED";
-                message: string;
-                /** Format: uuid */
-                traceId: string;
-            };
         };
         RecordingAck: {
             highestContiguousSeq: number;
@@ -6111,6 +7820,19 @@ export interface components {
             /** @enum {unknown} */
             state: "NOT_STARTED" | "IDLE" | "LEASED" | "DELAYED" | "DEFERRED" | "DONE" | "CANCELLED";
         };
+        RecordingPartSources: {
+            /** Format: uuid */
+            sessionId: string;
+            parts: {
+                /** Format: uuid */
+                partId: string;
+                partNo: number;
+                startSample: number;
+                sampleCount: number;
+                /** @enum {string} */
+                state: "EMPTY" | "CAPTURING" | "AVAILABLE";
+            }[];
+        };
         RecordingManifest: {
             /** Format: uuid */
             sessionId: string;
@@ -6146,6 +7868,15 @@ export interface components {
         };
     };
     responses: {
+        /** @description Current identity, meeting gate, recording fence or bounded transport rejected the request. No acknowledgement is implied. */
+        Error: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["RecordingError"];
+            };
+        };
         /** @description Session absent, expired, revoked, disabled or from an old generation */
         Unauthenticated: {
             headers: {
@@ -6156,7 +7887,7 @@ export interface components {
             };
         };
         /** @description Current authority, version or bounded source proof does not permit the operation */
-        Error: {
+        "info-suggestions_Error": {
             headers: {
                 [name: string]: unknown;
             };
@@ -6270,24 +8001,15 @@ export interface components {
                 "application/json": components["schemas"]["BusinessError"];
             };
         };
-        /** @description Current identity, meeting gate, recording fence or bounded transport rejected the request. No acknowledgement is implied. */
-        recording_Error: {
-            headers: {
-                [name: string]: unknown;
-            };
-            content: {
-                "application/json": components["schemas"]["RecordingError"];
-            };
-        };
     };
     parameters: {
-        /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
-        Key: string;
-        Meeting: string;
         /** @description Must exactly match the configured allowed origin */
         Origin: string;
         /** @description Independent session-bound token returned by currentSession */
         Csrf: string;
+        /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+        Key: string;
+        Meeting: string;
         MeetingId: string;
         PublicationId: string;
         /** @description Canonical lowercase full UUID, also the meeting number; knowing it grants no access. */
@@ -6322,6 +8044,834 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    operationsConfigurationHistoryPage: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsConfigurationHistoryPage"];
+                };
+            };
+        };
+    };
+    operationsCandidateHistoryPage: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                candidate: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCandidateHistoryPage"];
+                };
+            };
+        };
+    };
+    operationsMyVoiceprintsPage: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                q?: string;
+                state?: string;
+                limit?: number;
+                type?: string;
+                usage?: string;
+                model?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsVoiceprintsPage"];
+                };
+            };
+        };
+    };
+    operationsVoiceResampling: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsSubmissionReceipt"];
+                };
+            };
+        };
+    };
+    governanceDatasetsPage: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                q?: string;
+                state?: string;
+                limit?: number;
+                type?: string;
+                usage?: string;
+                model?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsDatasetsPage"];
+                };
+            };
+        };
+    };
+    governanceEvaluationsPage: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                q?: string;
+                state?: string;
+                limit?: number;
+                type?: string;
+                usage?: string;
+                model?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsEvaluationsPage"];
+                };
+            };
+        };
+    };
+    governanceCandidatesPage: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                q?: string;
+                state?: string;
+                limit?: number;
+                type?: string;
+                usage?: string;
+                model?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCandidatesPage"];
+                };
+            };
+        };
+    };
+    governanceVoiceprintsPage: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                q?: string;
+                state?: string;
+                limit?: number;
+                type?: string;
+                usage?: string;
+                model?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsVoiceprintsPage"];
+                };
+            };
+        };
+    };
+    governanceCorpusPage: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                q?: string;
+                state?: string;
+                limit?: number;
+                type?: string;
+                usage?: string;
+                model?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCorpusPage"];
+                };
+            };
+        };
+    };
+    governanceCatalog: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCatalog"];
+                };
+            };
+        };
+    };
+    governanceSampleAssets: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+                "X-Sample-Name": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "audio/wav": string;
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsAssetReceipt"];
+                };
+            };
+        };
+    };
+    governanceDatasetDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsDatasetDetail"];
+                };
+            };
+        };
+    };
+    governanceDatasetCopies: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    version: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsDatasetReceipt"];
+                };
+            };
+        };
+    };
+    governanceReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsReport"];
+                };
+            };
+        };
+    };
+    governanceVoiceDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsVoiceDetail"];
+                };
+            };
+        };
+    };
+    governanceSpeakerCandidates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsSpeakerCandidates"];
+                };
+            };
+        };
+    };
+    governanceEvaluationCancellation: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCancellationReceipt"];
+                };
+            };
+        };
+    };
+    governanceEvaluationRetries: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": Record<string, never>;
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsEvaluationReceipt"];
+                };
+            };
+        };
+    };
+    governanceEvaluationSampleReview: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                id: string;
+                sample: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    rubric: {
+                        factuality: number;
+                        actions: number;
+                        evidence: number;
+                    };
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsSampleReviewReceipt"];
+                };
+            };
+        };
+    };
+    governanceCandidates: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    title: string;
+                    configuration: components["schemas"]["OperationsModelConfiguration"];
+                    rules: components["schemas"]["OperationsQualificationRules"];
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCandidate"];
+                };
+            };
+        };
+    };
+    governanceCandidate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCandidateDetail"];
+                };
+            };
+        };
+    };
+    governanceCandidateEdits: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    title: string;
+                    configuration: components["schemas"]["OperationsModelConfiguration"];
+                    rules: components["schemas"]["OperationsQualificationRules"];
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCandidate"];
+                };
+            };
+        };
+    };
+    governanceCandidateEvaluations: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    /** Format: uuid */
+                    datasetId: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsEvaluationReceipt"];
+                };
+            };
+        };
+    };
+    governanceCandidateApproval: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    /** Format: uuid */
+                    evaluationId: string;
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCandidate"];
+                };
+            };
+        };
+    };
+    governanceCandidatePublication: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    currentConfigurationRevisionToken: string;
+                    reason: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsConfigurationReceipt"];
+                };
+            };
+        };
+    };
+    governanceRollbackCandidates: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    targetRevisionToken: string;
+                    title: string;
+                    reason: string;
+                    rules: components["schemas"]["OperationsQualificationRules"];
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsCandidate"];
+                };
+            };
+        };
+    };
+    publicationLibraryRecords: {
+        parameters: {
+            query?: {
+                view?: "read" | "manage";
+                cursor?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current library-authorized formal documents or scoped management records; never grants meeting read. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicationLibraryRecords"];
+                };
+            };
+        };
+    };
+    publicationGovernanceCapabilities: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["schemas"]["Uuid"];
+                publicationId: components["schemas"]["Uuid"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current library management capability, independent of meeting ownership. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        canManage: boolean;
+                    };
+                };
+            };
+        };
+    };
+    discardEmptyRecording: {
+        parameters: {
+            query?: never;
+            header: {
+                "X-Expected-Epoch": number;
+                "X-Collector-Id": string;
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
     capabilitiesGet: {
         parameters: {
             query?: never;
@@ -6673,7 +9223,7 @@ export interface operations {
                     samples: {
                         id: string;
                         /** @enum {unknown} */
-                        kind: "ASR" | "DIARIZATION" | "MINUTES" | "VOICE_SAME" | "VOICE_DIFFERENT";
+                        kind: "ASR" | "DIARIZATION" | "MINUTES" | "VOICE_SAME" | "VOICE_DIFFERENT" | "ENTITY" | "EVIDENCE";
                         input: string;
                         input2: string | null;
                         expected: string;
@@ -6688,11 +9238,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        /** Format: uuid */
-                        id: string;
-                        version: string;
-                    };
+                    "application/json": components["schemas"]["OperationsDatasetReceipt"];
                 };
             };
             /** @description Current identity or governance role required */
@@ -6785,12 +9331,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        /** Format: uuid */
-                        id: string;
-                        /** @constant */
-                        state: "PENDING";
-                    };
+                    "application/json": components["schemas"]["OperationsEvaluationReceipt"];
                 };
             };
             /** @description Current identity or governance role required */
@@ -6885,11 +9426,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        /** Format: uuid */
-                        id: string;
-                        reviewReason: string;
-                    };
+                    "application/json": components["schemas"]["OperationsEvaluationReviewReceipt"];
                 };
             };
             /** @description Current identity or governance role required */
@@ -6984,10 +9521,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        revisionToken: string;
-                        configuration: components["schemas"]["OperationsModelConfiguration"];
-                    };
+                    "application/json": components["schemas"]["OperationsConfigurationReceipt"];
                 };
             };
             /** @description Current identity or governance role required */
@@ -7039,10 +9573,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        revisionToken: string;
-                        configuration: components["schemas"]["OperationsModelConfiguration"];
-                    };
+                    "application/json": components["schemas"]["OperationsConfigurationReceipt"];
                 };
             };
             /** @description Current identity or governance role required */
@@ -7123,7 +9654,10 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": Record<string, never>;
+                "application/json": {
+                    expectedRevisionToken: string;
+                    reason: string;
+                };
             };
         };
         responses: {
@@ -7133,12 +9667,62 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        /** Format: uuid */
-                        id: string;
-                        /** @constant */
-                        withdrawn: true;
-                    };
+                    "application/json": components["schemas"]["OperationsWithdrawalReceipt"];
+                };
+            };
+            /** @description Current identity or governance role required */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact original request or resource revision conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Integration or authority unavailable; preserve original request */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    submitMeetingVoiceprintApplication: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Exactly one nonblank opaque key. Scope is the length-prefixed actor/resource/operation/key SHA-256. Full semantic payload digest must match; conflicting reuse returns 409. Rolled-back attempts do not consume the key. No history TTL. */
+                "Idempotency-Key": components["parameters"]["Key"];
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    sourceRevisionToken: string;
+                    segmentIds: string[];
+                    subjectId: string;
+                    subjectName: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Private bounded operations response; current identities and resource rights rechecked */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsSubmissionReceipt"];
                 };
             };
             /** @description Current identity or governance role required */
@@ -7184,6 +9768,14 @@ export interface operations {
                     /** @enum {unknown} */
                     category: "WORDING" | "LABEL" | "ACTION_OWNER";
                     comment: string;
+                } | {
+                    sourceRevisionToken: string;
+                    segmentIds: string[];
+                    /** @enum {unknown} */
+                    feedbackType: "PERSON" | "DEPARTMENT" | "PRODUCT" | "FINANCIAL_TERM" | "PRODUCT_ALIAS" | "TERM_PRONUNCIATION";
+                    originalValue: string;
+                    suggestedValue: string;
+                    note: string;
                 };
             };
         };
@@ -7194,7 +9786,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Feedback"];
+                    "application/json": components["schemas"]["OperationsSubmissionReceipt"];
                 };
             };
             /** @description Current identity or governance role required */
@@ -7425,9 +10017,9 @@ export interface operations {
                 };
             };
             401: components["responses"]["Unauthenticated"];
-            403: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            403: components["responses"]["info-suggestions_Error"];
+            409: components["responses"]["info-suggestions_Error"];
+            503: components["responses"]["info-suggestions_Error"];
         };
     };
     decideInfoSuggestion: {
@@ -7468,9 +10060,9 @@ export interface operations {
             };
             400: components["responses"]["Invalid"];
             401: components["responses"]["Unauthenticated"];
-            403: components["responses"]["Error"];
-            409: components["responses"]["Error"];
-            503: components["responses"]["Error"];
+            403: components["responses"]["info-suggestions_Error"];
+            409: components["responses"]["info-suggestions_Error"];
+            503: components["responses"]["info-suggestions_Error"];
         };
     };
     listMeetingMaterials: {
@@ -8244,6 +10836,53 @@ export interface operations {
             401: components["responses"]["Unauthenticated"];
             403: components["responses"]["BusinessForbidden"];
             503: components["responses"]["MeetingUnavailable"];
+        };
+    };
+    renewWorkspaceContentAccess: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current access checked; private no-store response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** Format: uuid */
+                        meetingId: string;
+                        /** @constant */
+                        allowed: true;
+                    };
+                };
+            };
+            400: components["responses"]["Invalid"];
+            401: components["responses"]["Unauthenticated"];
+            /** @description Current access denied */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Current authority unavailable; cached content must be cleared */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
         };
     };
     listWorkspaceTasks: {
@@ -10986,6 +13625,331 @@ export interface operations {
             503: {
                 headers: {
                     /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    generateMaterialEnhancement: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EnhancementInput"];
+            };
+        };
+        responses: {
+            /** @description Verified private result */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaterialEnhancement"];
+                };
+            };
+            /** @description Malformed envelope */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Session unavailable */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Current owner/material authority denied */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Candidate not in current actor and meeting */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Source, material, revision or idempotency conflict; no new save */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Bounded source or material limit */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Material parsing not ready, empty changes or budget exhausted */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Not installed or outcome unknown; replay original key and body */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    readMaterialEnhancement: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: string;
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Verified private result */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MaterialEnhancement"];
+                };
+            };
+            /** @description Malformed envelope */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Session unavailable */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Current owner/material authority denied */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Candidate not in current actor and meeting */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Source, material, revision or idempotency conflict; no new save */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Bounded source or material limit */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Material parsing not ready, empty changes or budget exhausted */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Not installed or outcome unknown; replay original key and body */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    adoptMaterialEnhancement: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                meetingId: string;
+                candidateId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": Record<string, never>;
+            };
+        };
+        responses: {
+            /** @description Verified private result */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Receipt"];
+                };
+            };
+            /** @description Malformed envelope */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Session unavailable */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Current owner/material authority denied */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Candidate not in current actor and meeting */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Source, material, revision or idempotency conflict; no new save */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Bounded source or material limit */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Material parsing not ready, empty changes or budget exhausted */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Not installed or outcome unknown; replay original key and body */
+            503: {
+                headers: {
                     "Cache-Control"?: "private, no-store";
                     [name: string]: unknown;
                 };
@@ -14136,6 +17100,327 @@ export interface operations {
             };
         };
     };
+    SavedWorkspaceHistory: {
+        parameters: {
+            query?: {
+                limit?: number;
+                beforeRevisionToken?: string;
+            };
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedWorkspaceHistory"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedWorkspaceDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+                snapshotId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedWorkspaceDetail"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
+    SavedWorkspaceRestore: {
+        parameters: {
+            query?: never;
+            header: {
+                Origin: string;
+                "X-CSRF-Token": string;
+                "Idempotency-Key": string;
+            };
+            path: {
+                meetingId: components["parameters"]["MinutesMeetingId"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedWorkspaceRestoreCommand"];
+            };
+        };
+        responses: {
+            /** @description Complete bounded private response; no-store on success and failure. */
+            200: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedCommandAck"];
+                };
+            };
+            /** @description Malformed request, query, UUID, revision representation or unknown field. */
+            400: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Missing or invalid enterprise session. */
+            401: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Fresh owner EDIT denied; admin status grants no content access. Mutation Origin/CSRF required. */
+            403: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Authorized same-meeting entity not found. */
+            404: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Revision, immutable body or idempotency conflict. */
+            409: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Request or complete acquisition/response budget exceeded; no partial graph. */
+            413: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Unsupported operation/content or unavailable enterprise selection. */
+            422: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+            /** @description Required installed contribution, original provenance, archive or runtime unavailable; no speculative success. */
+            503: {
+                headers: {
+                    "Cache-Control"?: "private, no-store";
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BusinessError"];
+                };
+            };
+        };
+    };
     SavedHistory: {
         parameters: {
             query?: {
@@ -16954,7 +20239,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Error"];
+                    "application/json": components["schemas"]["PublicationCommandRejection"];
                 };
             };
             /** @description Request/read budget exceeded; no truncation. */
@@ -16976,7 +20261,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Error"];
+                    "application/json": components["schemas"]["PublicationCommandRejection"];
                 };
             };
             /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
@@ -17419,7 +20704,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Error"];
+                    "application/json": components["schemas"]["PublicationCommandRejection"];
                 };
             };
             /** @description Request/read budget exceeded; no truncation. */
@@ -17441,7 +20726,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["Error"];
+                    "application/json": components["schemas"]["PublicationCommandRejection"];
                 };
             };
             /** @description Unavailable original provenance/result/read/new-command installation; no unsafe fallback. */
@@ -18299,6 +21584,8 @@ export interface operations {
                 limit?: number;
                 /** @description Opaque canonical continuation bound to this meeting, route, library and parent. Use exactly the returned nextCursor. */
                 cursor?: string;
+                /** @description Provider-side name and description filtering, before pagination. Bound to continuation cursor. */
+                search?: string;
             };
             header?: never;
             path: {
@@ -18674,6 +21961,43 @@ export interface operations {
             };
         };
     };
+    readCurrentMeetingRecording: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meetingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Current session or explicit null */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        session: components["schemas"]["RecordingSession"] | null;
+                    };
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
     createRecording: {
         parameters: {
             query?: never;
@@ -18699,14 +22023,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingSession"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     getRecording: {
@@ -18729,14 +22053,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingSession"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     getRecordingAck: {
@@ -18761,14 +22085,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingAck"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     claimRecordingWriter: {
@@ -18806,14 +22130,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingLease"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     renewRecordingWriter: {
@@ -18849,14 +22173,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingLease"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     putRecordingChunk: {
@@ -18895,14 +22219,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingAck"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     nextRecordingPart: {
@@ -18932,14 +22256,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingSession"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     pauseRecording: {
@@ -18967,14 +22291,14 @@ export interface operations {
                 };
                 content?: never;
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     resumeRecording: {
@@ -19002,14 +22326,14 @@ export interface operations {
                 };
                 content?: never;
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     finishRecording: {
@@ -19046,14 +22370,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingFinish"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     getRecordingArchive: {
@@ -19076,14 +22400,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingArchive"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     requestRecordingArchive: {
@@ -19111,14 +22435,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingArchive"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     getRecordingAudio: {
@@ -19152,13 +22476,13 @@ export interface operations {
                     "audio/wav": string;
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            416: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            416: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     getRecordingArchiveInput: {
@@ -19182,14 +22506,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingArchive"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     readRecordingSubtitles: {
@@ -19215,14 +22539,85 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingSubtitles"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    getRecordingPartSources: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Committed current-session result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingPartSources"];
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
+        };
+    };
+    getRecordingPartAudio: {
+        parameters: {
+            query?: never;
+            header?: {
+                Range?: string;
+            };
+            path: {
+                sessionId: string;
+                partId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Full registered PCM16 mono 16kHz WAV */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "audio/wav": string;
+                };
+            };
+            /** @description Single authenticated byte range */
+            206: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "audio/wav": string;
+                };
+            };
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            416: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     getRecordingManifest: {
@@ -19245,14 +22640,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingManifest"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     readTranscriptionSource: {
@@ -19275,14 +22670,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingTranscriptSource"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     prepareTranscriptionSource: {
@@ -19312,14 +22707,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingTranscriptSource"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     readCurrentTranscriptionSource: {
@@ -19342,14 +22737,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingTranscriptSource"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
     prepareCurrentTranscriptionSource: {
@@ -19379,14 +22774,14 @@ export interface operations {
                     "application/json": components["schemas"]["RecordingTranscriptSource"];
                 };
             };
-            400: components["responses"]["recording_Error"];
-            401: components["responses"]["recording_Error"];
-            403: components["responses"]["recording_Error"];
-            404: components["responses"]["recording_Error"];
-            409: components["responses"]["recording_Error"];
-            413: components["responses"]["recording_Error"];
-            429: components["responses"]["recording_Error"];
-            503: components["responses"]["recording_Error"];
+            400: components["responses"]["Error"];
+            401: components["responses"]["Error"];
+            403: components["responses"]["Error"];
+            404: components["responses"]["Error"];
+            409: components["responses"]["Error"];
+            413: components["responses"]["Error"];
+            429: components["responses"]["Error"];
+            503: components["responses"]["Error"];
         };
     };
 }

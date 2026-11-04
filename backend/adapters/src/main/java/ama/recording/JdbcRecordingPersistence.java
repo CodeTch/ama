@@ -77,6 +77,12 @@ public final class JdbcRecordingPersistence implements RecordingService.Persiste
         }
         open(proposed);jdbc.update("UPDATE recording_meeting_capture SET session_id=? WHERE meeting_id=?",proposed.sessionId(),proposed.meetingId());return proposed;
     }
+    @Override public String currentSessionId(String meeting) {
+        var pointers=jdbc.queryForList("SELECT session_id FROM recording_meeting_capture WHERE meeting_id=?",String.class,meeting);
+        if(!pointers.isEmpty()&&pointers.getFirst()!=null)return pointers.getFirst();
+        var legacy=jdbc.queryForList("SELECT session_id FROM recording_session WHERE meeting_id=? ORDER BY created_at DESC LIMIT 2",String.class,meeting);
+        if(legacy.size()>1)throw new RecordingService.StaleWriter();return legacy.isEmpty()?null:legacy.getFirst();
+    }
     @Override public RecordingService.Snapshot load(String id) {
         var sessions=jdbc.query("SELECT session_id,meeting_id,part_id,writer_epoch,backend_id,state FROM recording_session WHERE session_id=?",
                 (r,n)->new RecordingService.Snapshot(new RecordingContracts.Session(r.getString(1),r.getString(2),r.getString(3),r.getLong(4),r.getString(5)),r.getString(6).equals("PAUSED"),r.getString(6).equals("FINISHED"),java.util.List.of()),id);

@@ -1,0 +1,7 @@
+package ama.transcript;
+import java.util.*;import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;
+class PublicationLibraryRecordsTest {
+ Map<String,Object> valid(){var m=new LinkedHashMap<String,Object>();m.put("documentId","doc-"+"a".repeat(32));m.put("publicationId",Task11DocumentViewTest.ID);m.put("libraryId","library");m.put("folderId","root");m.put("libraryName","真实知识库");m.put("libraryDescription","");m.put("folderPath",List.of("根目录"));m.put("title","正式纪要");m.put("meetingName","来源会议");m.put("payloadSha256","b".repeat(64));m.put("state","ACTIVE");m.put("canManage",false);m.put("canRead",true);return m;}
+ @Test void readerAndManagerFlagsAreIndependentAndTerminalRecordNeverGrantsRead(){var r=valid();assertSame(r,PublicationLibraryRecords.validate(r));r.put("canRead",false);r.put("canManage",true);r.put("state","WITHDRAWN");assertSame(r,PublicationLibraryRecords.validate(r));r.put("canRead",true);assertThrows(RuntimeException.class,()->PublicationLibraryRecords.validate(r));}
+ @Test void malformedOrUnboundedProviderRecordsFailClosed(){for(String key:List.of("documentId","publicationId","folderPath","canManage","payloadSha256","state")){var r=valid();r.put(key,"untrusted");assertThrows(RuntimeException.class,()->PublicationLibraryRecords.validate(r),key);}var r=valid();r.put("payload",Map.of("body","must not transfer"));assertThrows(RuntimeException.class,()->PublicationLibraryRecords.validate(r));}
+}

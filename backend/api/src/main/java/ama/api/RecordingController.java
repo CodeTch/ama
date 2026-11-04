@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 class RecordingController {
     record SessionResponse(String sessionId,String partId,long writerEpoch,String backendId) {}
+    record CurrentResponse(SessionResponse session) {}
     record FinishResponse(String sessionId,long finalSequence,String archiveTaskId) {}
     static final class TooLarge extends RuntimeException {}
     private final RecordingService service;
@@ -36,6 +37,10 @@ class RecordingController {
         this.leases=Objects.requireNonNull(leases);
         this.mutations=Objects.requireNonNull(mutations);
         this.ingress=Objects.requireNonNull(ingress);this.subtitles=Objects.requireNonNull(subtitles);
+    }
+    @GetMapping("/api/v1/meetings/{meetingId}/recordings")
+    ResponseEntity<CurrentResponse> currentMeeting(@PathVariable String meetingId,HttpServletRequest request) {
+        return meeting(request,meetingId,gate->{var s=service.currentForMeeting(meetingId);return ResponseEntity.ok().header("Cache-Control","private, no-store").body(new CurrentResponse(s==null?null:new SessionResponse(s.sessionId(),s.partId(),s.writerEpoch(),s.backendId())));});
     }
     @PostMapping("/api/v1/meetings/{meetingId}/recordings")
     ResponseEntity<SessionResponse> create(@PathVariable String meetingId,HttpServletRequest request) {
@@ -68,6 +73,10 @@ class RecordingController {
         if(sha256==null)throw new IllegalArgumentException("Recording chunk SHA-256 required");
         var value=new RecordingContracts.Chunk(partId,epoch,seq,start,count,sha256,pcm);
         return writer(request,sessionId,epoch,collector,() -> {ingress.require(actor(request).enterpriseId(),sessionId,collector,pcm.length+ama.realtime.RecordingBinaryCodec.HEADER_BYTES);return service.accept(sessionId,epoch,value);});
+    }
+    @PostMapping("/api/v1/recordings/{sessionId}/discard-empty")
+    ResponseEntity<Void> discardEmpty(@PathVariable String sessionId,@RequestHeader(name="X-Expected-Epoch") long epoch,HttpServletRequest request,@RequestHeader(name="X-Collector-Id") String collector){
+        return writer(request,sessionId,epoch,collector,()->{service.discardEmpty(sessionId,epoch);return ResponseEntity.noContent().build();});
     }
     @PostMapping("/api/v1/recordings/{sessionId}/pause")
     ResponseEntity<Void> pause(@PathVariable String sessionId,@RequestHeader(name="X-Expected-Epoch") long epoch,HttpServletRequest request,@RequestHeader(name="X-Collector-Id",required=false) String collector) {

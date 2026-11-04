@@ -50,6 +50,7 @@ final class MinutesGraphDiscovery {
    case "INITIAL_SETTINGS"->parent("template_revision",requiredSelection(),1);
    case "CURRENT_GENERATION"->{for(String col:List.of("transcript_confirmation_id","template_revision_id","exclusion_revision_id","element_set_id","minutes_revision_id"))parent(tableFor(col),root.get(col),1);parent("material_snapshot",root.get("material_snapshot_id"),1);}
    case "SAVED_EFFECTIVE","READINESS","SETTINGS_READ"->{parent("material_snapshot",root.get("material_snapshot_id"),1);parent("minutes_revision",root.get("minutes_revision_id"),1);parent("element_set",root.get("element_set_id"),1);parent("exclusion_revision",root.get("exclusion_revision_id"),1);parent("template_revision",root.get("template_revision_id"),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
+   case "WORKSPACE_READ","WORKSPACE_RESTORE"->{parent("minutes_workspace_snapshot",requiredSelection(),1);parent("minutes_revision",root.get("minutes_revision_id"),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);parent("material_snapshot",root.get("material_snapshot_id"),1);}
    case "OWNER_SET"->parent("element_set",requiredSelection(),1);
    case "REVIEW_ID"->parent("result_review",requiredSelection(),1);
    case "BODY_EDIT","BODY_RESTORE"->{parent("material_snapshot",root.get("material_snapshot_id"),1);parent("minutes_revision",requiredSelection(),1);parent("transcript_confirmation",root.get("transcript_confirmation_id"),1);}
@@ -97,6 +98,7 @@ final class MinutesGraphDiscovery {
    }
    case "transcription_input"->{inputTasks("TRANSCRIPTION_INPUT",id,depth);require("IMPORT".equals(r.get("kind"))&&"EMPTY".equals(r.get("material_mode")),CAPABILITY_UNAVAILABLE);unsupported(r,"material_snapshot_id");unsupported(r,"source_revision_id");parent("input_batch",r.get("batch_id"),depth);}
    case "input_batch"->{pending.addLast(new Query("file_reference","owner_id",id,depth,false," AND owner_kind='INPUT_BATCH_FILE'"));children("input_batch_file","batch_id",id,depth);children("input_batch_fingerprint_profile","batch_id",id,depth);}
+   case "minutes_workspace_snapshot"->{for(String col:List.of("minutes_revision_id","element_set_id","template_revision_id","exclusion_revision_id","transcript_confirmation_id"))parent(tableFor(col),r.get(col),depth);parent("material_snapshot",r.get("material_snapshot_id"),depth);identity(r,"created_by");}
    case "template_revision"->{parent("minutes_template",r.get("template_id"),depth);identity(r,"owner_id");}
    case "minutes_template"->{identity(r,"owner_id");if(r.get("owner_id")!=null)children("personal_template_state","template_id",id,depth);}
    case "personal_template_state"->identity(r,"owner_id");
@@ -208,6 +210,7 @@ final class MinutesGraphDiscovery {
   add(defs,"meeting","id","id owner_id revision cancel_epoch access_revision stage lifecycle governance_state ever_published info_revision_id roster_revision_id transcript_revision_id transcript_confirmation_id minutes_revision_id element_set_id template_revision_id exclusion_revision_id material_snapshot_id final_confirmation_id generation_fingerprint needs_generation materials_pending");
   add(defs,"minutes_template","id","id owner_id name_hash current_revision_id revision created_at");
   add(defs,"personal_template_state","template_id","template_id owner_id command_revision deleted_at");
+  add(defs,"minutes_workspace_snapshot","id",MinutesWorkspaceSnapshots.COLUMNS);
   add(defs,"generation_candidate","id","id meeting_id input_id task_id minutes_revision_id element_set_id base_revision input_fingerprint state created_at decided_at");
   add(defs,"meeting_info_revision","id","id meeting_id revision category_id actual_meeting_date created_by created_at");
   add(defs,"roster_revision","id","id meeting_id revision state confirmed_at confirmed_by");

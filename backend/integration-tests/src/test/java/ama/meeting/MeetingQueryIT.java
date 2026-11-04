@@ -26,6 +26,31 @@ class MeetingQueryIT {
  List<String> ids(MeetingPage p){return p.items().stream().map(MeetingItem::id).toList();}
  // Reflection lets the RED run exercise old query behavior before adding its aggregate contract.
  long total(MeetingPage p)throws Exception{return ((Number)p.getClass().getMethod("total").invoke(p)).longValue();}
+ @Test void lockedProjectionReadRetainsActorMeetingDatasourceAndTransactionBoundaries()throws Exception {
+  String m=meeting(owner,"锁定读取",null,List.of(),List.of(),false);
+  var tx=new TransactionRunner(ds);var access=new JdbcMeetingAccess(ds,tx,new JdbcSubjectFences(ds,Set.of("MEETING")));
+  var constructor=JdbcWebMeetingProjectionReader.LockedRead.class.getDeclaredConstructor(DataSource.class,JdbcMeetingAccess.class,JdbcMeetingAccess.Held.class,Actor.class,String.class);constructor.setAccessible(true);
+  var scope=tx.required(()->{
+   var held=(JdbcMeetingAccess.Held)access.lock(owner,m);
+   var proof=constructor.newInstance(ds,access,held,owner,m);
+   var budget=new WorkspaceReadBudget();var metadata=new BoundedMeetingMetadata(ds,access,owner,m,held,budget,proof);
+   var selection=metadata.capture("meeting_info_revision","name","id=? AND meeting_id=?",1,held.root.infoId(),m);
+   assertEquals("锁定读取",metadata.read(selection).getFirst().get("name"));
+   assertThrows(IllegalArgumentException.class,()->proof.check(ds,access,held,other,m));
+   assertThrows(IllegalArgumentException.class,()->proof.check(ds,access,held,owner,id()));
+   var foreignAccess=new JdbcMeetingAccess(ds,tx,new JdbcSubjectFences(ds,Set.of("MEETING")));
+   assertThrows(IllegalArgumentException.class,()->proof.check(ds,foreignAccess,held,owner,m));
+   assertThrows(IllegalArgumentException.class,()->proof.check(MysqlDataSources.fromEnvironment("AMA_C_RECORDING_DATABASE_"),access,held,owner,m));
+   return proof;
+  });
+  assertThrows(WorkspaceReadBudget.Unavailable.class,scope::check);
+  tx.required(()->{assertThrows(WorkspaceReadBudget.Unavailable.class,scope::check);return null;});
+ }
+ @Test void aFullDefaultPageFitsTheSharedBudgetWithoutReservingEveryPossibleTopicGroup(){
+  for(int n=0;n<20;n++)meeting(owner,"完整分页 "+n,null,List.of(),List.of(),false);
+  var page=reader.list(owner,"owned",20,null,MeetingListFilter.NONE);
+  assertEquals(20,page.items().size());assertEquals(20,page.total());assertFalse(page.hasMore());
+ }
  @Test void literalSearchPrecedesPaginationAndAllCountsUseIdenticalFilter()throws Exception{
   String a=meeting(owner,"季度 A%_= 中文",null,List.of(),List.of(),false),b=meeting(owner,"quarter a%_= 中文",LocalDate.of(2026,10,31),List.of(),List.of(),false);
   meeting(owner,"newest nonmatching",null,List.of(),List.of(),false);meeting(other,"季度 A%_= 中文",null,List.of(),List.of(),false);

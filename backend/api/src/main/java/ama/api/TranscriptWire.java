@@ -15,7 +15,7 @@ final class TranscriptWire {
  static Command parse(InputStream input,long length,Operation operation)throws IOException {
   if(length>REQUEST_BYTES)throw new Failure(413,"REQUEST_TOO_LARGE");
   try(var parser=FACTORY.createParser(new Bounded(input))){
-   var reader=new Reader(parser);reader.expect(reader.next(),JsonToken.START_OBJECT);var revisions=JSON.createObjectNode();String source=null,find=null,replacement=null,candidate=null,decision=null;List<Edit> edits=null;List<String> occurrences=null,speakerSegments=null;String speakerLabel=null,enterprise=null;boolean enterpriseSeen=false;
+   var reader=new Reader(parser);reader.expect(reader.next(),JsonToken.START_OBJECT);var revisions=JSON.createObjectNode();String source=null,find=null,replacement=null,candidate=null,decision=null;List<Edit> edits=null;List<String> occurrences=null,speakerSegments=null,additionalCandidates=List.of();String speakerLabel=null,enterprise=null,voiceprint=null;boolean enterpriseSeen=false;
    while(reader.next()!=JsonToken.END_OBJECT){reader.expect(parser.currentToken(),JsonToken.FIELD_NAME);String field=parser.currentName();var token=reader.next();
     switch(field){
      case "expectedRevision"->{reader.expect(token,JsonToken.VALUE_NUMBER_INT);String text=parser.getText();if(!text.matches("0|[1-9][0-9]*"))throw invalid();revisions.put(field,parser.getBigIntegerValue());}
@@ -27,8 +27,10 @@ final class TranscriptWire {
      case "occurrenceIds"->{if(operation!=Operation.REPLACE)throw invalid();reader.expect(token,JsonToken.START_ARRAY);var values=new ArrayList<String>();while(reader.next()!=JsonToken.END_ARRAY){if(values.size()>=10000)throw new Failure(413,"REQUEST_TOO_LARGE");values.add(reader.text(parser.currentToken()));}occurrences=List.copyOf(values);}
      case "segmentIds"->{if(operation!=Operation.SPEAKERS)throw invalid();reader.expect(token,JsonToken.START_ARRAY);var values=new ArrayList<String>();while(reader.next()!=JsonToken.END_ARRAY){if(values.size()>=4096)throw new Failure(413,"REQUEST_TOO_LARGE");values.add(reader.text(parser.currentToken()));}speakerSegments=List.copyOf(values);}
      case "label"->{if(operation!=Operation.SPEAKERS)throw invalid();speakerLabel=reader.text(token);}
+     case "voiceprintId"->{if(operation!=Operation.SPEAKERS)throw invalid();voiceprint=reader.text(token);}
      case "enterpriseId"->{if(operation!=Operation.SPEAKERS)throw invalid();enterpriseSeen=true;enterprise=token==JsonToken.VALUE_NULL?null:reader.text(token);}
      case "candidateId"->{if(operation!=Operation.CORRECTION)throw invalid();candidate=reader.text(token);}
+     case "additionalCandidateIds"->{if(operation!=Operation.CORRECTION)throw invalid();reader.expect(token,JsonToken.START_ARRAY);var values=new ArrayList<String>();while(reader.next()!=JsonToken.END_ARRAY){if(values.size()>=59)throw new Failure(413,"REQUEST_TOO_LARGE");values.add(reader.text(parser.currentToken()));}additionalCandidates=List.copyOf(values);}
      case "decision"->{if(operation!=Operation.CORRECTION)throw invalid();decision=reader.text(token);}
      default->throw invalid();
     }
@@ -37,7 +39,7 @@ final class TranscriptWire {
    if(operation==Operation.REPLACE&&(find==null||replacement==null||occurrences==null))throw invalid();
    if(operation==Operation.CORRECTION&&(candidate==null||decision==null))throw invalid();
    if(operation==Operation.SPEAKERS&&(speakerSegments==null||speakerLabel==null||!enterpriseSeen))throw invalid();
-   return new Command(operation,HttpRevisionTokens.expected(revisions),source,edits==null?List.of():edits,operation==Operation.REPLACE?new Replacement(find,replacement,occurrences):null,operation==Operation.CORRECTION?new Correction(candidate,CorrectionDecision.valueOf(decision)):null,operation==Operation.SPEAKERS?new SpeakerEdit(speakerSegments,speakerLabel,enterprise):null);
+   return new Command(operation,HttpRevisionTokens.expected(revisions),source,edits==null?List.of():edits,operation==Operation.REPLACE?new Replacement(find,replacement,occurrences):null,operation==Operation.CORRECTION?new Correction(candidate,CorrectionDecision.valueOf(decision),additionalCandidates):null,operation==Operation.SPEAKERS?new SpeakerEdit(speakerSegments,speakerLabel,enterprise,voiceprint):null);
   }catch(com.fasterxml.jackson.core.JsonProcessingException malformed){throw invalid();}
  }
  private static IllegalArgumentException invalid(){return new IllegalArgumentException("Invalid transcript request");}

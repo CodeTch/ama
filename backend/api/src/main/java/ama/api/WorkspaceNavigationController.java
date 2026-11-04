@@ -6,6 +6,13 @@ import ama.contract.IdentityContracts.ResolvedSession;import ama.transcript.Jdbc
  WorkspaceNavigationController(JdbcWorkspaceNavigationReader reader){this(reader,null);}
  WorkspaceNavigationController(JdbcWorkspaceNavigationReader reader,JdbcWorkspaceOverview overview){this.reader=reader;this.overview=overview;}
  @org.springframework.beans.factory.annotation.Autowired WorkspaceNavigationController(JdbcWorkspaceNavigationReader reader,ProcessingConfiguration.Runtime runtime,JdbcTaskQueue queue,WorkspaceCursor cursors,WorkspaceReadBudget.Limits limits){this(reader,runtime.components()==null?null:new JdbcWorkspaceOverview(runtime.components().authority(),queue,cursors,limits));}
+ /** Renew an existing display lease through the same current access gate, without private task/history composition. */
+ @GetMapping("/api/v1/meetings/{meetingId}/workspace/access") ResponseEntity<Object> access(@PathVariable String meetingId,HttpServletRequest request){
+  ama.contract.OutboxContracts.uuid(meetingId);if(!request.getParameterMap().isEmpty())throw new IllegalArgumentException("Access renewal does not accept query parameters");
+  var actor=((ResolvedSession)request.getAttribute(SessionSecurityFilter.SESSION)).actor();
+  var value=reader.read(actor,meetingId);
+  return ResponseEntity.ok().header("Cache-Control","private, no-store").body(Map.of("meetingId",value.meetingId(),"allowed",true));
+ }
  @GetMapping("/api/v1/meetings/{meetingId}/workspace") ResponseEntity<Object> workspace(@PathVariable String meetingId,HttpServletRequest request){
   ama.contract.OutboxContracts.uuid(meetingId);if(!request.getParameterMap().isEmpty())throw new IllegalArgumentException("Workspace does not accept query parameters");
   var actor=((ResolvedSession)request.getAttribute(SessionSecurityFilter.SESSION)).actor();if(overview!=null)return ResponseEntity.ok().header("Cache-Control","private, no-store").body(overview.read(actor,meetingId));

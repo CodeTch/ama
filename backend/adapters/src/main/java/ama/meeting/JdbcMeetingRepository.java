@@ -136,9 +136,10 @@ public final class JdbcMeetingRepository implements MeetingRepository {
                 var info=metadata.read(metadata.capture("meeting_info_revision","name category_id summary actual_meeting_date","id=? AND meeting_id=?",1,held.root.infoId(),id));if(info.size()!=1)throw new WorkspaceReadBudget.Unavailable();var old=info.getFirst();
                 var transition=minutes.lockMinutesTransition(transitionPlan.value(),actor,id,held);version=expected+1;String infoId=uuid();String date=(String)old.get("actual_meeting_date");
                 String name=prepared.field().equals("NAME")?prepared.value():(String)old.get("name"),summary=prepared.field().equals("SUMMARY")?prepared.value():(String)old.get("summary");
-                insertInfo(infoId,id,version,name,(String)old.get("category_id"),summary,date==null?null:LocalDate.parse(date),actor.enterpriseId());
+                String category=prepared.field().equals("CATEGORY")?prepared.value():(String)old.get("category_id");if(prepared.field().equals("CATEGORY"))categories.requireAvailableCategory(category);
+                insertInfo(infoId,id,version,name,category,summary,date==null?null:LocalDate.parse(date),actor.enterpriseId());
                 if(j.update("UPDATE meeting SET revision=?,info_revision_id=?,final_confirmation_id=NULL,updated_at=UTC_TIMESTAMP(6) WHERE id=? AND revision=?",version,infoId,id,expected)!=1)throw new Conflict();
-                if(j.update("UPDATE meeting_search_projection SET info_revision_id=?,name_search=?,meeting_revision=? WHERE meeting_id=?",infoId,name,version,id)!=1)throw new WorkspaceReadBudget.Unavailable();
+                if(j.update("UPDATE meeting_search_projection SET info_revision_id=?,name_search=?,category_id=?,meeting_revision=? WHERE meeting_id=?",infoId,name,category,version,id)!=1)throw new WorkspaceReadBudget.Unavailable();
                 fences.advance(held.subject,version,held.root.cancelEpoch(),false);minutes.finishMinutesTransition(transition,version);
             }
             if(j.update("UPDATE meeting_info_suggestion SET state=?,decided_by=?,decided_at=UTC_TIMESTAMP(6),decided_revision=? WHERE id=? AND meeting_id=? AND state='PENDING'",decision.equals("ACCEPT")?"ACCEPTED":"REJECTED",actor.enterpriseId(),version,suggestion,id)!=1)throw new Conflict();

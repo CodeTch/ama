@@ -9,7 +9,7 @@ class CorpusFeedbackIT extends FeedbackReviewIT {
  @Test void onlyBoundApprovedCurrentSourcesAreConsumableAndWithdrawalIsImmediate(){
   var admin=reviewer(true);String id=(String)corpus.submit(actor,UUID.randomUUID().toString(),meeting,0,List.of(),"WORDING","仅显式提交建议").get("id");
   assertTrue(corpus.approved(admin).stream().noneMatch(row->row.get("id").equals(id)));feedback.review(admin,id,UUID.randomUUID().toString(),0,"ACCEPTED","批准用于受控语料");
-  assertTrue(corpus.approved(admin).stream().anyMatch(row->row.get("id").equals(id)));corpus.withdraw(actor,id,UUID.randomUUID().toString());assertTrue(corpus.approved(admin).stream().noneMatch(row->row.get("id").equals(id)));
+  assertTrue(corpus.approved(admin).stream().anyMatch(row->row.get("id").equals(id)));corpus.withdraw(actor,id,UUID.randomUUID().toString(),1,"本人撤回");assertTrue(corpus.approved(admin).stream().noneMatch(row->row.get("id").equals(id)));
   assertThrows(ama.access.MeetingAccess.AccessDeniedException.class,()->corpus.approved(actor));
  }
  @Test void reviewerCannotReadUnrelatedSourceAndSourceChangeStopsUse(){

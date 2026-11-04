@@ -39,6 +39,7 @@ export function useMinutesGeneration(api:Api,actor:()=>string|null,meeting:()=>s
    if(retry){if(command.snapshot.value?.operation!==operation||!['PREPARED','UNCERTAIN'].includes(command.state.value))throw new Error('没有可重试的原请求。');}
    else{
     if(!['EMPTY','ACKNOWLEDGED'].includes(command.state.value))throw new Error('请先处理原请求。');const fresh=await api.current(id,new AbortController().signal);if(!active())return;current.value=fresh;
+    if(operation==='MINUTES_GENERATE'&&fresh.activeTaskIds.length)throw new Error('已有生成任务正在处理，请等待原任务完成。');
     if(operation==='MINUTES_GENERATE'&&!fresh.eligible)throw new Error('生成条件尚未满足，请查看当前原因。');
     if(operation==='MINUTES_INITIAL'){
      if(fresh.saved.templateRevisionId!==null||fresh.saved.exclusionRevisionId!==null)throw new Error('初始设置已存在，请重新读取。');

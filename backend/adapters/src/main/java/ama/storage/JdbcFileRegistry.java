@@ -494,6 +494,16 @@ public final class JdbcFileRegistry implements FileRegistry {
         access.require(gate.access,MeetingAccess.Action.READ);return gate;
     }
     @Override public Download read(Actor actor,String meeting,ReadRequest request,String range){
+        for(int attempt=0;;attempt++){
+            try{return readOnce(actor,meeting,request,range);}
+            catch(CompleteReadPolicy.ReadSnapshotChanged concurrent){
+                // No stream has been opened. Discard every prior capability and repeat the
+                // complete bounded preparation and authorization, at most three times.
+                if(attempt>=2)throw new Unavailable();
+            }
+        }
+    }
+    private Download readOnce(Actor actor,String meeting,ReadRequest request,String range){
         if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Read owns its authorization transaction");
         Objects.requireNonNull(actor);uuid(meeting);String requested=validateSelector(request);ama.contract.MinutesContracts.check(()->false);
         access.prepareExternalRead(actor,meeting);

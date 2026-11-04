@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import WorkspaceTopbar from '../../shared/WorkspaceTopbar.vue';
 import {ref} from 'vue';
 import {RouterLink} from 'vue-router';
 import Icon from '../../shared/Icon.vue';
@@ -21,7 +20,7 @@ function regenerate(){regenerated.value=true;showNotice('重新生成');}
 
 <template>
  <div class="layout prototype-meeting-page"><div class="main">
-  <WorkspaceTopbar/>
+
   <main class="content detail-page prototype-detail-page" :class="{'prototype-minutes-page':stage==='minutes'}"><div class="aci-detail ac-related prototype-detail">
    <div class="page-head aci-detail-head">
     <div class="ac-workspace-leading"><RouterLink to="/meetings" class="btn ac-workspace-back" aria-label="返回列表">‹</RouterLink><div class="aci-heading-text"><div class="aci-title-row"><h1 class="page-title">未命名会议</h1><span class="tag blue">{{stage==='confirm'?'会议待确认':stage==='minutes'?'纪要待处理':'转写待处理'}}</span></div><div class="page-desc">{{meetingId}} · 待补充会议信息</div></div></div>

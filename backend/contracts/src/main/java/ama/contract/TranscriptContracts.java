@@ -6,10 +6,15 @@ public final class TranscriptContracts {
  private TranscriptContracts(){}
  public enum Operation { SAVE, MARKS, RESTORE, CONFIRM, REPLACE, UNDO, CORRECTION, SPEAKERS }
  public enum CorrectionDecision { ACCEPT, REJECT }
- public record SpeakerEdit(List<String> segmentIds,String label,String enterpriseId){
-  public SpeakerEdit{if(segmentIds==null||segmentIds.isEmpty()||segmentIds.size()>4096||new HashSet<>(segmentIds).size()!=segmentIds.size())throw new IllegalArgumentException("Explicit speaker segments required");segmentIds=List.copyOf(segmentIds);segmentIds.forEach(ama.contract.MinutesContracts::uuid);scalars(label);if(label.isBlank()||label.length()>256||!label.equals(label.strip()))throw new IllegalArgumentException("Bounded human speaker label required");if(enterpriseId!=null){scalars(enterpriseId);if(enterpriseId.isBlank()||enterpriseId.length()>255)throw new IllegalArgumentException("Invalid speaker identity");}}
+ public record SpeakerEdit(List<String> segmentIds,String label,String enterpriseId,String voiceprintId){
+  public SpeakerEdit(List<String> segmentIds,String label,String enterpriseId){this(segmentIds,label,enterpriseId,null);}
+  public SpeakerEdit{if(voiceprintId!=null){ama.contract.MinutesContracts.uuid(voiceprintId);if(enterpriseId==null)throw new IllegalArgumentException("Candidate requires enterprise subject");}if(segmentIds==null||segmentIds.isEmpty()||segmentIds.size()>4096||new HashSet<>(segmentIds).size()!=segmentIds.size())throw new IllegalArgumentException("Explicit speaker segments required");segmentIds=List.copyOf(segmentIds);segmentIds.forEach(ama.contract.MinutesContracts::uuid);scalars(label);if(label.isBlank()||label.length()>256||!label.equals(label.strip()))throw new IllegalArgumentException("Bounded human speaker label required");if(enterpriseId!=null){scalars(enterpriseId);if(enterpriseId.isBlank()||enterpriseId.length()>255)throw new IllegalArgumentException("Invalid speaker identity");}}
  }
- public record Correction(String candidateId,CorrectionDecision decision){public Correction{uuid(candidateId);Objects.requireNonNull(decision);}}
+ public record Correction(String candidateId,CorrectionDecision decision,List<String> additionalCandidateIds){
+  public Correction(String candidateId,CorrectionDecision decision){this(candidateId,decision,List.of());}
+  public Correction{uuid(candidateId);Objects.requireNonNull(decision);additionalCandidateIds=List.copyOf(additionalCandidateIds);if(additionalCandidateIds.size()>59)throw new IllegalArgumentException("Correction batch budget exceeded");var ids=new HashSet<String>();ids.add(candidateId);for(String id:additionalCandidateIds){uuid(id);if(!ids.add(id))throw new IllegalArgumentException("Duplicate correction candidate");}}
+  public List<String> candidateIds(){var ids=new ArrayList<String>();ids.add(candidateId);ids.addAll(additionalCandidateIds);return List.copyOf(ids);}
+ }
  public record Edit(String segmentId,String body,List<Mark> marks){
   public Edit {uuid(segmentId);if(body!=null)scalars(body);if(marks==null||marks.size()>4||new HashSet<>(marks).size()!=marks.size())throw new Failure(422,"INVALID_MARKS");marks=marks.stream().sorted().toList();}
  }

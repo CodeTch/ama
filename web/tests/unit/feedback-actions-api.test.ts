@@ -24,3 +24,12 @@ test('summary reads use server state filters and complete private counts with bo
  const page=await api.summaries(null,'PENDING',false,new AbortController().signal);assert.equal(page.counts.ALL,1);assert.match(calls[0].path,/state=PENDING/);assert.match(calls[0].path,/reviewing=false/);
  value={...value,counts:{...value.counts,ALL:-1}};await assert.rejects(api.summaries(null,null,false,new AbortController().signal));
 });
+test('actual adoption facts are validated separately from review decisions and legacy replies remain readable',async()=>{
+ const usage={usageState:'PENDING_ADOPTION',usageVersion:null,canWithdraw:true,withdrawalReason:null,withdrawnAt:null};
+ let value:any={...detail,usage};const api=createFeedbackApi({json:async()=>value} as any,()=> 'owner');
+ assert.equal((await api.detail(id,new AbortController().signal)).usage?.usageState,'PENDING_ADOPTION');
+ value={items:[{...feedback,kind:'CORPUS',feedbackType:null,originalValue:null,suggestedValue:null,note:null,submittedAt:detail.submittedAt,reviewReason:null,usageState:'LEGACY',usageVersion:null}],nextCursor:null,counts:{ALL:1,PENDING:1,ACCEPTED:0,REJECTED:0,NEEDS_MORE:0}};
+ assert.equal((await api.summaries(null,null,false,new AbortController().signal)).items[0]?.usageState,'LEGACY');
+ value={...value,items:[{...value.items[0],usageState:'UNVERIFIED_SUCCESS'}]};await assert.rejects(api.summaries(null,null,false,new AbortController().signal));
+ value={...detail,usage:{...usage,canWithdraw:'true'}};await assert.rejects(api.detail(id,new AbortController().signal));
+});

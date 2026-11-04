@@ -17,7 +17,7 @@ public final class JdbcPublicationGovernance implements AutoCloseable {
  private final PublicationGovernanceBinding binding;
  private final JdbcTemplate j;
  private final JdbcSubjectFences fences;
- private final java.util.concurrent.ScheduledExecutorService scheduler=java.util.concurrent.Executors.newScheduledThreadPool(3,r->{var t=new Thread(r,"publication-governance");t.setDaemon(true);return t;});
+ private final java.util.concurrent.ScheduledExecutorService scheduler=java.util.concurrent.Executors.newScheduledThreadPool(5,r->{var t=new Thread(r,"publication-governance");t.setDaemon(true);return t;});
  private final java.util.concurrent.atomic.AtomicBoolean started=new java.util.concurrent.atomic.AtomicBoolean();
  private volatile boolean closed;
  private final ama.task.PreparationCancellation cancellation=new ama.task.PreparationCancellation(){public boolean cancelled(){return closed||Thread.currentThread().isInterrupted();}public AutoCloseable register(Runnable abort){return ()->{};}};
@@ -32,16 +32,16 @@ public final class JdbcPublicationGovernance implements AutoCloseable {
   ama.contract.MinutesContracts.scalars(reason);
   String scope=JdbcProcessingIntake.digest(actor.enterpriseId(),meeting,publication,"GOVERNANCE",key);
   String request=JdbcProcessingIntake.digest(Long.toString(expected),action,reason);
-  var prepared=binding.prepare(meeting,publication);
+  var prepared=binding.prepare(meeting,publication);manager(actor,prepared);
   return binding.withinCurrent(prepared,()->{
-   owner(actor,prepared);
+   active(actor);
    var prior=j.queryForList("SELECT id,request_hash FROM publication_governance_command WHERE scope_hash=? FOR UPDATE",scope);
    if(!prior.isEmpty()){if(!request.equals(prior.getFirst().get("request_hash")))throw new Failure(409,"IDEMPOTENCY_CONFLICT");return projection((String)prior.getFirst().get("id"));}
    if(expected!=prepared.revision())throw new Failure(409,"REVISION_CONFLICT");
    if(!Set.of("ACTIVE","UNKNOWN").contains(prepared.governanceState())||j.queryForObject("SELECT COUNT(*) FROM publication_governance_command WHERE publication_id=?",Long.class,publication)!=0)
     throw new Failure(409,"GOVERNANCE_ALREADY_REQUESTED");
    String id=UUID.randomUUID().toString();var body=new TreeMap<String,Object>();
-   body.put("protocol","ama.controlled-knowledge-governance.v1");body.put("actorId",prepared.actorId());body.put("documentId",prepared.documentId());body.put("publicationId",publication);
+   body.put("protocol","ama.controlled-knowledge-governance.v1");body.put("actorId",actor.enterpriseId());body.put("documentId",prepared.documentId());body.put("publicationId",publication);
    body.put("commandKey",id);body.put("expectedRevisionToken","0");body.put("action",action);body.put("reason",reason);
    byte[] wire=ControlledKnowledgeClient.canonical(body);if(wire.length>32768)throw new IllegalArgumentException("Governance wire budget");
    j.update("INSERT INTO publication_governance_command(id,meeting_id,publication_id,actor_id,scope_hash,request_hash,wire_hash,wire_body,action,reason,state) VALUES(?,?,?,?,?,?,?,?,?,?,'PENDING')",
@@ -50,16 +50,21 @@ public final class JdbcPublicationGovernance implements AutoCloseable {
   });
  }
  public Map<String,Object> status(Actor actor,String meeting,String publication,String id){
-  JdbcMinutesFactsReader.independent();uuid(id);var prepared=binding.prepare(meeting,publication);
-  return binding.withinCurrent(prepared,()->{owner(actor,prepared);if(j.queryForObject("SELECT COUNT(*) FROM publication_governance_command WHERE id=? AND meeting_id=? AND publication_id=? AND actor_id=?",Long.class,id,meeting,publication,actor.enterpriseId())!=1)throw new Failure(404,"GOVERNANCE_NOT_FOUND");return projection(id);});
+  JdbcMinutesFactsReader.independent();uuid(id);var prepared=binding.prepare(meeting,publication);manager(actor,prepared);
+  return binding.withinCurrent(prepared,()->{active(actor);if(j.queryForObject("SELECT COUNT(*) FROM publication_governance_command WHERE id=? AND meeting_id=? AND publication_id=?",Long.class,id,meeting,publication)!=1)throw new Failure(404,"GOVERNANCE_NOT_FOUND");return projection(id);});
  }
  public List<Map<String,Object>> history(Actor actor,String meeting,String publication){
-  JdbcMinutesFactsReader.independent();var prepared=binding.prepare(meeting,publication);
-  return binding.withinCurrent(prepared,()->{owner(actor,prepared);return j.queryForList("SELECT id FROM publication_governance_command WHERE publication_id=? ORDER BY created_at DESC,id DESC LIMIT 20",String.class,publication).stream().map(this::projection).toList();});
+  JdbcMinutesFactsReader.independent();var prepared=binding.prepare(meeting,publication);manager(actor,prepared);
+  return binding.withinCurrent(prepared,()->{active(actor);return j.queryForList("SELECT id FROM publication_governance_command WHERE publication_id=? ORDER BY created_at DESC,id DESC LIMIT 20",String.class,publication).stream().map(this::projection).toList();});
  }
- private void owner(Actor actor,PublicationGovernanceBinding.Prepared prepared){
-  // The exact original owner identity is already locked by the technical capture.
-  if(actor==null||!prepared.actorId().equals(actor.enterpriseId())||!"ACTIVE".equals(j.queryForObject("SELECT status FROM enterprise_identity WHERE enterprise_id=?",String.class,prepared.actorId())))throw new MeetingAccess.AccessDeniedException();
+ private void active(Actor actor){if(actor==null||j.queryForObject("SELECT COUNT(*) FROM enterprise_identity WHERE enterprise_id=? AND status='ACTIVE'",Long.class,actor.enterpriseId())!=1)throw new MeetingAccess.AccessDeniedException();}
+ public Map<String,Object> capabilities(Actor actor,String meeting,String publication){var prepared=binding.prepare(meeting,publication);try{manager(actor,prepared);return Map.of("canManage",true);}catch(MeetingAccess.AccessDeniedException denied){return Map.of("canManage",false);}}
+ private void manager(Actor actor,PublicationGovernanceBinding.Prepared prepared){
+  active(actor);
+  try{var value=client.exchange(client.governancePermissions(prepared,actor.enterpriseId()),16384,cancellation);
+   if(!value.keySet().equals(Set.of("providerId","storeInstanceId","documentId","publicationId","libraryId","canManage"))||!prepared.documentId().equals(value.get("documentId"))||!prepared.publicationId().equals(value.get("publicationId"))||!prepared.libraryId().equals(value.get("libraryId")))throw new MeetingAccess.AuthorityUnavailableException();
+   if(!Boolean.TRUE.equals(value.get("canManage")))throw new MeetingAccess.AccessDeniedException();
+  }catch(ControlledKnowledgeClient.ProviderFailure denied){if(denied.status==403||denied.status==404)throw new MeetingAccess.AccessDeniedException();throw new MeetingAccess.AuthorityUnavailableException(denied);}catch(java.io.IOException unavailable){throw new MeetingAccess.AuthorityUnavailableException(unavailable);}
  }
  private Map<String,Object> projection(String id){
   var rows=j.queryForList("SELECT id,meeting_id,publication_id,action,state,last_error,created_at,finished_at,reason FROM publication_governance_command WHERE id=?",id);
@@ -78,16 +83,17 @@ public final class JdbcPublicationGovernance implements AutoCloseable {
  /** An accepted, leased original command only; neither a caller map nor a read proof can mint it. */
  final class Send {
   final PublicationGovernanceBinding.Prepared binding;
-  private final String id,lease,hash;private final byte[] wire;
-  private Send(PublicationGovernanceBinding.Prepared binding,String id,String lease,String hash,byte[] wire){this.binding=binding;this.id=id;this.lease=lease;this.hash=hash;this.wire=wire.clone();}
+  private final String id,lease,hash,actor;private final byte[] wire;
+  private Send(PublicationGovernanceBinding.Prepared binding,String id,String lease,String hash,String actor,byte[] wire){this.actor=actor;this.binding=binding;this.id=id;this.lease=lease;this.hash=hash;this.wire=wire.clone();}
   byte[] bytes(){return wire.clone();}
+  String actor(){return actor;}
   void require(ControlledKnowledgeClient expected){
    if(client!=expected)throw new IllegalArgumentException("Foreign governance sender");binding.require(expected);
    if(j.queryForObject("SELECT COUNT(*) FROM publication_governance_command WHERE id=? AND lease_owner=? AND wire_hash=? AND state IN ('PENDING','RECONCILING') AND lease_until>UTC_TIMESTAMP(6)",Long.class,id,lease,hash)!=1)throw new IllegalArgumentException("Expired governance command lease");
   }
  }
  private record Work(String id,String meeting,String publication,String lease){}
- public void start(){if(started.compareAndSet(false,true)){scheduler.scheduleWithFixedDelay(()->safe(this::commandOnce),0,1,java.util.concurrent.TimeUnit.SECONDS);for(int n=0;n<2;n++)scheduler.scheduleWithFixedDelay(()->safe(this::pollOnce),n,1,java.util.concurrent.TimeUnit.SECONDS);}}
+ public void start(){if(started.compareAndSet(false,true)){scheduler.scheduleWithFixedDelay(()->safe(this::commandOnce),0,1,java.util.concurrent.TimeUnit.SECONDS);for(int n=0;n<4;n++)scheduler.scheduleWithFixedDelay(()->safe(this::pollOnce),n*60L,250,java.util.concurrent.TimeUnit.MILLISECONDS);}}
  private void safe(Runnable action){if(closed)return;try{action.run();}catch(RuntimeException unavailable){/* Durable due rows remain recoverable; no response body or credential logging. */}}
  @Override public void close(){closed=true;scheduler.shutdownNow();try{scheduler.awaitTermination(20,java.util.concurrent.TimeUnit.SECONDS);}catch(InterruptedException interrupted){Thread.currentThread().interrupt();}}
  /** Bounded one-at-a-time command claim. Locks are released before provenance work or network I/O. */
@@ -101,15 +107,15 @@ public final class JdbcPublicationGovernance implements AutoCloseable {
   });if(work==null)return;
   try{
    var prepared=binding.prepare(work.meeting(),work.publication());Send send=binding.withinCurrent(prepared,()->{
-    var rows=j.queryForList("SELECT wire_hash,IF(OCTET_LENGTH(wire_body)<=32768,wire_body,NULL) wire_body FROM publication_governance_command WHERE id=? AND lease_owner=? AND lease_until>UTC_TIMESTAMP(6) AND state IN ('PENDING','RECONCILING') FOR UPDATE",work.id(),work.lease());
+    var rows=j.queryForList("SELECT actor_id,wire_hash,IF(OCTET_LENGTH(wire_body)<=32768,wire_body,NULL) wire_body FROM publication_governance_command WHERE id=? AND lease_owner=? AND lease_until>UTC_TIMESTAMP(6) AND state IN ('PENDING','RECONCILING') FOR UPDATE",work.id(),work.lease());
     if(rows.size()!=1||!(rows.getFirst().get("wire_body") instanceof String text))throw new IllegalArgumentException("Governance original unavailable");byte[] bytes=text.getBytes(StandardCharsets.UTF_8);String hash=(String)rows.getFirst().get("wire_hash");var body=ControlledKnowledgeClient.parse(bytes,32768);
-    if(!hash.equals(ControlledKnowledgeClient.digest(bytes))||!Arrays.equals(bytes,ControlledKnowledgeClient.canonical(body))||!prepared.documentId().equals(body.get("documentId"))||!prepared.publicationId().equals(body.get("publicationId"))||!prepared.actorId().equals(body.get("actorId"))||!work.id().equals(body.get("commandKey")))throw new IllegalArgumentException("Governance original binding mismatch");
-    return new Send(prepared,work.id(),work.lease(),hash,bytes);
+    if(!hash.equals(ControlledKnowledgeClient.digest(bytes))||!Arrays.equals(bytes,ControlledKnowledgeClient.canonical(body))||!prepared.documentId().equals(body.get("documentId"))||!prepared.publicationId().equals(body.get("publicationId"))||!rows.getFirst().get("actor_id").equals(body.get("actorId"))||!work.id().equals(body.get("commandKey")))throw new IllegalArgumentException("Governance original binding mismatch");
+    return new Send(prepared,work.id(),work.lease(),hash,(String)rows.getFirst().get("actor_id"),bytes);
    });
    Map<String,Object> result;
-   try{result=client.exchange(client.governanceRead(prepared,work.id()),12288,cancellation);}
+   try{result=client.exchange(client.governanceRead(prepared,work.id(),send.actor()),12288,cancellation);}
    catch(ControlledKnowledgeClient.ProviderFailure missing){if(missing.status!=404)throw missing;result=client.exchange(client.governanceWrite(send),12288,cancellation);}
-   var proof=client.governanceProof(ControlledKnowledgeClient.string(result,"assertion"),false);proof.require(prepared);
+   var proof=client.governanceProof(ControlledKnowledgeClient.string(result,"assertion"),false);proof.require(prepared,send.actor());
    if(!work.id().equals(proof.claims.get("commandKey"))||!send.hash.equals(proof.claims.get("requestSha256")))throw new IllegalArgumentException("Foreign governance receipt");
    // A response may outlive its original preparation; reacquire the genuine current metadata.
    apply(binding.prepare(work.meeting(),work.publication()),proof,work);
@@ -121,7 +127,7 @@ public final class JdbcPublicationGovernance implements AutoCloseable {
  /** Demand refresh after the caller has independently checked its local ACL. No business locks span I/O. */
  public void ensureFresh(String meeting){
   JdbcMinutesFactsReader.independent();uuid(meeting);
-  var rows=j.queryForList("SELECT p.id,a.verified_until>DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 2 SECOND) fresh FROM meeting m JOIN publication p ON p.meeting_id=m.id AND p.confirmation_id=m.final_confirmation_id AND p.state='SUCCEEDED' LEFT JOIN publication_governance_authority a ON a.publication_id=p.id AND a.state='ACTIVE' WHERE m.id=? AND m.lifecycle='ACTIVE' AND m.governance_state='ACTIVE' AND m.ever_published=1 LIMIT 2",meeting);
+  var rows=j.queryForList("SELECT p.id,a.verified_until>DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 3 SECOND) fresh FROM meeting m JOIN publication p ON p.meeting_id=m.id AND p.confirmation_id=m.final_confirmation_id AND p.state='SUCCEEDED' LEFT JOIN publication_governance_authority a ON a.publication_id=p.id AND a.state='ACTIVE' WHERE m.id=? AND m.lifecycle='ACTIVE' AND m.governance_state='ACTIVE' AND m.ever_published=1 LIMIT 2",meeting);
   if(rows.isEmpty())return;if(rows.size()!=1)throw new MeetingAccess.AuthorityUnavailableException();var row=rows.getFirst();if(row.get("fresh") instanceof Number n&&n.intValue()==1)return;
   try{var prepared=binding.prepare(meeting,(String)row.get("id"));var response=client.exchange(client.governanceRead(prepared,null),12288,cancellation);var proof=client.governanceProof(ControlledKnowledgeClient.string(response,"assertion"),true);apply(prepared,proof,null);}
   catch(Exception unavailable){throw new MeetingAccess.AuthorityUnavailableException(unavailable);}
@@ -131,7 +137,7 @@ public final class JdbcPublicationGovernance implements AutoCloseable {
   JdbcMinutesFactsReader.independent();if(closed)return;
   j.update("INSERT IGNORE INTO publication_governance_poll(publication_id) SELECT p.id FROM publication p JOIN external_document_mapping d ON d.publication_id=p.id WHERE p.state='SUCCEEDED' AND NOT EXISTS(SELECT 1 FROM publication_governance_poll g WHERE g.publication_id=p.id) ORDER BY p.id LIMIT 16");
   Work work=authority.transactionRunner().required(()->{
-   var rows=j.queryForList("SELECT g.publication_id,p.meeting_id FROM publication_governance_poll g JOIN publication p ON p.id=g.publication_id WHERE g.next_check_at<=UTC_TIMESTAMP(6) AND (g.lease_until IS NULL OR g.lease_until<UTC_TIMESTAMP(6)) ORDER BY g.next_check_at,g.publication_id LIMIT 1 FOR UPDATE SKIP LOCKED");
+   var rows=j.queryForList("SELECT g.publication_id,p.meeting_id FROM publication_governance_poll g JOIN publication p ON p.id=g.publication_id LEFT JOIN publication_governance_authority a ON a.publication_id=p.id WHERE g.next_check_at<=UTC_TIMESTAMP(6) AND (a.verified_until IS NULL OR a.verified_until<=DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 2 SECOND)) AND (g.lease_until IS NULL OR g.lease_until<UTC_TIMESTAMP(6)) ORDER BY g.next_check_at,g.publication_id LIMIT 1 FOR UPDATE SKIP LOCKED");
    if(rows.isEmpty())return null;var row=rows.getFirst();String lease=UUID.randomUUID().toString();j.update("UPDATE publication_governance_poll SET lease_owner=?,lease_until=DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 60 SECOND) WHERE publication_id=?",lease,row.get("publication_id"));return new Work(null,(String)row.get("meeting_id"),(String)row.get("publication_id"),lease);
   });if(work==null)return;
   boolean success=false;
@@ -148,9 +154,11 @@ public final class JdbcPublicationGovernance implements AutoCloseable {
   apply(binding.prepare(meetings.getFirst(),publication),proof,null);
  }
  private void apply(PublicationGovernanceBinding.Prepared prepared,ControlledKnowledgeClient.GovernanceProof proof,Work work){
-  proof.require(prepared);var claims=proof.claims;String observed=(String)claims.get("state"),event=(String)claims.get("eventId");long version=Long.parseLong((String)claims.get("revisionToken"));
+  String proofActor=prepared.actorId();
+  if(!proof.fresh){var actors=j.queryForList("SELECT actor_id FROM publication_governance_command WHERE id=? AND publication_id=?",String.class,proof.claims.get("commandKey"),prepared.publicationId());if(actors.size()==1)proofActor=actors.getFirst();}
+  final String expectedActor=proofActor;proof.require(prepared,expectedActor);var claims=proof.claims;String observed=(String)claims.get("state"),event=(String)claims.get("eventId");long version=Long.parseLong((String)claims.get("revisionToken"));
   binding.withinCurrent(prepared,()->{
-   proof.require(prepared);
+   proof.require(prepared,expectedActor);
    if(work!=null&&j.queryForObject("SELECT COUNT(*) FROM publication_governance_command WHERE id=? AND lease_owner=? AND lease_until>UTC_TIMESTAMP(6) AND state IN ('PENDING','RECONCILING') FOR UPDATE",Long.class,work.id(),work.lease())!=1)throw new IllegalArgumentException("Stale governance lease");
    var previous=j.queryForList("SELECT document_id,state,remote_revision,event_id FROM publication_governance_authority WHERE publication_id=? FOR UPDATE",prepared.publicationId());
    if(!previous.isEmpty()&&!prepared.documentId().equals(previous.getFirst().get("document_id")))throw new IllegalArgumentException("Governance document changed");
@@ -169,7 +177,7 @@ public final class JdbcPublicationGovernance implements AutoCloseable {
    j.update("UPDATE external_document_mapping SET authority_state=?,verified_at=UTC_TIMESTAMP(6) WHERE publication_id=? AND external_document_id=? AND authority_state<>?",observed,prepared.publicationId(),prepared.documentId(),observed);
    changeRoot(prepared,next);
    if(!proof.fresh){
-    var matching=j.queryForList("SELECT id,wire_hash,action,reason FROM publication_governance_command WHERE id=? AND publication_id=? AND actor_id=? FOR UPDATE",claims.get("commandKey"),prepared.publicationId(),prepared.actorId());
+    var matching=j.queryForList("SELECT id,wire_hash,action,reason FROM publication_governance_command WHERE id=? AND publication_id=? AND actor_id=? FOR UPDATE",claims.get("commandKey"),prepared.publicationId(),expectedActor);
     if(!matching.isEmpty()){
      var row=matching.getFirst();if(!row.get("wire_hash").equals(claims.get("requestSha256"))||!row.get("action").equals(claims.get("action"))||!ControlledKnowledgeClient.digest(((String)row.get("reason")).getBytes(StandardCharsets.UTF_8)).equals(claims.get("reasonSha256")))throw new IllegalArgumentException("Governance command receipt mismatch");
      j.update("UPDATE publication_governance_command SET state='SUCCEEDED',last_error=NULL,lease_owner=NULL,lease_until=NULL,finished_at=COALESCE(finished_at,UTC_TIMESTAMP(6)) WHERE id=?",row.get("id"));

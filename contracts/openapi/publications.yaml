@@ -263,6 +263,13 @@
       },
       "information": {
         "$ref": "#/FrozenInformation"
+      },
+      "background": {
+        "type": "array",
+        "maxItems": 250000,
+        "items": {
+          "$ref": "./minutes.yaml#/SavedBackgroundDirectory"
+        }
       }
     },
     "required": [
@@ -444,6 +451,13 @@
       },
       "observation": {
         "$ref": "./minutes.yaml#/SavedReadObservation"
+      },
+      "optionalReviews": {
+        "type": "array",
+        "maxItems": 100000,
+        "items": {
+          "$ref": "#/OptionalReview"
+        }
       }
     },
     "required": [
@@ -524,7 +538,10 @@
           "enum": [
             "VIEW_FROZEN",
             "REFRESH_STATUS",
-            "VIEW_ATTEMPTS"
+            "VIEW_ATTEMPTS",
+            "RETRY_ZERO_EFFECT",
+            "RESUBMIT",
+            "RECOVER_LOCAL"
           ]
         },
         "maxItems": 16
@@ -589,6 +606,125 @@
         "oneOf": [
           {
             "$ref": "#/Uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "phase": {
+        "enum": [
+          "VALIDATING",
+          "CREATING_DOCUMENT",
+          "WRITING_RECORDS",
+          "COMPLETED",
+          "FAILED"
+        ]
+      },
+      "governanceState": {
+        "enum": [
+          "ACTIVE",
+          "UNKNOWN",
+          "WITHDRAW_PENDING",
+          "WITHDRAWN",
+          "OBSOLETE_PENDING",
+          "OBSOLETE"
+        ]
+      },
+      "configurationSnapshot": {
+        "oneOf": [
+          {
+            "$ref": "#/PublicationConfigurationMetadata"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "providerId": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "libraryId": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "folderId": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "publishedBy": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "documentId": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "documentVersion": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "failureCode": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "submittedAt": {
+        "oneOf": [
+          {
+            "$ref": "#/Timestamp"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "publishedAt": {
+        "oneOf": [
+          {
+            "$ref": "#/Timestamp"
           },
           {
             "type": "null"
@@ -1160,6 +1296,9 @@
       "folderId": {
         "type": "string",
         "maxLength": 255
+      },
+      "configurationVersionToken": {
+        "$ref": "#/CounterToken"
       }
     },
     "required": [
@@ -1233,6 +1372,9 @@
         "maximum": 9223372036854775806
       },
       "expectedPublicationRevisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "configurationVersionToken": {
         "$ref": "#/CounterToken"
       }
     },
@@ -1784,7 +1926,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/Error"
+                "$ref": "#/PublicationCommandRejection"
               }
             }
           }
@@ -1822,7 +1964,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/Error"
+                "$ref": "#/PublicationCommandRejection"
               }
             }
           }
@@ -2616,7 +2758,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/Error"
+                "$ref": "#/PublicationCommandRejection"
               }
             }
           }
@@ -2654,7 +2796,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/Error"
+                "$ref": "#/PublicationCommandRejection"
               }
             }
           }
@@ -5050,6 +5192,21 @@
         "minLength": 1,
         "maxLength": 255,
         "description": "Exact Unicode scalar identifier; no slash, backslash, control, dot-only segment, or encoded separator ambiguity."
+      },
+      "description": {
+        "type": "string",
+        "maxLength": 2048
+      },
+      "visibility": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "canPublish": {
+        "type": "boolean"
+      },
+      "unavailableReason": {
+        "type": "string",
+        "maxLength": 1024
       }
     },
     "required": [
@@ -5220,6 +5377,17 @@
             "maxLength": 4096
           },
           "description": "Opaque canonical continuation bound to this meeting, route, library and parent. Use exactly the returned nextCursor."
+        },
+        {
+          "name": "search",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "description": "Provider-side name and description filtering, before pagination. Bound to continuation cursor."
         }
       ],
       "responses": {
@@ -6090,5 +6258,688 @@
       "displayName",
       "memberKind"
     ]
+  },
+  "PublicationCommandRejection": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "error": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": "string",
+            "enum": [
+              "FINAL_NOT_READY",
+              "REVISION_CONFLICT",
+              "REVISION_EXHAUSTED",
+              "INVALID_OPTIONAL_REVIEW",
+              "PUBLICATION_NOT_READY",
+              "IDEMPOTENCY_CONFLICT",
+              "MEETING_NOT_WRITABLE",
+              "CURRENT_REVISION_REQUIRED"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "traceId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "code",
+          "message",
+          "traceId"
+        ]
+      }
+    },
+    "required": [
+      "error"
+    ],
+    "description": "Validated command rejection. Code and HTTP status must match: INVALID_OPTIONAL_REVIEW=422, other listed codes=409. Network/5xx/unverifiable replies retain the original intent for recovery."
+  },
+  "OptionalReview": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "targetKind",
+      "targetId",
+      "reviewKind",
+      "outcome",
+      "targetAnchor"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "targetKind": {
+        "type": "string",
+        "enum": [
+          "BODY",
+          "ELEMENT"
+        ]
+      },
+      "targetId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "reviewKind": {
+        "type": "string",
+        "enum": [
+          "SOURCE_SUPPORT",
+          "ACTION_FIELDS"
+        ]
+      },
+      "outcome": {
+        "type": "string"
+      },
+      "targetAnchor": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "PublicationTagRules": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "maxCount": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 256
+      },
+      "maxLength": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 256
+      },
+      "allowEmpty": {
+        "type": "boolean"
+      },
+      "trim": {
+        "type": "boolean"
+      },
+      "caseSensitive": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "maxCount",
+      "maxLength",
+      "allowEmpty",
+      "trim",
+      "caseSensitive"
+    ]
+  },
+  "PublicationConfigurationMetadata": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "schema": {
+        "const": "ama.publication-configuration.v1"
+      },
+      "configurationVersionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "providerId": {
+        "type": "string",
+        "maxLength": 64
+      },
+      "libraryId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "folderId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "libraryName": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "description": {
+        "type": "string",
+        "maxLength": 2048
+      },
+      "visibility": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "pathNames": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "minItems": 2,
+        "maxItems": 129
+      },
+      "pathIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "maxItems": 127,
+        "uniqueItems": true
+      },
+      "tagRules": {
+        "$ref": "#/PublicationTagRules"
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "maxItems": 256,
+        "uniqueItems": true
+      }
+    },
+    "required": [
+      "schema",
+      "configurationVersionToken",
+      "providerId",
+      "libraryId",
+      "folderId",
+      "libraryName",
+      "description",
+      "visibility",
+      "pathNames",
+      "pathIds",
+      "tagRules",
+      "tags"
+    ]
+  },
+  "PublicationConfiguration": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "meetingId": {
+        "$ref": "#/Uuid"
+      },
+      "configurationVersionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "configuration": {
+        "oneOf": [
+          {
+            "$ref": "#/PublicationConfigurationMetadata"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "tagRules": {
+        "$ref": "#/PublicationTagRules"
+      }
+    },
+    "required": [
+      "meetingId",
+      "configurationVersionToken",
+      "configuration",
+      "tagRules"
+    ]
+  },
+  "PublicationConfigurationCommand": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "expectedConfigurationVersionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "providerId": {
+        "type": "string",
+        "maxLength": 64
+      },
+      "libraryId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "folderId": {
+        "type": "string",
+        "maxLength": 255
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "maxItems": 256
+      }
+    },
+    "required": [
+      "expectedConfigurationVersionToken",
+      "providerId",
+      "libraryId",
+      "folderId",
+      "tags"
+    ]
+  },
+  "configuration": {
+    "get": {
+      "summary": "Read saved meeting publication configuration",
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Meeting configuration and authoritative tag rules",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/PublicationConfiguration"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Forbidden, stale configuration, unavailable destination, or service failure",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Forbidden, stale configuration, unavailable destination, or service failure",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Forbidden, stale configuration, unavailable destination, or service failure",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Forbidden, stale configuration, unavailable destination, or service failure",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Forbidden, stale configuration, unavailable destination, or service failure",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    },
+    "put": {
+      "summary": "Save publication configuration using its optimistic version",
+      "parameters": [
+        {
+          "name": "meetingId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "$ref": "#/Uuid"
+          },
+          "description": "Requested meeting; fresh B03 relation/lifecycle checked on every read/replay."
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/PublicationConfigurationCommand"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Meeting configuration and authoritative tag rules",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/PublicationConfiguration"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Forbidden, stale configuration, unavailable destination, or service failure",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Forbidden, stale configuration, unavailable destination, or service failure",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Forbidden, stale configuration, unavailable destination, or service failure",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "409": {
+          "description": "Forbidden, stale configuration, unavailable destination, or service failure",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Forbidden, stale configuration, unavailable destination, or service failure",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/Error"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "PublicationLibraryRecord": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "providerId",
+      "storeInstanceId",
+      "libraryId",
+      "libraryName",
+      "folderId",
+      "title",
+      "meetingName",
+      "publishedBy",
+      "meetingId",
+      "publicationId",
+      "confirmationId",
+      "libraryDescription",
+      "folderPath",
+      "documentId",
+      "payloadSha256",
+      "versionToken",
+      "publishedVersion",
+      "documentUrl",
+      "publishedAt",
+      "meetingRevisionToken",
+      "state",
+      "canRead",
+      "canManage"
+    ],
+    "properties": {
+      "providerId": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "storeInstanceId": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "libraryId": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "libraryName": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "folderId": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "title": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "meetingName": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "publishedBy": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "meetingId": {
+        "$ref": "#/Uuid"
+      },
+      "publicationId": {
+        "$ref": "#/Uuid"
+      },
+      "confirmationId": {
+        "$ref": "#/Uuid"
+      },
+      "libraryDescription": {
+        "type": "string",
+        "maxLength": 4096
+      },
+      "folderPath": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 32,
+        "items": {
+          "type": "string",
+          "maxLength": 1024
+        }
+      },
+      "documentId": {
+        "type": "string",
+        "pattern": "^doc-[0-9a-f]{32}$"
+      },
+      "payloadSha256": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "versionToken": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "publishedVersion": {
+        "const": "1"
+      },
+      "documentUrl": {
+        "type": "string",
+        "maxLength": 512
+      },
+      "publishedAt": {
+        "oneOf": [
+          {
+            "$ref": "#/Timestamp"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "meetingRevisionToken": {
+        "$ref": "#/CounterToken"
+      },
+      "state": {
+        "enum": [
+          "ACTIVE",
+          "UNKNOWN",
+          "WITHDRAW_PENDING",
+          "WITHDRAWN",
+          "OBSOLETE_PENDING",
+          "OBSOLETE"
+        ]
+      },
+      "canRead": {
+        "type": "boolean"
+      },
+      "canManage": {
+        "type": "boolean"
+      }
+    }
+  },
+  "PublicationLibraryRecords": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "items",
+      "hasMore",
+      "nextCursor",
+      "hasManagedLibraries"
+    ],
+    "properties": {
+      "items": {
+        "type": "array",
+        "maxItems": 20,
+        "items": {
+          "$ref": "#/PublicationLibraryRecord"
+        }
+      },
+      "hasMore": {
+        "type": "boolean"
+      },
+      "hasManagedLibraries": {
+        "type": "boolean"
+      },
+      "nextCursor": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^doc-[0-9a-f]{32}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    }
+  },
+  "libraryRecords": {
+    "get": {
+      "operationId": "publicationLibraryRecords",
+      "parameters": [
+        {
+          "name": "view",
+          "in": "query",
+          "schema": {
+            "enum": [
+              "read",
+              "manage"
+            ]
+          }
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "schema": {
+            "type": "string",
+            "pattern": "^doc-[0-9a-f]{32}$"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Current library-authorized formal documents or scoped management records; never grants meeting read.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/PublicationLibraryRecords"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "governanceCapabilities": {
+    "parameters": [
+      {
+        "name": "meetingId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "#/Uuid"
+        }
+      },
+      {
+        "name": "publicationId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "$ref": "#/Uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "publicationGovernanceCapabilities",
+      "responses": {
+        "200": {
+          "description": "Current library management capability, independent of meeting ownership.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "canManage"
+                ],
+                "properties": {
+                  "canManage": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

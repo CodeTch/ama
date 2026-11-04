@@ -57,7 +57,7 @@ class ControlledSpeechImportIT {
    tx=new TransactionRunner(source);fences=new JdbcSubjectFences(source,Set.of("MEETING"));access=new JdbcMeetingAccess(source,tx,fences);var validators=new HashMap<String,OutboxReferenceValidator>(new MeetingEventReferences(source).validators());validators.putAll(new TranscriptEventReferences(source).validators());outbox=new JdbcOutbox(source,validators);
    String owner="speech-import-"+id();j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",owner,owner);actor=new Actor(owner,Status.ACTIVE,Set.of(Role.USER));
    meetings=new MeetingService(new JdbcMeetingRepository(source,tx,access,fences,outbox,new ama.audit.JdbcAuditAdapter(source),m->{}));meeting=meetings.create(actor,id(),"speech-resume").id();
-   FilePurposePolicy purposes=(a,m,p)->{if(!p.equals("TRANSCRIPT_INPUT"))throw new FilePurposePolicy.Unavailable();};
+   FilePurposePolicy purposes=new TranscriptFilePurposePolicy();
    components=JdbcTranscriptAuthority.create(source,tx,access,purposes,catalog,Map.of(),ama.minutes.ControlledMinutesAdmin.READ,new ama.contract.MinutesContracts.CanonicalBudget(16777216,32,1000000,4194304,250000));queue=TranscriptImportRuntime.install(source,fences,outbox,components);
    var uploads=new JdbcFileUploads(source,tx,access,purposes,catalog,new ama.audit.JdbcAuditAdapter(source),outbox,1048576,components.authority().publicationWriteGuard());
    wav=originalWavs.getFirst().clone();var ordered=new ArrayList<String>();

@@ -17,8 +17,13 @@ final class BoundedMeetingMetadata {
   int size(){return rows.size();}
  }
  private final DataSource source;private final JdbcTemplate jdbc;private final JdbcMeetingAccess access;private final Actor actor;private final String meeting;private final MeetingAccess.Locked held;private final Object holder;private final WorkspaceReadBudget budget;
+ private final JdbcWebMeetingProjectionReader.LockedRead projection;
  private int phase;private String lastParent="",lastChildren="";private final Set<String> parents=new HashSet<>();
  BoundedMeetingMetadata(DataSource source,JdbcMeetingAccess access,Actor actor,String meeting,MeetingAccess.Locked held,WorkspaceReadBudget budget) {
+  this(source,access,actor,meeting,held,budget,null);
+ }
+ BoundedMeetingMetadata(DataSource source,JdbcMeetingAccess access,Actor actor,String meeting,MeetingAccess.Locked held,WorkspaceReadBudget budget,JdbcWebMeetingProjectionReader.LockedRead projection) {
+  this.projection=projection;
   this.source=source;this.access=access;this.actor=actor;this.meeting=meeting;this.held=held;this.budget=budget;
   access.requireProjectionSource(source);holder=TransactionSynchronizationManager.getResource(source);jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(5);check();
  }
@@ -73,7 +78,7 @@ final class BoundedMeetingMetadata {
   },parameters.toArray());
   check();return result;
  }
- private void check(){budget.check();if(holder==null||!TransactionSynchronizationManager.isActualTransactionActive()||TransactionSynchronizationManager.getResource(source)!=holder)throw unavailable();budget.reserve(6,30,2048,1024,1280,4,false);access.requirePrepared(held,actor,meeting,List.of(),MeetingAccess.Action.READ);}
+ private void check(){budget.check();if(holder==null||!TransactionSynchronizationManager.isActualTransactionActive()||TransactionSynchronizationManager.getResource(source)!=holder)throw unavailable();budget.reserve(6,30,2048,1024,1280,4,false);if(projection==null)access.requirePrepared(held,actor,meeting,List.of(),MeetingAccess.Action.READ);else projection.check(source,access,held,actor,meeting);}
  private static long utf8(String text){long bytes=0;for(int i=0;i<text.length();i++){char c=text.charAt(i);int p=c;if(Character.isHighSurrogate(c)){if(++i>=text.length()||!Character.isLowSurrogate(text.charAt(i)))throw unavailable();p=Character.toCodePoint(c,text.charAt(i));}else if(Character.isLowSurrogate(c))throw unavailable();bytes+=p<=0x7f?1:p<=0x7ff?2:p<=0xffff?3:4;}return bytes;}
  private static WorkspaceReadBudget.Unavailable unavailable(){return new WorkspaceReadBudget.Unavailable();}
 }

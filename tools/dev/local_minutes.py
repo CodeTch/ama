@@ -158,6 +158,8 @@ def prepare(runtime,state,java,env,classpath):
     values.update(json.loads(personal_setup.stdout))
     region_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalRegionMinutesSetup',str(root/'archive'),values['minutes.index-sha'],state['minutesTemplateRevisionId'],*(['SENSITIVE_SCENARIO'] if state.get('minutesScenario')=='sensitive' else [])],env=env,capture_output=True,text=True,check=True,timeout=30)
     values.update(json.loads(region_setup.stdout))
+    governance_setup=subprocess.run([str(java),'-Xmx192m','-cp',classpath,'ama.localdev.LocalGovernanceSetup',str(root/'archive'),values['minutes.index-sha'],values['minutes.prompt-version'],values['minutes.prompt-sha']],env=env,capture_output=True,text=True,check=True,timeout=30)
+    values.update(json.loads(governance_setup.stdout))
     values.update(prepare_knowledge(runtime,state))
     values.update({'transcript.candidates.installation':'AUTHORITY_CONTROLLED',
         'transcript.publication.installation':'AUTHORITY_CONTROLLED','transcript.transitions.installation-version':'2',

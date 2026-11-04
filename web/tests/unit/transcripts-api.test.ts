@@ -49,3 +49,12 @@ test('managed recording WAV reads thirty minutes with full SHA while ordinary so
  bytes[22]=2;const malformed={...source,sha256:Buffer.from(await crypto.subtle.digest('SHA-256',bytes)).toString('hex')};await assert.rejects(api.source(id,malformed,new AbortController().signal),/录音.*格式|录音.*校验/);
  }finally{globalThis.fetch=old;}
 });
+
+test('transcript reads retain server source classification for timed subtitles',async()=>{
+ const old=fetch,api=createTranscriptsApi(createBusinessClient('https://ama.test',()=>session,()=>{}),()=> 'owner');
+ try{
+  globalThis.fetch=async()=>Response.json({...current,sources:[{...current.sources[0],name:'议题.SRT',kind:'SUBTITLE'}]});
+  const result=await api.current(id,new AbortController().signal);
+  assert.equal((result.sources[0] as {kind?:string}).kind,'SUBTITLE');
+ }finally{globalThis.fetch=old;}
+});

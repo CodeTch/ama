@@ -20,3 +20,19 @@ test('rejected assignment can retry the same original request after the server r
  assert.equal(manager.command.state.value,'REJECTED');const original=f.calls[0];f.fail(null);
  await manager.retry();assert.deepEqual(f.calls[1],original);assert.equal(manager.pending.value,false);
 });
+test('a late page read cannot overwrite a verified assignment and account changes clear the snapshot',async()=>{
+ const f=fixture(),api:Parameters<typeof useTopicCommands>[0]={...f.api};
+ const manager=useTopicCommands(api,f.actor,f.context);
+ manager.synchronize();
+ const readback=api.memberships;
+ let finishOldRead!:(rows:Awaited<ReturnType<typeof readback>>)=>void;
+ api.memberships=()=>new Promise(resolve=>{finishOldRead=resolve;});
+ const pending=manager.refreshMemberships([meeting],new AbortController().signal);
+ api.memberships=readback;
+ await manager.assign(meeting,topic,'0');
+ finishOldRead([{meetingId:meeting,topicId:null}]);
+ await pending;
+ assert.equal(manager.memberships.value[meeting],topic);
+ f.setActor('other');manager.synchronize();
+ assert.deepEqual(manager.memberships.value,{});
+});

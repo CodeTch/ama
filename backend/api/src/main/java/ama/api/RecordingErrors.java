@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import org.springframework.web.bind.annotation.*;
 
-@ControllerAdvice(assignableTypes={RecordingController.class,RecordingLeaseController.class,RecordingSubtitleController.class,RecordingTranscriptController.class})
+@ControllerAdvice(assignableTypes={RecordingController.class,RecordingLeaseController.class,RecordingSubtitleController.class,RecordingTranscriptController.class,RecordingPartController.class})
 class RecordingErrors {
     private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(RecordingErrors.class);
     @ExceptionHandler(RecordingIngressBudget.RateLimited.class)

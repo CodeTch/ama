@@ -336,6 +336,7 @@ def start(state):
     values = [65536, 1048576, 16, 32, 8, 200000, 32, 255, 65536, 262144, 1048576, 65536, 32,
               250000, 500000, 16777216, 32, 1000000, 2097152, 250000, 4194304, 4096, 67108864, 128, 1048576]
     options.append('--processing.enabled=true')
+    options.append('--processing.material-enhancement-origin=http://127.0.0.1:8792')
     options.extend(f'--processing.bounds.{key}={value}' for key, value in zip(names, values, strict=True))
     from local_services import prepare, properties, port as service_port
     if 'pkiPassword' not in state:
@@ -383,6 +384,7 @@ def start(state):
     })
     if origins['model']:
         settings['minutes.provider-origin'] = origins['model']
+        settings['minutes.category-suggestion-origin'] = origins['model']
     settings['spring.datasource.hikari.maximum-pool-size'] = pool_maximum
     if integration_origin:
         settings['publication.origin'] = integration_origin
@@ -422,7 +424,7 @@ def start(state):
     else:
         raise RuntimeError('Local file service did not become ready')
     state['model'] = launch([java, '-Xmx192m', '-XX:ActiveProcessorCount=2', '-cp', classpath,
-        'ama.model.ControlledMinutesProvider', RUNTIME / 'minutes/runtime.properties'], env, 'model.log')
+        'ama.model.ControlledMinutesProvider', RUNTIME / 'minutes/runtime.properties'], {**env, 'AMA_MINUTES_COMPOSITION_ORIGIN': 'http://127.0.0.1:8792'}, 'model.log')
     save(RUNTIME / 'state.json', state)
     knowledge_ready = RUNTIME / 'knowledge/provider.ready'
     state['knowledge'] = launch([sys.executable, ROOT / 'tools/providers/controlled_knowledge.py',

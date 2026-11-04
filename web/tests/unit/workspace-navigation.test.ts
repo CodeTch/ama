@@ -6,6 +6,13 @@ import type {components} from '../../src/shared/api/generated.js';
 const id='cd2e160e-6b11-4f4e-871e-bb8aa90ecdee',other='00000000-0000-4000-8000-000000000000';
 const navigation:components['schemas']['WorkspaceNavigation']={meetingId:id,revisionToken:'9007199254740993',accessRevisionToken:'7',stage:'ENTRY',relation:'OWNER',navigationState:'CHECK_PRODUCER',contentEligibility:'RECHECK_REQUIRED',saved:{infoRevisionId:other,rosterRevisionId:null,transcriptRevisionId:null,transcriptConfirmationId:null,minutesRevisionId:null,elementSetId:null}};
 const session:components['schemas']['Session']={actor:{enterpriseId:'owner',status:'ACTIVE',roles:['USER']},csrfToken:'X'.repeat(43),expiresAt:'2030-01-01T00:00:00Z'};
+test('display renewal uses an exact bounded access response without full private workspace loading',async t=>{
+ let value:unknown={meetingId:id,allowed:true};
+ t.mock.method(globalThis,'fetch',async(path:RequestInfo|URL,init?:RequestInit)=>{assert.equal(String(path),`https://ama.test/api/v1/meetings/${id}/workspace/access`);assert.equal(init?.method??'GET','GET');return Response.json(value);});
+ const api=createWorkspaceApi(createBusinessClient('https://ama.test',()=>session,()=>{}));
+ await api.access(id,new AbortController().signal);
+ for(const bad of [{meetingId:other,allowed:true},{meetingId:id,allowed:false},{meetingId:id,allowed:true,privateSections:{}}]){value=bad;await assert.rejects(api.access(id,new AbortController().signal));}
+});
 test('workspace facade uses real route, preserves exact nullable references and rejects inconsistent owner/member observations',async()=>{
  const old=fetch;let value:unknown=navigation,count=0;globalThis.fetch=async(url,options)=>{count++;assert.equal(String(url),`https://ama.test/api/v1/meetings/${id}/workspace`);assert.equal(options?.credentials,'include');return Response.json(value);};
  const api=createWorkspaceApi(createBusinessClient('https://ama.test',()=>session,()=>{}));

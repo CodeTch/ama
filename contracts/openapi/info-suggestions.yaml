@@ -3,7 +3,7 @@ collection:
     - {$ref: '#/Meeting'}
   get:
     operationId: listInfoSuggestions
-    description: Owner-private pending NAME/SUMMARY proposals from genuine asynchronous candidates. Full provenance and current confirmation/material/template/exclusion are verified. Summary is ordered OVERVIEW content, never the complete minutes body. Loading never modifies human information. Category remains an explicit dictionary selection.
+    description: Owner-private NAME/SUMMARY/CATEGORY proposals with explicit decision states from genuine asynchronous candidates. Full provenance and current confirmation/material/template/exclusion are verified. Summary is ordered OVERVIEW content, never the complete minutes body. Loading never modifies human information. CATEGORY is an input-bound, independently versioned model proposal limited to the configured dictionary. Missing or unavailable proposals retain manual dictionary selection.
     security: [{enterpriseSession: []}]
     responses:
       '200':
@@ -19,7 +19,7 @@ decision:
     - {name: suggestionId, in: path, required: true, schema: {type: string, format: uuid}}
   post:
     operationId: decideInfoSuggestion
-    description: Explicit ACCEPT writes only the selected saved information field, preserves roster drafts/grants, advances the aggregate fence and retains an immutable receipt. REJECT records the decision without modifying human information. Original-key replay returns the original revision under current owner authority; different body conflicts. No client-supplied suggestion value is accepted. Human drafts must be saved before deciding.
+    description: Explicit ACCEPT writes only the selected saved information field, preserves roster drafts/grants, advances the aggregate fence and retains an immutable receipt. REJECT records the decision without modifying human information. Original-key replay returns the original revision under current owner authority; different body conflicts. No client-supplied suggestion value is accepted. The client rebases only the selected field after the exact receipt; unrelated human draft fields are preserved, and conflicting external changes require explicit reconciliation.
     security: [{enterpriseSession: []}]
     parameters:
       - {$ref: './meetings.yaml#/Key'}
@@ -60,15 +60,16 @@ InfoSuggestions:
   properties:
     meetingId: {type: string, format: uuid}
     revisionToken: {type: string, pattern: '^(0|[1-9][0-9]{0,18})$'}
-    categoryStatus: {type: string, const: SELECT_REQUIRED}
-    items: {type: array, maxItems: 2, items: {$ref: '#/InfoSuggestion'}}
+    categoryStatus: {type: string, enum: [SELECT_REQUIRED, AVAILABLE, UNAVAILABLE]}
+    items: {type: array, maxItems: 3, items: {$ref: '#/InfoSuggestion'}}
 InfoSuggestion:
   type: object
   additionalProperties: false
   required: [id, field, value, createdAt, candidateId, inputId, inputFingerprint, transcriptConfirmationId]
   properties:
     id: {type: string, format: uuid}
-    field: {type: string, enum: [NAME, SUMMARY]}
+    field: {type: string, enum: [NAME, SUMMARY, CATEGORY]}
+    state: {type: string, enum: [PENDING, ACCEPTED, REJECTED], description: Legacy responses without state are pending.}
     value: {type: string, minLength: 1}
     createdAt: {type: string, format: date-time}
     candidateId: {type: string, format: uuid}

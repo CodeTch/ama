@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public final class RecordingArchiveController {
+ private static final org.slf4j.Logger LOG=org.slf4j.LoggerFactory.getLogger(RecordingArchiveController.class);
  private final JdbcTaskQueue queue;
  public RecordingArchiveController(JdbcTaskQueue queue){this.queue=java.util.Objects.requireNonNull(queue);}
  @PostMapping("/api/v1/recordings/{sessionId}/archive")
@@ -24,6 +25,10 @@ public final class RecordingArchiveController {
   try(var download=AuthorizedDownloads.guard(RecordingArchiveRuntime.download(queue,actor,sessionId,range),identity,(current,probe)->RecordingArchiveRuntime.download(queue,current,sessionId,probe))){
    response.setStatus(range==null?200:206);response.setContentType("audio/wav");response.setHeader("Accept-Ranges","bytes");response.setHeader("X-Content-Type-Options","nosniff");response.setHeader("Cache-Control","private, no-store");response.setHeader("Content-Disposition","inline; filename=recording.wav");response.setContentLengthLong(download.length());
    if(range!=null)response.setHeader("Content-Range","bytes "+download.offset()+"-"+(download.offset()+download.length()-1)+"/"+download.file().size());download.body().transferTo(response.getOutputStream());
+  }catch(IOException|RuntimeException failure){
+   if(!response.isCommitted()){response.reset();throw failure;}
+   LOG.warn("Recording archive stream terminated: type={}",failure.getClass().getSimpleName());
+   try{response.getOutputStream().close();}catch(IOException ignored){/* The client already disconnected. */}
   }
  }
  private static Actor actor(HttpServletRequest request){if(!(request.getAttribute(SessionSecurityFilter.SESSION) instanceof ResolvedSession session))throw new ama.access.MeetingAccess.AccessDeniedException();return session.actor();}

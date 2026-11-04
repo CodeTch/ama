@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed,ref} from 'vue';import {RouterLink} from 'vue-router';import {useApplication} from '../../application';
 const {operationsCommands:ops,session}=useApplication(),error=ref('');
-async function recheck(){error.value='';try{await session.refresh();}catch(cause){error.value=cause instanceof Error?cause.message:'请重新登录企业账号。';}}
+async function recheck(){error.value='';try{await ops.recheck(()=>session.refresh());}catch(cause){error.value=cause instanceof Error?cause.message:'请重新登录企业账号。';}}
 const originalMail=computed(()=>ops.command.snapshot.value?.path.match(/^\/api\/v1\/meetings\/([0-9a-f-]{36})\/mail$/)?.[1]??null);
 async function retry(){error.value='';try{await ops.retry();}catch(cause){error.value=cause instanceof Error?cause.message:'原请求尚未确认。';}}
 function discard(){try{ops.discardRejected();error.value='';}catch(cause){error.value=cause instanceof Error?cause.message:'请保留原请求。';}}

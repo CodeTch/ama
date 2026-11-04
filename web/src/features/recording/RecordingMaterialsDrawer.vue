@@ -1,0 +1,11 @@
+<script setup lang="ts">
+import {onMounted,ref,watch} from 'vue';
+import Icon from '../../shared/Icon.vue';
+const props=defineProps<{open:boolean;preventClose:boolean}>(),emit=defineEmits<{close:[]}>(),dialog=ref<HTMLDialogElement>();
+function sync(){if(props.open&&!dialog.value?.open)dialog.value?.showModal();else if(!props.open&&dialog.value?.open)dialog.value.close();}
+function close(){if(!props.preventClose)emit('close');}
+function backdrop(event:MouseEvent){if(event.target!==dialog.value)return;const bounds=dialog.value.getBoundingClientRect();if(event.clientX<bounds.left||event.clientX>bounds.right)close();}
+watch(()=>props.open,sync,{flush:'post'});onMounted(sync);
+</script>
+<template><dialog ref="dialog" class="recording-material-drawer acr-material-drawer" aria-labelledby="recording-material-title" @cancel.prevent="close" @click="backdrop"><header class="drawer-h"><h3 id="recording-material-title" class="d-t">会议背景材料及相关文档</h3><button class="drawer-close" type="button" aria-label="关闭背景材料" :disabled="preventClose" @click="close"><Icon name="x" :size="18"/></button></header><div class="drawer-b"><slot/></div><footer class="acr-drawer-footer"><span class="small muted">材料自动保存，准备状态以列表为准。</span><button class="btn primary" :disabled="preventClose" @click="close">完成</button></footer></dialog></template>
+<style scoped>.recording-material-drawer{box-sizing:border-box;width:440px;max-width:92vw;height:100dvh;max-height:100dvh;margin:0 0 0 auto;padding:0;border:0;background:white;color:var(--text);box-shadow:-8px 0 30px #11184926}.recording-material-drawer[open]{display:flex;flex-direction:column}.recording-material-drawer::backdrop{background:#11184959}.drawer-h{flex-shrink:0;gap:16px}.drawer-h h3{margin:0}.drawer-close{margin-left:auto;cursor:pointer;border:0;background:none;color:var(--muted);padding:0;display:flex;border-radius:6px}.drawer-close:disabled{opacity:.45;cursor:wait}.drawer-b{flex:1;overflow:auto;min-height:0}.acr-drawer-footer{flex-shrink:0}.drawer-b :deep(.material-import-section){border:0;padding:0;margin:0;box-shadow:none}.drawer-b :deep(.ac-material-heading h3){display:none}.drawer-b :deep(.file-item){max-width:100%;overflow-wrap:anywhere}.drawer-b :deep(.between){flex-wrap:wrap;gap:8px}</style>

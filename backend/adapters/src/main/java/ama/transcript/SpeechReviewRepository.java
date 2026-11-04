@@ -68,6 +68,7 @@ final class SpeechReviewRepository {
  static FullRow raw(SavedTranscriptGraph graph){var rows=graph.rows().stream().filter(r->r.table()==Table.TRANSCRIPT_REVISION&&r.string("kind").equals("RAW")).toList();require(rows.size()==1,PROVENANCE_UNAVAILABLE);return rows.getFirst();}
  /** Parsing and digesting model originals is outside the owner root transaction. */
  Plan plan(SavedTranscriptGraph graph,String engine){
+  if(!new ama.governance.JdbcGovernanceRuntime(j.getDataSource()).corpusCurrent(graph.input().string("id")))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_STALE");
   require(!org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive(),CAPABILITY_UNAVAILABLE);
   var facts=graph.review();require(facts.modelsCaptured(),PROVENANCE_UNAVAILABLE);var raw=raw(graph);var rawSegments=graph.segments(raw.string("id"));var current=graph.segments(graph.selected());
   var stages=new HashMap<String,SpeechReviewFacts.Stage>();for(var stage:facts.stages())require(stages.put(text(stage.metadata(),"clip_key")+":"+text(stage.metadata(),"stage"),stage)==null,PROVENANCE_UNAVAILABLE);
@@ -117,20 +118,26 @@ final class SpeechReviewRepository {
   }
  }
  int pending(SavedTranscriptGraph graph){return Math.toIntExact(graph.review().candidates().stream().filter(c->"PENDING".equals(c.get("state"))).count()+graph.review().otherPending().size());}
- Map<String,Object> decision(SavedTranscriptGraph graph,ama.contract.TranscriptContracts.Command command){
+ List<Map<String,Object>> decisions(SavedTranscriptGraph graph,ama.contract.TranscriptContracts.Command command){
+  if(command.correction()!=null&&command.correction().decision()==ama.contract.TranscriptContracts.CorrectionDecision.ACCEPT&&!new ama.governance.JdbcGovernanceRuntime(j.getDataSource()).corpusCurrent(graph.input().string("id")))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_STALE");
   var correction=command.correction();if(correction==null)throw new IllegalArgumentException("Original correction decision required");
-  var rows=graph.review().candidates().stream().filter(c->correction.candidateId().equals(c.get("id"))).toList();if(rows.size()!=1)throw new ama.contract.TranscriptContracts.Failure(404,"CORRECTION_NOT_FOUND");var row=rows.getFirst();
+  var result=new ArrayList<Map<String,Object>>();
+  for(String candidateId:correction.candidateIds()){
+  var rows=graph.review().candidates().stream().filter(c->candidateId.equals(c.get("id"))).toList();if(rows.size()!=1)throw new ama.contract.TranscriptContracts.Failure(404,"CORRECTION_NOT_FOUND");var row=rows.getFirst();
   if(!"PENDING".equals(row.get("state")))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_ALREADY_HANDLED");
   var segments=graph.segments(graph.selected()).stream().filter(s->s.string("segment_id").equals(row.get("segment_id"))).toList();require(segments.size()==1,PROVENANCE_UNAVAILABLE);
   if(correction.decision()==ama.contract.TranscriptContracts.CorrectionDecision.ACCEPT&&!segments.getFirst().string("body").equals(row.get("before_text")))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_STALE");
-  return row;
+  result.add(row);
+  }
+  return List.copyOf(result);
  }
  List<Map<String,Object>> items(SavedTranscriptGraph graph,boolean writable){
   var current=new HashMap<String,FullRow>();for(var s:graph.segments(graph.selected()))current.put(s.string("segment_id"),s);var result=new ArrayList<Map<String,Object>>();
   for(var row:graph.review().candidates()){
    var segment=current.get(text(row,"segment_id"));require(segment!=null,PROVENANCE_UNAVAILABLE);boolean pending="PENDING".equals(row.get("state"));var item=new LinkedHashMap<String,Object>();
    item.put("id",row.get("id"));item.put("segmentId",row.get("segment_id"));item.put("source",row.get("before_text"));item.put("replacement",row.get("after_text"));item.put("status",row.get("state"));item.put("operationId",row.get("decision_revision_id"));
-   item.put("canAccept",writable&&pending&&segment.string("body").equals(row.get("before_text")));item.put("canReject",writable&&pending);item.put("canUndo",writable&&"ACCEPTED".equals(row.get("state"))&&graph.selected().equals(row.get("decision_revision_id")));result.add(Collections.unmodifiableMap(item));
+   item.put("range",TranscriptCorrectionRange.between(text(row,"before_text"),text(row,"after_text")));item.put("createdSourceRevisionId",row.get("created_source_revision_id"));item.put("kind","SPEECH_ENHANCEMENT");
+   item.put("canAccept",writable&&pending&&segment.string("body").equals(row.get("before_text"))&&new ama.governance.JdbcGovernanceRuntime(j.getDataSource()).corpusCurrent(graph.input().string("id")));item.put("canReject",writable&&pending);item.put("canUndo",writable&&"ACCEPTED".equals(row.get("state"))&&graph.selected().equals(row.get("decision_revision_id")));result.add(Collections.unmodifiableMap(item));
   }
   return List.copyOf(result);
  }
@@ -145,13 +152,14 @@ final class SpeechReviewRepository {
  }
  void afterRevision(JdbcTranscriptAuthority.HeldSavedTranscript held,FileRegistry.LockedMeeting gate,Actor actor,SavedTranscriptGraph graph,ama.contract.TranscriptContracts.Command command,String result,List<FullRow> written){
   authority.requireSpeechReviewWrite(held,gate,actor,graph);var bodies=new HashMap<String,String>();for(var row:written)if(row.table()==Table.TRANSCRIPT_SEGMENT){require(result.equals(row.string("revision_id"))&&bodies.put(row.string("segment_id"),row.string("body"))==null,PROVENANCE_UNAVAILABLE);}
-  require(bodies.size()==graph.segments(graph.selected()).size(),PROVENANCE_UNAVAILABLE);String decided=null;
+  require(bodies.size()==graph.segments(graph.selected()).size(),PROVENANCE_UNAVAILABLE);var decided=new HashSet<String>();
   if(command.operation()==ama.contract.TranscriptContracts.Operation.CORRECTION){
-   var row=decision(graph,command);decided=text(row,"id");String state=command.correction().decision()==ama.contract.TranscriptContracts.CorrectionDecision.ACCEPT?"ACCEPTED":"REJECTED";
-   require(j.update("UPDATE speech_review_candidate SET state=?,decision_revision_id=?,decided_at=UTC_TIMESTAMP(6) WHERE id=? AND meeting_id=? AND state='PENDING'",state,result,decided,graph.meeting())==1,PROVENANCE_UNAVAILABLE);
+   for(var row:decisions(graph,command)){String candidateId=text(row,"id");decided.add(candidateId);String state=command.correction().decision()==ama.contract.TranscriptContracts.CorrectionDecision.ACCEPT?"ACCEPTED":"REJECTED";
+   require(j.update("UPDATE speech_review_candidate SET state=?,decision_revision_id=?,decided_at=UTC_TIMESTAMP(6) WHERE id=? AND meeting_id=? AND state='PENDING'",state,result,candidateId,graph.meeting())==1,PROVENANCE_UNAVAILABLE);
+   }
   }
   for(var row:graph.review().candidates()){
-   if("PENDING".equals(row.get("state"))&&!Objects.equals(decided,row.get("id"))&&!Objects.equals(bodies.get(text(row,"segment_id")),row.get("before_text")))stale(graph,text(row,"id"));
+   if("PENDING".equals(row.get("state"))&&!decided.contains(row.get("id"))&&!Objects.equals(bodies.get(text(row,"segment_id")),row.get("before_text")))stale(graph,text(row,"id"));
    if(command.operation()==ama.contract.TranscriptContracts.Operation.UNDO&&"ACCEPTED".equals(row.get("state"))&&graph.selected().equals(row.get("decision_revision_id")))require(j.update("UPDATE speech_review_candidate SET state='UNDONE',undo_revision_id=?,decided_at=UTC_TIMESTAMP(6) WHERE id=? AND meeting_id=? AND state='ACCEPTED' AND decision_revision_id=?",result,row.get("id"),graph.meeting(),graph.selected())==1,PROVENANCE_UNAVAILABLE);
   }
   for(var row:graph.review().otherPending())stale(graph,text(row,"id"));

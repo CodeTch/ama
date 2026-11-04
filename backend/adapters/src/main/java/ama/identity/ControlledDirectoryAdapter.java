@@ -61,13 +61,14 @@ public final class ControlledDirectoryAdapter implements DirectoryPort,AutoClose
   }
  }
  private static Person person(JsonParser p)throws IOException {
-  expect(p.currentToken(),JsonToken.START_OBJECT);var fields=new HashSet<String>();String id=null,name=null,department=null;Boolean active=null;
+  expect(p.currentToken(),JsonToken.START_OBJECT);var fields=new HashSet<String>();String id=null,name=null,department=null,title=null;Boolean active=null;
   while(p.nextToken()!=JsonToken.END_OBJECT){expect(p.currentToken(),JsonToken.FIELD_NAME);String field=p.currentName();if(!fields.add(field))throw unavailable();var token=p.nextToken();switch(field){
    case "stableId"->id=text(p,token,1020);case "displayName"->name=text(p,token,16384);case "department"->{if(token!=JsonToken.VALUE_NULL)department=text(p,token,16384);}
+   case "title"->{if(token!=JsonToken.VALUE_NULL)title=text(p,token,16384);}
    case "active"->{if(token!=JsonToken.VALUE_TRUE&&token!=JsonToken.VALUE_FALSE)throw unavailable();active=token==JsonToken.VALUE_TRUE;}
    case "email"->{if(token!=JsonToken.VALUE_NULL)text(p,token,16384);}default->throw unavailable();
   }}
-  if(!fields.containsAll(Set.of("stableId","displayName","department","active"))||id==null||!id.equals(id.trim())||name==null||name.isBlank()||active==null)throw unavailable();ama.contract.IdentityContracts.stableId(id);return new Person(id,name,department,active);
+  if(!fields.containsAll(Set.of("stableId","displayName","department","active"))||id==null||!id.equals(id.trim())||name==null||name.isBlank()||active==null)throw unavailable();ama.contract.IdentityContracts.stableId(id);return new Person(id,name,department,active,title);
  }
  private static String text(JsonParser p,JsonToken token,int maximum)throws IOException {expect(token,JsonToken.VALUE_STRING);String text=p.getText();if(text.getBytes(StandardCharsets.UTF_8).length>maximum)throw unavailable();for(int i=0;i<text.length();i++){char c=text.charAt(i);if(Character.isHighSurrogate(c)){if(++i>=text.length()||!Character.isLowSurrogate(text.charAt(i)))throw unavailable();}else if(Character.isLowSurrogate(c))throw unavailable();}return text;}
  private static String encode(String value){return URLEncoder.encode(value,StandardCharsets.UTF_8);}

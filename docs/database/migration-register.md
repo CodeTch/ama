@@ -294,3 +294,41 @@ V060 recording_transcript_sources：独占`ama_c_recording_3b64241f569b`已成�
 V062 `operations_governance_mail`，SHA256 `824ce033bb73c35645521516898835a8d638bf11606b69c6a329cf380557d5d6`。在当前独占C测试库及本地ama_local_dev均已按序应用；保留已有V061，不改旧迁移、不repair或重置。新增八张表，列/ER/权限与生命周期见[治理邮件增量字典](2026-11-02-governance-mail-increment.md)。源反馈与邮件子行已经纳入MeetingDeletionRows显式清理顺序；实际会议删除8项回归通过。原E计划的V016—V019旧占位不再作为迁移路径。
 
 V063 `governance_dataset_metadata`：SHA `f15ee51bc16e987192e31e4841ddea44c904c45a46e204db808153be0bf9dfa3`。已在当前独占测试库和本地主库按序应用。增加JSON_LENGTH派生的STORED样本数和(created_at,id)索引，列表仅排序元数据；真实512KB以上样本先触发MySQL1038，再以相同默认sort buffer通过。原samples_json和V062字节均保留。
+
+
+## 2026-11-03 V064 材料增强候选
+
+V064 `material_enhancement_candidates`，SHA256 `4fe6ae851ba1d8ce107bb381ad329d313ad2473b816c2f6f340d5cf0e204bccb`。正常本地主库及独占 `ama_c_recording_e187aaab9a86` 均按序应用54条迁移至064；独占库23项集成通过后已移除。本次新表绑定原稿／材料快照／精确请求与采用回执，actor按二进制身份比较，已纳入会议删除路径。字典和读取预算见[材料增强增量](2026-11-03-material-enhancement-increment.md)。不改旧迁移与既有语音profile。
+
+
+## 2026-11-03 V066 会议分类建议
+
+V066 `meeting_category_suggestions` 为当前会议确认修复保留。只向既有 `meeting_info_suggestion` 增加分类建议值、绑定的生成输入指纹、精确模型请求 SHA256 和独立 profile，不改已有迁移。复用该表的候选/会议外键与删除顺序；采纳分类仍须核验当前来源、当前字典、负责人权限与会议版本。应用及验证结果在本轮验收报告记录。
+
+
+## 2026-11-03 V065、V068 在线录音处理
+
+V065 `recording_processing` 固定录音处理意图、材料快照、各阶段和增强采用回执标识，已在本地主库应用；SHA256 `2000c5e0a470c584f02b6406e78bc0d8607751f4cc71456885d9528be617e9df`。V068 `recording_processing_retries` 增加独立的原始识别重试请求与版本，SHA256 `7020c9495f6480a27431ce4ea3beed630c352850961e2760e834dc367ff031bd`；V066 已被会议分类建议占用，因此本轮未应用的录音重试草稿在首次成功迁移前分配到 V068，保留所有已应用迁移。新表按会议归属加入物理删除路径。验证证据在 `.tools/local-app/recording-strict-20261103/`。
+
+
+## 2026-11-03 V070 知识库发布配置
+
+V070 `publication_configuration` 为本轮发布修复登记：按会议持久保存稳定目标 ID、服务端标签规则、标签与路径/可见范围元数据，独立乐观版本。提交时将元数据冻结到原 publication_submission manifest 和知识文档 v2 payload；旧 v1 继续校验读取。新表已纳入会议物理删除路径，不改动已有迁移。执行及验收记录见 `docs/acceptance/knowledge-publish/`。
+
+V071 `recording_pending_materials` 为录音处理期间的材料变更保留待应用快照。当前任务始终使用受理时材料快照；处理结束后仅更新可用材料集合，增强工作稿须由后续明确的候选采用操作更新。保持主项目 main、原数据库与外部 harness 固定端口。
+
+### V067 — AI纪要完整工作区历史
+
+`V067__minutes_workspace_snapshots.sql` 增加不可变的正文、核心要素、模板、排除项与来源版本关联。仅为迁移当时完整的当前工作区建立基线，不按时间猜测历史配对。恢复通过现有权限、编辑意图、业务版本和来源校验，复制新的正文/要素并整体更新当前指针；不继承人工核对结论。
+
+### V074 — 已应用 V072 后的反馈撤回理由
+
+2026-11-03 发布验收重启时发现 V072 已于 20:33 应用，其后追加 `corpus_feedback_binding.withdraw_reason` 导致校验不符。已从当时应用构建产物核对原 V072（Flyway checksum -1766875882），原文件字节恢复一致；新增字段移到 V074 前向迁移，保留该共享开发功能，不 repair、不改写 Flyway 历史、不清库。迁移前确认本地主库该列尚不存在。
+
+### V073 — 已应用 V072 后的运行快照补齐
+
+V073 `governance_legacy_runtime` 承接已应用 V072 后追加的历史运行快照与模型身份修正 SQL；2026-11-03 20:43 已成功应用本地库（checksum -317547990）。V072 保留已执行 checksum -1766875882，不删除原始记录、不改写 Flyway 历史。同日反馈撤回理由在未应用前编号为 V074，避免重复版本。
+
+### V069 — 结构化会议反馈与会议声纹申请
+
+`V069__structured_meeting_feedback.sql` 的 SHA256 为 `bfdb38c8cb93415270910a9f0f897d0f63bd56c9b7a6ce2552baad552844a6dd`，已于 2026-11-03 20:00 在本地开发库按序执行。反馈新增六类业务类型、独立原值/建议/说明；旧记录保持空结构字段，不猜测拆分旧 comment。来源绑定新增外部采用的原请求、序号和回执。会议声纹申请及追加历史独立存储申请人、主体、会议修订、片段、授权与加密特征，审核通过才建立正式声纹。既有声纹约束保留最小 3 秒与撤销后无向量，最大值扩至接口文档采集策略的 50 秒；3–50 秒策略明确属于本地 harness 联调配置。申请/历史纳入会议删除归属清理，外部语料回执在撤销确认前不得删除。

@@ -16,7 +16,11 @@ public final class IdentityContracts {
             roles = Set.copyOf(roles);
         }
     }
-    public record Person(String stableId, String displayName, String department, boolean active) {}
+    public record Person(String stableId, String displayName, String department, boolean active, String title) {
+        public Person(String stableId, String displayName, String department, boolean active) {
+            this(stableId, displayName, department, active, null);
+        }
+    }
     public record PeoplePage(List<Person> items, String nextCursor) {}
     public record Department(String id, String name, String parentId, boolean active) {}
     public record Departments(List<Department> items) {

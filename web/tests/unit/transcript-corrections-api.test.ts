@@ -9,6 +9,11 @@ const current={meetingId:meeting,sourceRevisionId:source,observation,items:[item
 const proposal={actor:'owner',resource:meeting,key,operation:'TRANSCRIPT_CORRECTIONS_PROPOSE',path:`/api/v1/meetings/${meeting}/transcript/correction-proposals`,body:JSON.stringify({expectedRevisionToken:token,sourceRevisionId:source})};
 const decision={...proposal,operation:'TRANSCRIPT_CORRECTION',path:`/api/v1/meetings/${meeting}/transcript/corrections/${candidate}/decisions`,body:JSON.stringify({expectedRevisionToken:token,sourceRevisionId:source,candidateId:candidate,decision:'ACCEPT'})};
 const api=()=>createTranscriptCorrectionsApi(createBusinessClient('https://ama.test',()=>session,()=>{}),()=> 'owner');
+test('atomic correction batch binds a bounded distinct set to the original first candidate',()=>{
+ const batch=(ids:unknown)=>({...decision,body:JSON.stringify({...JSON.parse(decision.body),additionalCandidateIds:ids})});
+ assert(validCorrectionCommand(batch([key]),'owner',meeting));
+ for(const ids of [[candidate],[key,key],['invalid'],Array.from({length:60},()=>key),null])assert.equal(validCorrectionCommand(batch(ids),'owner',meeting),false);
+});
 test('correction original commands accept only server IDs and exact scope/path with no arbitrary model text',()=>{
  assert(validCorrectionCommand(proposal,'owner',meeting));assert(validCorrectionCommand(decision,'owner',meeting));
  for(const bad of [{...decision,actor:'other'},{...decision,path:proposal.path},{...decision,body:decision.body.replace('}',',"text":"forged"}')},{...proposal,body:proposal.body.replace('}',',"candidateId":"'+candidate+'"}')}])assert.equal(validCorrectionCommand(bad,'owner',meeting),false);

@@ -40,7 +40,12 @@ public final class JdbcMinutesFactsReader {
  Snapshot readOwner(Actor actor,String meeting,String selector,String selected,TranscriptAcquisitionBudget.Ledger budget){return read(actor,meeting,selector,selected,false,budget);}
  private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member){return read(actor,meeting,selector,selected,member,limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->false));}
  private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget){
-  independent();uuid(meeting);require(Set.of("INITIAL_SETTINGS","CURRENT_GENERATION","STORED_INPUT","CANDIDATE","SAVED_EFFECTIVE","OWNER_REVISION","REVIEW_BODY","REVIEW_ELEMENT","FINAL","REUSE_SOURCES","OWNER_SET","REVIEW_ID","READINESS","SETTINGS_READ").contains(selector),INVALID_ARGUMENT);
+  independent();uuid(meeting);Objects.requireNonNull(budget);
+  var jdbc=new org.springframework.jdbc.core.JdbcTemplate(authority.dataSource());jdbc.setQueryTimeout(2);
+  return TranscriptReadRetry.read(()->MinutesReadVersion.capture(jdbc,meeting,selector,selected,(rows,bytes)->{budget.row(rows);budget.capture(bytes,bytes,bytes,2);}),()->readOnce(actor,meeting,selector,selected,member,budget));
+ }
+ private Snapshot readOnce(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget){
+  independent();uuid(meeting);require(Set.of("INITIAL_SETTINGS","CURRENT_GENERATION","STORED_INPUT","CANDIDATE","SAVED_EFFECTIVE","OWNER_REVISION","WORKSPACE_READ","REVIEW_BODY","REVIEW_ELEMENT","FINAL","REUSE_SOURCES","OWNER_SET","REVIEW_ID","READINESS","SETTINGS_READ").contains(selector),INVALID_ARGUMENT);
   Objects.requireNonNull(budget);authority.savedAccess().prepareExternalRead(actor,meeting);
   MinutesGraphDiscovery.Discovery discovered=null;RuntimeException discoveryError=null;
   try{discovered=MinutesGraphDiscovery.discover(authority.dataSource(),meeting,selector,selected,limits,authority.readBudget());if(selector.equals("READINESS"))discovered=MinutesGraphDiscovery.withPending(authority.dataSource(),discovered,limits.tasks(),budget);charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}

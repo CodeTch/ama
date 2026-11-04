@@ -28,6 +28,9 @@ public final class SpeechPipeline {
  private final SpeechModelPort model;
  public SpeechPipeline(SpeechModelPort model){this.model=Objects.requireNonNull(model);}
  public Result transcribe(WavClip clip,Store store){
+  return transcribe(clip,store,List::of);
+ }
+ public Result transcribe(WavClip clip,Store store,Supplier<List<String>> entities){
   Objects.requireNonNull(clip);Objects.requireNonNull(store);clip.endSampleExclusive();
   var vad=stage(store,Stage.VAD,Vad.class,()->new Vad(model.vad(clip)),v->{for(var span:v.spans())range(clip,span.startSample(),span.endSample());});
   var speakers=stage(store,Stage.DIARIZATION,Diarization.class,()->new Diarization(model.diarize(clip,vad.spans())),v->{for(var span:v.spans()){range(clip,span.startSample(),span.endSample());if(span.enterpriseId()!=null)throw new IllegalArgumentException("Model clusters cannot grant a human identity");}});
@@ -36,7 +39,7 @@ public final class SpeechPipeline {
   var embedding=stage(store,Stage.EMBEDDING,Embedding.class,()->new Embedding(model.embed(clip)),v->{});
   CorrectionResult correction=null;var correctionModel=model.correctionModel();
   if(correctionModel.isPresent()){
-   correction=stage(store,Stage.CORRECTION,Correction.class,()->new Correction(enhanced.text().isBlank()?new CorrectionResult(correctionModel.get(),enhanced.text(),List.of()):model.correct(enhanced.text())),v->{
+   correction=stage(store,Stage.CORRECTION,Correction.class,()->new Correction(enhanced.text().isBlank()?new CorrectionResult(correctionModel.get(),enhanced.text(),List.of()):model.correct(enhanced.text(),entities.get())),v->{
     if(!v.result().sourceText().equals(enhanced.text())||!v.result().modelVersion().equals(correctionModel.get()))throw new IllegalArgumentException("Correction checkpoint source or model mismatch");
    }).result();
   }

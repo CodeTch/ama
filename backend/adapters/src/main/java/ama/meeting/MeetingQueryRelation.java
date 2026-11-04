@@ -49,12 +49,18 @@ final class MeetingQueryRelation {
   return j.query("SELECT m.id,m.updated_at,m.revision,m.info_revision_id,m.stage"+from+continuation+" ORDER BY m.updated_at DESC,m.id DESC LIMIT ?",(r,n)->new MeetingListScan.Candidate(new MeetingListScan.Position(r.getObject(2,LocalDateTime.class),r.getString(1)),r.getLong(3),r.getString(4),r.getString(5)),values.toArray());
  }
  Counts counts(Actor actor,String scope){
-  boolean owned=scope.equals("owned");int maximum=owned?2048:8;budget.reserve(0,0,(maximum+1)*96L,(maximum+1)*96L,(maximum+1)*96L,3,false);
+  boolean owned=scope.equals("owned");int maximum=owned?2048:8;
   var stages=new LinkedHashMap<String,Long>();for(String stage:MeetingListScan.STAGES)stages.put(stage,0L);var topics=new LinkedHashMap<String,Long>();long[] total={0};
   String topic=owned?"COALESCE((SELECT mt.topic_id FROM meeting_topic mt JOIN topic t ON t.id=mt.topic_id WHERE mt.meeting_id=m.id AND t.owner_id=?),'__none')":"'__none'";
   var values=new ArrayList<Object>();if(owned)values.add(actor.enterpriseId());values.addAll(args);
-  // One grouped pass computes total, stage counts and topic groups from the exact same F.
-  j.query("SELECT "+STAGE+" workspace_stage,"+topic+" topic_key,COUNT(*) n"+from+" GROUP BY workspace_stage,topic_key LIMIT "+(maximum+1),rs->{int rows=0;while(rs.next()){budget.check();if(++rows>maximum)throw new WorkspaceReadBudget.Unavailable();budget.reserve(1,3,96,96,96,1,false);String stage=rs.getString(1),key=rs.getString(2);long n=rs.getLong(3);if(!stages.containsKey(stage)||n<0)throw new WorkspaceReadBudget.Unavailable();stages.compute(stage,(k,v)->Math.addExact(v,n));total[0]=Math.addExact(total[0],n);if(owned)topics.merge(key,n,Math::addExact);if(topics.size()>256)throw new WorkspaceReadBudget.Unavailable();}return null;},values.toArray());
+  String grouped="SELECT "+STAGE+" workspace_stage,"+topic+" topic_key,COUNT(*) n"+from+" GROUP BY workspace_stage,topic_key LIMIT "+(maximum+1);
+  // Admit numeric cardinality before transferring any grouped string. The same locked
+  // transaction and exact relation are used for both passes, with the original hard cap.
+  budget.reserve(1,8,128,128,128,2,false);
+  long groups=j.queryForObject("SELECT COUNT(*) FROM ("+grouped+") bounded_groups",Long.class,values.toArray());
+  if(groups<0||groups>maximum)throw new WorkspaceReadBudget.Unavailable();
+  budget.reserve(0,0,(groups+1)*96L,(groups+1)*96L,(groups+1)*96L,3,false);
+  j.query(grouped,rs->{int rows=0;while(rs.next()){budget.check();if(++rows>groups)throw new WorkspaceReadBudget.Unavailable();budget.reserve(1,3,96,96,96,1,false);String stage=rs.getString(1),key=rs.getString(2);long n=rs.getLong(3);if(!stages.containsKey(stage)||n<0)throw new WorkspaceReadBudget.Unavailable();stages.compute(stage,(k,v)->Math.addExact(v,n));total[0]=Math.addExact(total[0],n);if(owned)topics.merge(key,n,Math::addExact);if(topics.size()>256)throw new WorkspaceReadBudget.Unavailable();}return null;},values.toArray());
   budget.reserve(8+topics.size(),16+topics.size()*2L,2048+topics.size()*128L,2048+topics.size()*128L,2048+topics.size()*128L,2,true);
   return new Counts(total[0],Map.copyOf(stages),Map.copyOf(topics));
  }

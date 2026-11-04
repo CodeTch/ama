@@ -21,8 +21,14 @@ class ExternalReadPreparation implements WebMvcConfigurer,HandlerInterceptor {
  public boolean preHandle(HttpServletRequest request,HttpServletResponse response,Object handler){
   if(!(request.getAttribute(SessionSecurityFilter.SESSION) instanceof ResolvedSession session))return true;
   String path=request.getRequestURI();
+  // The formal snapshot has its own current library grant and terminal-state capture.
+  // Keep all meeting/source reads on the existing meeting READ preparation.
+  if(handler instanceof org.springframework.web.method.HandlerMethod method && method.getBeanType()==PublicationDocumentController.class && method.getMethod().getName().equals("document"))return true;
   // Governance and deletion expose technical recovery metadata under independent owner gates.
   if(handler instanceof org.springframework.web.method.HandlerMethod method && Set.of(GovernanceController.class,MeetingDeletionController.class,KnowledgeGovernanceEventController.class,OperationsController.class).contains(method.getBeanType()))return true;
+  // Discard authorizes its own exact receipt replay even after the meeting is deleted.
+  if(request.getMethod().equals("POST") && handler instanceof org.springframework.web.method.HandlerMethod method
+      && method.getBeanType()==ImportDraftController.class && method.getMethod().getName().equals("discard"))return true;
   if(request.getMethod().equals("DELETE")&&path.matches("/api/v1/meetings/[0-9a-f-]{36}"))return true;
   String meeting=null;var matcher=java.util.regex.Pattern.compile("^/api/v1/meetings/([0-9a-f-]{36})(?:/.*)?$").matcher(path);
   if(matcher.matches())meeting=matcher.group(1);

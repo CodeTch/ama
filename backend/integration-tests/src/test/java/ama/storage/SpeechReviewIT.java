@@ -44,10 +44,11 @@ class SpeechReviewIT {
   scenario("punctuation","/inference/asr-punc/modelserving/punc",Map.of("text_equals",original),Map.of("text",enhanced));
   var f=harness.new Fixture(audios);var lease=f.claim(f.queue);var carrier=TranscriptImportRuntime.prepare(f.queue,lease,f.settings,NEVER);assertTrue(f.queue.completeWithEffects(lease,carrier));return f;
  }
- JdbcSavedTranscripts service(ControlledSpeechImportIT.Fixture f){
+ JdbcSavedTranscripts service(ControlledSpeechImportIT.Fixture f){return service(f,f.settings.archives());}
+ JdbcSavedTranscripts service(ControlledSpeechImportIT.Fixture f,java.util.function.Supplier<ama.config.ConfigArchiveSource.Snapshot> archives){
   var installed=CorrectionInstallation.compose(new CorrectionInstallation.Declaration("CONTROLLED_SPEECH","1","speech-review-it"),List.of());
   var limits=new TranscriptAcquisitionBudget(16777216,16777216,16777216,134217728,67108864,33554432,128,256,256);
-  return new JdbcSavedTranscripts(f.components.authority(),f.settings.archives(),limits,installed,f.fences,f.outbox,new ama.audit.JdbcAuditAdapter(source),new SavedTranscriptTransitions("AUTHORITY_CONTROLLED","AUTHORITY_CONTROLLED","2",List.of(),List.of()));
+  return new JdbcSavedTranscripts(f.components.authority(),archives,limits,installed,f.fences,f.outbox,new ama.audit.JdbcAuditAdapter(source),new SavedTranscriptTransitions("AUTHORITY_CONTROLLED","AUTHORITY_CONTROLLED","2",List.of(),List.of()));
  }
  @SuppressWarnings("unchecked") Map<String,Object> selected(Map<String,Object> detail){return (Map<String,Object>)detail.get("selected");}
  @SuppressWarnings("unchecked") List<Map<String,Object>> segments(Map<String,Object> detail){return (List<Map<String,Object>>)selected(detail).get("segments");}
@@ -193,6 +194,42 @@ class SpeechReviewIT {
    var service=service(f);String working=working(f,service);service.proposeCorrections(f.actor,f.meeting,id(),revision(f),working,id());var items=(List<Map<String,Object>>)service.readCorrections(f.actor,f.meeting,working).get("items");assertEquals(2,items.size());String first=(String)items.get(0).get("id"),second=(String)items.get(1).get("id");
    String accepted=result(service.mutate(f.actor,f.meeting,id(),new Command(Operation.CORRECTION,revision(f),working,List.of(),null,new Correction(first,CorrectionDecision.ACCEPT)),id()),"revisionId");assertEquals(1,((Number)service.readCorrections(f.actor,f.meeting,accepted).get("pendingCount")).intValue());assertFalse((Boolean)((Map<?,?>)service.readCurrent(f.actor,f.meeting).get("capabilities")).get("canConfirm"));
    String rejected=result(service.mutate(f.actor,f.meeting,id(),new Command(Operation.CORRECTION,revision(f),accepted,List.of(),null,new Correction(second,CorrectionDecision.REJECT)),id()),"revisionId");assertEquals(0,((Number)service.readCorrections(f.actor,f.meeting,rejected).get("pendingCount")).intValue());assertEquals(List.of(ORIGINAL,ORIGINAL),segments(service.readOwner(f.actor,f.meeting,raw(f))).stream().map(r->r.get("body")).toList());
+  }
+ }
+ @SuppressWarnings("unchecked") @Test void atomicBatchRejectsUnknownMemberAndAcceptsAndUndoesBothClipsTogether()throws Exception {
+  try(var f=fixture(2)){
+   var service=service(f);String working=working(f,service);service.proposeCorrections(f.actor,f.meeting,id(),revision(f),working,id());var items=(List<Map<String,Object>>)service.readCorrections(f.actor,f.meeting,working).get("items");String first=(String)items.get(0).get("id"),second=(String)items.get(1).get("id");long base=revision(f);
+   assertThrows(Failure.class,()->service.mutate(f.actor,f.meeting,id(),new Command(Operation.CORRECTION,base,working,List.of(),null,new Correction(first,CorrectionDecision.ACCEPT,List.of(id()))),id()));
+   assertEquals(base,revision(f));assertEquals(2,((Number)service.readCorrections(f.actor,f.meeting,working).get("pendingCount")).intValue());
+   var command=new Command(Operation.CORRECTION,base,working,List.of(),null,new Correction(first,CorrectionDecision.ACCEPT,List.of(second)));String key=id();
+   String accepted=result(service.mutate(f.actor,f.meeting,key,command,id()),"revisionId");assertEquals(base+1,revision(f));assertEquals(List.of(ENHANCED,ENHANCED),segments(service.readCurrent(f.actor,f.meeting)).stream().map(r->r.get("body")).toList());
+   assertEquals(0,((Number)service.readCorrections(f.actor,f.meeting,accepted).get("pendingCount")).intValue());
+   service.mutate(f.actor,f.meeting,id(),new Command(Operation.UNDO,revision(f),accepted,List.of()),id());assertEquals(List.of(ORIGINAL,ORIGINAL),segments(service.readCurrent(f.actor,f.meeting)).stream().map(r->r.get("body")).toList());
+   assertEquals(2,j.queryForObject("SELECT COUNT(*) FROM speech_review_candidate WHERE meeting_id=? AND state='UNDONE'",Integer.class,f.meeting));assertEquals(true,service.mutate(f.actor,f.meeting,key,command,id()).get("replayed"));assertEquals(base+2,revision(f));
+  }
+ }
+ @Test void minutesSettingsReadReacquiresAfterAnActualConcurrentTranscriptSave()throws Exception {
+  try(var f=fixture()){
+   var writer=service(f);String working=working(f,writer);var value=segments(writer.readCurrent(f.actor,f.meeting)).getFirst();var once=new java.util.concurrent.atomic.AtomicBoolean(true);
+   var limits=new TranscriptAcquisitionBudget(16777216,16777216,16777216,134217728,67108864,33554432,128,256,256);
+   var reader=new JdbcMinutesFactsReader(f.components.authority(),()->{var snapshot=f.settings.archives().get();if(once.compareAndSet(true,false))writer.mutate(f.actor,f.meeting,id(),new Command(Operation.SAVE,revision(f),working,List.of(new Edit((String)value.get("segmentId"),"纪要读取期间人工保存",List.of()))),id());return snapshot;},f.settings.archives().get().indexSha256(),limits);
+   var result=reader.readOwner(f.actor,f.meeting,"SETTINGS_READ",null);assertFalse(once.get());assertEquals(revision(f),((Number)result.observation().get("revision")).longValue());
+  }
+ }
+ @Test void sourceReadReacquiresWhenAnActualEditCommitsBetweenItsSnapshots()throws Exception {
+  var originalSource=source;var probe=new Task04ProbeSource(source);source=probe;
+  try(var f=fixture()){
+   var writer=service(f);String working=working(f,writer);var value=segments(writer.readCurrent(f.actor,f.meeting)).getFirst();var once=new java.util.concurrent.atomic.AtomicBoolean(true);
+   probe.after=sql->{if(sql.contains("FROM meeting WHERE id=?")&&sql.contains("AS __admitted")&&!sql.contains("FOR UPDATE")&&once.compareAndSet(true,false))writer.mutate(f.actor,f.meeting,id(),new Command(Operation.SAVE,revision(f),working,List.of(new Edit((String)value.get("segmentId"),"读取原件期间人工保存",List.of()))),id());};
+   try(var download=f.components.registry().read(f.actor,f.meeting,new ProcessingSourceReader.HistoryRequest(working,f.file),null)){assertArrayEquals(f.wav,download.body().readAllBytes());}
+   assertFalse(once.get());assertEquals("读取原件期间人工保存",segments(writer.readCurrent(f.actor,f.meeting)).getFirst().get("body"));
+  }finally{probe.after=sql->{};source=originalSource;}
+ }
+ @Test void currentReadReacquiresWhenAnActualEditCommitsBetweenItsSnapshots()throws Exception {
+  try(var f=fixture()){
+   var writer=service(f);String working=working(f,writer);var value=segments(writer.readCurrent(f.actor,f.meeting)).getFirst();var once=new java.util.concurrent.atomic.AtomicBoolean();
+   var reader=service(f,()->{var snapshot=f.settings.archives().get();if(once.compareAndSet(true,false))writer.mutate(f.actor,f.meeting,id(),new Command(Operation.SAVE,revision(f),working,List.of(new Edit((String)value.get("segmentId"),"并发核对完成",List.of()))),id());return snapshot;});
+   once.set(true);assertEquals("并发核对完成",segments(reader.readCurrent(f.actor,f.meeting)).getFirst().get("body"));
   }
  }
  @Test void proposalAndConfirmationCannotCommitAnUnresolvedConfirmedVersion()throws Exception {

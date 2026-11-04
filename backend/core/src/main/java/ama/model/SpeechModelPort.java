@@ -20,4 +20,5 @@ public interface SpeechModelPort {
     /** Absence is distinct from an empty successful correction response. */
     default Optional<String> correctionModel() { return Optional.empty(); }
     default SpeechContracts.CorrectionResult correct(String text) { throw new UnsupportedOperationException("Correction provider not installed"); }
+    default SpeechContracts.CorrectionResult correct(String text,java.util.List<String> entities) { if(!entities.isEmpty())throw new UnsupportedOperationException("Entity context unavailable");return correct(text); }
 }

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import WorkspaceTopbar from '../../shared/WorkspaceTopbar.vue';
 import {ref} from 'vue';
 import {RouterLink} from 'vue-router';
 import Icon from '../../shared/Icon.vue';
@@ -19,7 +18,7 @@ function reloadTranscript(){reloaded.value=true;}
 
 <template>
  <div class="layout transcript-demo-page"><div class="main">
-  <WorkspaceTopbar/>
+
   <main class="content detail-page"><div class="aci-detail ac-related transcript-demo-detail">
    <div class="page-head aci-detail-head">
     <div class="ac-workspace-leading"><RouterLink to="/meetings" class="btn ac-workspace-back" aria-label="返回列表">‹</RouterLink><div class="aci-heading-text"><div class="aci-title-row"><h1 class="page-title">未命名会议</h1><span class="tag blue">转写待处理</span></div><div class="page-desc">{{meetingId}} · 待补充会议信息</div></div></div>

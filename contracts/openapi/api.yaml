@@ -7,6 +7,72 @@ servers:
   - url: http://127.0.0.1:8081
     description: Loopback management listener; never publish through the public ingress.
 paths:
+  /api/v1/operations/configuration/history:
+    $ref: './operations.yaml#/configurationHistory'
+  /api/v1/operations/candidates/{candidate}/history:
+    $ref: './operations.yaml#/candidateHistory'
+  /api/v1/operations/my-voiceprints/page:
+    $ref: './operations.yaml#/myVoiceprintsPage'
+  /api/v1/operations/voiceprints/{id}/resampling:
+    $ref: './operations.yaml#/voiceResampling'
+  /api/v1/operations/datasets/page:
+    $ref: './operations.yaml#/datasetsPage'
+  /api/v1/operations/evaluations/page:
+    $ref: './operations.yaml#/evaluationsPage'
+  /api/v1/operations/candidates/page:
+    $ref: './operations.yaml#/candidatesPage'
+  /api/v1/operations/voiceprints/page:
+    $ref: './operations.yaml#/voiceprintsPage'
+  /api/v1/operations/corpus/page:
+    $ref: './operations.yaml#/corpusPage'
+  /api/v1/operations/catalog:
+    $ref: './operations.yaml#/catalog'
+  /api/v1/operations/sample-assets:
+    $ref: './operations.yaml#/sampleAssets'
+  /api/v1/operations/datasets/{id}:
+    $ref: './operations.yaml#/datasetDetail'
+  /api/v1/operations/datasets/{id}/copies:
+    $ref: './operations.yaml#/datasetCopies'
+  /api/v1/operations/reports/{id}:
+    $ref: './operations.yaml#/report'
+  /api/v1/operations/voiceprints/{id}:
+    $ref: './operations.yaml#/voiceDetail'
+  /api/v1/meetings/{id}/speaker-candidates:
+    $ref: './operations.yaml#/speakerCandidates'
+  /api/v1/operations/evaluations/{id}/cancellation:
+    $ref: './operations.yaml#/evaluationCancellation'
+  /api/v1/operations/evaluations/{id}/retries:
+    $ref: './operations.yaml#/evaluationRetries'
+  /api/v1/operations/evaluations/{id}/samples/{sample}/review:
+    $ref: './operations.yaml#/evaluationSampleReview'
+  /api/v1/operations/candidates:
+    $ref: './operations.yaml#/candidates'
+  /api/v1/operations/candidates/{id}:
+    $ref: './operations.yaml#/candidate'
+  /api/v1/operations/candidates/{id}/edits:
+    $ref: './operations.yaml#/candidateEdits'
+  /api/v1/operations/candidates/{id}/evaluations:
+    $ref: './operations.yaml#/candidateEvaluations'
+  /api/v1/operations/candidates/{id}/approval:
+    $ref: './operations.yaml#/candidateApproval'
+  /api/v1/operations/candidates/{id}/publication:
+    $ref: './operations.yaml#/candidatePublication'
+  /api/v1/operations/rollback-candidates:
+    $ref: './operations.yaml#/rollbackCandidates'
+  /api/v1/knowledge-documents:
+    $ref: './publications.yaml#/libraryRecords'
+  /api/v1/meetings/{meetingId}/publications/{publicationId}/governance-capabilities:
+    $ref: './publications.yaml#/governanceCapabilities'
+  /api/v1/meetings/{meetingId}/publication-configuration:
+    $ref: './publications.yaml#/configuration'
+  /api/v1/recordings/{sessionId}/processing:
+    $ref: './recording.yaml#/processing'
+  /api/v1/recordings/{sessionId}/processing/retry:
+    $ref: './recording.yaml#/processingRetry'
+  /api/v1/recordings/{sessionId}/subtitles/retry:
+    $ref: './recording.yaml#/retrySubtitles'
+  /api/v1/recordings/{sessionId}/discard-empty:
+    $ref: './recording.yaml#/discardEmpty'
   /api/v1/operations/capabilities:
     $ref: './operations.yaml#/capabilities'
   /api/v1/operations/voiceprints:
@@ -35,6 +101,8 @@ paths:
     $ref: './operations.yaml#/corpus'
   /api/v1/operations/corpus/{id}/withdrawal:
     $ref: './operations.yaml#/corpusWithdrawal'
+  /api/v1/meetings/{id}/voiceprint-applications:
+    $ref: './operations.yaml#/meetingVoiceprintApplication'
   /api/v1/meetings/{id}/feedback:
     $ref: './operations.yaml#/feedback'
   /api/v1/meetings/{id}/mail:
@@ -91,6 +159,8 @@ paths:
     $ref: './workspace.yaml#/commandDiscovery'
   /api/v1/meetings/{meetingId}/workspace:
     $ref: './workspace.yaml#/workspace'
+  /api/v1/meetings/{meetingId}/workspace/access:
+    $ref: './workspace.yaml#/access'
   /api/v1/meetings/{meetingId}/tasks:
     $ref: './workspace.yaml#/tasks'
   /api/v1/meetings/categories:
@@ -166,6 +236,12 @@ paths:
     $ref: './transcripts.yaml#/speakers'
   /api/v1/meetings/{meetingId}/transcript/corrections:
     $ref: './transcripts.yaml#/corrections'
+  /api/v1/meetings/{meetingId}/transcript/material-enhancements:
+    $ref: './material-enhancements.yaml#/proposals'
+  /api/v1/meetings/{meetingId}/transcript/material-enhancements/{candidateId}:
+    $ref: './material-enhancements.yaml#/candidate'
+  /api/v1/meetings/{meetingId}/transcript/material-enhancements/{candidateId}/adoption:
+    $ref: './material-enhancements.yaml#/adoption'
   /api/v1/meetings/{meetingId}/transcript/correction-proposals:
     $ref: './transcripts.yaml#/correctionProposals'
   /api/v1/meetings/{meetingId}/transcript/corrections/{candidateId}/decisions:
@@ -220,6 +296,12 @@ paths:
     $ref: './minutes.yaml#/savedIntent'
   /api/v1/meetings/{meetingId}/minutes/editor-intents:
     $ref: './minutes.yaml#/savedIntents'
+  /api/v1/meetings/{meetingId}/minutes/workspace-versions:
+    $ref: './minutes.yaml#/savedWorkspaceHistory'
+  /api/v1/meetings/{meetingId}/minutes/workspace-versions/{snapshotId}:
+    $ref: './minutes.yaml#/savedWorkspaceDetail'
+  /api/v1/meetings/{meetingId}/minutes/workspace-restorations:
+    $ref: './minutes.yaml#/savedWorkspaceRestore'
   /api/v1/meetings/{meetingId}/minutes/history:
     $ref: './minutes.yaml#/savedHistory'
   /api/v1/meetings/{meetingId}/minutes/element-sets:
@@ -326,6 +408,10 @@ paths:
     $ref: './recording.yaml#/archiveInput'
   /api/v1/recordings/{sessionId}/subtitles:
     $ref: './recording.yaml#/subtitles'
+  /api/v1/recordings/{sessionId}/part-sources:
+    $ref: './recording.yaml#/partSources'
+  /api/v1/recordings/{sessionId}/parts/{partId}/audio:
+    $ref: './recording.yaml#/partAudio'
   /api/v1/recordings/{sessionId}/manifest:
     $ref: './recording.yaml#/manifest'
   /api/v1/recordings/{sessionId}/transcription-source:

@@ -31,11 +31,44 @@ function privateSections(v:unknown,meeting:string):boolean{
  if(v.publicationId===null?v.publicationState!==null:typeof v.publicationState!=='string'||!['READY','RUNNING','RECONCILING','FAILED','SUCCEEDED'].includes(v.publicationState))return false;
  const page=v.candidates;return shape(page,'detailPath,hasMore,items')&&page.detailPath===`/api/v1/meetings/${meeting}/minutes/candidates`&&typeof page.hasMore==='boolean'&&Array.isArray(page.items)&&page.items.length<=20&&page.items.every(c=>shape(c,'id,inputId,state,taskId')&&uuid(c.id)&&uuid(c.inputId)&&uuid(c.taskId)&&c.state==='PENDING')&&new Set(page.items.map(c=>c.id)).size===page.items.length;
 }
-export function createWorkspaceApi(client:ReturnType<typeof createBusinessClient>){return {
+export function createWorkspaceApi(client:ReturnType<typeof createBusinessClient>,scope:()=>unknown=()=>client){
+ type Flight={scope:unknown;controller:AbortController;promise:Promise<WorkspaceNavigation>;subscribers:number};
+ const pending=new Map<string,Flight>();
+ // One page composes several editors. Share only a currently executing observation,
+ // never a completed response; each producer still checks its own permissions/version.
+ function observe(meeting:string,signal:AbortSignal):Promise<WorkspaceNavigation>{
+  if(signal.aborted)return Promise.reject(new DOMException('Navigation cancelled','AbortError'));
+  const identity=scope();let flight=pending.get(meeting);
+  if(flight&&(flight.scope!==identity||flight.controller.signal.aborted)){flight.controller.abort();pending.delete(meeting);flight=undefined;}
+  if(!flight){
+   const controller=new AbortController();
+   const promise=Promise.resolve().then(async()=>{
+    if(controller.signal.aborted||scope()!==identity)throw new DOMException('Navigation scope changed','AbortError');
+    const value=await client.json<unknown>(`/api/v1/meetings/${meeting}/workspace`,{signal:controller.signal,expectedStatus:200,maxResponseBytes:262144});
+    if(controller.signal.aborted||scope()!==identity)throw new DOMException('Navigation scope changed','AbortError');
+    if(!navigation(value,meeting))throw new ApiError('response',200,'会议导航暂无法确认，请重新加载。');
+    const freeze=(v:unknown)=>{if(v!==null&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}};freeze(value);return value;
+   });
+   flight={scope:identity,controller,promise,subscribers:0};pending.set(meeting,flight);
+   const current=flight,clear=()=>{if(pending.get(meeting)===current)pending.delete(meeting);};void promise.then(clear,clear);
+  }
+  const current=flight;current.subscribers++;
+  return new Promise((resolve,reject)=>{
+   let finished=false;
+   const finish=(value?:WorkspaceNavigation,cause?:unknown)=>{if(finished)return;finished=true;signal.removeEventListener('abort',cancel);current.controller.signal.removeEventListener('abort',cancel);current.subscribers--;if(!current.subscribers&&pending.get(meeting)===current){pending.delete(meeting);current.controller.abort();}if(cause)reject(cause);else resolve(value!);};
+   const cancel=()=>finish(undefined,new DOMException('Navigation cancelled','AbortError'));
+   signal.addEventListener('abort',cancel,{once:true});current.controller.signal.addEventListener('abort',cancel,{once:true});
+   void current.promise.then(value=>finish(value),cause=>finish(undefined,cause));
+  });
+ }
+ return {
+ async access(meeting:string,signal:AbortSignal):Promise<void>{
+  if(!uuid(meeting))throw new TypeError('Invalid workspace meeting');
+  const value=await client.json<unknown>(`/api/v1/meetings/${meeting}/workspace/access`,{signal,expectedStatus:200,maxResponseBytes:4096});
+  if(!shape(value,'allowed,meetingId')||value.meetingId!==meeting||value.allowed!==true)throw new ApiError('response',200,'会议内容的访问状态暂无法核实，请重新读取。');
+ },
  async navigation(meeting:string,signal:AbortSignal):Promise<WorkspaceNavigation>{
   if(!uuid(meeting))throw new TypeError('Invalid workspace meeting');
-  const value=await client.json<unknown>(`/api/v1/meetings/${meeting}/workspace`,{signal,expectedStatus:200,maxResponseBytes:262144});
-  if(!navigation(value,meeting))throw new ApiError('response',200,'会议导航暂无法确认，请重新加载。');
-  const freeze=(v:unknown)=>{if(v!==null&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}};freeze(value);return value;
+  return observe(meeting,signal);
  }
 };}

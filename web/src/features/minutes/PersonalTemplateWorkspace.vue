@@ -16,7 +16,7 @@ const actor=()=>app.session.current.value?.actor.enterpriseId??null;
 const busy=computed(()=>localBusy.value||manager.busy.value),pending=computed(()=>manager.pending.value||busy.value);
 const concealed=computed(()=>!manager.available.value||!actor());
 function clear(){name.value='';themeText.value='';selected.value=null;accepted.value=null;composing.value=false;}
-function close(){if(pending.value)return;view.value?.close();visible.value=false;}
+function close(){if(busy.value)return;view.value?.close();visible.value=false;}
 function restore(){
  const original=manager.original.value,snapshot=manager.command.snapshot.value;
  if(!original||!snapshot)return;
@@ -87,9 +87,9 @@ defineExpose({openCreate,openManage,showRecovery,pending});
 </script>
 <template>
  <PersonalTemplateDialogView ref="view" v-model:name="name" v-model:theme-text="themeText" v-model:composing="composing" :mode="mode" :pending="manager.pending.value" :busy="busy" :state="manager.command.state.value" :error="error" :concealed="concealed" :accepted="!!accepted" @submit="submit" @retry="retry" @discard="discard" @close="close"/>
- <dialog ref="library" class="mask personal-library-root" aria-label="管理个人模板" @cancel="event=>{if(pending)event.preventDefault();}" @click="event=>{if(event.target===event.currentTarget&&!pending)library?.close();}">
+ <dialog ref="library" class="mask personal-library-root" aria-label="管理个人模板" @cancel="event=>{if(busy)event.preventDefault();}" @click="event=>{if(event.target===event.currentTarget&&!busy)library?.close();}">
   <div class="modal">
-   <header class="modal-h"><h3 class="m-t">管理个人模板</h3><button class="m-x" aria-label="关闭模板管理" :disabled="pending" @click="library?.close()"><Icon name="x" :size="18"/></button></header>
+   <header class="modal-h"><h3 class="m-t">管理个人模板</h3><button class="m-x" aria-label="关闭模板管理" :disabled="busy" @click="library?.close()"><Icon name="x" :size="18"/></button></header>
    <div class="modal-b">
     <p class="small muted">模板编辑形成新版本；已有纪要继续保留原模板版本。</p>
     <p v-if="!manager.page.value?.items.length" class="empty">{{busy?'正在读取模板…':'暂无个人模板'}}</p>
@@ -99,9 +99,10 @@ defineExpose({openCreate,openManage,showRecovery,pending});
     </article>
     <p v-if="error" role="alert" class="ac-error">{{error}}</p>
    </div>
-   <footer class="modal-f"><button class="btn" :disabled="pending" @click="loadPage(null)">返回首页</button><button v-if="manager.page.value?.nextCursor" class="btn" :disabled="pending" @click="loadPage(manager.page.value.nextCursor)">下一页</button><button class="btn" :disabled="pending" @click="library?.close()">关闭</button></footer>
+   <footer class="modal-f"><button class="btn" :disabled="pending" @click="loadPage(null)">返回首页</button><button v-if="manager.page.value?.nextCursor" class="btn" :disabled="pending" @click="loadPage(manager.page.value.nextCursor)">下一页</button><button class="btn" :disabled="busy" @click="library?.close()">关闭</button></footer>
   </div>
  </dialog>
+ <button v-if="manager.pending.value&&!visible" class="btn sm" type="button" @click="showRecovery">恢复原模板操作</button>
  <p v-if="error&&!visible&&!library?.open" class="small" role="alert">{{error}}</p>
 </template>
 <style scoped>

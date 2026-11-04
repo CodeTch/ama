@@ -26,6 +26,7 @@ final class MinutesPersonalTemplateSelection {
  static void requirePersonal(MinutesGraphCapture.Graph graph,String revision,String actor,boolean capable){
   var selected=JdbcMinutesFactsReader.one(graph,Table.TEMPLATE_REVISION,revision);String owner=selected.nullableString("owner_id");
   if(owner!=null&&!owner.equals(actor))throw new MeetingAccess.AccessDeniedException();
+  if(ama.minutes.BuiltinMinutesTemplates.matches(selected)){require(capable,CAPABILITY_UNAVAILABLE);requireCurrent(graph,revision,actor,false);return;}
   require(owner!=null&&capable,CAPABILITY_UNAVAILABLE);requireCurrent(graph,revision,actor,true);
   try{ama.minutes.PersonalTemplateDocument.name(selected.string("name"));var layout=ama.minutes.PersonalTemplateDocument.parse(selected.string("themes"));require(selected.number("theme_count")==layout.themes().size(),PROVENANCE_UNAVAILABLE);}
   catch(IllegalArgumentException|IllegalStateException invalid){throw fail(PROFILE_UNAVAILABLE);}

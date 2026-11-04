@@ -11,3 +11,11 @@ test('manual offsets must still quote the selected Unicode text',()=>{
  assert.deepEqual(reanchorEvidence('A😀bc',evidence,manual),[{evidenceId,startToken:'1',endToken:'3'}]);
  assert.throws(()=>reanchorEvidence('XXA😀bc',evidence,manual));assert.throws(()=>reanchorEvidence('A😀Xc',evidence,manual));
 });
+
+test('title-only edits and edits outside repeated evidence preserve the exact saved occurrences',()=>{
+ const original='😀重复证据\n重复证据',anchors=[{evidenceId,quote:'重复证据',startToken:'1',endToken:'5'},{evidenceId:'second',quote:'重复证据',startToken:'6',endToken:'10'}];
+ assert.deepEqual(reanchorEvidence(original,anchors,new Map(),original),anchors.map(({evidenceId,startToken,endToken})=>({evidenceId,startToken,endToken})));
+ assert.deepEqual(reanchorEvidence('前言\n'+original,anchors,new Map(),original).map(x=>x.startToken),['4','9']);
+ assert.deepEqual(reanchorEvidence(original+'\n备注',anchors,new Map(),original).map(x=>x.startToken),['1','6']);
+ assert.throws(()=>reanchorEvidence('更改了全部证据',anchors,new Map(),original));
+});

@@ -12,7 +12,8 @@ final class PublicationManifest {
  }
  static void validate(Map<String,Object> m,TranscriptAcquisitionBudget.Ledger budget){
   Objects.requireNonNull(budget);budget.row(m.size());
-  var keys=new HashSet<>(m.keySet());keys.remove("bindingTransition");keys.remove("acceptanceBinding");require(keys.equals(KEYS)&&"ama.knowledge-publication-manifest.v1".equals(m.get("schema")),PROVENANCE_UNAVAILABLE);
+  var keys=new HashSet<>(m.keySet());keys.remove("bindingTransition");keys.remove("acceptanceBinding");keys.remove("publicationMetadata");require(keys.equals(KEYS)&&"ama.knowledge-publication-manifest.v1".equals(m.get("schema")),PROVENANCE_UNAVAILABLE);
+  if(m.containsKey("publicationMetadata")){var metadata=PublicationConfigurationData.validate(m.get("publicationMetadata"));for(String key:List.of("providerId","libraryId","folderId"))require(Objects.equals(m.get(key),metadata.get(key)),PROVENANCE_UNAVAILABLE);}
   if(m.containsKey("acceptanceBinding")){require(m.get("acceptanceBinding") instanceof Map<?,?>,PROVENANCE_UNAVAILABLE);var binding=(Map<?,?>)m.get("acceptanceBinding");require(binding.keySet().equals(Set.of("schema","operation","receiptScopeHash","requestHash"))&&"ama.publication-command-acceptance.v1".equals(binding.get("schema"))&&binding.get("operation") instanceof String&&Set.of("PUBLICATION_SUBMIT","PUBLICATION_RESUBMIT","PUBLICATION_ZERO_EFFECT_RETRY").contains(binding.get("operation")),PROVENANCE_UNAVAILABLE);require(text(binding,"receiptScopeHash",64).matches("[0-9a-f]{64}")&&text(binding,"requestHash",64).matches("[0-9a-f]{64}"),PROVENANCE_UNAVAILABLE);}
   for(String k:List.of("publicationId","confirmationId","meetingId"))uuid(text(m,k,36));
   for(String k:List.of("providerId","storeInstanceId","clientId","delegationKeyId","assertionKeyId","requesterId","libraryId","folderId"))text(m,k,255);

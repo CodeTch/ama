@@ -10,6 +10,14 @@ class SavedSpeechCorrectionIdentityTest {
  final Actor actor=new Actor("correction-owner",Status.ACTIVE,Set.of(Role.USER));
  final String meeting="00000000-0000-4000-8000-000000000001",source="00000000-0000-4000-8000-000000000002",first="00000000-0000-4000-8000-000000000003",second="00000000-0000-4000-8000-000000000004";
  Command decision(String id,CorrectionDecision decision){return new Command(Operation.CORRECTION,7,source,List.of(),null,new Correction(id,decision));}
+ @Test void batchBindsAllCandidatesAndRejectsDuplicates(){
+  var batch=new Correction(first,CorrectionDecision.ACCEPT,List.of(second));
+  assertEquals(List.of(first,second),batch.candidateIds());
+  var command=new Command(Operation.CORRECTION,7,source,List.of(),null,batch);
+  assertNotEquals(JdbcSavedTranscriptReceipts.identity(actor,meeting,"batch-key",decision(first,CorrectionDecision.ACCEPT)).request(),JdbcSavedTranscriptReceipts.identity(actor,meeting,"batch-key",command).request());
+  assertThrows(IllegalArgumentException.class,()->new Correction(first,CorrectionDecision.ACCEPT,List.of(first)));
+  assertThrows(IllegalArgumentException.class,()->new Correction(first,CorrectionDecision.ACCEPT,List.of(second,second)));
+ }
  @Test void candidateAndDecisionArePartOfTheImmutableOriginalRequest(){
   var accept=JdbcSavedTranscriptReceipts.identity(actor,meeting,"same-original-key",decision(first,CorrectionDecision.ACCEPT));
   assertEquals(accept,JdbcSavedTranscriptReceipts.identity(actor,meeting,"same-original-key",decision(first,CorrectionDecision.ACCEPT)));

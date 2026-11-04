@@ -15,26 +15,46 @@ export function useSpeechCorrections(api:Api,options:Options){
  function dispose(){epoch++;clearView();scope=null;available.value=false;reading.value=false;command.invalidate();}
  function synchronize(){dispose();const who=options.actor();if(!who||!options.eligible())return;scope={actor:who,meeting:options.meeting()};concealed.value=false;const stored=journal.load(who,scope.meeting);if(['INVALID','UNAVAILABLE'].includes(stored.kind))throw Error('纠错恢复记录暂不可用，请保留页面。');available.value=true;if(stored.kind==='RESTORED')command.restore(stored.value);}
  async function load(){
-  clearView();const current=options.current(),turn=epoch,order=readOrder;if(!active(turn)||!current?.saved||current.saved.kind!=='WORKING'||current.correction.mode!=='CONTROLLED_SPEECH')return;
+  clearView();const current=options.current(),turn=epoch,order=readOrder;if(!active(turn)||!current?.saved||current.saved.kind!=='WORKING')return;
   const source=current.saved.id,token=current.observation.revisionToken;request=new AbortController();const controller=request;loading.value=true;
-  try{const [result,labels]=await Promise.all([current.capabilities.canSave?api.read(scope!.meeting,source,controller.signal):Promise.resolve(null),api.speakers(scope!.meeting,source,controller.signal)]);if(active(turn)&&order===readOrder&&!controller.signal.aborted&&options.current()?.saved?.id===source&&options.current()?.observation.revisionToken===token&&(result===null||result.observation.revisionToken===token)&&labels.observation.revisionToken===token){view.value=result;speakers.value=labels;}}
+  const valid=()=>active(turn)&&order===readOrder&&!controller.signal.aborted&&options.current()?.saved?.id===source&&options.current()?.observation.revisionToken===token;
+  try{
+   const reads=[
+    api.speakers(scope!.meeting,source,controller.signal).then(labels=>{
+     if(valid()&&labels.observation.revisionToken===token)speakers.value=labels;
+    }),
+    ...(current.capabilities.canSave&&current.correction.mode==='CONTROLLED_SPEECH'
+     ? [api.read(scope!.meeting,source,controller.signal).then(result=>{
+      if(valid()&&result.observation.revisionToken===token)view.value=result;
+     })] : [])
+   ];
+   const results=await Promise.allSettled(reads);
+   const failures=results.filter(result=>result.status==='rejected');
+   const failed=failures.find(result=>result.reason instanceof ApiError&&[401,403].includes(result.reason.status??0))??failures[0];
+   if(failed)throw failed.reason;
+  }
   catch(cause){if(active(turn)&&order===readOrder){conceal(cause);throw cause;}}finally{if(active(turn)&&order===readOrder)loading.value=false;}
  }
- function source(){const current=options.current();if(!active(epoch)||!available.value||!options.canMutate()||pending.value||!current?.capabilities.canSave||current.saved?.kind!=='WORKING'||current.correction.mode!=='CONTROLLED_SPEECH')throw Error('请先保存或处理当前修改，再核对纠错建议。');return current;}
+ function source(speakerOperation=false){const current=options.current();if(!active(epoch)||!available.value||!options.canMutate()||pending.value||!current?.capabilities.canSave||current.saved?.kind!=='WORKING'||!speakerOperation&&current.correction.mode!=='CONTROLLED_SPEECH')throw Error('请先保存或处理当前修改，再核对纠错建议。');return current;}
  async function retry(){
-  const turn=epoch,selected=scope;if(!active(turn)||!selected||!available.value||!command.snapshot.value||busy.value)throw Error('原纠错操作暂不可恢复。');if(!['PREPARED','UNCERTAIN','ACKNOWLEDGED'].includes(command.state.value))throw Error('请核对明确拒绝的原操作。');
+  const turn=epoch,selected=scope;if(!active(turn)||!selected||!available.value||!command.snapshot.value||reading.value||command.state.value==='SENDING')throw Error('原纠错操作暂不可恢复。');if(!['PREPARED','UNCERTAIN','ACKNOWLEDGED'].includes(command.state.value))throw Error('请核对明确拒绝的原操作。');
   if(journal.save(selected.actor,selected.meeting,command.snapshot.value)!=='SAVED')throw Error('无法保存纠错原请求，请保留页面重试。');
   let accepted;try{accepted=command.state.value==='ACKNOWLEDGED'?command.ack.value!:await command.send();}catch(cause){if(active(turn))conceal(cause);throw cause;}
   if(!active(turn))throw new DOMException('Correction scope changed','AbortError');reading.value=true;const controller=new AbortController();request=controller;
   try{const current=await api.current(selected.meeting,controller.signal);if(!active(turn)||controller.signal.aborted)throw new DOMException('Correction scope changed','AbortError');if(current.meetingId!==selected.meeting)throw Error('当前工作稿暂无法核实，请保留原请求。');if(!journal.clear())throw Error('纠错已受理，恢复记录尚未清理，请重试确认。');command.invalidate();clearView();return{accepted,current};}
   catch(cause){if(active(turn))conceal(cause);throw cause;}finally{if(active(turn))reading.value=false;}
  }
- function prepare(operation:string,path:string,extra:Record<string,unknown>={}){const current=source();command.prepare({operation,actor:scope!.actor,resource:scope!.meeting,path:`/api/v1/meetings/${scope!.meeting}/transcript${path}`,key:crypto.randomUUID(),body:{expectedRevisionToken:current.observation.revisionToken,sourceRevisionId:current.saved!.id,...extra}});if(!validCorrectionCommand(command.snapshot.value,scope!.actor,scope!.meeting)){command.invalidate();throw Error('纠错请求无效。');}return retry();}
+ function prepare(operation:string,path:string,extra:Record<string,unknown>={}){const current=source(operation==='TRANSCRIPT_SPEAKERS');command.prepare({operation,actor:scope!.actor,resource:scope!.meeting,path:`/api/v1/meetings/${scope!.meeting}/transcript${path}`,key:crypto.randomUUID(),body:{expectedRevisionToken:current.observation.revisionToken,sourceRevisionId:current.saved!.id,...extra}});if(!validCorrectionCommand(command.snapshot.value,scope!.actor,scope!.meeting)){command.invalidate();throw Error('纠错请求无效。');}return retry();}
  function propose(){if(!view.value?.canPropose)return Promise.reject(Error('当前没有可请求的语音增强来源。'));return prepare('TRANSCRIPT_CORRECTIONS_PROPOSE','/correction-proposals');}
  function decide(id:string,decision:'ACCEPT'|'REJECT'){const current=source(),item=view.value?.items.find(x=>x.id===id);if(view.value?.sourceRevisionId!==current.saved!.id||view.value?.observation.revisionToken!==current.observation.revisionToken||!item||!(decision==='ACCEPT'?item.canAccept:item.canReject))return Promise.reject(Error('建议已变化，请重新读取后核对。'));return prepare('TRANSCRIPT_CORRECTION',`/corrections/${id}/decisions`,{candidateId:id,decision});}
+ function decideBatch(ids:string[],decision:'ACCEPT'|'REJECT'){
+  const current=source(),snapshot=view.value;
+  if(!ids.length||ids.length>60||new Set(ids).size!==ids.length||snapshot?.sourceRevisionId!==current.saved!.id||snapshot.observation.revisionToken!==current.observation.revisionToken||ids.some(id=>!snapshot.items.some(item=>item.id===id&&(decision==='ACCEPT'?item.canAccept:item.canReject))))return Promise.reject(Error('批量建议已变化，请重新核对。'));
+  return prepare('TRANSCRIPT_CORRECTION',`/corrections/${ids[0]}/decisions`,{candidateId:ids[0],additionalCandidateIds:ids.slice(1),decision});
+ }
  function undo(id:string){const current=source(),item=view.value?.items.find(x=>x.id===id);if(!item?.canUndo||item.operationId!==current.saved!.id)return Promise.reject(Error('只能撤销仍为当前版本的接受操作。'));return prepare('TRANSCRIPT_CORRECTION_UNDO',`/operations/${item.operationId}/undo`);}
- function label(segmentIds:string[],label:string,enterpriseId:string|null=null){return prepare('TRANSCRIPT_SPEAKERS','/speakers',{segmentIds:[...segmentIds],label,enterpriseId});}
- function merge(sourceId:string,targetId:string){const current=source(),labels=speakers.value;if(!labels||labels.sourceRevisionId!==current.saved!.id||labels.observation.revisionToken!==current.observation.revisionToken||sourceId===targetId)return Promise.reject(Error('说话人版本已变化，请重新核对。'));const from=labels.items.find(x=>x.id===sourceId),to=labels.items.find(x=>x.id===targetId);if(!from||!to)return Promise.reject(Error('请选择当前稿件中的两个说话人。'));return label([...from.segmentIds,...to.segmentIds],to.label,to.enterpriseId);}
+ function label(segmentIds:string[],label:string,enterpriseId:string|null=null,voiceprintId?:string){return prepare('TRANSCRIPT_SPEAKERS','/speakers',{segmentIds:[...segmentIds],label,enterpriseId,...(voiceprintId?{voiceprintId}:{})});}
+ function merge(sourceId:string,targetId:string){const current=source(true),labels=speakers.value;if(!labels||labels.sourceRevisionId!==current.saved!.id||labels.observation.revisionToken!==current.observation.revisionToken||sourceId===targetId)return Promise.reject(Error('说话人版本已变化，请重新核对。'));const from=labels.items.find(x=>x.id===sourceId),to=labels.items.find(x=>x.id===targetId);if(!from||!to)return Promise.reject(Error('请选择当前稿件中的两个说话人。'));return label([...from.segmentIds,...to.segmentIds],to.label,to.enterpriseId);}
  function discardRejected(){if(!['CONFLICT','REJECTED'].includes(command.state.value))throw Error('不能放弃结果未知的纠错操作。');if(!journal.clear())throw Error('原纠错记录暂无法清理。');command.invalidate();clearView();}
- return{view:readonly(view),speakers:readonly(speakers),available:readonly(available),loading:readonly(loading),pending,busy,original,command,synchronize,load,propose,decide,undo,label,merge,retry,discardRejected,clearView,dispose};
+ return{view:readonly(view),speakers:readonly(speakers),available:readonly(available),loading:readonly(loading),pending,busy,original,command,synchronize,load,propose,decide,decideBatch,undo,label,merge,retry,discardRejected,clearView,dispose};
 }

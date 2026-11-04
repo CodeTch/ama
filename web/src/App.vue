@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import WorkspaceTopbar from './shared/WorkspaceTopbar.vue';
 import { computed,nextTick,onMounted,onUnmounted,ref,watch } from 'vue';
 import {useApplication} from './application';
 import {useRouter,onBeforeRouteLeave,onBeforeRouteUpdate} from 'vue-router';
@@ -14,9 +13,16 @@ import {ApiError} from './shared/api/client';
 import Icon from './shared/Icon.vue';
 import MeetingDateRange from './features/meetings/MeetingDateRange.vue';
 import {fitSelectedTags,positionSelectedPopover} from './features/meetings/selected-filter-tags';
-const {session,list,create,createDiscovery,options:useApplicationOptions,setMeetingScope,topics,topicCommands}=useApplication(),router=useRouter(),createOpen=ref(false),importAfterCreate=ref(false);
+const {session,list,create,createDiscovery,options:useApplicationOptions,setMeetingScope,topicCommands,pendingImports}=useApplication(),router=useRouter(),createOpen=ref(false),importAfterCreate=ref(false);
 const sessionChecking=ref(!session.current.value);
 const importMeeting=ref<string|null>(null),importOpen=ref(false),importPanel=ref<InstanceType<typeof UploadImportPanel>>();
+const pendingImportEntries=computed(()=>{
+ const actor=session.current.value?.actor.enterpriseId;
+ return actor?pendingImports.list(actor):[];
+});
+function resumeImport(entry:(typeof pendingImportEntries.value)[number]){
+ void router.replace({path:'/meetings',query:{import:entry.command.resource,fresh:entry.newImport?'1':undefined}});
+}
 const createFlow=useMeetingCreateFlow(create,()=>session.current.value?.actor.enterpriseId??null,async id=>{if(importAfterCreate.value){setMeetingScope(id);importMeeting.value=id;const failure=await router.replace({path:'/meetings',query:{import:id,fresh:'1'}});if(failure)return false;await nextTick();return importPanel.value?.showModal()??false;}const path=`/meeting/${id}`;const failure=await router.push(path);return !failure&&router.currentRoute.value.path===path;});
 function goCasLogin(){window.location.assign('/login');}
 function startRecording(){if(!session.current.value){goCasLogin();return;}void router.push('/recording?start=1');}
@@ -40,29 +46,41 @@ const page=list.page,loading=list.loading;
 const homeLoading=computed(()=>sessionChecking.value||session.status.value==='LOADING'||!!session.current.value&&loading.value&&!page.value);
 const keyword=ref(''),stageFilters=ref<string[]>([]),categoryFilters=ref<string[]>([]),fromDate=ref(''),toDate=ref(''),groupView=ref(false),topicFilter=ref('');
 const selectedMeetingIds=ref<string[]>([]);watch(()=>[session.current.value?.actor.enterpriseId,scope.value,page.value],()=>{selectedMeetingIds.value=[];});
-const topicWorkspace=ref<InstanceType<typeof TopicWorkspace>>(),topicMemberships=ref<Record<string,string|null>>({}),topicMembershipLoading=ref(false),topicMembershipError=ref<string|null>(null);let topicTurn=0,topicRequest:AbortController|null=null;
-let topicMembershipActor:string|null=null;
+const topicWorkspace=ref<InstanceType<typeof TopicWorkspace>>(),topicMemberships=topicCommands.memberships,topicMembershipLoading=ref(false),topicMembershipError=ref<string|null>(null);let topicTurn=0,topicRequest:AbortController|null=null;
 async function readTopicMemberships(){
  const turn=++topicTurn,who=session.current.value?.actor.enterpriseId??null,ids=page.value?.items.map(item=>item.id)??[];
  topicRequest?.abort();
- // A same-account refresh keeps verified labels until the fresh read settles.
- // Removed rows and identity/scope changes drop their labels immediately.
- topicMemberships.value=who&&who===topicMembershipActor&&scope.value==='owned'?Object.fromEntries(Object.entries(topicMemberships.value).filter(([id])=>ids.includes(id))):{};
- topicMembershipActor=who;topicMembershipError.value=null;topicMembershipLoading.value=false;
+ topicMembershipError.value=null;topicMembershipLoading.value=false;
  if(!who||scope.value!=='owned'||!ids.length)return;
  const request=new AbortController();topicRequest=request;topicMembershipLoading.value=true;
- try{const rows=await topics.memberships(ids,request.signal);if(turn===topicTurn&&who===session.current.value?.actor.enterpriseId)topicMemberships.value=Object.fromEntries(rows.map(row=>[row.meetingId,row.topicId]));}
- catch(cause){if(turn===topicTurn){topicMemberships.value={};topicMembershipError.value=cause instanceof Error?cause.message:'会议专题暂无法读取。';}}
+ try{await topicCommands.refreshMemberships(ids,request.signal);}
+ catch(cause){if(turn===topicTurn)topicMembershipError.value=cause instanceof Error?cause.message:'会议专题暂无法读取。';}
  finally{if(turn===topicTurn)topicMembershipLoading.value=false;}
 }
 watch(()=>[session.current.value?.actor.enterpriseId,scope.value,page.value?.items.map(item=>item.id).join(',')],()=>{void readTopicMemberships();},{immediate:true});
-const topicLabels=computed(()=>Object.fromEntries((page.value?.items??[]).map(item=>{const id=topicMemberships.value[item.id];return [item.id,id?topicCommands.topics.value.find(topic=>topic.id===id)?.name??'专题暂不可用':Object.hasOwn(topicMemberships.value,item.id)?'未归入专题':topicMembershipLoading.value?'正在读取专题':topicMembershipError.value?'专题读取失败':'未归入专题'];})));
+const topicLabels=computed(()=>Object.fromEntries((page.value?.items??[]).map(item=>{
+ const id=topicMemberships.value[item.id];
+ const label=id?topicCommands.topics.value.find(topic=>topic.id===id)?.name??'专题暂不可用':
+  id===null?'未归入专题':topicMembershipLoading.value?null:topicMembershipError.value?'专题读取失败':'未归入专题';
+ return [item.id,label];
+})));
 const unassignedItems=computed(()=>(page.value?.items??[]).filter(item=>topicMemberships.value[item.id]===null));
 const topicGroups=computed(()=>topicCommands.topics.value.filter(topic=>!topicFilter.value||topicFilter.value===topic.id).map(topic=>({topic,items:(page.value?.items??[]).filter(item=>topicMemberships.value[item.id]===topic.id)})));
 function assignTopics(items:components['schemas']['MeetingItem'][]){void topicWorkspace.value?.openAssignment(items.map(item=>({...item,topicId:topicMemberships.value[item.id]??null})));}
-function topicsChanged(){void list.reload();void readTopicMemberships();}
+const topicNotice=ref('');
+let topicNoticeTimer:ReturnType<typeof setTimeout>|undefined;
+function clearTopicNotice(){clearTimeout(topicNoticeTimer);topicNotice.value='';}
+function topicsChanged(notice?:string){
+ if(notice){
+  clearTopicNotice();
+  topicNotice.value=notice;
+  topicNoticeTimer=setTimeout(clearTopicNotice,4000);
+ }
+ void list.reload();
+}
 function selectTopic(){if(topicFilter.value==='__create'){topicFilter.value='';if(!session.current.value){goCasLogin();return;}void topicWorkspace.value?.openCreate();return;}applyFilters();}
-onUnmounted(()=>{topicTurn++;topicRequest?.abort();});
+watch(()=>session.current.value?.actor.enterpriseId,clearTopicNotice,{flush:'sync'});
+onUnmounted(()=>{topicTurn++;topicRequest?.abort();clearTopicNotice();});
 const activeFilterMenu=ref<string|null>(null);
 function redrawHome(){
  // Keep the page shell mounted while a filter read settles so native controls
@@ -108,8 +126,8 @@ const future=ref<InstanceType<typeof FuturePanels>>();
 </script>
 <template>
  <div class="layout"><div class="main">
-  <WorkspaceTopbar :breadcrumb="importOpen?'会议详情':''" :session-checking="sessionChecking"/>
-  <main class="content"><div class="m19-page" :class="{'aci-import-background':importOpen}">
+
+  <main class="content"><button v-if="topicWorkspace?.showRecoveryEntry()" class="btn" type="button" @click="topicWorkspace.recover()">恢复原专题请求</button><div v-if="pendingImports.error.value" class="banner error" role="alert">导入恢复记录暂无法更新。</div><div v-if="!importOpen&&pendingImportEntries.length" class="banner" aria-label="待确认的导入操作"><div v-for="(entry,index) in pendingImportEntries" :key="entry.command.key"><span>{{pendingImportEntries.length>1?'第 '+(index+1)+' 项 · ':''}}{{entry.command.operation==='IMPORT_DRAFT_DISCARD'?'放弃导入':'保存导入'}}结果待确认</span> <button class="btn sm" type="button" @click="resumeImport(entry)">继续处理</button></div></div><div class="m19-page" :class="{'aci-import-background':importOpen}">
    <div class="page-head"><div><h1 class="page-title">我的会议</h1><div class="page-desc">集中管理你负责和参与的会议，从录音采集、AI增强转写到纪要生成与发布，让会议内容可核对、结论可追溯、成果随时回看。</div></div><div class="page-actions">
     <button class="btn primary" @click="startRecording"><Icon name="mic" :size="14"/> 开始录音</button>
     <button class="btn" @click="openImport"><Icon name="plus" :size="14"/> 导入会议</button>
@@ -137,6 +155,7 @@ const future=ref<InstanceType<typeof FuturePanels>>();
   </div>
   </main>
  </div></div>
+ <div id="toast-wrap" class="toast-wrap" role="status"><div v-if="topicNotice" class="toast"><span class="t-t">{{topicNotice}}</span></div></div>
  <TopicWorkspace ref="topicWorkspace" @changed="topicsChanged"/><FuturePanels ref="future"/><UploadImportPanel v-if="importMeeting" ref="importPanel" :key="importMeeting" :meeting-id="importMeeting" :new-import="router.currentRoute.value.query.fresh==='1'" @opened="importOpen=true" @closed="closedImport" @saved="savedImport" @discarded="savedImport" @processed="processedImport" @background="kind=>future?.open(kind)"/>
 </template>
 

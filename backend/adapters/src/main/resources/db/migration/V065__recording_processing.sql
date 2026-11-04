@@ -1,0 +1,25 @@
+-- Durable user-requested processing, with the submitted material snapshot retained.
+CREATE TABLE recording_processing (
+ session_id CHAR(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci PRIMARY KEY,
+ meeting_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ actor_id VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_bin NOT NULL,
+ request_key CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ expected_revision BIGINT UNSIGNED NOT NULL,
+ material_snapshot_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+ state VARCHAR(24) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ task_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+ source_revision_id CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+ source_meeting_revision BIGINT UNSIGNED NULL,
+ decision_key CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ lease_owner CHAR(36) CHARACTER SET ascii COLLATE ascii_bin NULL,
+ lease_until DATETIME(6) NULL,
+ error_code VARCHAR(128) CHARACTER SET ascii COLLATE ascii_bin NULL,
+ updated_at DATETIME(6) NOT NULL,
+ FOREIGN KEY(session_id) REFERENCES recording_session(session_id),
+ FOREIGN KEY(meeting_id) REFERENCES meeting(id),
+ FOREIGN KEY(actor_id) REFERENCES enterprise_identity(enterprise_id),
+ FOREIGN KEY(material_snapshot_id) REFERENCES material_snapshot(id),
+ UNIQUE KEY recording_process_request(actor_id,meeting_id,request_key),
+ INDEX recording_process_due(state,lease_until),
+ CHECK(state IN ('WAITING_ARCHIVE','COPYING','TRANSCRIBING','ENHANCING','SUCCEEDED','FAILED','STALE'))
+) ENGINE=InnoDB;

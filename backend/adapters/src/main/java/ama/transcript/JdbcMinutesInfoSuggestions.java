@@ -12,15 +12,46 @@ public final class JdbcMinutesInfoSuggestions {
   public String candidateId(){return candidate;}public String field(){return field;}public String value(){return value;}
  }
  private Map<String,Object> root(Actor actor,String meeting){authority.savedAccess().prepareExternalRead(actor,meeting);return authority.transactionRunner().required(()->{authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);return j.queryForMap("SELECT revision,transcript_confirmation_id FROM meeting WHERE id=?",meeting);});}
- public Map<String,Object> list(Actor actor,String meeting){
-  uuid(meeting);var before=root(actor,meeting);long revision=((Number)before.get("revision")).longValue();var indexes=j.queryForList("SELECT s.id,s.candidate_id,s.field,s.created_at FROM meeting_info_suggestion s JOIN generation_candidate c ON c.id=s.candidate_id AND c.meeting_id=s.meeting_id JOIN generation_input i ON i.id=c.input_id AND i.meeting_id=c.meeting_id WHERE s.meeting_id=? AND s.state='PENDING' AND c.state IN ('PENDING','ADOPTED','STALE') AND i.transcript_confirmation_id=? ORDER BY s.created_at DESC,s.id DESC LIMIT 3",meeting,before.get("transcript_confirmation_id"));
-  // Offer the latest available value for each field; old indexes remain independently addressable.
-  var items=new ArrayList<Map<String,Object>>();var fields=new HashSet<String>();var cache=new HashMap<String,JdbcMinutesFactsReader.Snapshot>();
-  for(var index:indexes){String field=(String)index.get("field");if(!fields.add(field))continue;String candidate=(String)index.get("candidate_id");var snapshot=cache.computeIfAbsent(candidate,c->reader.readOwner(actor,meeting,"CANDIDATE",c));if(((Number)snapshot.observation().get("revision")).longValue()!=revision)throw new ama.contract.MeetingContracts.Conflict();var row=candidate(snapshot,candidate);var input=JdbcMinutesFactsReader.one(snapshot.graph(),Table.GENERATION_INPUT,(String)row.get("input_id"));if(!currentSources(snapshot,input))continue;String value=values(snapshot,row).get(field);if(value==null)continue;items.add(Map.of("id",index.get("id"),"field",field,"value",value,"createdAt",row.get("created_at"),"candidateId",candidate,"inputId",input.string("id"),"inputFingerprint",input.string("input_fingerprint"),"transcriptConfirmationId",input.string("transcript_confirmation_id")));}
-  var after=root(actor,meeting);if(!before.equals(after))throw new ama.contract.MeetingContracts.Conflict();return Map.of("meetingId",meeting,"revisionToken",Long.toString(revision),"items",List.copyOf(items),"categoryStatus","SELECT_REQUIRED");
+ public Map<String,Object> list(Actor actor,String meeting){return list(actor,meeting,null,null);}
+ public Map<String,Object> list(Actor actor,String meeting,ama.model.HttpMeetingCategorySuggestion model,ama.meeting.CategoryDictionary categories){
+  uuid(meeting);var before=root(actor,meeting);long revision=((Number)before.get("revision")).longValue();
+  var candidates=j.queryForList("SELECT c.id FROM generation_candidate c JOIN generation_input i ON i.id=c.input_id AND i.meeting_id=c.meeting_id WHERE c.meeting_id=? AND c.state IN ('PENDING','ADOPTED','STALE') AND i.scope='FULL' AND i.transcript_confirmation_id=? ORDER BY c.created_at DESC,c.id DESC LIMIT 1",meeting,before.get("transcript_confirmation_id"));
+  var items=new ArrayList<Map<String,Object>>();String categoryStatus="SELECT_REQUIRED";
+  if(!candidates.isEmpty()){
+   String candidate=(String)candidates.getFirst().get("id");var snapshot=reader.readOwner(actor,meeting,"CANDIDATE",candidate);
+   if(((Number)snapshot.observation().get("revision")).longValue()!=revision)throw new ama.contract.MeetingContracts.Conflict();
+   var row=candidate(snapshot,candidate);var input=JdbcMinutesFactsReader.one(snapshot.graph(),Table.GENERATION_INPUT,(String)row.get("input_id"));
+   if(currentSources(snapshot,input)){
+    var original=values(snapshot,row);
+    if(model!=null&&categories!=null&&j.queryForObject("SELECT COUNT(*) FROM meeting_info_suggestion WHERE candidate_id=? AND field='CATEGORY'",Long.class,candidate)==0){
+     try{
+      var budget=new ama.meeting.WorkspaceReadBudget();var catalog=categories.catalog(budget);var dictionary=new ArrayList<Map<String,String>>();
+      for(var metadata:catalog.metadata(budget)){var category=catalog.read(metadata,budget);dictionary.add(Map.of("id",category.id(),"label",category.label()));}
+      var request=new com.fasterxml.jackson.databind.ObjectMapper().writeValueAsBytes(Map.of("profile",ama.model.HttpMeetingCategorySuggestion.PROFILE,"candidateId",candidate,"inputFingerprint",input.string("input_fingerprint"),"name",original.getOrDefault("NAME",""),"summary",original.getOrDefault("SUMMARY",""),"dictionaryVersion",catalog.version(budget),"categories",dictionary));
+      String value=model.execute(request);
+      if(value!=null){categories.requireAvailableCategory(value);authority.transactionRunner().required(()->{
+       authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);
+       if(!before.equals(j.queryForMap("SELECT revision,transcript_confirmation_id FROM meeting WHERE id=?",meeting)))throw new ama.contract.MeetingContracts.Conflict();
+       j.update("INSERT INTO meeting_info_suggestion(id,meeting_id,candidate_id,field,state,created_at,category_value,category_input_fingerprint,category_request_sha256,category_profile) VALUES (?,?,?,'CATEGORY','PENDING',?,?,?,?,?) ON DUPLICATE KEY UPDATE id=id",UUID.randomUUID().toString(),meeting,candidate,java.time.LocalDateTime.ofInstant(java.time.Instant.parse((String)row.get("created_at")),java.time.ZoneOffset.UTC),value,input.string("input_fingerprint"),ama.model.HttpMeetingCategorySuggestion.sha(request),ama.model.HttpMeetingCategorySuggestion.PROFILE);return null;
+      });}
+     }catch(java.io.IOException|ama.contract.MeetingContracts.CategoryUnavailable|IllegalArgumentException unavailable){categoryStatus="UNAVAILABLE";}
+    }
+    var indexes=j.queryForList("SELECT id,field,state,category_value,category_input_fingerprint,category_profile FROM meeting_info_suggestion WHERE meeting_id=? AND candidate_id=? ORDER BY field LIMIT 3",meeting,candidate);
+    for(var index:indexes){String field=(String)index.get("field"),value=suggestionValue(original,index,input);if(value==null)continue;
+     if("CATEGORY".equals(field))categoryStatus="AVAILABLE";
+     var item=new LinkedHashMap<String,Object>();item.putAll(Map.of("id",index.get("id"),"field",field,"state",index.get("state"),"value",value,"createdAt",row.get("created_at"),"candidateId",candidate,"inputId",input.string("id"),"inputFingerprint",input.string("input_fingerprint"),"transcriptConfirmationId",input.string("transcript_confirmation_id")));items.add(Collections.unmodifiableMap(item));
+    }
+   }
+  }
+  var after=root(actor,meeting);if(!before.equals(after))throw new ama.contract.MeetingContracts.Conflict();return Map.of("meetingId",meeting,"revisionToken",Long.toString(revision),"items",List.copyOf(items),"categoryStatus",categoryStatus);
+ }
+ private static String suggestionValue(Map<String,String> original,Map<String,Object> index,FullRow input){
+  String field=(String)index.get("field");if(!"CATEGORY".equals(field))return original.get(field);
+  require(ama.model.HttpMeetingCategorySuggestion.PROFILE.equals(index.get("category_profile"))&&input.string("input_fingerprint").equals(index.get("category_input_fingerprint")),PROVENANCE_UNAVAILABLE);
+  return (String)index.get("category_value");
  }
  public Prepared prepare(Actor actor,String meeting,String id){
-  uuid(meeting);uuid(id);root(actor,meeting);var rows=j.queryForList("SELECT candidate_id,field FROM meeting_info_suggestion WHERE id=? AND meeting_id=?",id,meeting);require(rows.size()==1,PROVENANCE_UNAVAILABLE);var index=rows.getFirst();String candidate=(String)index.get("candidate_id");var snapshot=reader.readOwner(actor,meeting,"CANDIDATE",candidate);var row=candidate(snapshot,candidate);require(Set.of("PENDING","ADOPTED","STALE").contains(row.get("state")),PROVENANCE_UNAVAILABLE);var input=JdbcMinutesFactsReader.one(snapshot.graph(),Table.GENERATION_INPUT,(String)row.get("input_id"));String confirmation=input.string("transcript_confirmation_id"),field=(String)index.get("field"),value=values(snapshot,row).get(field);if(!currentSources(snapshot,input))throw new ama.contract.MeetingContracts.Conflict();require(value!=null,PROVENANCE_UNAVAILABLE);return new Prepared(actor,meeting,id,candidate,field,value,confirmation,((Number)snapshot.observation().get("revision")).longValue());
+  uuid(meeting);uuid(id);root(actor,meeting);var rows=j.queryForList("SELECT candidate_id,field,category_value,category_input_fingerprint,category_profile FROM meeting_info_suggestion WHERE id=? AND meeting_id=?",id,meeting);require(rows.size()==1,PROVENANCE_UNAVAILABLE);var index=rows.getFirst();String candidate=(String)index.get("candidate_id");var snapshot=reader.readOwner(actor,meeting,"CANDIDATE",candidate);var row=candidate(snapshot,candidate);require(Set.of("PENDING","ADOPTED","STALE").contains(row.get("state")),PROVENANCE_UNAVAILABLE);var input=JdbcMinutesFactsReader.one(snapshot.graph(),Table.GENERATION_INPUT,(String)row.get("input_id"));String confirmation=input.string("transcript_confirmation_id"),field=(String)index.get("field"),value=suggestionValue(values(snapshot,row),index,input);if(!currentSources(snapshot,input))throw new ama.contract.MeetingContracts.Conflict();require(value!=null,PROVENANCE_UNAVAILABLE);return new Prepared(actor,meeting,id,candidate,field,value,confirmation,((Number)snapshot.observation().get("revision")).longValue());
  }
  private static boolean currentSources(JdbcMinutesFactsReader.Snapshot snapshot,FullRow input){for(String field:List.of("transcript_confirmation_id","material_snapshot_id","template_revision_id","exclusion_revision_id"))if(!Objects.equals(input.nullableString(field),snapshot.observation().get(field)))return false;return true;}
  private static Map<String,Object> candidate(JdbcMinutesFactsReader.Snapshot snapshot,String id){var rows=snapshot.graph().auxiliary().getOrDefault("generation_candidate",List.of()).stream().filter(r->id.equals(r.get("id"))).toList();require(rows.size()==1,PROVENANCE_UNAVAILABLE);return rows.getFirst();}

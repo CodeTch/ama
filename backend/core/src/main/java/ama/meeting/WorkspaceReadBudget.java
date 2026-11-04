@@ -14,6 +14,7 @@ public final class WorkspaceReadBudget {
  private long bytes,response,scalars,units,rows,edges;
  public WorkspaceReadBudget(){this(DEFAULT,()->Thread.currentThread().isInterrupted());}
  public WorkspaceReadBudget(Limits limits,BooleanSupplier cancelled){this.limits=Objects.requireNonNull(limits);this.cancelled=Objects.requireNonNull(cancelled);}
+ public long remainingNanos(){check();return Math.max(1,limits.timeout().toNanos()-(System.nanoTime()-started));}
  public void check(){if(cancelled.getAsBoolean()||System.nanoTime()-started>=limits.timeout().toNanos())throw unavailable();}
  public void reserve(long rowCount,long edgeCount,long utf8,long points,long utf16,int copies,boolean json) {
   check();if(rowCount<0||edgeCount<0||utf8<0||points<0||utf16<0||copies<1)throw unavailable();
@@ -22,7 +23,10 @@ public final class WorkspaceReadBudget {
    long s=Math.addExact(scalars,Math.multiplyExact(points,copies)),u=Math.addExact(units,Math.multiplyExact(utf16,copies));
    long r=Math.addExact(rows,rowCount),e=Math.addExact(edges,edgeCount);
    long out=json?Math.addExact(response,Math.addExact(Math.multiplyExact(utf16,6),Math.addExact(Math.multiplyExact(rowCount,256),64))):response;
-   if(b>limits.bytes()||s>limits.scalars()||u>limits.units()||r>limits.rows()||e>limits.edges()||out>limits.responseBytes())throw unavailable();
+   if(b>limits.bytes()||s>limits.scalars()||u>limits.units()||r>limits.rows()||e>limits.edges()||out>limits.responseBytes()){
+    System.getLogger(WorkspaceReadBudget.class.getName()).log(System.Logger.Level.WARNING,"Workspace read budget exhausted: requested={0}, limits={1}",new Usage(b,out,s,u,r,e),limits);
+    throw unavailable();
+   }
    bytes=b;scalars=s;units=u;rows=r;edges=e;response=out;
   }catch(ArithmeticException e){throw unavailable();}
  }

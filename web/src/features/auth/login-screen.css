@@ -11,7 +11,7 @@
 .login-body > .login-notice { margin: 16px 0; padding: 10px 12px; border: 1px solid #bbdfcd; border-radius: 6px; background: #f0faf4; color: #237a4b; line-height: 1.6; }
 .login-body label { display: block; font-size: 13px; margin: 16px 0 6px; }
 .login-body input { width: 100%; box-sizing: border-box; height: 42px; padding: 0 12px; background: #fffbe6; border: 1px solid #e8d9a0; border-radius: 5px; font: inherit; font-size: 14px; color: #333; }
-.login-body input:focus-visible, .login-body button:focus-visible, .login-body a:focus-visible { outline: 2px solid #c76a13; outline-offset: 3px; }
+.login-body input:focus-visible, .login-body button:focus-visible, .login-body a:focus-visible { outline: 1px solid var(--navy); outline-offset: 3px; }
 .login-password { position: relative; }
 .login-password input { padding-right: 58px; }
 .login-password button { position: absolute; right: 8px; top: 0; height: 42px; background: transparent; border: 0; color: #795522; cursor: pointer; }

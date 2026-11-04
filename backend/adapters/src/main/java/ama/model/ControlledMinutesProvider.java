@@ -16,9 +16,11 @@ import static ama.config.WireValues.*;
 /** Explicit local controlled provider with a bounded HTTP/1.1 parser before application code.
  * No framework-normalized headers, implicit body buffering, redirect or resend endpoint. */
 public final class ControlledMinutesProvider implements AutoCloseable {
- private final ControlledMinutesProviderStore store;private final ServerSocket listener;private final byte[] authorization;
+ private final ControlledMinutesProviderStore store;private final ServerSocket listener;private final byte[] authorization;private HttpMinutesComposition composition;
  private final ThreadPoolExecutor workers=new ThreadPoolExecutor(2,2,0,TimeUnit.SECONDS,new ArrayBlockingQueue<>(4),r->{var t=new Thread(r,"controlled-minutes-http");t.setDaemon(true);return t;},new ThreadPoolExecutor.AbortPolicy());
  private final ScheduledExecutorService timers=Executors.newSingleThreadScheduledExecutor(r->{var t=new Thread(r,"controlled-minutes-deadline");t.setDaemon(true);return t;});
+ private final ScheduledExecutorService compositionRecovery=Executors.newSingleThreadScheduledExecutor(r->{var t=new Thread(r,"minutes-composition-recovery");t.setDaemon(true);return t;});
+ private final Set<String> computing=ConcurrentHashMap.newKeySet();
  private final Set<Socket> sockets=ConcurrentHashMap.newKeySet();private volatile boolean closed;private Thread accepting;
  public ControlledMinutesProvider(Path root,InetSocketAddress bind,String bearer,String mode)throws IOException {
   if(!"CONTROLLED_INSTALLATION".equals(mode)||bind==null||bind.isUnresolved()||!bind.getAddress().getHostAddress().equals("127.0.0.1")||bearer==null||!bearer.matches("[A-Za-z0-9_-]{32,128}"))throw new IllegalArgumentException("Explicit controlled loopback installation required");
@@ -28,7 +30,7 @@ public final class ControlledMinutesProvider implements AutoCloseable {
  public synchronized void start()throws IOException {
   if(closed||accepting!=null)throw new IllegalStateException("Controlled provider already started or closed");
   // Only already-reserved computation can resume. GET lookup never invokes this path.
-  for(String id:store.pending())complete(id);
+  if(composition==null)for(String id:store.pending())complete(id);else compositionRecovery.scheduleWithFixedDelay(new MinutesCompositionRecovery(store::pending,this::complete)::runOnce,1,3,TimeUnit.SECONDS);
   accepting=new Thread(this::accept,"controlled-minutes-accept");accepting.setDaemon(false);accepting.start();
  }
  public int port(){return listener.getLocalPort();}
@@ -82,6 +84,7 @@ public final class ControlledMinutesProvider implements AutoCloseable {
  private static byte[] readBody(InputStream in,int length)throws IOException {byte[] bytes=in.readNBytes(length);if(bytes.length!=length)throw new EOFException("Incomplete controlled body");return bytes;}
  private ControlledMinutesStore.Receipt complete(String id)throws IOException {
   var request=store.request(id);var payload=MaterialMinutesWire.payload(request.payloadValue());
+  if(composition!=null){if(!computing.add(id))return store.lookup(id);try{var current=store.lookup(id);if(!current.state().equals("UNKNOWN"))return current;return store.commitSuccess(id,composition.execute(request));}catch(HttpMinutesComposition.Rejected rejected){return store.reject(id,"HARNESS_INPUT_REJECTED");}catch(IllegalArgumentException invalid){return store.reject(id,"HARNESS_INVALID_OUTPUT");}finally{computing.remove(id);}}
   String instruction=text(payload.get("instructionText"));if(instruction.equals("controlled:definitive-rejection"))return store.reject(id,"CONTROLLED_REJECTION");
   if(instruction.equals("controlled:invalid-json"))return store.commitSuccess(id,"{invalid controlled JSON".getBytes(StandardCharsets.UTF_8));
   if(regionTarget(payload)!=null)return store.commitSuccess(id,region(request,payload));
@@ -129,8 +132,8 @@ public final class ControlledMinutesProvider implements AutoCloseable {
  private static void closeSocket(Socket socket){try{socket.close();}catch(IOException ignored){}}
  private void closeQuietly(){try{close();}catch(IOException ignored){}}
  @Override public synchronized void close()throws IOException {
-  if(closed)return;closed=true;listener.close();for(Socket socket:sockets)closeSocket(socket);workers.shutdownNow();timers.shutdownNow();
-  try{workers.awaitTermination(5,TimeUnit.SECONDS);if(accepting!=null&&accepting!=Thread.currentThread())accepting.join(2000);}catch(InterruptedException e){Thread.currentThread().interrupt();}store.close();Arrays.fill(authorization,(byte)0);
+  if(closed)return;closed=true;listener.close();for(Socket socket:sockets)closeSocket(socket);workers.shutdownNow();timers.shutdownNow();compositionRecovery.shutdownNow();if(composition!=null)composition.close();
+  try{compositionRecovery.awaitTermination(5,TimeUnit.SECONDS);workers.awaitTermination(5,TimeUnit.SECONDS);if(accepting!=null&&accepting!=Thread.currentThread())accepting.join(2000);}catch(InterruptedException e){Thread.currentThread().interrupt();}store.close();Arrays.fill(authorization,(byte)0);
  }
  public static void main(String[] args)throws Exception {
   if(args.length!=1)throw new IllegalArgumentException("One explicit controlled configuration path required");Path config=Path.of(args[0]).toAbsolutePath().normalize();Path owner=config.getParent();if(Files.isSymbolicLink(config)||Files.size(config)>8192)throw new IllegalArgumentException("Invalid controlled configuration");
@@ -139,6 +142,7 @@ public final class ControlledMinutesProvider implements AutoCloseable {
   Path root=contained(owner,values.get("store")),secret=contained(owner,values.get("secretFile")),ready=contained(owner,values.get("readyFile"));
   if(Files.isSymbolicLink(secret)||Files.size(secret)>128||!Files.getPosixFilePermissions(secret).equals(java.nio.file.attribute.PosixFilePermissions.fromString("rw-------")))throw new IllegalArgumentException("Private controlled secret file required");
   String bearer=Files.readString(secret,StandardCharsets.US_ASCII);var server=new ControlledMinutesProvider(root,new InetSocketAddress("127.0.0.1",Integer.parseInt(values.get("port"))),bearer,values.get("mode"));
+  String composeOrigin=System.getenv("AMA_MINUTES_COMPOSITION_ORIGIN");if(composeOrigin!=null)server.composition=new HttpMinutesComposition(URI.create(composeOrigin));
   Runtime.getRuntime().addShutdownHook(new Thread(server::closeQuietly,"controlled-minutes-shutdown"));server.start();Files.writeString(ready,Integer.toString(server.port()),StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE);System.out.println("CONTROLLED_MINUTES_READY port="+server.port()+" maxHeap="+Runtime.getRuntime().maxMemory()+" processors="+Runtime.getRuntime().availableProcessors());
  }
  private static Path contained(Path owner,String value){Path p=Path.of(value).toAbsolutePath().normalize();if(p.equals(owner)||!p.startsWith(owner))throw new IllegalArgumentException("Controlled path outside owner");return p;}

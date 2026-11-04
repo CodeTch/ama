@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {nextTick,ref} from 'vue';import Icon from '../../shared/Icon.vue';
 import StableLabel from '../../shared/StableLabel.vue';
-const props=defineProps<{reason:string;error?:string|null;saveDisabled:boolean;startDisabled:boolean;closeBlocked?:boolean;retrying?:boolean;acknowledged?:boolean;hasFiles?:boolean;newImport?:boolean;discardDisabled?:boolean;promptBusy?:boolean;saveLabel?:string}>();
+const props=defineProps<{reason:string;error?:string|null;saveDisabled:boolean;startDisabled:boolean;closeBlocked?:boolean;deferClose?:()=>boolean;retrying?:boolean;acknowledged?:boolean;hasFiles?:boolean;newImport?:boolean;discardDisabled?:boolean;promptBusy?:boolean;saveLabel?:string}>();
 const emit=defineEmits<{opened:[];closed:[];save:[];discard:[];submit:[];background:[kind:'local'|'library'];blockedClose:[]}>();const dialog=ref<HTMLDialogElement>(),confirm=ref<HTMLDialogElement>(),closePrompt=ref(false);
 function showModal(){if(dialog.value&&!dialog.value.open){dialog.value.showModal();emit('opened');}return dialog.value?.open??false;}
-function close(){if(props.closeBlocked){emit('blockedClose');return false;}if(props.newImport&&props.hasFiles&&props.saveDisabled){emit('blockedClose');return false;}if(props.newImport&&props.hasFiles){closePrompt.value=true;void nextTick(()=>confirm.value?.showModal());return false;}if(props.newImport){emit('discard');return false;}dialog.value?.close();return true;}
+function close(){if(!dialog.value?.open)return true;if(props.closeBlocked){emit('blockedClose');return false;}if(props.deferClose){if(!props.deferClose())return false;dialog.value?.close();return true;}if(props.newImport&&props.hasFiles&&props.saveDisabled){emit('blockedClose');return false;}if(props.newImport&&props.hasFiles){closePrompt.value=true;void nextTick(()=>confirm.value?.showModal());return false;}if(props.newImport){emit('discard');return false;}dialog.value?.close();return true;}
 function stay(){confirm.value?.close();closePrompt.value=false;}
 function savePrompt(){stay();emit('save');}
 function forceClose(){confirm.value?.close();closePrompt.value=false;dialog.value?.close();}

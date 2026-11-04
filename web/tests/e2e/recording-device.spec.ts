@@ -1,5 +1,7 @@
 import {test,expect} from '@playwright/test';
-test.use({launchOptions:{args:['--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream']},permissions:['microphone']});
+// Use an explicit test output sink as well as a fake microphone: WSL's host
+// PulseAudio connection must not decide whether native AudioWorklet tests run.
+test.use({launchOptions:{args:['--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream','--disable-audio-output']},permissions:['microphone']});
 test('native AudioWorklet captures bounded PCM, excludes paused input and releases its microphone',async({page})=>{
  await page.goto('/login');await page.evaluate(async()=>{const path='/src/features/recording/browser-pcm-capture.ts';const {openPcmCapture}=await import(path);let samples=0;const capture=await openPcmCapture(async(input:Float32Array)=>{samples+=input.length;},()=>{});(window as any).pcmTest={capture,samples:()=>samples};await capture.resume();});await page.waitForFunction(()=>(window as any).pcmTest.samples()>16000);
  const before=await page.evaluate(async()=>{const state=(window as any).pcmTest;await state.capture.pause();return state.samples();});await page.waitForTimeout(300);expect(await page.evaluate(()=>(window as any).pcmTest.samples())).toBe(before);

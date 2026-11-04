@@ -7,17 +7,18 @@ export function useLiveSubtitles(api:ReturnType<typeof createSubtitleApi>,option
  const active=(turn:number)=>!disposed&&turn===epoch&&!!scope&&scope.actor===options.actor()&&scope.meeting===options.meeting()&&scope.session===options.sessionId()&&options.eligible();
  function clear(){segments=new Map();events.value=[];cursor.value='0';ready.value=false;}
  function halt(){epoch++;if(timer!==null)clearTimeout(timer);timer=null;controller?.abort();controller=null;flight=null;scope=null;loading.value=false;clear();}
- function synchronize(){halt();if(disposed)return;denied=false;error.value=null;delayed.value=false;state.value='NOT_STARTED';const actor=options.actor(),meeting=options.meeting(),session=options.sessionId();if(!actor||!recordingUuid(meeting)||!recordingUuid(session)||!options.eligible())return;scope={actor,meeting,session};void poll();}
+ function synchronize(){const actor=options.actor(),meeting=options.meeting(),session=options.sessionId(),eligible=options.eligible();if(!disposed&&eligible&&scope?.actor===actor&&scope.meeting===meeting&&scope.session===session)return;halt();if(disposed)return;denied=false;error.value=null;delayed.value=false;state.value='NOT_STARTED';if(!actor||!recordingUuid(meeting)||!recordingUuid(session)||!eligible)return;scope={actor,meeting,session};void poll();}
  function poll():Promise<void>{
   if(flight)return flight;const turn=epoch,selected=scope;if(!active(turn)||!selected||denied)return Promise.resolve();loading.value=true;controller=new AbortController();const request=controller;let more=false;
   const run=async()=>{try{
    const result=await api.read(selected.meeting,selected.session,cursor.value,request.signal);if(!active(turn)||request.signal.aborted)return;
    const next=new Map(segments);for(const event of result.events){const prior=next.get(event.segmentId);if(prior&&event.revision<=prior.revision)throw new ApiError('response',200,'实时字幕版本暂无法核实。');next.set(event.segmentId,event);}if(next.size>4608)throw new ApiError('response',200,'实时字幕超过当前显示限额，请使用会后转写。');
    segments=next;events.value=[...next.values()].sort((a,b)=>a.startMs-b.startMs||a.segmentId.localeCompare(b.segmentId));cursor.value=result.nextCursor;delayed.value=result.delayed;state.value=result.state;ready.value=true;error.value=null;more=result.hasMore;
-  }catch(cause){if(active(turn)){clear();delayed.value=true;error.value=cause instanceof Error?cause.message:'实时字幕暂不可用，音频保存独立进行。';denied=cause instanceof ApiError&&[401,403].includes(cause.status??0);}}
+  }catch(cause){if(active(turn)){delayed.value=true;error.value=cause instanceof Error?cause.message:'实时字幕暂不可用，音频保存独立进行。';denied=cause instanceof ApiError&&[401,403].includes(cause.status??0);if(denied)clear();}}
   finally{if(active(turn)){loading.value=false;controller=null;flight=null;if(!denied)timer=setTimeout(()=>{timer=null;void poll();},more?0:500);}}};flight=run();return flight;
  }
  function refresh(){if(timer!==null)clearTimeout(timer);timer=null;denied=false;return poll();}
+ async function retryRecognition(){if(!scope)return;const selected=scope;try{await api.retry(selected.session);if(scope===selected)await refresh();}catch(cause){if(scope===selected)error.value=cause instanceof Error?cause.message:'实时识别暂无法恢复';}}
  function dispose(){halt();disposed=true;error.value=null;delayed.value=false;}
- return{events:readonly(events),cursor:readonly(cursor),delayed:readonly(delayed),error:readonly(error),loading:readonly(loading),ready:readonly(ready),state:readonly(state),synchronize,refresh,dispose};
+ return{events:readonly(events),cursor:readonly(cursor),delayed:readonly(delayed),error:readonly(error),loading:readonly(loading),ready:readonly(ready),state:readonly(state),synchronize,refresh,retryRecognition,dispose};
 }

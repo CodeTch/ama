@@ -19,3 +19,13 @@ test('meeting routes are exact local meeting paths and member actions cannot imp
  const api=createMeetingsApi({json:async()=>({...good(),items:[details]})} as any);assert.equal((await api.list('owned',null,new AbortController().signal)).items[0]?.materialCount,3);
  const member=createMeetingsApi({json:async()=>({...good(),topicGroups:{},items:[{...details,relation:'MEMBER',writeState:'MEMBER_READ_ONLY'}]})} as any);await assert.rejects(()=>member.list('joined',null,new AbortController().signal));
 });
+
+ test('owner recording destination restores the same meeting and cannot grant a member recording access',async()=>{
+ const details={...row,ownerName:'负责人',materialCount:0,allowedActions:['OPEN'],destination:`/recording/${id}`};
+ const api=createMeetingsApi({json:async()=>({...good(),items:[details]})} as any);
+ assert.equal((await api.list('owned',null,new AbortController().signal)).items[0]!.destination,`/recording/${id}`);
+ for(const bad of [{...details,relation:'MEMBER',writeState:'MEMBER_READ_ONLY'},{...details,destination:'/recording/00000000-0000-4000-8000-000000000002'}]){
+  const invalid=createMeetingsApi({json:async()=>({...good(),items:[bad]})} as any);
+  await assert.rejects(()=>invalid.list('owned',null,new AbortController().signal));
+ }
+});

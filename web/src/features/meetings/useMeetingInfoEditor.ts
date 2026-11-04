@@ -119,8 +119,18 @@ export function useMeetingInfoEditor(api:Api,actor:()=>string|null,meeting:()=>s
  }
  function reapply(){resolveLocal('reapply');}
  function discard(){resolveLocal('discard');}
+ function mergeSuggestedField(field:'name'|'category'|'summary',expectedBase:string,acceptedRevision:string){
+  const d=draft.value,current=saved.value;
+  if(!d||!current||pending||flight||!eligible()||disposed||recoveryBlocked.value||d.baseToken.value!==expectedBase||current.revisionToken!==acceptedRevision)return false;
+  const actual=fields(current),old=d.saved.value;
+  if((Object.keys(actual) as (keyof InfoFields)[]).some(key=>key!==field&&JSON.stringify(actual[key])!==JSON.stringify(old[key])))return false;
+  const merged={...d.value.value,[field]:actual[field]};
+  d.reset(actual,acceptedRevision);
+  if(JSON.stringify(merged)!==JSON.stringify(actual))d.edit(merged);
+  persist();return true;
+ }
  return {draft:shallowReadonly(draft),saved:shallowReadonly(saved),loading:shallowReadonly(loading),busy:shallowReadonly(busy),error:shallowReadonly(error),command,storageStatus:shallowReadonly(storageStatus),recoveryBlocked:shallowReadonly(recoveryBlocked),
-  reload:()=>read(),save:()=>save(),confirmRoster:()=>save('CONFIRM_ROSTER'),edit(value:InfoFields){if(!draft.value||recoveryBlocked.value)throw new Error('Information not loaded or recovery blocked');draft.value.edit(value);persist();},reapply,discard,
+  reload:()=>read(),save:()=>save(),confirmRoster:()=>save('CONFIRM_ROSTER'),edit(value:InfoFields){if(!draft.value||recoveryBlocked.value)throw new Error('Information not loaded or recovery blocked');draft.value.edit(value);persist();},mergeSuggestedField,reapply,discard,
   logout(){retained=null;if(persistence)recoveryBlocked.value=!persistence.clear();invalidate();retained=null;},
   dispose(){disposed=true;stop();invalidate();}};
 }

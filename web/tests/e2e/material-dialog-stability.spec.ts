@@ -90,3 +90,38 @@ test('closing refresh replaces the retained materials with the updated directory
   await expect(data.background.locator('.aci-progress-file')).toHaveCount(1);
  }finally{data.release();}
 });
+
+test('parsing materials leaves both intake buttons and local upload usable',async({page})=>{
+ const data=await setup(page),parsing=gate();let batchStarted=false,uploadStarted=false;
+ try{
+  data.release();
+  await page.route('**/material-libraries*',route=>route.fulfill({json:{items:[{id:'lib',name:'资料库'}],cursor:null}}));
+  await page.route('**/material-libraries/lib/documents*',route=>route.fulfill({json:{items:[{id:'doc',libraryId:'lib',name:'解析材料.docx',version:sha,sha256:sha,sizeBytesToken:'3'}],cursor:null}}));
+  await page.route(`**/meetings/${meeting}/materials/batches`,async route=>{batchStarted=true;await parsing.wait;await route.fulfill({status:201,json:{items:[],materialSnapshotId:null,meetingRevision:'2'}});});
+  await page.route(`**/meetings/${meeting}/uploads`,async route=>{uploadStarted=true;await route.fulfill({status:503,json:{}});});
+  await page.getByRole('button',{name:'调整背景材料',exact:true}).click();
+  const dialog=page.getByRole('dialog',{name:'会议背景材料',exact:true});
+  await dialog.getByRole('button',{name:'从知识库选择',exact:true}).click();
+  const picker=page.getByRole('dialog',{name:'从知识库选择背景材料',exact:true});
+  await picker.getByRole('checkbox').check();await picker.getByRole('button',{name:'添加到会议',exact:true}).click();
+  await expect.poll(()=>batchStarted).toBe(true);
+  await picker.getByRole('button',{name:'关闭知识库选择',exact:true}).click();
+  await expect(dialog.getByRole('button',{name:'上传本地文件',exact:true})).toBeEnabled();
+  await expect(dialog.getByRole('button',{name:'从知识库选择',exact:true})).toBeEnabled();
+  await dialog.getByLabel('选择背景材料',{exact:true}).setInputFiles({name:'继续上传.pdf',mimeType:'application/pdf',buffer:Buffer.from('pdf bytes')});
+  await expect.poll(()=>uploadStarted).toBe(true);
+  await expect(dialog.getByText('继续上传.pdf',{exact:true})).toBeVisible();
+  await dialog.getByRole('button',{name:'从知识库选择',exact:true}).click();await expect(picker).toBeVisible();
+ }finally{parsing.release();data.release();}
+});
+
+test('background material dialog can close during a pending read',async({page})=>{
+ const data=await setup(page);
+ try{
+  await page.getByRole('button',{name:'调整背景材料',exact:true}).click();
+  const dialog=page.getByRole('dialog',{name:'会议背景材料',exact:true});
+  await expect.poll(data.reads).toBe(2);
+  await dialog.getByRole('button',{name:'关闭背景材料',exact:true}).click();
+  await expect(dialog).toBeHidden();
+ }finally{data.release();}
+});

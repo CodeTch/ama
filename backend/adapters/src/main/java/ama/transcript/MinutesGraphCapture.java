@@ -14,7 +14,7 @@ import static ama.transcript.SavedTranscriptRows.*;
  * Captured graph is detached data; only the private authority scope records successful acquisition. */
 final class MinutesGraphCapture {
  record Graph(MinutesGraphDiscovery.Discovery discovery,List<FullRow> rows,Map<String,List<Map<String,Object>>> auxiliary) {}
- static final List<String> DOMAIN_RANK=List.of("transcript_revision","transcript_segment","transcript_segment_mark","transcript_speaker_change","transcript_speaker_snapshot","transcript_confirmation","transcription_input","input_batch","input_batch_fingerprint_profile","input_batch_file","minutes_template","personal_template_state","template_revision","exclusion_revision","sensitive_exclusion","generation_input","generation_region_request","source_context","source_context_material","material_snapshot","material_snapshot_item","material_reference","material_revision","parsed_document","parsed_document_profile","parsed_unit","minutes_revision","element_set","minutes_element","action_item","action_suggestion","sensitive_detection","background_note","source_locator","sensitive_detection_source","background_note_source","evidence_link","evidence_source_context","element_source_context","result_review","result_review_evidence","final_result_review","generation_candidate");
+ static final List<String> DOMAIN_RANK=List.of("transcript_revision","transcript_segment","transcript_segment_mark","transcript_speaker_change","transcript_speaker_snapshot","transcript_confirmation","transcription_input","input_batch","input_batch_fingerprint_profile","input_batch_file","minutes_template","personal_template_state","template_revision","exclusion_revision","sensitive_exclusion","generation_input","generation_region_request","source_context","source_context_material","material_snapshot","material_snapshot_item","material_reference","material_revision","parsed_document","parsed_document_profile","parsed_unit","minutes_revision","element_set","minutes_element","action_item","action_suggestion","sensitive_detection","background_note","source_locator","sensitive_detection_source","background_note_source","evidence_link","evidence_source_context","element_source_context","result_review","result_review_evidence","final_result_review","generation_candidate","minutes_workspace_snapshot");
  static final Shape TEMPLATE=new Shape("minutes_template",List.of("id"),List.of("id","owner_id","name","name_normalized","name_hash","current_revision_id","revision","created_at"),Set.of("revision"),Set.of("created_at"));
  static final Shape PERSONAL_TEMPLATE_STATE=new Shape("personal_template_state",List.of("template_id"),List.of("template_id","owner_id","command_revision","deleted_at"),Set.of("command_revision"),Set.of("deleted_at"));
  static final Shape CANDIDATE=new Shape("generation_candidate",List.of("id"),List.of("id","meeting_id","input_id","task_id","minutes_revision_id","element_set_id","base_revision","input_fingerprint","state","created_at","decided_at"),Set.of("base_revision"),Set.of("created_at","decided_at"));
@@ -85,11 +85,12 @@ final class MinutesGraphCapture {
    if(name.equals("result_review")){budget.row(2);budget.capture(36,36,36,4);auxiliary.put("result_review_history_max",List.copyOf(j.queryForList("SELECT id,review_no FROM result_review FORCE INDEX (review_sequence) WHERE meeting_id=? ORDER BY review_no DESC LIMIT 1 FOR UPDATE",expected.meeting())));}
    MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,name,budget);
    var declared=expected.tables().getOrDefault(name,List.of());if(declared.isEmpty())continue;
-   Table table=byName.get(name);Shape shape=table!=null?shape(table):name.equals("minutes_template")?TEMPLATE:name.equals("personal_template_state")?PERSONAL_TEMPLATE_STATE:name.equals("generation_candidate")?CANDIDATE:metadata("input_batch_fingerprint_profile","batch_id","batch_id profile");
-   for(var row:declared){
-    budget.check();String where=String.join(" AND ",shape.keys().stream().map(k->k+"=?").toList());Object[] keys=shape.keys().stream().map(row::get).toArray();String order=String.join(",",shape.keys());
-    if(table!=null)transfers.add(read.deferRows(table,where,order,1,true,keys));
-    else auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(read.deferRead(shape,where,order,1,false,keys));
+   Table table=byName.get(name);Shape shape=table!=null?shape(table):name.equals("minutes_template")?TEMPLATE:name.equals("personal_template_state")?PERSONAL_TEMPLATE_STATE:name.equals("generation_candidate")?CANDIDATE:name.equals("minutes_workspace_snapshot")?new Shape(name,List.of("id"),List.of(MinutesWorkspaceSnapshots.COLUMNS.split(" ")),Set.of("revision","needs_generation"),Set.of("created_at")):metadata("input_batch_fingerprint_profile","batch_id","batch_id profile");
+   for(int offset=0;offset<declared.size();offset+=128){
+    budget.check();var batch=declared.subList(offset,Math.min(declared.size(),offset+128));int count=batch.size();
+    String exact=String.join(" AND ",shape.keys().stream().map(k->k+"=?").toList()),where=String.join(" OR ",Collections.nCopies(count,"("+exact+")"));Object[] keys=batch.stream().flatMap(row->shape.keys().stream().map(row::get)).toArray();String order=String.join(",",shape.keys());
+    if(table!=null){var transfer=read.deferRows(table,where,order,count,true,keys);transfers.add(()->{var found=transfer.get();require(found.size()==count,PROVENANCE_UNAVAILABLE);return found;});}
+    else {var transfer=read.deferRead(shape,where,order,count,false,keys);auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(()->{var found=transfer.get();require(found.size()==count,PROVENANCE_UNAVAILABLE);return found;});}
    }
   }
   // Readiness and publication submission capture actual pending decisions under the same gate/budget.
@@ -122,8 +123,8 @@ final class MinutesGraphCapture {
   }
   if(preparationLease!=null)PublicationGraph.requirePreparationUnion(preparationLease,taskUnionBefore,taskUnionAfter);
   // No existing-row lock is discovered by a deferred content SELECT; exact protected PKs only.
-  for(var transfer:transfers){var found=transfer.get();require(found.size()==1,PROVENANCE_UNAVAILABLE);rows.addAll(found);}
-  for(var group:auxiliaryTransfers.entrySet()){var found=new ArrayList<Map<String,Object>>();for(var transfer:group.getValue()){var one=transfer.get();require(one.size()==1,PROVENANCE_UNAVAILABLE);found.addAll(one);}auxiliary.put(group.getKey(),List.copyOf(found));}
+  for(var transfer:transfers){var found=transfer.get();require(!found.isEmpty(),PROVENANCE_UNAVAILABLE);rows.addAll(found);}
+  for(var group:auxiliaryTransfers.entrySet()){var found=new ArrayList<Map<String,Object>>();for(var transfer:group.getValue()){var one=transfer.get();require(!one.isEmpty(),PROVENANCE_UNAVAILABLE);found.addAll(one);}auxiliary.put(group.getKey(),List.copyOf(found));}
   TranscriptSpeakerRows.mirrors(j,rows);
   var graph=new Graph(expected,List.copyOf(rows),Collections.unmodifiableMap(auxiliary));authority.sealMinutesCapture(scope,gate,actor,graph,ordinaryPublication);if(ordinaryPublication!=null&&!taskCapture)authority.publicationWriteGuard().requirePermitted(ordinaryPublication,authority.fileRegistry().access(gate));return graph;
  }
