@@ -29,7 +29,7 @@ export function usePublicationConfiguration(api:Api,actor:()=>string|null,meetin
  async function save(target:PublicationTarget){
   if(disposed||!actor()||busy.value||!current.value)return false;
   const turn=++epoch,who=actor(),id=meeting();busy.value=true;error.value=null;message.value='';
-  try{const value=await api.saveConfiguration(id,{...target,expectedConfigurationVersionToken:current.value.configurationVersionToken,tags:tags()});if(disposed||turn!==epoch||who!==actor()||id!==meeting())return false;current.value=value;tagsText.value=value.configuration?.tags.join(', ')??'';message.value='发布配置已保存';return true;}
+  try{const value=await api.saveConfiguration(id,{providerId:target.providerId,libraryId:target.libraryId,folderId:target.folderId,expectedConfigurationVersionToken:current.value.configurationVersionToken,tags:tags()});if(disposed||turn!==epoch||who!==actor()||id!==meeting())return false;current.value=value;tagsText.value=value.configuration?.tags.join(', ')??'';message.value='发布配置已保存';return true;}
   catch(cause){if(!disposed&&turn===epoch)error.value=cause;return false;}
   finally{if(!disposed&&turn===epoch)busy.value=false;}
  }

@@ -29,4 +29,11 @@ class QualityMetricsTest {
   var result=QualityMetrics.entities(Set.of("PERSON:张三","PRODUCT:甲"),Set.of("PERSON:张三","PERSON:李四"));
   assertEquals(.5,result.get("precision"));assertEquals(.5,result.get("recall"));assertEquals(.5,result.get("f1"));
  }
+ @Test void entityTypesRetainTheirOwnMissingAndInventedCounts() {
+  var result=QualityMetrics.entities(Set.of("PERSON:张三","PRODUCT:甲"),Set.of("PERSON:张三","DEPARTMENT:研发"));
+  assertEquals(1d,result.get("PERSON.f1"));assertEquals(1d,result.get("PRODUCT.falseNegative"));
+  assertEquals(1d,result.get("DEPARTMENT.falsePositive"));assertEquals(0d,result.get("PRODUCT.f1"));
+  assertFalse(result.containsKey("FINANCIAL_TERM.f1"),"No evaluated sample must not be presented as a perfect type");
+  assertThrows(IllegalArgumentException.class,()->QualityMetrics.entities(Set.of("PERSON:张三"),Set.of("UNKNOWN:张三")));
+ }
 }

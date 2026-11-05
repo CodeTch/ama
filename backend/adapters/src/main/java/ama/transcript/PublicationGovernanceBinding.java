@@ -26,15 +26,34 @@ final class PublicationGovernanceBinding {
  Prepared prepare(String meeting,String publication){
   JdbcMinutesFactsReader.independent();uuid(meeting);uuid(publication);var budget=limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->Thread.currentThread().isInterrupted());
   var owners=j().queryForList("SELECT owner_id FROM meeting WHERE id=?",String.class,meeting);require(owners.size()==1,PROVENANCE_UNAVAILABLE);String owner=owners.getFirst();
+  return PublicationGraph.retryObservation(()->{var prepared=acquire(meeting,publication,owner,budget);held(prepared,prepared,()->null);return prepared;});
+ }
+ private Prepared acquire(String meeting,String publication,String owner,TranscriptAcquisitionBudget.Ledger budget){
   var plan=PublicationGraph.discover(authority.dataSource(),meeting,budget);var captured=capture(meeting,publication,owner,plan);var manifest=PublicationDocumentRead.verify(client,captured,plan);require(owner.equals(manifest.get("requesterId")),PROVENANCE_UNAVAILABLE);
-  var prepared=new Prepared(meeting,publication,owner,plan,captured);withinCurrent(prepared,()->null);return prepared;
+  return new Prepared(meeting,publication,owner,plan,captured);
  }
  /** Supplies only current metadata locks. Caller must separately establish command ownership
   * or a verified provider observation before changing governance; no content grant is returned. */
  <T>T withinCurrent(Prepared prepared,Supplier<T> work){
   if(prepared==null||prepared.issuer()!=this)throw new IllegalArgumentException("Foreign governance binding");prepared.require(client);
-  return authority.transactionRunner().required(()->{var fresh=capture(prepared.meeting,prepared.publication,prepared.owner,prepared.plan);require(fresh.equals(prepared.snapshot),PROVENANCE_UNAVAILABLE);return work.get();});
+  var current=new Prepared[]{prepared};
+  return PublicationGraph.retryObservation(()->{
+   // The original lifetime, budget and success association remain binding, even
+   // when an unrelated export heartbeat requires a new complete metadata plan.
+   prepared.require(client);
+   if(current[0]==null)current[0]=acquire(prepared.meeting,prepared.publication,prepared.owner,prepared.plan.budget());
+   try{return held(prepared,current[0],work);}catch(PublicationGraph.ObservationChanged changed){current[0]=null;throw changed;}
+  });
  }
+ private <T>T held(Prepared original,Prepared current,Supplier<T> work){
+  return authority.transactionRunner().required(()->{
+   var fresh=capture(original.meeting,original.publication,original.owner,current.plan);
+   require(fresh.equals(current.snapshot)&&fresh.equals(original.snapshot),PROVENANCE_UNAVAILABLE);
+   // Once the caller starts, never replay its command or its effects.
+   return invokeWork(work);
+  });
+ }
+ static <T>T invokeWork(Supplier<T> work){try{return work.get();}catch(PublicationGraph.ObservationChanged changed){throw fail(PROVENANCE_UNAVAILABLE);}}
  private org.springframework.jdbc.core.JdbcTemplate j(){var value=new org.springframework.jdbc.core.JdbcTemplate(authority.dataSource());value.setQueryTimeout(2);return value;}
  private PublicationDocumentRead.Snapshot capture(String meeting,String publication,String owner,PublicationGraph.Plan plan){
   return authority.transactionRunner().required(()->{
@@ -45,7 +64,7 @@ final class PublicationGovernanceBinding {
    var root=one(plan,"SELECT id,owner_id,revision,access_revision,cancel_epoch,lifecycle,governance_state,stage,ever_published,final_confirmation_id,info_revision_id,roster_revision_id,transcript_confirmation_id,minutes_revision_id,material_snapshot_id,element_set_id,template_revision_id,exclusion_revision_id FROM meeting WHERE id=?",meeting);require(owner.equals(root.get("owner_id")),PROVENANCE_UNAVAILABLE);
    var pub=one(plan,"SELECT id,meeting_id,confirmation_id,business_key,library_id,folder_id,state,revision,published_at FROM publication WHERE id=? AND meeting_id=? FOR UPDATE",publication,meeting);
    var confirmation=one(plan,"SELECT id,meeting_id,meeting_revision,info_revision_id,roster_revision_id,transcript_confirmation_id,minutes_revision_id,material_snapshot_id,element_set_id,template_revision_id,exclusion_revision_id,source_manifest_hash,input_fingerprint,confirmed_by,confirmed_at FROM final_confirmation WHERE id=? AND meeting_id=? FOR UPDATE",pub.get("confirmation_id"),meeting);
-   PublicationGraph.lock(authority.dataSource(),plan,true);PublicationGraph.lock(authority.dataSource(),plan,false);var selected=PublicationDocumentRead.recordedGovernance(root,pub,confirmation,plan.rows());var submission=selected.submission();
+   PublicationGraph.lockObservation(authority.dataSource(),plan,true);PublicationGraph.lockObservation(authority.dataSource(),plan,false);var selected=PublicationDocumentRead.recordedGovernance(root,pub,confirmation,plan.rows());var submission=selected.submission();
    long bytes=n(submission,"request_manifest_bytes"),points=n(submission,"request_manifest_scalars"),units=n(submission,"request_manifest_utf16");require(bytes>0&&bytes<=Math.min(65536,authority.readBudget().maxManifestBytes())&&points>0&&points<=bytes&&units>=points&&units<=bytes,BUDGET_EXCEEDED);budget.text(bytes,points,units,2,false);
    var originals=j().queryForList("SELECT request_manifest FROM publication_submission WHERE task_id=? AND publication_id=? AND OCTET_LENGTH(request_manifest)=? AND CHAR_LENGTH(request_manifest)=? AND OCTET_LENGTH(CONVERT(request_manifest USING utf16))/2=?",submission.get("task_id"),publication,bytes,points,units);require(originals.size()==1&&originals.getFirst().get("request_manifest") instanceof String,PROVENANCE_UNAVAILABLE);String manifest=(String)originals.getFirst().get("request_manifest");
    var stored=PublicationExecutionRead.read(j(),budget,authority.readBudget().maxManifestBytes(),(String)submission.get("task_id"),(String)selected.operation().get("id"),(String)selected.execution().get("id"),n(selected.execution(),"execution_no"));require(manifest.equals(stored.manifest()),PROVENANCE_UNAVAILABLE);

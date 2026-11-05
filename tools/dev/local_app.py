@@ -241,7 +241,18 @@ def launch(command, env, log):
         process = subprocess.Popen([str(x) for x in command], cwd=ROOT, env=env, stdin=subprocess.DEVNULL,
                                    stdout=stream, stderr=subprocess.STDOUT, start_new_session=True)
     CHILDREN[process.pid] = process
-    return process_record(process)
+    record = process_record(process)
+    # /proc/<pid>/environ may briefly be empty across exec. Only this retained
+    # Popen child may wait for its ownership marker; existing-process checks
+    # and stop_process still require the exact marker and start time.
+    deadline = time.monotonic() + 5
+    while not alive(record):
+        if process.poll() is not None:
+            raise RuntimeError('Local process exited during launch; inspect ' + log)
+        if time.monotonic() >= deadline:
+            raise RuntimeError('Local process ownership did not become ready; inspect ' + log)
+        time.sleep(.01)
+    return record
 
 
 def status(state):
@@ -286,14 +297,14 @@ def minutes_scenario():
     return value
 
 
-def start(state):
+def start(state, *, bundled_frontend=False):
     pool_maximum = database_pool_maximum()
     file_workers = file_worker_threads()
     origins = integration_origins()
     scenario = minutes_scenario()
     configure_ports(state, None, None, None)
     signature = source_signature()
-    if all(alive(state.get(role)) for role in SERVICE_ROLES) and state.get('sourceSignature') == signature and state.get('activePorts') == state.get('ports') and state.get('databasePoolMaximum', 20) == pool_maximum and state.get('fileWorkerThreads', 16) == file_workers and state.get('integrationOrigins') == origins and state.get('minutesScenario', 'standard') == scenario:
+    if all(alive(state.get(role)) for role in SERVICE_ROLES) and state.get('sourceSignature') == signature and state.get('activePorts') == state.get('ports') and state.get('databasePoolMaximum', 20) == pool_maximum and state.get('fileWorkerThreads', 16) == file_workers and state.get('integrationOrigins') == origins and state.get('minutesScenario', 'standard') == scenario and state.get('bundledFrontend', False) == bundled_frontend:
         current_port = database(state)
         if state.get('databasePort') == current_port:
             status(state)
@@ -470,7 +481,19 @@ def start(state):
     state['sourceSignature'] = signature
     state['databasePoolMaximum'] = pool_maximum
     state['integrationOrigins'] = origins
-    state['frontend'] = launch([npm, '--prefix', 'web', 'run', 'dev', '--', '--port', str(state['ports']['web']), '--strictPort'], env, 'frontend.log')
+    state['bundledFrontend'] = bundled_frontend
+    if bundled_frontend:
+        # Real-browser acceptance serves the compiled app with the same local-only features
+        # and /api and /auth proxies. Network changes during a reload must not interrupt
+        # hundreds of individually served development modules.
+        bundle = RUNTIME / 'web-bundle'
+        run_logged([npm, '--prefix', 'web', 'run', 'build', '--', '--outDir', bundle, '--emptyOutDir'],
+                   env | {'NODE_ENV': 'development'}, 'frontend-build.log')
+        frontend_command = [npm.with_name('node'), ROOT / 'web/node_modules/vite/bin/vite.js',
+                            'preview', ROOT / 'web', '--outDir', bundle, '--host', '127.0.0.1']
+    else:
+        frontend_command = [npm, '--prefix', 'web', 'run', 'dev', '--']
+    state['frontend'] = launch([*frontend_command, '--port', str(state['ports']['web']), '--strictPort'], env, 'frontend.log')
     save(RUNTIME / 'state.json', state)
     deadline = time.monotonic() + 30
     while time.monotonic() < deadline:

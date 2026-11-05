@@ -1,5 +1,6 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {useMinutesTaskObservation} from '../../src/features/minutes/useMinutesTaskObservation';
+import {ref} from 'vue';
 const meeting='10000000-0000-4000-8000-000000000001',id='10000000-0000-4000-8000-000000000002';
 const task=(state:string)=>({taskId:id,kind:'MINUTES_GENERATE_V1',state,inputId:id,attemptToken:'1',businessRevisionToken:'7',detailPath:''});
 const flush=async()=>{for(let i=0;i<15;i++)await Promise.resolve();};
@@ -12,4 +13,14 @@ test('failed observations retain actionable error and retry without sending a ta
  let reads=0;const queue:Array<()=>void>=[];
  const state=useMinutesTaskObservation({list:async()=>{if(++reads===1)throw Error('网络暂不可用');return{items:[task('FAILED')],hasMore:false,nextCursor:null,verification:'PERSISTED_RELATION'} as any;}},()=> 'owner',()=>meeting,()=>true,()=>{},fn=>{queue.push(fn);return 1 as any;});
  try{await state.refresh();assert.match(state.error.value,/网络/);queue.shift()!();await flush();assert.equal(state.latest.value?.state,'FAILED');assert.equal(state.error.value,'');}finally{state.dispose();}
+});
+test('an already completed task is a baseline, including after revisiting the workbench',async()=>{
+ const enabled=ref(true);let done=0;
+ const state=useMinutesTaskObservation({list:async()=>({items:[task('SUCCEEDED')],nextCursor:null} as any)},()=> 'owner',()=>meeting,()=>enabled.value,()=>done++);
+ try{await state.refresh();assert.equal(state.latest.value?.state,'SUCCEEDED');assert.equal(done,0);enabled.value=false;enabled.value=true;await flush();assert.equal(done,0);}finally{state.dispose();}
+});
+test('a task observed running still delivers completion after leaving and returning, without crossing actors',async()=>{
+ const enabled=ref(true),actor=ref('owner');let status='RUNNING',done=0;
+ const state=useMinutesTaskObservation({list:async()=>({items:[task(status)],nextCursor:null} as any)},()=>actor.value,()=>meeting,()=>enabled.value,()=>done++,()=>1 as any);
+ try{await state.refresh();enabled.value=false;status='SUCCEEDED';enabled.value=true;await flush();assert.equal(done,1);await state.refresh();assert.equal(done,1);actor.value='other';await flush();assert.equal(done,1);}finally{state.dispose();}
 });

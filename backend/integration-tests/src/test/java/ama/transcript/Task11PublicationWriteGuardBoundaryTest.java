@@ -116,17 +116,17 @@ public class Task11PublicationWriteGuardBoundaryTest {
  }
 
  @Test void pendingCapturesAccumulateAcrossDiscoveryAndHeldRechecks()throws Exception{
-  var f=new Fixture();f.responder=q->q.startsWith("SELECT COUNT(*)")?List.of(Map.of("count",1L)):List.of(Map.of("id","x".repeat(512)));
+  var f=new Fixture();f.responder=q->q.startsWith("SELECT COUNT(*)")?List.of(Map.of("count",1L)):List.of(Map.of("id",MEETING));
   var limits=new TranscriptAcquisitionBudget(4500,4500,4500,50000,50000,1024,16,32,32);var q=new MinutesPendingDiscovery.Query("publication",List.of("id"),List.of("id"),"meeting_id=?",List.of(MEETING));var j=new org.springframework.jdbc.core.JdbcTemplate(f.ds);
   for(int n=0;n<2;n++)assertEquals(1,MinutesPendingDiscovery.read(j,q,false,limits.ledger(f.authority.readBudget(),f.authority.canonicalBudget(),()->false)).size());
-  var budget=limits.ledger(f.authority.readBudget(),f.authority.canonicalBudget(),()->false);assertEquals(1,MinutesPendingDiscovery.read(j,q,false,budget).size());int before=f.sql.size();var denied=assertThrows(ama.contract.MinutesContracts.Failure.class,()->MinutesPendingDiscovery.read(j,q,true,budget));assertEquals(ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED,denied.code());assertTrue(f.sql.subList(before,f.sql.size()).stream().allMatch(sql->sql.startsWith("SELECT COUNT(*)")));
+  var budget=limits.ledger(f.authority.readBudget(),f.authority.canonicalBudget(),()->false);assertEquals(1,MinutesPendingDiscovery.read(j,q,false,budget).size());long remaining=MinutesMetadataBounds.row(q.columns()).bytes()-1,spent=4500-budget.usage()[0]-remaining;budget.capture(spent,spent,spent,1);int before=f.sql.size();var denied=assertThrows(ama.contract.MinutesContracts.Failure.class,()->MinutesPendingDiscovery.read(j,q,true,budget));assertEquals(ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED,denied.code());assertTrue(f.sql.subList(before,f.sql.size()).stream().allMatch(sql->sql.startsWith("SELECT COUNT(*)")));
  }
 
  @Test void actualCurrentTaskAcquisitionCannotResetItsCallersLedger()throws Exception{
   var f=new Fixture();when(f.authority.transactionRunner()).thenReturn(f.tx);when(f.authority.fileRegistry()).thenReturn(mock(ama.storage.FileRegistry.class));
   var archive=new ama.contract.ConfigArchiveContracts.ArchiveReadBudget(65536,16777216,64,128,128,2000000,128,255,4194304,4194304,16777216,65536,64,24,500000);when(f.authority.readBudget()).thenReturn(archive);var limits=Task11CombinedInstallationTest.LIMITS;var pages=new MinutesMetadataPages(f.authority,limits);
   for(int n=0;n<2;n++)assertTrue(pages.allTaskRows(ACTOR,MEETING,limits.ledger(archive,f.authority.canonicalBudget(),()->false)).isEmpty());
-  var budget=limits.ledger(archive,f.authority.canonicalBudget(),()->false);assertTrue(pages.allTaskRows(ACTOR,MEETING,budget).isEmpty());var denied=assertThrows(ama.contract.MinutesContracts.Failure.class,()->pages.allTaskRows(ACTOR,MEETING,budget));assertEquals(ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED,denied.code());
+  var budget=limits.ledger(archive,f.authority.canonicalBudget(),()->false);assertTrue(pages.allTaskRows(ACTOR,MEETING,budget).isEmpty());long firstRows=budget.usage()[5];assertTrue(pages.allTaskRows(ACTOR,MEETING,budget).isEmpty());assertTrue(budget.usage()[5]>firstRows);while(budget.remainingRows()>1)budget.row(0);var denied=assertThrows(ama.contract.MinutesContracts.Failure.class,()->pages.allTaskRows(ACTOR,MEETING,budget));assertEquals(ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED,denied.code());
  }
 
 }

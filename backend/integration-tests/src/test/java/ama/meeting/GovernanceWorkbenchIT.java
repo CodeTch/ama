@@ -11,6 +11,24 @@ class GovernanceWorkbenchIT extends FeedbackReviewIT {
  final QualificationRules rules=new QualificationRules(1,1,.8,.8,.8,.8,0,0,1);
  @BeforeEach void setupWorkbench(){var tx=new ama.db.TransactionRunner(source);var access=new JdbcMeetingAccess(source,tx,new ama.task.JdbcSubjectFences(source,Set.of("MEETING")));governance=new JdbcGovernance(source,tx,access,new GovernanceHttpProvider(java.net.URI.create("http://127.0.0.1:8792"),"harness-fixture-embedding-v1",256),new EncryptedEmbeddingStore(new byte[32]));workbench=new JdbcGovernanceWorkbench(source,tx,access,governance);}
  String key(){return UUID.randomUUID().toString();}
+ @Test void needsMoreRetainsAuthorizationAndRequiresANewSampleRevision(){
+  var admin=reviewer(true);var created=governance.enroll(actor,key(),"本人明确授权",java.time.Instant.now().plusSeconds(86400).toString(),GovernanceLifecycleIT.wav(220));String id=(String)created.get("id");
+  var reviewed=governance.reviewVoice(admin,id,key(),0,"NEEDS_MORE","请使用更清晰的独立声音");assertEquals("NEEDS_MORE",reviewed.get("state"));
+  assertEquals("NOT_APPLIED",workbench.voiceDetail(actor,id).get("usageState"));assertEquals(2,((List<?>)workbench.voiceDetail(actor,id).get("history")).size());
+  assertThrows(ama.contract.MeetingContracts.Conflict.class,()->governance.reviewVoice(admin,id,key(),1,"APPROVED","不能直接沿用旧样本"));
+  String replaceKey=key(),expires=java.time.Instant.now().plusSeconds(86400).toString();var replaced=governance.replaceSample(actor,id,replaceKey,1,"本人再次授权",expires,GovernanceLifecycleIT.wav(330),"重新提供清晰声音");assertEquals("2",replaced.get("revisionToken"));assertEquals("PENDING",replaced.get("state"));assertEquals(replaced,governance.replaceSample(actor,id,replaceKey,1,"本人再次授权",expires,GovernanceLifecycleIT.wav(330),"重新提供清晰声音"));assertEquals(2,((List<?>)workbench.voiceDetail(actor,id).get("sampleHistory")).size());governance.reviewVoice(admin,id,key(),2,"APPROVED","复核新样本");
+ }
+ @Test void corpusSnapshotsReachCorrectionContextAndWithdrawalInvalidatesOldAndNewUse(){
+  var admin=reviewer(true);var created=feedback.createStructured(actor,key(),meeting,"FINANCIAL_TERM","净值估计","单位净值","已核验");String id=(String)created.get("id");
+  j.update("INSERT INTO corpus_feedback_binding(feedback_id,source_revision,segment_ids,adoption_state,adoption_version) VALUES (?,0,'[]','ADOPTED','harness-corpus-runtime')",id);
+  feedback.review(admin,id,key(),0,"ACCEPTED","依据充分");var runtime=new JdbcGovernanceRuntime(source);String input=key();runtime.freeze(input);assertEquals(List.of("单位净值"),runtime.entities(input));
+  j.update("UPDATE corpus_feedback_binding SET withdrawn=TRUE WHERE feedback_id=?",id);assertFalse(runtime.corpusCurrent(input));assertEquals(List.of(),runtime.entities(input));String next=key();runtime.freeze(next);assertEquals(List.of(),runtime.entities(next));
+ }
+ @Test void keysetPagesCoverTiedRowsAndBindEveryFilterAndActor(){
+  var admin=reviewer(true);String prefix="paging-"+key();for(int n=0;n<23;n++)governance.dataset(admin,key(),prefix+"-"+n,List.of(new Sample("s",Kind.MINUTES,"会议",null,"参考")));
+  j.update("UPDATE governance_dataset SET created_at='2026-11-03 00:00:00' WHERE version LIKE ?",prefix+"%");var first=workbench.page(admin,"datasets",null,prefix,null,20);String cursor=(String)first.get("nextCursor");var second=workbench.page(admin,"datasets",cursor,prefix,null,20);var ids=new HashSet<Object>();for(var page:List.of(first,second))for(var row:(List<?>)page.get("items"))assertTrue(ids.add(((Map<?,?>)row).get("id")));assertEquals(23,ids.size());assertEquals(23L,((Number)first.get("total")).longValue());
+  assertThrows(IllegalArgumentException.class,()->workbench.page(admin,"datasets",cursor,prefix+"x",null,20));assertThrows(IllegalArgumentException.class,()->workbench.page(reviewer(true),"datasets",cursor,prefix,null,20));assertThrows(ama.access.MeetingAccess.AccessDeniedException.class,()->workbench.page(actor,"datasets",null,null,null,20));assertEquals(0L,((Number)workbench.page(actor,"my-voiceprints",null,null,null,20).get("total")).longValue());
+ }
  @Test void controlledAssetsKeepAudioOutOfDatasetAndMetadataPages(){
   var admin=reviewer(true);byte[] wav=GovernanceLifecycleIT.wav(220);String key=key();var asset=workbench.upload(admin,key,"sample.wav",wav);
   assertEquals(asset,workbench.upload(admin,key,"sample.wav",wav));assertThrows(ama.access.MeetingAccess.AccessDeniedException.class,()->workbench.upload(actor,key(),"sample.wav",wav));

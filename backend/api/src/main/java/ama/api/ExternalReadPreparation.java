@@ -21,6 +21,10 @@ class ExternalReadPreparation implements WebMvcConfigurer,HandlerInterceptor {
  public boolean preHandle(HttpServletRequest request,HttpServletResponse response,Object handler){
   if(!(request.getAttribute(SessionSecurityFilter.SESSION) instanceof ResolvedSession session))return true;
   String path=request.getRequestURI();
+  // This exact status-only handler checks committed local ACL metadata itself and
+  // invokes the original external preparation whenever retained sources require it.
+  if(request.getMethod().equals("GET") && handler instanceof org.springframework.web.method.HandlerMethod method
+      && method.getBeanType()==WorkspaceNavigationController.class && method.getMethod().getName().equals("access"))return true;
   // The formal snapshot has its own current library grant and terminal-state capture.
   // Keep all meeting/source reads on the existing meeting READ preparation.
   if(handler instanceof org.springframework.web.method.HandlerMethod method && method.getBeanType()==PublicationDocumentController.class && method.getMethod().getName().equals("document"))return true;

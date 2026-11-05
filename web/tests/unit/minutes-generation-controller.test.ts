@@ -1,4 +1,4 @@
-import {test} from 'node:test';import assert from 'node:assert/strict';
+import {test} from 'node:test';import {watch} from 'vue';import assert from 'node:assert/strict';
 import {useMinutesGeneration} from '../../src/features/minutes/useMinutesGeneration.js';
 import type {GenerationCurrent,GenerationReceipt} from '../../src/shared/api/minutes-generation.js';
 import type {CommandSnapshot} from '../../src/shared/composables/useCommand.js';
@@ -24,4 +24,31 @@ test('generation refresh recovers exact original command before new unavailable 
 });
 test('new generation does not submit without real current readiness even when task list is empty',async()=>{
  let sends=0;const state=useMinutesGeneration({current:async()=>current(false),templates:async()=>({items:[],nextCursor:null,observation:current(false).observation}),send:async()=>{sends++;return receipt;}},()=> 'owner',()=>meeting,()=>true);await state.reload();await state.generate();assert.equal(sends,0);assert.equal(state.current.value?.reasons[0],'TRANSCRIPT_CONFIRMATION_REQUIRED');state.dispose();
+});
+
+test('accepted generation clears recovery before a receipt observer unmounts the first-result panel',async()=>{
+ const context={tab:'ack-unmount',storage:storage(),recovery:'RESUME_NAMESPACE' as const},seen:CommandSnapshot[]=[];
+ const api={current:async()=>current(true),templates:async()=>({items:[],nextCursor:null,observation:current(true).observation}),send:async(c:CommandSnapshot)=>{seen.push(c);return receipt;}};
+ const first=useMinutesGeneration(api,()=> 'owner',()=>meeting,()=>true,context);await first.reload();
+ const stop=watch(()=>first.command.ack.value,ack=>{if(ack)first.dispose();},{flush:'sync'});
+ await first.generate();stop();assert.equal(seen.length,1);
+ const resumed=useMinutesGeneration(api,()=> 'owner',()=>meeting,()=>true,context);await resumed.reload();
+ assert.equal(resumed.command.state.value,'EMPTY','An acknowledged terminal task must not resurrect as an uncertain command');
+ await resumed.generate();assert.equal(seen.length,2);assert.notEqual(seen[1]!.key,seen[0]!.key);resumed.dispose();
+});
+test('late accepted response from a disposed panel cannot clear a newer meeting command',async()=>{
+ const context={tab:'late-ack',storage:storage(),recovery:'RESUME_NAMESPACE' as const};let finishOld!:(value:GenerationReceipt)=>void;
+ const api={current:async()=>current(true),templates:async()=>({items:[],nextCursor:null,observation:current(true).observation}),send:async()=>new Promise<GenerationReceipt>(resolve=>{finishOld=resolve;})};
+ const first=useMinutesGeneration(api,()=> 'owner',()=>meeting,()=>true,context);await first.reload();const running=first.generate();
+ while(!finishOld)await new Promise(resolve=>setImmediate(resolve));first.dispose();
+ const newer=useMinutesGeneration({...api,send:async()=>{throw Error('new response lost');}},()=> 'owner',()=>id,()=>true,context);await newer.reload();await newer.generate();assert.equal(newer.command.state.value,'UNCERTAIN');const original=newer.command.snapshot.value;newer.dispose();
+ finishOld(receipt);await running;
+ const restored=useMinutesGeneration(api,()=> 'owner',()=>id,()=>true,context);await restored.reload();assert.equal(restored.command.state.value,'UNCERTAIN');assert.deepEqual(restored.command.snapshot.value,original);restored.dispose();
+});
+test('failed acknowledged-journal cleanup blocks replacement and fresh task read still prevents duplication',async()=>{
+ const backing=storage();let denyRemoval=false,sends=0;
+ const context={tab:'cleanup-failure',storage:{...backing,removeItem:(key:string)=>{if(denyRemoval)throw Error('storage denied');backing.removeItem(key);}},recovery:'RESUME_NAMESPACE' as const};
+ const state=useMinutesGeneration({current:async()=>({...current(true),activeTaskIds:sends?[id]:[]}),templates:async()=>({items:[],nextCursor:null,observation:current(true).observation}),send:async()=>{sends++;return receipt;}},()=> 'owner',()=>meeting,()=>true,context);
+ await state.reload();denyRemoval=true;await state.generate();assert.equal(state.command.state.value,'ACKNOWLEDGED');assert.equal(state.blocked.value,true);
+ await state.generate();assert.equal(sends,1);denyRemoval=false;await state.reload();assert.equal(state.blocked.value,false);await state.generate();assert.equal(sends,1);state.dispose();
 });

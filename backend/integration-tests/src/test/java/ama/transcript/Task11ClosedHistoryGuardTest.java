@@ -9,7 +9,7 @@ class Task11ClosedHistoryGuardTest {
   var f=sql(new Fixture().remote(),new AtomicBoolean());var authorized=new AtomicBoolean();
   org.mockito.Mockito.when(f.access.lock(Task11PublicationWriteGuardBoundaryTest.ACTOR,MEETING)).thenReturn(f.root);
   org.mockito.Mockito.doAnswer(x->{assertTrue(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive());authorized.set(true);return null;}).when(f.access).require(f.root,ama.access.MeetingAccess.Action.EDIT);
-  var response=f.responder;f.responder=q->{if(q.startsWith("SELECT request_manifest")){assertTrue(authorized.get(),"original before fresh owner authorization");assertTrue(q.endsWith("FOR UPDATE"));for(String table:List.of("publication","final_confirmation","publication_submission","durable_task","task_attempt","external_operation","external_execution"))assertTrue(f.sql.stream().anyMatch(x->x.contains(" FROM "+table+" ")&&x.endsWith("FOR UPDATE")),table+" missing protected S lock");}return response.apply(q);};
+  var response=f.responder;f.responder=q->{if(q.startsWith("SELECT request_manifest")){assertTrue(authorized.get(),"original before fresh owner authorization");assertTrue(q.endsWith("FOR UPDATE"));for(String table:List.of("publication","final_confirmation","publication_submission","durable_task","task_attempt","external_operation","external_execution"))assertTrue(f.sql.stream().anyMatch(x->x.contains(" FROM "+table+" ")&&(x.endsWith("FOR UPDATE")||x.contains(" FOR UPDATE) locked_metadata"))),table+" missing protected S lock");}return response.apply(q);};
   f.prepare();assertTrue(authorized.get());
  }
  @Test void deniedOwnerNeverTransfersAnOriginal()throws Exception{
@@ -27,7 +27,16 @@ class Task11ClosedHistoryGuardTest {
    if(sql.startsWith("SELECT request_manifest FROM publication_submission")){String original=history.originals.get(TASK);if(changed.get()&&sql.endsWith("FOR UPDATE"))original=original.replace("owner","ownez");return List.of(Map.of("request_manifest",original));}
    if(sql.startsWith("SELECT OCTET_LENGTH(request_manifest) mb")){var original=history.executions.get(EXEC);long m=original.manifest().length(),e=original.noEffectEvidence().length();return List.of(row("mb",m,"ms",m,"mu",m,"eb",e,"es",e,"eu",e));}
    if(sql.startsWith("SELECT request_manifest,no_effect_evidence")){var original=history.executions.get(EXEC);return List.of(row("request_manifest",original.manifest(),"no_effect_evidence",original.noEffectEvidence()));}
-   var match=java.util.regex.Pattern.compile("FROM ([a-z_]+) ").matcher(sql);if(!match.find())return null;String table=match.group(1);List<Map<String,Object>> rows=switch(table){case "meeting"->List.of(history.root);case "publication"->history.pubs;case "final_confirmation"->history.finals;default->history.rows.get(table);};if(rows==null)return null;if(sql.startsWith("SELECT COUNT(*)"))return List.of(Map.of("count",(long)rows.size()));return rows;
+   var match=java.util.regex.Pattern.compile("FROM ([a-z_]+) ").matcher(sql);if(!match.find())return null;String table=match.group(1);List<Map<String,Object>> rows=switch(table){case "meeting"->List.of(history.root);case "publication"->history.pubs;case "final_confirmation"->history.finals;default->history.rows.get(table);};if(rows==null)return null;if(sql.startsWith("SELECT COUNT(*)"))return List.of(Map.of("count",(long)rows.size()));return projection(sql,rows);
   };return f;
  }
+ /** The JDBC substitute returns exactly the requested columns, as a real ResultSet does.
+  * Metadata comparison SQL is exercised against MySQL in PublicationMetadataComparisonIT. */
+ static List<Map<String,Object>> projection(String sql,List<Map<String,Object>> rows){
+  String text=sql.substring(7,sql.indexOf(" FROM "));if(text.equals("*"))return rows;
+  var columns=new ArrayList<String>();int start=0,depth=0;
+  for(int n=0;n<text.length();n++){char c=text.charAt(n);if(c=='(')depth++;else if(c==')')depth--;else if(c==','&&depth==0){columns.add(text.substring(start,n));start=n+1;}}columns.add(text.substring(start));
+  return rows.stream().map(row->{var selected=new LinkedHashMap<String,Object>();for(String expression:columns){String name=expression.contains(" AS ")?expression.substring(expression.lastIndexOf(" AS ")+4):expression;selected.put(name,row.get(name));}return (Map<String,Object>)selected;}).toList();
+ }
+
 }

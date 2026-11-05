@@ -5,7 +5,9 @@ import local_app
 from offline_speech_check import database_sql
 
 ROOT=Path('/home/tanren/ama')
-OUT=ROOT/'.tools/local-app/governance-repair-20261103'
+OUT=ROOT/os.environ.get('AMA_GOVERNANCE_OUTPUT','.tools/local-app/governance-repair-20261105')
+assert OUT.resolve().is_relative_to((ROOT/'.tools/local-app').resolve())
+OUT.mkdir(parents=True,exist_ok=True)
 BUILD=OUT/'maven'
 TESTS=os.environ.get('AMA_GOVERNANCE_TESTS','GovernanceWorkbenchIT,GovernanceLifecycleIT,VoiceprintMatchingIT,CorpusFeedbackIT,StructuredFeedbackIT')
 

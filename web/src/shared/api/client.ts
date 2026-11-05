@@ -1,6 +1,8 @@
 import type { components } from './generated';
 import {intentConflict} from './intent-contract';
 import {publicationErrors} from './publication-errors';
+import {requestAdmission} from './request-admission';
+const admission=requestAdmission();
 
 type DeclaredErrorCode = { [K in keyof components['schemas']]: components['schemas'][K] extends {error: {code: infer C extends string}} ? C : never }[keyof components['schemas']];
 const knownCodes: ReadonlySet<string> = new Set(["CATEGORY_DICTIONARY_UNAVAILABLE", "FILE_CONFLICT", "FILE_INVALID_RANGE", "FILE_NOT_FOUND", "FILE_PURPOSE_UNAVAILABLE", "FILE_STORAGE_UNAVAILABLE", "FORBIDDEN", "IDENTITY_PROVIDER_UNAVAILABLE", "IDENTITY_UNAVAILABLE", "INVALID_ARGUMENT", "MEETING_CONFLICT", "TOPIC_NOT_PUBLISHED", "MEETING_FORBIDDEN", "MEETING_UNAVAILABLE", "REQUEST_TOO_LARGE", "UNAUTHENTICATED", "RECORDING_CONFLICT", "RECORDING_GAP", "RECORDING_PAUSED", "RECORDING_UNAVAILABLE", "RECORDING_RATE_LIMITED", "RECORDING_READ_ONLY", "RECORDING_ARCHIVE_NOT_READY", "RECORDING_ARCHIVE_CONFLICT", "RECORDING_ARCHIVE_UNAVAILABLE", "INVALID_RANGE"] satisfies readonly DeclaredErrorCode[]);
@@ -51,8 +53,8 @@ export async function request<T>(path:string, init:RequestOptions={}):Promise<T>
  const method=(options.method??'GET').toUpperCase(),transcriptRoute=errorContract==='saved-transcript'?new URL(path,'https://local.invalid').pathname.match(/^\/api\/v1\/meetings\/([0-9a-f-]{36})\/transcript(\/marks|\/speakers|\/restorations|\/confirmations|\/replacements|\/correction-proposals|\/operations\/([0-9a-f-]{36})\/undo|\/corrections\/([0-9a-f-]{36})\/decisions)?$/):null;
  const transcriptCommand=transcriptRoute&&UUID.test(transcriptRoute[1]!)&&(method==='PUT'&&(!transcriptRoute[2]||transcriptRoute[2]==='/marks')||method==='POST'&&(['/speakers','/restorations','/confirmations','/replacements','/correction-proposals'].includes(transcriptRoute[2]??'')||!!transcriptRoute[3]&&UUID.test(transcriptRoute[3])||!!transcriptRoute[4]&&UUID.test(transcriptRoute[4])));
  const enhancementCommand=errorContract==='material-enhancement'&&method==='POST'&&/^\/api\/v1\/meetings\/[0-9a-f-]{36}\/transcript\/material-enhancements(?:\/[0-9a-f-]{36}\/adoption)?$/.test(new URL(path,'https://local.invalid').pathname);
- const publicationRoute=errorContract==='final-publication'&&method==='POST'?new URL(path,'https://local.invalid').pathname.match(/^\/api\/v1\/meetings\/([0-9a-f-]{36})\/(final-confirmations|publications)$/):null;
- const publicationCommand=publicationRoute&&UUID.test(publicationRoute[1]!);
+ const publicationRoute=errorContract==='final-publication'?new URL(path,'https://local.invalid').pathname.match(/^\/api\/v1\/meetings\/([0-9a-f-]{36})\/(final-confirmations|publication-configuration|publications(?:\/([0-9a-f-]{36})\/(?:zero-effect-retries|resubmissions|local-recoveries))?)$/):null;
+ const publicationCommand=publicationRoute&&UUID.test(publicationRoute[1]!)&&(!publicationRoute[3]||UUID.test(publicationRoute[3]))&&(publicationRoute[2]==='publication-configuration'?method==='PUT':method==='POST');
  if(errorContract&&!intentMeeting&&!transcriptCommand&&!enhancementCommand&&!publicationCommand)throw new TypeError('Error contract requires the matching product command');
  if(!Number.isSafeInteger(maxResponseBytes)||maxResponseBytes<1||maxResponseBytes>8*1024*1024)throw new TypeError('Invalid response limit');
  if(expectedStatus!==undefined&&(!Number.isInteger(expectedStatus)||expectedStatus<200||expectedStatus>299))throw new TypeError('Invalid expected status');
@@ -60,8 +62,12 @@ export async function request<T>(path:string, init:RequestOptions={}):Promise<T>
  const originalSignal=options.signal;if(readDeadline)options.signal=originalSignal?AbortSignal.any([originalSignal,readDeadline]):readDeadline;
  const checkReadDeadline=()=>{if(readDeadline?.aborted&&!originalSignal?.aborted)throw new ApiError('network',0,'读取会议内容超时，请重新读取。');options.signal?.throwIfAborted();};
  const headers=new Headers(options.headers);if(!headers.has('Accept'))headers.set('Accept','application/json');
+ let release=()=>{};
+ try {
  let response:Response;
- try {response=await fetch(path,{...options,headers,credentials:'include',redirect:'error'});}
+ const resource=new URL(path,'https://local.invalid');
+ const displayRenewal=method==='GET'&&!resource.search&&!resource.hash&&/^\/api\/v1\/meetings\/[0-9a-f-]{36}\/workspace\/access$/.test(resource.pathname);
+ try {if(!displayRenewal){const slot=admission.acquire(options.signal);release=typeof slot==='function'?slot:await slot;}response=await fetch(path,{...options,...(displayRenewal?{priority:'high' as const}:{}),headers,credentials:'include',redirect:'error'});}
  catch(error){checkReadDeadline();if(aborted(error,options.signal))throw error;throw new ApiError('network',0,'网络连接不可用，请检查网络后重试。');}
  checkReadDeadline();
  if(!response.ok) {
@@ -74,4 +80,5 @@ export async function request<T>(path:string, init:RequestOptions={}):Promise<T>
  if(response.status===204||response.status===205)return undefined as T;
  try{const value=await boundedJson(response,maxResponseBytes);checkReadDeadline();return value as T;}
  catch(error){checkReadDeadline();if(aborted(error,options.signal))throw error;throw new ApiError('response',response.status,'服务响应格式异常，请稍后重试。');}
+ } finally {release();}
 }

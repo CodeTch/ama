@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {computed,ref,watch} from 'vue';import {useRoute,useRouter} from 'vue-router';import {useApplication} from '../../application';import Icon from '../../shared/Icon.vue';import GovernanceListFrame from './GovernanceListFrame.vue';import GovernanceDrawer from './GovernanceDrawer.vue';import FeedbackReviewPanel from './FeedbackReviewPanel.vue';import {useGovernanceList} from './useGovernanceList';import {localTime,stateLabels,usageLabels,feedbackLabels,type CorpusPage} from './workbench-types';
 const app=useApplication(),route=useRoute(),router=useRouter(),list=useGovernanceList<CorpusPage>('corpus'),selected=ref<string|null>(null);
-const row=computed(()=>list.page.value?.items.find(r=>r.id===selected.value)),canReview=computed(()=>!!row.value&&row.value.submitterId!==app.session.current.value?.actor.enterpriseId);
+const row=computed(()=>list.page.value?.items.find(r=>r.id===selected.value)),canReview=computed(()=>(!row.value||row.value.submitterId!==app.session.current.value?.actor.enterpriseId));
 function open(id:string){selected.value=id;void router.replace({query:{...route.query,selected:id}});}
 function close(){selected.value=null;void router.replace({query:{...route.query,selected:undefined}});}
 watch(()=>route.query.selected,id=>{selected.value=typeof id==='string'?id:null;},{immediate:true});

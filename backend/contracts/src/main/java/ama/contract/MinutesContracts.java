@@ -15,10 +15,10 @@ public final class MinutesContracts {
         LOCATOR_INVALID, TARGET_INVALID, FINGERPRINT_MISMATCH, CAPABILITY_UNAVAILABLE, PROFILE_UNAVAILABLE,
         CANCELLED, READ_FAILED, ARCHIVE_IO_UNAVAILABLE, PROVENANCE_UNAVAILABLE, SOURCE_CONTEXT_AMBIGUOUS, SOURCE_MEMBERSHIP_MISMATCH
     }
-    /** Deliberately contains no raw input, cause, suppressed exception or writable stack trace. */
+    /** Contains no raw input, cause or suppressed exception; bounded diagnostics log code locations only. */
     public static final class Failure extends RuntimeException {
         private final FailureCode code;
-        public Failure(FailureCode code) { super(Objects.requireNonNull(code).name(), null, false, false); this.code=code; }
+        public Failure(FailureCode code) { super(Objects.requireNonNull(code).name(), null, false, code == FailureCode.PROVENANCE_UNAVAILABLE || code == FailureCode.BUDGET_EXCEEDED); this.code=code; }
         public FailureCode code() { return code; }
     }
     public static Failure fail(FailureCode code) { return new Failure(code); }

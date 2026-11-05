@@ -22,6 +22,9 @@ final class PublicationDocumentRead {
   return authority.transactionRunner().required(()->{
    budget.check();var locked=authority.savedAccess().lock(viewer,meeting);if(meetingReader)authority.savedAccess().require(locked,MeetingAccess.Action.READ);
    var root=one(service,"SELECT id,owner_id,revision,access_revision,cancel_epoch,lifecycle,governance_state,stage,ever_published,final_confirmation_id,info_revision_id,roster_revision_id,transcript_confirmation_id,minutes_revision_id,material_snapshot_id,element_set_id,template_revision_id,exclusion_revision_id FROM meeting WHERE id=?",budget,meeting);
+   // Formal-library access is independent of the meeting roster, but a withdrawn,
+   // obsolete or deleted meeting can no longer release its published content.
+   if(!meetingReader&&(!"ACTIVE".equals(root.get("lifecycle"))||!"ACTIVE".equals(root.get("governance_state"))))throw new MeetingAccess.AccessDeniedException();
    var pub=one(service,"SELECT id,meeting_id,confirmation_id,business_key,library_id,folder_id,state,revision,published_at FROM publication WHERE id=? AND meeting_id=? FOR UPDATE",budget,publication,meeting);
    var confirmation=one(service,"SELECT id,meeting_id,meeting_revision,info_revision_id,roster_revision_id,transcript_confirmation_id,minutes_revision_id,material_snapshot_id,element_set_id,template_revision_id,exclusion_revision_id,source_manifest_hash,input_fingerprint,confirmed_by,confirmed_at FROM final_confirmation WHERE id=? AND meeting_id=? FOR UPDATE",budget,pub.get("confirmation_id"),meeting);
    PublicationGraph.lock(authority.dataSource(),plan,true);PublicationGraph.lock(authority.dataSource(),plan,false);

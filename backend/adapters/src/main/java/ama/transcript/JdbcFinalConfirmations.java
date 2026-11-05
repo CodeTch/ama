@@ -24,19 +24,40 @@ public final class JdbcFinalConfirmations {
  }
  void requireConfiguration(JdbcTranscriptAuthority authority,Supplier<ConfigArchiveSource.Snapshot> archives,String pin,TranscriptAcquisitionBudget limits,JdbcSavedTranscripts transcripts){if(this.authority!=authority||this.archives!=archives||!this.pin.equals(pin)||!this.limits.equals(limits)||this.transcripts!=transcripts)throw new IllegalArgumentException("Foreign final confirmation installation");}
  private record ReadinessCapture(MinutesGraphCapture.Graph graph,String historyBlocker){}
- private ReadinessCapture captureReadiness(Actor actor,String meeting,MinutesGraphDiscovery.Discovery declaration,TranscriptAcquisitionBudget.Ledger budget,PublicationWriteGuard.Prepared prepared){
-  var gate=JdbcMinutesFactsReader.lockGraph(authority,actor,meeting,declaration);var cap=authority.minutesScope(gate,actor,meeting);var guard=authority.publicationWriteGuard();var access=authority.fileRegistry().access(gate);
-  var held=new java.util.concurrent.atomic.AtomicReference<PublicationWriteGuard.Held>();var blocker=new java.util.concurrent.atomic.AtomicReference<String>();
-  var graph=MinutesGraphCapture.capturePublicationCurrent(authority,cap,gate,actor,declaration,budget,()->held.set(guard.controls(prepared,actor,meeting,access)),()->{
-   guard.tasks(held.get(),access);try{guard.requirePermitted(held.get(),access);}catch(Failure denied){if(denied.code()==BUDGET_EXCEEDED||denied.code()==CANCELLED)throw denied;blocker.set("PUBLICATION_HISTORY_UNAVAILABLE");}
-  });return new ReadinessCapture(graph,blocker.get());
+ private ReadinessCapture captureReadiness(Actor actor,String meeting,MinutesGraphDiscovery.Discovery declaration,TranscriptAcquisitionBudget.Ledger budget,PublicationWriteGuard.Prepared prepared,ReadinessCapture previous){
+  var gate=JdbcMinutesFactsReader.lockGraph(authority,actor,meeting,declaration);
+  var cap=authority.minutesScope(gate,actor,meeting);
+  var guard=authority.publicationWriteGuard();
+  var access=authority.fileRegistry().access(gate);
+  var held=new java.util.concurrent.atomic.AtomicReference<PublicationWriteGuard.Held>();
+  var blocker=new java.util.concurrent.atomic.AtomicReference<String>();
+  Runnable controls=()->held.set(guard.readinessControls(prepared,actor,meeting,access));
+  Runnable tasks=()->{
+   guard.readinessTasks(held.get(),access);
+   try{guard.requirePermitted(held.get(),access);}
+   catch(Failure denied){
+    if(denied.code()==BUDGET_EXCEEDED||denied.code()==CANCELLED)throw denied;
+    blocker.set("PUBLICATION_HISTORY_UNAVAILABLE");
+   }
+  };
+  var graph=previous==null
+    ?MinutesGraphCapture.capturePublicationCurrent(authority,cap,gate,actor,declaration,budget,controls,tasks)
+    :MinutesGraphCapture.comparePublicationCurrent(authority,cap,gate,actor,declaration,budget,controls,tasks,previous.graph());
+  return new ReadinessCapture(graph,blocker.get());
  }
  public Map<String,Object> readiness(Actor actor,String meeting){
-  JdbcMinutesFactsReader.independent();var budget=limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->false);var declaration=MinutesGraphDiscovery.withPending(authority.dataSource(),MinutesGraphDiscovery.discover(authority.dataSource(),meeting,"READINESS",null,limits,authority.readBudget()),limits.tasks(),budget);JdbcMinutesFactsReader.charge(declaration,budget);
+  JdbcMinutesFactsReader.independent();
+  var budget=limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->false);
+  return PublicationGraph.retryObservation(()->observeReadiness(actor,meeting,budget));
+ }
+ private Map<String,Object> observeReadiness(Actor actor,String meeting,TranscriptAcquisitionBudget.Ledger budget){
+  budget.check();
+  var declaration=MinutesGraphDiscovery.withPending(authority.dataSource(),MinutesGraphDiscovery.discover(authority.dataSource(),meeting,"READINESS",null,limits,authority.readBudget()),limits.tasks(),budget);
+  JdbcMinutesFactsReader.charge(declaration,budget);
   var prepared=authority.publicationWriteGuard().prepare(actor,meeting,budget);var publication=authority.publicationWriteGuard().declaration(prepared);
-  var captured=authority.transactionRunner().required(()->captureReadiness(actor,meeting,declaration,budget,prepared));
+  var captured=authority.transactionRunner().required(()->captureReadiness(actor,meeting,declaration,budget,prepared,null));
   var snapshot=reader.prepare(captured.graph(),budget);var result=new LinkedHashMap<>(queries.finalReadiness(snapshot,publication));var correction=transcripts.correctionFor(authority);
-  authority.transactionRunner().required(()->{var fresh=captureReadiness(actor,meeting,declaration,budget,prepared);require(fresh.equals(captured),PROVENANCE_UNAVAILABLE);transcripts.requireCorrection(authority,correction,Set.of("NOT_APPLICABLE","READY").contains(correction.projection().readiness()));return null;});
+  authority.transactionRunner().required(()->{var fresh=captureReadiness(actor,meeting,declaration,budget,prepared,captured);require(fresh.equals(captured),PROVENANCE_UNAVAILABLE);transcripts.requireCorrection(authority,correction,Set.of("NOT_APPLICABLE","READY").contains(correction.projection().readiness()));return null;});
   if(captured.historyBlocker()!=null){var blockers=new LinkedHashSet<>((List<String>)result.get("blockers"));blockers.add(captured.historyBlocker());result.put("blockers",List.copyOf(blockers));result.put("ready",false);result.put("businessReady",false);}return Collections.unmodifiableMap(result);
  }
  public Map<String,Object> confirm(Actor actor,String meeting,String key,long expected,List<String> optionalReviewIds,String trace){

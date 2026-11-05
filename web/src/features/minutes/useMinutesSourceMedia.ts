@@ -1,10 +1,10 @@
 import {computed,shallowRef,watch,onScopeDispose} from 'vue';
 import type {Source} from '../../shared/api/minutes-inspection';
-import type {TranscriptDetail,TranscriptSource} from '../../shared/api/transcripts';
+import type {TranscriptSource} from '../../shared/api/transcripts';
 import type {MaterialListing} from '../../shared/api/materials';
 import {ApiError} from '../../shared/api/client';
 import {useSourceMedia,type MediaScope,type SourceReader} from '../transcript/useSourceMedia';
-type Ports={revision:(meeting:string,revision:string,signal:AbortSignal)=>Promise<TranscriptDetail>;source:SourceReader;materials?:(meeting:string,signal:AbortSignal)=>Promise<MaterialListing>};
+type Ports={source:SourceReader;materials?:(meeting:string,signal:AbortSignal)=>Promise<MaterialListing>};
 const forbidden=(cause:unknown)=>cause instanceof ApiError&&[401,403].includes(cause.status??0);
 /** Resolve only the immutable segment/file declared by this source. Byte validation stays in the existing transcript reader. */
 export function useMinutesSourceMedia(ports:Ports,actor:()=>string|null,meeting:()=>string,active:()=>boolean,source:()=>Source|null,denied:(cause:unknown)=>void,urls:Pick<typeof URL,'createObjectURL'|'revokeObjectURL'>=URL){
@@ -25,15 +25,15 @@ export function useMinutesSourceMedia(ports:Ports,actor:()=>string|null,meeting:
     plainName.value=item.name;return;
    }
    if(version!==saved.locator.transcript_revision_id)throw Error('来源版本无法核实，请重新打开来源。');
-   const detail=await ports.revision(id,version,c.signal);if(!accept())return;
-   if(detail.meetingId!==id||detail.selected.id!==version||detail.observation.revisionToken!==saved.observation.revisionToken||detail.observation.accessRevisionToken!==saved.observation.accessRevisionToken)throw Error('来源或访问状态已变化，请重新打开核对。');
-   const segment=detail.selected.segments.find(s=>s.segmentId===saved.locator.segment_id),file=detail.sources.find(s=>s.fileId===segment?.sourceFileId);
-   if(!segment||!file||saved.locator.file_id!==null&&saved.locator.file_id!==file.fileId||saved.originalBytes.route.split('/').at(-1)!==file.fileId)throw Error('来源文件与已保存段落不一致。');
-   if(!detail.capabilities.canReadSources||!detail.sourceBytes.some(s=>s.fileId===file.fileId&&s.eligibility==='ELIGIBLE'))throw Error('来源原件当前不可读取。');
-   const original:TranscriptSource={fileId:file.fileId,sha256:file.sha256,sizeBytes:file.sizeBytes,revisionId:version,recordingWav:detail.parserVersion==='ama.recording-wav.v1'};
+   const segment=saved.transcript;
+   if(!segment||segment.revisionId!==version||segment.segmentId!==saved.locator.segment_id||saved.locator.file_id!==null&&saved.locator.file_id!==segment.fileId)throw Error('来源文件与已保存段落不一致。');
+   const expectedRoute=`/api/v1/meetings/${id}/transcript/${saved.historical?`revisions/${version}/`:''}sources/${segment.fileId}`;
+   const size=Number(segment.sizeBytesToken),ordinal=Number(segment.ordinalToken);
+   if(saved.originalBytes.route!==expectedRoute||!Number.isSafeInteger(size)||size<0||!Number.isSafeInteger(ordinal)||ordinal<0)throw Error('来源原件当前不可读取。');
+   const original:TranscriptSource={fileId:segment.fileId,sha256:segment.sha256,sizeBytes:size,revisionId:saved.historical?version:null,recordingWav:segment.parserVersion==='ama.recording-wav.v1'};
    if(segment.startMs===null){const result=await ports.source(id,original,c.signal);if(accept())plainName.value=result.name;return;}
    if(!Number.isSafeInteger(segment.startMs)||segment.startMs<0||segment.endMs===null||segment.endMs<segment.startMs)throw Error('来源时间无法核实。');
-   startMs.value=segment.startMs;mediaScope.value={meeting:id,revisionId:version,accessRevisionToken:detail.observation.accessRevisionToken,sources:[{...original,ordinal:segment.ordinal}]};
+   startMs.value=segment.startMs;mediaScope.value={meeting:id,revisionId:version,accessRevisionToken:saved.observation.accessRevisionToken,sources:[{...original,ordinal}]};
   }catch(cause){if(accept()){if(forbidden(cause)){clear();denied(cause);}else error.value=cause;}}finally{if(accept())loading.value=false;}
  }
  const stop=watch(identity,()=>{void reload();},{immediate:true,flush:'sync'});

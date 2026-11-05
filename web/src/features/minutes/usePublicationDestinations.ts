@@ -37,6 +37,9 @@ export function usePublicationDestinations(api:Api,actor:()=>string|null,meeting
    const items=[...(previous?.items??[]),...page.items];if(new Set(items.map(x=>x.id)).size!==items.length)throw new Error('目录分页重复，请重新读取目录。');libraries.value={...page,items};
   });
   if(accepted&&!searching)await restore();
+  // A debounced search can supersede the root read started by a recent click.
+  // Keep that selection and finish its inline tree when the library is visible again.
+  if(accepted&&searching&&selection.value){const lib=libraries.value?.items.find(x=>x.id===selection.value?.libraryId);if(lib&&!branches.value[branchKey(lib.id,lib.rootFolderId)])await loadBranch(lib,lib.rootFolderId);}
  }
  async function loadBranch(lib:Library,parent:string,cursor:string|null=null){
   if(!available()||!libraries.value?.items.some(x=>x.id===lib.id&&x.rootFolderId===lib.rootFolderId))return false;

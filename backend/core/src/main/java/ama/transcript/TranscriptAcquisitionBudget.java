@@ -22,8 +22,7 @@ public record TranscriptAcquisitionBudget(long utf8,long scalars,long utf16,long
   /** Transient JDBC result admission before execution; actual retained captures are charged separately. */
   public void admitCapture(long b,long p,long u,int ownedCopies){
    check();require(b>=0&&p>=0&&u>=0&&ownedCopies>0,INVALID_ARGUMENT);
-   require(b<=Math.min(limits.utf8,archive.maxTotalBytes())-bytes&&p<=Math.min(limits.scalars,archive.maxAggregateScalars())-points&&u<=limits.utf16-units,BUDGET_EXCEEDED);
-   require(b<=(limits.copyBytes-copies)/ownedCopies&&u<=(limits.copyUtf16-copyUnits)/ownedCopies,BUDGET_EXCEEDED);
+   requireSpace(b,p,u,ownedCopies);
   }
   /** Maximum whole metadata rows that can be admitted without changing any budget counter. */
   public int captureRowLimit(long perRowBytes,long perRowPoints,long perRowUnits,int ownedCopies,int requested){
@@ -36,12 +35,18 @@ public record TranscriptAcquisitionBudget(long utf8,long scalars,long utf16,long
    count=Math.min(count,(limits.copyUtf16-copyUnits)/ownedCopies/perRowUnits);
    return (int)Math.max(0,count);
   }
+  private void requireSpace(long b,long p,long u,int ownedCopies){
+   boolean fits=b<=Math.min(limits.utf8,archive.maxTotalBytes())-bytes&&p<=Math.min(limits.scalars,archive.maxAggregateScalars())-points&&u<=limits.utf16-units&&b<=(limits.copyBytes-copies)/ownedCopies&&u<=(limits.copyUtf16-copyUnits)/ownedCopies;
+   if(!fits)System.getLogger(TranscriptAcquisitionBudget.class.getName()).log(System.Logger.Level.WARNING,"Acquisition capacity exceeded: usage="+java.util.Arrays.toString(usage())+" requested="+b+","+p+","+u+","+ownedCopies+" maxima="+Math.min(limits.utf8,archive.maxTotalBytes())+","+Math.min(limits.scalars,archive.maxAggregateScalars())+","+limits.utf16+","+limits.copyBytes+","+limits.copyUtf16,new IllegalStateException("Acquisition limit diagnostic"));
+   require(fits,BUDGET_EXCEEDED);
+  }
   private void reserve(long b,long p,long u,int ownedCopies,boolean projected){
-   require(b<=Math.min(limits.utf8,archive.maxTotalBytes())-bytes&&p<=Math.min(limits.scalars,archive.maxAggregateScalars())-points&&u<=limits.utf16-units,BUDGET_EXCEEDED);
-   require(b<=(limits.copyBytes-copies)/ownedCopies&&u<=(limits.copyUtf16-copyUnits)/ownedCopies,BUDGET_EXCEEDED);
+   requireSpace(b,p,u,ownedCopies);
    if(projected)require(u<=(limits.responseBytes-response)/6,BUDGET_EXCEEDED);
    bytes+=b;points+=p;units+=u;copies+=b*ownedCopies;copyUnits+=u*ownedCopies;if(projected)response+=u*6;
   }
+  /** Extra encoding/driver copies of already owned immutable text, without reacquiring its value. */
+  public void copies(long b,long u,int ownedCopies){check();require(b>=0&&u>=0&&ownedCopies>0,INVALID_ARGUMENT);require(b<=(limits.copyBytes-copies)/ownedCopies&&u<=(limits.copyUtf16-copyUnits)/ownedCopies,BUDGET_EXCEEDED);copies+=b*ownedCopies;copyUnits+=u*ownedCopies;}
   public void row(long links){
    check();require(links>=0&&rows<archive.maxFactRows()&&links<=archive.maxFactEdges()-edges,BUDGET_EXCEEDED);
    require(rows<canonical.maxContainerEntries()&&links<=canonical.maxContainerEntries(),BUDGET_EXCEEDED);

@@ -21,4 +21,23 @@ class MinutesPreparationRenewalTest {
     @Test void everyOtherUnionRowMustRemainExact(){for(String table:List.of("task_attempt","external_operation","external_execution")){var next=renewed();next.put(table,List.of(Map.of("other",true)));rejects(original(),next);}}
     @Test void missingOrAdditionalTasksCannotBecomeRecapture(){var next=renewed();next.put("durable_task",List.of());rejects(original(),next);next=renewed();next.put("durable_task",List.of(next.get("durable_task").getFirst(),Map.of("id","other")));rejects(original(),next);}
     @Test void expiryMustBePresentWellFormedAndStrictlyForward(){for(Object expiry:List.of(LocalDateTime.parse("2026-10-29T00:00:19"),"broken",5L)){var next=renewed();var task=new HashMap<>(next.get("durable_task").getFirst());task.put("expires_at",expiry);next.put("durable_task",List.of(task));rejects(original(),next);}var next=renewed();var task=new HashMap<>(next.get("durable_task").getFirst());task.remove("expires_at");next.put("durable_task",List.of(task));rejects(original(),next);}
+    @Test void forwardRenewalCanContinueWithoutExtendingThePreparedSnapshot(){
+        var before=original();var after=renewed();assertDoesNotThrow(()->PublicationGraph.requirePreparationContinuation(lease,before,after));
+        assertEquals(before.get("durable_task"),PublicationGraph.conservativeTasks(lease,before.get("durable_task"),after.get("durable_task")));
+        assertEquals(LocalDateTime.parse("2026-10-29T00:00:25"),after.get("durable_task").getFirst().get("expires_at"));
+    }
+    @Test void captureUsesEquivalentUtcTimestampEncodingWithoutHidingOtherChanges(){
+        var declared=new HashMap<>(row());declared.put("created_at",LocalDateTime.parse("2026-10-29T00:00:00"));declared.put("available_at","2026-10-29T00:00:01");
+        var captured=new HashMap<>(declared);captured.put("created_at","2026-10-29T00:00:00.000000Z");captured.put("available_at","2026-10-29T00:00:01.000000Z");captured.put("expires_at","2026-10-29T00:00:25.000000Z");
+        var result=PublicationGraph.conservativeCapturedTasks(lease,List.of(declared),List.of(captured));
+        assertEquals("2026-10-29T00:00:20.000000Z",result.getFirst().get("expires_at"));
+        assertEquals("2026-10-29T00:00:25.000000Z",captured.get("expires_at"));
+        captured.put("available_at","2026-10-29T00:00:02.000000Z");assertThrows(MinutesContracts.Failure.class,()->PublicationGraph.conservativeCapturedTasks(lease,List.of(declared),List.of(captured)));
+    }
+    @Test void continuationStillRejectsChangedFenceAndUnrelatedUnion(){
+        var after=renewed();var task=new HashMap<>(after.get("durable_task").getFirst());task.put("attempt",2L);after.put("durable_task",List.of(task));
+        assertThrows(MinutesContracts.Failure.class,()->PublicationGraph.requirePreparationContinuation(lease,original(),after));
+        assertThrows(MinutesContracts.Failure.class,()->PublicationGraph.conservativeTasks(lease,original().get("durable_task"),after.get("durable_task")));
+        var other=renewed();other.put("external_execution",List.of(Map.of("id","other")));assertThrows(MinutesContracts.Failure.class,()->PublicationGraph.requirePreparationContinuation(lease,original(),other));
+    }
 }

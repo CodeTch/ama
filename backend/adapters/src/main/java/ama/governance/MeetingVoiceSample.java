@@ -21,6 +21,7 @@ final class MeetingVoiceSample {
    if(!(segment.get("start_ms") instanceof Number startMs)||!(segment.get("end_ms") instanceof Number endMs))throw new IllegalArgumentException("本次会议没有可用原录音，未提交声纹审核。");
    String file=(String)segment.get("source_file_id");long start=Math.max(startMs.longValue()*16,covered.getOrDefault(file,0L)),end=endMs.longValue()*16;
    if(start>=end)continue;end=Math.min(end,start+target-pcm.size()/2);
+   if(!GovernanceSpeakerEvidence.single(j,input,file,start,end))throw new IllegalArgumentException("选中片段包含多个或无法核实的说话人，请选择独立清晰的单人片段后重新提交。");
    var clips=j.queryForList("SELECT * FROM speech_pcm_artifact WHERE meeting_id=? AND input_id=? AND file_id=? AND state='READY' AND start_sample<? AND start_sample+sample_count>? ORDER BY start_sample LIMIT 61",meeting,input,file,end,start);
    for(var clip:clips){
     long offset=((Number)clip.get("start_sample")).longValue(),count=((Number)clip.get("sample_count")).longValue();

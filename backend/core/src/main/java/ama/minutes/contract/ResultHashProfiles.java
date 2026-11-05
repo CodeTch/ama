@@ -103,6 +103,19 @@ public final class ResultHashProfiles {
   var ids=new ArrayList<String>();for(var membership:index.matching(Table.RESULT_REVIEW_EVIDENCE,"review_id",review.string("id")))ids.add(membership.string("evidence_id"));
   return new ReviewFacts(review.string("meeting_id"),kind,review.nullableString("element_id"),review.nullableString("minutes_revision_id"),anchor,ids,index.facts);
  }
+ /** Verify every persisted review against one exact shared raw closure. No review credit is inferred. */
+ public void verifyReviews(StoredProvenanceFacts facts,List<FullRow> reviews,GraphBudget budget,BooleanSupplier cancelled){
+  require(!reviews.isEmpty(),INVALID_ARGUMENT);var operation=resolver.open(facts,cancelled);
+  var bound=new ResultHashProfiles(operation.resolver());var index=new StoredFactsIndex(facts,budget,cancelled);var selected=new HashSet<String>();
+  for(var row:reviews){
+   check(cancelled);require(row.table()==Table.RESULT_REVIEW&&selected.add(row.string("id")),TARGET_INVALID);
+   require(index.one(Table.RESULT_REVIEW,row.string("id"),PROVENANCE_UNAVAILABLE).equals(row),PROVENANCE_UNAVAILABLE);
+   var scope=storedReview(row,index);var profile=operation.resolver().reviewProfile(row.string("hash_profile"),cancelled);
+   require(bound.targetBound(scope,profile,index).equals(row.string("target_hash")),FINGERPRINT_MISMATCH);
+   require(bound.sourcesBound(scope,profile,index).equals(row.string("source_set_hash")),FINGERPRINT_MISMATCH);
+  }
+  operation.finish();check(cancelled);
+ }
  public CanonicalValue finalData(FinalFacts facts,GraphBudget budget,BooleanSupplier cancelled){
   return finalData(facts,new StoredFactsIndex(facts.stored(),budget,cancelled));
  }

@@ -189,6 +189,9 @@ public final class ConfigBindings {
  public ValidatedGenerationBinding computeGeneration(GenerationDraft draft,StoredProvenanceFacts prerequisites,Fence fence,List<RawArchive> raw,GraphBudget graphBudget,ArchiveReadBudget readBudget,BooleanSupplier cancelled){
   var projection=new ama.minutes.contract.GenerationFingerprint(this,raw,readBudget).compute(draft,prerequisites,fence,graphBudget,cancelled);return new ValidatedGenerationBinding(projection);
  }
+ public Map<String,ValidatedGenerationBinding> verifyGenerations(StoredProvenanceFacts facts,List<TaskSpec> tasks,List<RawArchive> raw,GraphBudget graphBudget,ArchiveReadBudget readBudget,BooleanSupplier cancelled){
+  var projections=new ama.minutes.contract.GenerationFingerprint(this,raw,readBudget).verifyAll(facts,tasks,graphBudget,cancelled);var result=new LinkedHashMap<String,ValidatedGenerationBinding>();for(var entry:projections.entrySet())result.put(entry.getKey(),new ValidatedGenerationBinding(entry.getValue()));return Collections.unmodifiableMap(result);
+ }
  public ValidatedGenerationBinding verifyGeneration(GenerationFacts facts,TaskSpec task,List<RawArchive> raw,GraphBudget graphBudget,ArchiveReadBudget readBudget,BooleanSupplier cancelled){
   var configs=new ArrayList<GenerationConfiguration>();for(var config:facts.stored().configurations()){check(cancelled);if(config.inputId().equals(facts.inputId()))configs.add(config);}require(configs.size()==1,PROFILE_UNAVAILABLE);
   var projection=new ama.minutes.contract.GenerationFingerprint(this,raw,readBudget).verify(facts,task,configs.getFirst().profiles(),graphBudget,cancelled);return new ValidatedGenerationBinding(projection);

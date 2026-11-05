@@ -91,17 +91,34 @@ public final class PublicationWriteGuard {
 
  /** The caller supplies its authentic already-held owner gate, never asks this guard for a new root. */
  public Held controls(Prepared prepared,Actor actor,String meeting,MeetingAccess.Locked gate){
+  return controls(prepared,actor,meeting,gate,false);
+ }
+ Held readinessControls(Prepared prepared,Actor actor,String meeting,MeetingAccess.Locked gate){
+  return controls(prepared,actor,meeting,gate,true);
+ }
+ private Held controls(Prepared prepared,Actor actor,String meeting,MeetingAccess.Locked gate,boolean observation){
   if(!(prepared instanceof PublicationWriteGuard.Plan plan)||plan.issuer()!=this||!plan.actor.equals(actor)||!plan.meeting.equals(meeting))throw new IllegalArgumentException("Foreign publication preparation");
   transaction();authority.savedAccess().requirePrepared(gate,actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);
   if(plan.graph==null||plan.publications==null||plan.finals==null){if(plan.failure!=null)throw plan.failure;throw fail(PROVENANCE_UNAVAILABLE);}
-  require(publications(meeting,plan.budget,true).equals(plan.publications)&&finals(meeting,plan.budget,true).equals(plan.finals),PROVENANCE_UNAVAILABLE);
-  PublicationGraph.lock(source,plan.graph,true);var scope=new Scope(plan,gate);authority.registerPublicationGuard(gate,scope);return scope;
+  boolean same=publications(meeting,plan.budget,true).equals(plan.publications)&&finals(meeting,plan.budget,true).equals(plan.finals);
+  if(observation&&!same)throw new PublicationGraph.ObservationChanged();
+  require(same,PROVENANCE_UNAVAILABLE);
+  if(observation)PublicationGraph.lockObservation(source,plan.graph,true);
+  else PublicationGraph.lock(source,plan.graph,true);
+  var scope=new Scope(plan,gate);authority.registerPublicationGuard(gate,scope);return scope;
  }
 
  /** Called at the common task rank, after all declared domain/session/file acquisitions. */
  public void tasks(Held held,MeetingAccess.Locked gate){var scope=scope(held,gate,Phase.CONTROLS);if(scope.plan.storage)PublicationGraph.lockStorage(source,scope.plan.graph);else PublicationGraph.lock(source,scope.plan.graph,false);scope.phase=Phase.TASKS;}
 
- /** Initial generation preparation only: no failed capture or guard is accepted after a renewal signal. */
+ /** Read-only readiness may repeat its complete acquisition if a publisher changes a task row. */
+ void readinessTasks(Held held,MeetingAccess.Locked gate){
+  var scope=scope(held,gate,Phase.CONTROLS);
+  PublicationGraph.lockObservation(source,scope.plan.graph,false);
+  scope.phase=Phase.TASKS;
+ }
+
+ /** Initial generation preparation only: compare the complete task union with the exact lease fence. */
  void tasksForGenerationPreparation(Held held,MeetingAccess.Locked gate,ama.contract.TaskContracts.TaskLease lease){
   var scope=scope(held,gate,Phase.CONTROLS);MinutesTaskDomainPolicy.shape(lease.spec());
   require(scope.plan.meeting.equals(lease.spec().subject().id()),PROVENANCE_UNAVAILABLE);
@@ -147,25 +164,25 @@ public final class PublicationWriteGuard {
    for(var expected:rows.getOrDefault(table,List.of())){var matches=graph.rows().get(table).stream().filter(r->keys.stream().allMatch(k->Objects.equals(r.get(k),expected.get(k)))).toList();if(recapture&&matches.size()!=1)throw new StorageSnapshotChanged();require(matches.size()==1,PROVENANCE_UNAVAILABLE);var actual=matches.getFirst();for(var cell:expected.entrySet())if(actual.containsKey(cell.getKey())){if(recapture&&!Objects.equals(cell.getValue(),actual.get(cell.getKey())))throw new StorageSnapshotChanged();require(Objects.equals(cell.getValue(),actual.get(cell.getKey())),PROVENANCE_UNAVAILABLE);}}
   }
  }
- /** Root-free discovery coverage may reject only the exact same-own-lease renewal for complete reacquisition. */
+ /** Root-free coverage retains the original expiry only for an exact same-owner, same-attempt renewal. */
  void coversForGenerationPreparation(Prepared prepared,Actor actor,String meeting,Map<String,List<Map<String,Object>>> discovered,Map<String,List<Map<String,Object>>> pending,ama.contract.TaskContracts.TaskLease lease){
   if(!(prepared instanceof PublicationWriteGuard.Plan plan)||plan.issuer()!=this||!plan.actor.equals(actor)||!plan.meeting.equals(meeting))throw new IllegalArgumentException("Foreign generation publication preparation");
   MinutesTaskDomainPolicy.shape(lease.spec());require(meeting.equals(lease.spec().subject().id()),PROVENANCE_UNAVAILABLE);
-  try{covers(prepared,discovered);covers(prepared,pending);}
-  catch(Failure mismatch){
-   if(mismatch.code()!=PROVENANCE_UNAVAILABLE||plan.failure!=null)throw mismatch;
-   var current=(Plan)prepare(actor,meeting,plan.budget);
-   if(current.failure!=null)throw current.failure;
-   require(Objects.equals(plan.root,current.root)&&Objects.equals(plan.publications,current.publications)&&Objects.equals(plan.finals,current.finals)&&plan.originals.equals(current.originals)&&plan.executions.equals(current.executions),PROVENANCE_UNAVAILABLE);
-   require(plan.graph.rows().keySet().equals(current.graph.rows().keySet()),PROVENANCE_UNAVAILABLE);
-   for(var control:plan.graph.controls())require(plan.graph.rows().get(control.table()).equals(current.graph.rows().get(control.table())),PROVENANCE_UNAVAILABLE);
-   var before=new LinkedHashMap<String,List<Map<String,Object>>>();var after=new LinkedHashMap<String,List<Map<String,Object>>>();
-   for(String table:MinutesPendingDiscovery.TASKS){before.put(table,plan.graph.rows().get(table));after.put(table,current.graph.rows().get(table));}
-   PublicationGraph.requirePreparationUnion(lease,before,after);
-   // Equal guards cannot explain failed coverage; this is never an accepted replacement declaration.
-   throw mismatch;
-  }
+  covers(prepared,conservativeCoverage(plan,discovered,lease));covers(prepared,conservativeCoverage(plan,pending,lease));
  }
+ Map<String,List<Map<String,Object>>> conservativeCoverage(Prepared prepared,Map<String,List<Map<String,Object>>> rows,ama.contract.TaskContracts.TaskLease lease){
+  if(!(prepared instanceof Plan plan)||plan.issuer()!=this)throw new IllegalArgumentException("Foreign generation publication preparation");
+  var result=new LinkedHashMap<>(rows);var tasks=new ArrayList<Map<String,Object>>();
+  for(var row:rows.getOrDefault("durable_task",List.of())){
+   if(!lease.taskId().equals(row.get("id"))){tasks.add(row);continue;}
+   var original=plan.graph.rows().get("durable_task").stream().filter(t->lease.taskId().equals(t.get("id"))).toList();require(original.size()==1,PROVENANCE_UNAVAILABLE);
+   var merged=new LinkedHashMap<>(original.getFirst());for(var cell:row.entrySet())if(merged.containsKey(cell.getKey()))merged.put(cell.getKey(),cell.getValue());
+   PublicationGraph.conservativeTasks(lease,original,List.of(merged));
+   var conservative=new LinkedHashMap<>(row);conservative.put("expires_at",original.getFirst().get("expires_at"));tasks.add(Collections.unmodifiableMap(conservative));
+  }
+  result.put("durable_task",List.copyOf(tasks));return Collections.unmodifiableMap(result);
+ }
+
  private Scope scope(Held held,MeetingAccess.Locked gate,Phase phase){
   if(!(held instanceof PublicationWriteGuard.Scope scope)||scope.issuer()!=this||scope.gate!=gate||scope.holder!=transaction()||scope.phase!=phase)throw new IllegalArgumentException("Foreign, expired or out-of-phase publication guard");return scope;
  }
@@ -177,7 +194,8 @@ public final class PublicationWriteGuard {
  private List<Map<String,Object>> headers(String table,String columns,String key,String meeting,int maximum,TranscriptAcquisitionBudget.Ledger budget,boolean lock){
   budget.check();long count=j.queryForObject("SELECT COUNT(*) FROM (SELECT 1 FROM "+table+" WHERE "+key+"=? ORDER BY id LIMIT "+(maximum+1)+") write_history_count",Long.class,meeting);
   require(count<=maximum&&count<=budget.remainingRows(),BUDGET_EXCEEDED);int fields=columns.split(",").length;
-  budget.admitCapture((count+1)*fields*2048,(count+1)*fields*512,(count+1)*fields*1024,2);
+  long bytes=0,points=0,units=0;for(String field:columns.split(",")){long fieldMaximum=switch(field){case "id","meeting_id","confirmation_id"->36;case "revision","ever_published","meeting_revision"->20;case "source_manifest_hash","input_fingerprint"->64;case "business_key","library_id","folder_id"->255;case "stage","lifecycle","governance_state","state"->64;default->throw new IllegalArgumentException("Undeclared header column");};bytes+=fieldMaximum*4+64;points+=fieldMaximum+32;units+=fieldMaximum*2+32;}
+  budget.admitCapture((count+1)*bytes,(count+1)*points,(count+1)*units,2);
   var rows=j.queryForList("SELECT "+columns+" FROM "+table+" WHERE "+key+"=? ORDER BY id LIMIT "+(count+1)+(lock?" FOR UPDATE":""),meeting);require(rows.size()==count,PROVENANCE_UNAVAILABLE);
   var result=new ArrayList<Map<String,Object>>();for(var row:rows){budget.row(fields);var normalized=new LinkedHashMap<String,Object>();for(var cell:row.entrySet()){Object value=JdbcPublicationQueries.normalizeMetadata(cell.getValue());if(value instanceof String text){require(text.length()<=512,PROVENANCE_UNAVAILABLE);budget.capture(text.getBytes(java.nio.charset.StandardCharsets.UTF_8).length,text.codePointCount(0,text.length()),text.length(),3);}normalized.put(cell.getKey(),value);}result.add(Collections.unmodifiableMap(normalized));}return List.copyOf(result);
  }

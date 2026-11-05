@@ -1,0 +1,18 @@
+package ama.transcript;
+import ama.contract.ExternalContracts.OperationToken;
+import ama.contract.TaskContracts.SubjectRef;
+import java.time.*;
+import java.util.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import static ama.contract.MinutesContracts.*;
+class MinutesLookupRenewalTest {
+ final OperationToken token=new OperationToken("00000000-0000-4000-8000-000000000001","00000000-0000-4000-8000-000000000002",1,3,"RECONCILER",Instant.parse("2026-11-05T00:00:20Z"),new SubjectRef("MEETING","meeting"));
+ Map<String,Object> row(){var r=new LinkedHashMap<String,Object>();r.put("id",token.operationId());r.put("reconcile_owner",token.owner());r.put("reconcile_epoch",3L);r.put("current_execution_no",1L);r.put("subject_kind","MEETING");r.put("subject_id","meeting");r.put("state","UNKNOWN");r.put("request_hash","hash");r.put("reconcile_expires_at",LocalDateTime.parse("2026-11-05T00:00:20"));r.put("next_check_at",r.get("reconcile_expires_at"));return r;}
+ Map<String,Object> renewed(){var r=new LinkedHashMap<>(row());r.put("reconcile_expires_at",LocalDateTime.parse("2026-11-05T00:00:25"));r.put("next_check_at",r.get("reconcile_expires_at"));return r;}
+ @Test void ownForwardRenewalRetainsEarlierExpiryAndExactEpoch(){var before=List.of(row());assertSame(before,MinutesLookupRenewal.conservative(token,before,List.of(renewed())));assertEquals(before,MinutesLookupRenewal.conservative(token,before,before));}
+ @Test void ownerEpochExecutionStateSubjectAndBindingChangesAreRejected(){for(var e:Map.<String,Object>of("reconcile_owner","OTHER","reconcile_epoch",4L,"current_execution_no",2L,"subject_id","another","subject_kind","VOICE","state","SUCCEEDED","request_hash","other","id",token.executionId()).entrySet()){var r=renewed();r.put(e.getKey(),e.getValue());assertThrows(Failure.class,()->MinutesLookupRenewal.conservative(token,List.of(row()),List.of(r)),e.getKey());}}
+ @Test void backwardMissingMalformedOrUnpairedScheduleChangeIsRejected(){for(Object t:List.of("2026-11-04T00:00:00","bad",42L)){var r=renewed();r.put("reconcile_expires_at",t);r.put("next_check_at",t);assertThrows(Failure.class,()->MinutesLookupRenewal.conservative(token,List.of(row()),List.of(r)));}var r=renewed();r.remove("next_check_at");assertThrows(Failure.class,()->MinutesLookupRenewal.conservative(token,List.of(row()),List.of(r)));var unpaired=renewed();unpaired.put("next_check_at",row().get("next_check_at"));assertThrows(Failure.class,()->MinutesLookupRenewal.conservative(token,List.of(row()),List.of(unpaired)));}
+ @Test void anotherOperationRenewalAndMembershipChangesAreRejected(){var other=new LinkedHashMap<>(row());other.put("id","other");var changed=new LinkedHashMap<>(other);changed.put("next_check_at","2026-11-05T00:00:30");assertThrows(Failure.class,()->MinutesLookupRenewal.conservative(token,List.of(row(),other),List.of(renewed(),changed)));assertThrows(Failure.class,()->MinutesLookupRenewal.conservative(token,List.of(row()),List.of(renewed(),other)));assertThrows(Failure.class,()->MinutesLookupRenewal.conservative(token,List.of(other),List.of(other)));}
+ @Test void fullCapturePreservesResultContentAndNormalizesOnlyOwnLeaseTimestamps(){var r=renewed();r.put("reconcile_expires_at","2026-11-05T00:00:25.000000Z");r.put("next_check_at",r.get("reconcile_expires_at"));r.put("external_result_id","recorded-result");var captured=MinutesLookupRenewal.captured(token,List.of(row()),List.of(r));assertEquals("recorded-result",captured.getFirst().get("external_result_id"));assertEquals("2026-11-05T00:00:20.000000Z",captured.getFirst().get("reconcile_expires_at"));assertEquals("2026-11-05T00:00:25.000000Z",r.get("reconcile_expires_at"));}
+}

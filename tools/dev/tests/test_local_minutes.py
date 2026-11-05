@@ -92,18 +92,21 @@ class PersonalTemplatePreparationTests(unittest.TestCase):
                    'minutesTemplateId':'00000000-0000-4000-8000-000000000001',
                    'minutesTemplateRevisionId':'00000000-0000-4000-8000-000000000002'}
             phases={'ama.localdev.LocalMinutesSetup':'a'*64,'ama.localdev.LocalDocumentSetup':'b'*64,
-                    'ama.localdev.LocalMaterialSetup':'c'*64,'ama.localdev.LocalPersonalTemplatesSetup':'d'*64,'ama.localdev.LocalRegionMinutesSetup':'e'*64}
+                    'ama.localdev.LocalMaterialSetup':'c'*64,'ama.localdev.LocalPersonalTemplatesSetup':'d'*64,'ama.localdev.LocalRegionMinutesSetup':'e'*64,
+                    'ama.localdev.LocalGovernanceSetup':'f'*64}
             calls=[]
             def run(command,**options):
                 calls.append(command)
                 pin=phases[command[4]]
-                return subprocess.CompletedProcess(command,0,json.dumps({'minutes.index-sha':pin,'processing.index-sha':pin}), '')
+                return subprocess.CompletedProcess(command,0,json.dumps({'minutes.index-sha':pin,'processing.index-sha':pin,
+                    'minutes.prompt-version':'test-prompt-v1','minutes.prompt-sha':'1'*64}), '')
             with patch.object(local_minutes.subprocess,'run',side_effect=run),patch.object(local_minutes,'prepare_knowledge',return_value={}),patch.object(local_minutes,'asr_environment',return_value=False):
                 values,_=local_minutes.prepare(runtime,state,Path('/owned/java'),{},'owned-classpath')
             self.assertEqual([command[4] for command in calls],list(phases))
-            self.assertEqual(calls[-2][-2:],[phases['ama.localdev.LocalMaterialSetup'],state['minutesTemplateRevisionId']])
-            self.assertEqual(values['minutes.index-sha'],'e'*64)
-            self.assertEqual(values['processing.index-sha'],'e'*64)
+            self.assertEqual(calls[3][-2:],[phases['ama.localdev.LocalMaterialSetup'],state['minutesTemplateRevisionId']])
+            self.assertEqual(calls[-1][-3:],['e'*64,'test-prompt-v1','1'*64])
+            self.assertEqual(values['minutes.index-sha'],'f'*64)
+            self.assertEqual(values['processing.index-sha'],'f'*64)
             self.assertEqual(values['processing.bounds.dependencies'],384)
             self.assertEqual(values['processing.bounds.artifacts'],64)
 
@@ -118,9 +121,12 @@ class SensitiveScenarioPreparationTests(unittest.TestCase):
             calls=[]
             def run(command,**options):
                 calls.append(command)
-                return subprocess.CompletedProcess(command,0,json.dumps({'minutes.index-sha':'e'*64,'processing.index-sha':'e'*64}),'')
+                return subprocess.CompletedProcess(command,0,json.dumps({'minutes.index-sha':'e'*64,'processing.index-sha':'e'*64,
+                    'minutes.prompt-version':'test-prompt-v1','minutes.prompt-sha':'1'*64}),'')
             with patch.object(local_minutes.subprocess,'run',side_effect=run),patch.object(local_minutes,'prepare_knowledge',return_value={}),patch.object(local_minutes,'asr_environment',return_value=False):
                 local_minutes.prepare(Path(temporary).resolve(),state,Path('/owned/java'),{},'owned-classpath')
-            self.assertEqual(calls[-1][4],'ama.localdev.LocalRegionMinutesSetup')
-            self.assertEqual(calls[-1][-1],'SENSITIVE_SCENARIO')
-            self.assertEqual(calls[-1][-3:-1],['e'*64,state['minutesTemplateRevisionId']])
+            self.assertEqual(calls[-2][4],'ama.localdev.LocalRegionMinutesSetup')
+            self.assertEqual(calls[-2][-1],'SENSITIVE_SCENARIO')
+            self.assertEqual(calls[-2][-3:-1],['e'*64,state['minutesTemplateRevisionId']])
+            self.assertEqual(calls[-1][4],'ama.localdev.LocalGovernanceSetup')
+            self.assertEqual(calls[-1][-3:],['e'*64,'test-prompt-v1','1'*64])

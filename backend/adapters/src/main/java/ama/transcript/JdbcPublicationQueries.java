@@ -114,13 +114,21 @@ public final class JdbcPublicationQueries {
   for(var a:rows.get("publication_attempt")){var es=rows.get("external_execution").stream().filter(e->a.get("execution_id").equals(e.get("id"))&&a.get("operation_id").equals(e.get("operation_id"))).toList();require(es.size()==1,PROVENANCE_UNAVAILABLE);var ss=submissions.stream().filter(s->es.getFirst().get("task_id").equals(s.get("task_id"))).toList();require(ss.size()==1&&a.get("confirmation_id").equals(ss.getFirst().get("confirmation_id")),PROVENANCE_UNAVAILABLE);}
   for(var o:rows.get("external_operation"))require(rows.get("external_execution").stream().anyMatch(e->o.get("id").equals(e.get("operation_id"))),PROVENANCE_UNAVAILABLE);
  }
- private List<Map<String,Object>> bounded(String sql,int maximum,TranscriptAcquisitionBudget.Ledger budget,Object...args){
-  long count=j.queryForObject("SELECT COUNT(*) FROM ("+sql+" LIMIT "+(maximum+1)+") publication_read_count",Long.class,args);require(count<=maximum&&count<=budget.remainingRows(),BUDGET_EXCEEDED);budget.admitCapture(Math.multiplyExact(count+1,65536),Math.multiplyExact(count+1,16384),Math.multiplyExact(count+1,32768),2);
-  var found=j.queryForList(sql+" LIMIT "+(maximum+1)+" FOR UPDATE",args);require(found.size()==count,PROVENANCE_UNAVAILABLE);return metadata(found,budget);
+ private List<Map<String,Object>> bounded(String sql,int maximum,TranscriptAcquisitionBudget.Ledger budget,Object...args){return boundedMetadata(j,sql,maximum,budget,args);}
+ static List<Map<String,Object>> boundedMetadata(JdbcTemplate j,String sql,int maximum,TranscriptAcquisitionBudget.Ledger budget,Object...args){return boundedMetadata(j,sql,maximum,false,budget,args);}
+ static List<Map<String,Object>> boundedMetadata(JdbcTemplate j,String sql,int maximum,boolean pageOnly,TranscriptAcquisitionBudget.Ledger budget,Object...args){
+  long count=j.queryForObject("SELECT COUNT(*) FROM ("+sql+" LIMIT "+(pageOnly?maximum:maximum+1)+") publication_read_count",Long.class,args);require(count<=maximum&&count<=budget.remainingRows(),BUDGET_EXCEEDED);
+  var found=new ArrayList<Map<String,Object>>();
+  while(found.size()<count){
+   int remaining=(int)count-found.size(),limit=budget.captureRowLimit(65536,16384,32768,2,Math.min(8,remaining+(pageOnly?0:1)));require(limit>0,BUDGET_EXCEEDED);
+   budget.admitCapture((long)limit*65536,(long)limit*16384,(long)limit*32768,2);
+   var page=j.queryForList(sql+" LIMIT "+limit+" OFFSET "+found.size()+" FOR UPDATE",args);require(page.size()==Math.min(limit,remaining),PROVENANCE_UNAVAILABLE);found.addAll(metadata(page,budget));
+  }
+  return List.copyOf(found);
  }
  record PageQuery(String sql,List<Object> args){PageQuery{args=List.copyOf(args);}}
  static PageQuery attemptPage(String publication,PublicationHistoryCursor.Key before){var args=new ArrayList<Object>();args.add(publication);String sql="SELECT id,created_at FROM publication_attempt WHERE publication_id=?";if(before!=null){sql+=" AND (created_at<? OR (created_at=? AND id<?))";args.add(before.created());args.add(before.created());args.add(before.id());}return new PageQuery(sql+" ORDER BY created_at DESC,id DESC",args);}
- private List<Map<String,Object>> page(String sql,int cap,TranscriptAcquisitionBudget.Ledger budget,Object...args){long count=j.queryForObject("SELECT COUNT(*) FROM ("+sql+" LIMIT "+cap+") publication_page_count",Long.class,args);require(count<=cap&&count<=budget.remainingRows(),BUDGET_EXCEEDED);budget.admitCapture(Math.multiplyExact(count+1,65536),Math.multiplyExact(count+1,16384),Math.multiplyExact(count+1,32768),2);var found=j.queryForList(sql+" LIMIT "+cap+" FOR UPDATE",args);require(found.size()==count,PROVENANCE_UNAVAILABLE);return metadata(found,budget);}
+ private List<Map<String,Object>> page(String sql,int cap,TranscriptAcquisitionBudget.Ledger budget,Object...args){return boundedMetadata(j,sql,cap,true,budget,args);}
  private static List<Map<String,Object>> metadata(List<Map<String,Object>> found,TranscriptAcquisitionBudget.Ledger budget){var rows=new ArrayList<Map<String,Object>>();for(var raw:found){budget.row(raw.size());var row=new LinkedHashMap<String,Object>();for(var cell:raw.entrySet()){Object value=normalizeMetadata(cell.getValue());if(value instanceof String text){scalars(text);require(text.length()<=512,BUDGET_EXCEEDED);budget.capture(text.getBytes(StandardCharsets.UTF_8).length,text.codePointCount(0,text.length()),text.length(),3);}row.put(cell.getKey(),value);}rows.add(Collections.unmodifiableMap(row));}return List.copyOf(rows);}
 
  static Object normalizeMetadata(Object value){if(value instanceof Number number)return new java.math.BigDecimal(number.toString()).longValueExact();if(value instanceof java.sql.Timestamp time)return time.toLocalDateTime().toString();if(value instanceof java.time.temporal.TemporalAccessor time)return time.toString();return value;}

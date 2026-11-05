@@ -22,8 +22,8 @@ export function operationsResponse(path:string,method:string,value:unknown,reque
   if(/^\/api\/v1\/meetings\/[0-9a-f-]{36}\/mail$/.test(pathname))schema='MailJobs';
   if(/^\/api\/v1\/meetings\/[0-9a-f-]{36}\/mail-context$/.test(pathname))schema='MailContext';
  }else if(method==='POST'){
-  if(path===prefix+'voiceprints'||/^\/api\/v1\/operations\/voiceprints\/[0-9a-f-]{36}\/(?:review|revocation)$/.test(path))schema='Voiceprint';
-  if(/^\/api\/v1\/operations\/voiceprints\/[0-9a-f-]{36}\/resampling$/.test(path))schema='SubmissionReceipt';
+  if(path===prefix+'voiceprints'||/^\/api\/v1\/operations\/voiceprints\/[0-9a-f-]{36}\/(?:review|revocation|samples)$/.test(path))schema='Voiceprint';
+  if(/^\/api\/v1\/operations\/voiceprints\/[0-9a-f-]{36}\/resampling$/.test(path))schema='VoiceResamplingReceipt';
   if(path===prefix+'voiceprints/match')schema='CandidateMatches';
   if(path===prefix+'datasets')schema='DatasetReceipt';
   if(/^\/api\/v1\/operations\/datasets\/[0-9a-f-]{36}\/copies$/.test(path))schema='DatasetReceipt';
@@ -47,7 +47,7 @@ export function operationsResponse(path:string,method:string,value:unknown,reque
   const meeting=pathname.match(/^\/api\/v1\/meetings\/([0-9a-f-]{36})\/speaker-candidates$/)?.[1];if(meeting&&value.meetingId!==meeting)return false;
  }
  if(method!=='POST'||!object(value))return true;
- const target=path.match(/\/(?:evaluations|voiceprints|corpus)\/([0-9a-f-]{36})\/(?:review|revocation|withdrawal|resampling)$/)?.[1];
+ const target=path.match(/\/(?:evaluations|voiceprints|corpus)\/([0-9a-f-]{36})\/(?:review|revocation|withdrawal|resampling|samples)$/)?.[1];
  if(target&&value.id!==target)return false;
  const meeting=path.match(/\/meetings\/([0-9a-f-]{36})\//)?.[1];
  if(meeting&&value.meetingId!==meeting)return false;
@@ -71,7 +71,7 @@ export function operationsResponse(path:string,method:string,value:unknown,reque
  if(schema==='EvaluationReviewReceipt'&&value.reviewReason!==request.reason)return false;
  if(schema==='SubmissionReceipt'&&value.category!==((path.endsWith('/voiceprint-applications')||path.endsWith('/resampling'))?'VOICEPRINT':request.feedbackType??request.category))return false;
  if(path.endsWith('/resampling')&&(value.state!=='PENDING'||!revisionToken(request.expectedRevisionToken)||value.revisionToken!==(BigInt(request.expectedRevisionToken)+1n).toString()))return false;
- if(schema==='Voiceprint'&&target&&value.state!==(path.endsWith('/revocation')?'REVOKED':request.decision))return false;
+ if(schema==='Voiceprint'&&target&&value.state!==(path.endsWith('/revocation')?'REVOKED':path.endsWith('/samples')?'PENDING':request.decision))return false;
  if((schema==='ConfigurationReceipt'&&!candidateId||schema==='WithdrawalReceipt'||schema==='Voiceprint'&&target)&&revisionToken(request.expectedRevisionToken)){
   if(!revisionToken(value.revisionToken)||BigInt(value.revisionToken)!==BigInt(request.expectedRevisionToken)+1n)return false;
  }

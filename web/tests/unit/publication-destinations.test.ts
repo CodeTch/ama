@@ -15,6 +15,12 @@ test('provider search includes later pages and keeps the selected path while bro
  const searches:string[]=[];const d=usePublicationDestinations({libraries:async(_m,_c,_s,search='')=>{searches.push(search);return libs(search?[]:[a]);},folders:async()=>folders([])},()=> 'owner',()=>meeting,()=>true,()=>false,()=>{});
  await d.loadLibraries();await d.selectLibrary(a);await d.loadLibraries(null,'说明关键词');assert.equal(searches.at(-1),'说明关键词');assert.equal(d.libraries.value?.items.length,0);assert.equal(d.selection.value?.libraryId,'a');assert.equal(d.canSubmit.value,true);d.dispose();
 });
+test('a debounced search finishing after library selection resumes the cancelled root-folder read',async()=>{
+ const slow=deferred(),top=f('top','ar');let calls=0;
+ const d=usePublicationDestinations({libraries:async()=>libs([a]),folders:async()=>++calls===1?slow.promise:folders([top])},()=> 'owner',()=>meeting,()=>true,()=>false,()=>{});
+ await d.loadLibraries();const selected=d.selectLibrary(a);await d.loadLibraries(null,'同名');slow.resolve(folders([]));await selected;
+ assert.equal(d.selection.value?.folderId,'ar');assert.deepEqual(d.rows(a).map(x=>x.folder.id),['top']);assert.equal(d.canSubmit.value,true);d.dispose();
+});
 test('directory paging appends genuine stable IDs and a library switch clears the old folder before loading',async()=>{
  const gate=deferred();let slow=false;const api={libraries:async(_m:string,c:string|null)=>c?libs([b]):libs([a],'next'),folders:async()=>slow?gate.promise:folders([])};const d=usePublicationDestinations(api,()=> 'owner',()=>meeting,()=>true,()=>false,()=>{});
  await d.loadLibraries();await d.loadLibraries('next');assert.deepEqual(d.libraries.value?.items.map(x=>x.id),['a','b']);await d.selectLibrary(a);assert.equal(d.selection.value?.folderId,'ar');assert.equal(d.canSubmit.value,true);slow=true;const next=d.selectLibrary(b);assert.equal(d.selection.value?.folderId,'br');assert.equal(d.canSubmit.value,false);gate.resolve(folders([]));await next;assert.equal(d.canSubmit.value,true);d.dispose();

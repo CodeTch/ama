@@ -18,6 +18,15 @@ const canStart=computed(()=>!busy.value&&props.canMutate&&parts.value.length>0&&
 useFixedDockHeight(dock);
 const clock=(samples:number)=>{const seconds=Math.floor(samples/16000);return [Math.floor(seconds/3600),Math.floor(seconds/60)%60,seconds%60].map(n=>String(n).padStart(2,'0')).join(':');};
 const labels:Record<RecordingProcessing['state'],string>={NOT_REQUESTED:'录音已保存，可开始处理',WAITING_ARCHIVE:'正在保存录音',COPYING:'正在准备录音来源',TRANSCRIBING:'正在识别原始录音',ENHANCING:'正在根据背景材料增强转写',SUCCEEDED:'转写与增强完成',FAILED:'处理失败，请重试',STALE:'材料或转写版本已变化，请核对后重新处理'};
+const failureReason=computed(()=>{
+ if(!failed.value)return null;
+ const reasons:Record<string,string>={
+  RECORDING_ARCHIVE_FAILED:'录音归档未完成，已确认的音频分片保留。请重试处理。',
+  RECORDING_TRANSCRIPTION_FAILED:'原始录音识别未完成，已保存录音保留。请重试处理。',
+  ENHANCEMENT_RETRY_SAME_REQUEST:'背景材料增强暂未完成，原始录音和转写已保留。请重试处理，继续使用本次锁定的材料。'
+ };
+ return reasons[value.value?.errorCode??'']??'录音处理暂未完成，已保存内容保留。请重试处理。';
+});
 let timer:ReturnType<typeof setTimeout>|undefined,epoch=0,mounted=false,completionEmitted=false;
 function publish(result:RecordingProcessing){value.value=result;if(result.state==='SUCCEEDED'&&!completionEmitted){completionEmitted=true;emit('accepted');}}
 async function load(){
@@ -62,6 +71,7 @@ defineExpose({beforeLeave,reloadMaterials:()=>{void materialListing.reload();ref
   <div class="card-h" :class="hasTask?'aci-processing-top':''"><div><div class="card-t">材料导入与解析</div><div class="small muted mt8">{{hasTask?(value?labels[value.state]:'正在读取处理状态'):'录音已自动关联，无需重复上传；可继续补充背景资料。'}}</div></div><span class="ml-a"></span><button v-if="!hasTask" class="btn sm" @click="emit('materials','materials')">添加背景资料</button></div>
   <div class="card-p">
    <p v-if="error" class="ac-error" role="alert">{{error}} <button class="btn sm ghost" :disabled="busy" @click="refresh">重新读取状态</button></p>
+   <p v-if="failureReason" class="ac-error mb12" role="alert">{{failureReason}}</p>
    <div :class="hasTask?'aci-material-grid':''">
     <section><h3>会议主文件 <span v-if="hasTask" class="small muted">{{parts.length}} 个</span></h3><p v-if="!parts.length" class="small muted" role="status">正在读取录音文件…</p><div v-for="part in parts" :key="part.partId" class="aci-progress-file"><div class="aci-progress-file-top"><span class="aci-file-type"><Icon name="mic" :size="18"/></span><div class="aci-progress-name"><b>第{{part.partNo}}段录音.wav</b><div class="small muted">会议主文件 · {{clock(part.sampleCount)}} · WAV</div></div><span class="tag" :class="failed?'red':ready||!hasTask?'green':'orange'">{{failed?'处理失败':ready?'识别及转写完成':hasTask?'正在识别':'已保存'}}</span></div><div v-if="hasTask" class="progress mt12"><div class="bar" :style="{width:ready?'100%':'0%'}"></div></div></div></section>
     <section><div v-if="!hasTask" class="divider"></div><div :class="hasTask?'aci-material-section-title':'ac-material-heading'"><h3>{{hasTask?'背景材料及相关文档':'会议背景材料及相关文档'}} <span class="small muted">{{hasTask?(materialFiles?.length??0)+' 个':'（选填）'}}</span></h3><button v-if="hasTask" class="btn sm" @click="emit('materials','materials')">调整背景材料</button><div v-else class="flex wrap"><button class="btn" @click="emit('materials','local')">上传本地文件</button><button class="btn" @click="emit('materials','library')">从知识库选择</button></div></div>

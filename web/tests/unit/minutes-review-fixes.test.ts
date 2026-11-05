@@ -89,3 +89,8 @@ test('authorized participant reads sensitive excerpts without accessing owner se
 });
 
 test('returning with a saved body discovers an active generation without opening the dialog',async()=>{const h=await harness('/src/features/minutes/MinutesWorkspace.vue');try{h.app.tasks.list=async()=>({items:[{taskId:candidateId,state:'RUNNING',kind:'MINUTES_GENERATE_V1',inputId:A,attemptToken:'1',businessRevisionToken:'7',detailPath:''}],nextCursor:null,hasMore:false,verification:'PERSISTED_RELATION'});await h.s.generationTask.refresh();assert.equal(h.s.generationTask.running.value,true);assert.equal(h.s.generationOpened.value,false);assert.equal(h.s.value.value.body.id,bodyId);}finally{await h.close();}});
+
+test('returning from confirmation keeps the selected source open when the last generation is historical',async()=>{
+ const h=await harness('/src/features/minutes/MinutesWorkspace.vue',{stage:'confirm'});
+ try{let resolve!:(value:any)=>void;h.app.tasks.list=()=>new Promise(done=>resolve=done);h.props.stage='minutes';await h.flush();h.s.inspect({kind:'BODY',id:bodyId,locatorId:B});await h.flush();assert.equal(h.s.inspectionOpen.value,true);resolve({items:[{taskId:candidateId,state:'SUCCEEDED',kind:'MINUTES_GENERATE_V1',inputId:A,attemptToken:'1',businessRevisionToken:'7',detailPath:''}],nextCursor:null,hasMore:false,verification:'PERSISTED_RELATION'});await h.flush();assert.equal(h.s.inspectionOpen.value,true);assert.equal(h.s.selected.value.locatorId,B);assert.equal(h.s.source.value.text,B);}finally{await h.close();}
+});

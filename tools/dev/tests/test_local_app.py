@@ -15,6 +15,20 @@ SPEC.loader.exec_module(app)
 
 
 class ProcessOwnershipTests(unittest.TestCase):
+    def test_launch_waits_for_its_child_exec_ownership_marker(self):
+        actual_alive=app.alive
+        checks=[]
+        def delayed(record):
+            checks.append(record)
+            return len(checks)>2 and actual_alive(record)
+        with tempfile.TemporaryDirectory() as directory,patch.object(app,'RUNTIME',Path(directory)),patch.object(app,'alive',side_effect=delayed):
+            record=app.launch([sys.executable,'-c','import time;time.sleep(30)'],dict(os.environ,AMA_LOCAL_DEV_INSTANCE=app.OWNER),'launch.log')
+            try:
+                self.assertGreaterEqual(len(checks),3)
+                self.assertTrue(actual_alive(record))
+            finally:
+                process=app.CHILDREN.pop(record['pid']);process.terminate();process.wait(timeout=5)
+
     def process(self,owned=True):
         env=os.environ.copy()
         env['AMA_LOCAL_DEV_INSTANCE']=app.OWNER if owned else 'another-checkout'

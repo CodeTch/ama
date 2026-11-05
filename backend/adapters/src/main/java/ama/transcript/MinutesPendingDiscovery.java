@@ -3,6 +3,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.*;
 import ama.contract.TranscriptContracts.Failure;
+import static ama.contract.MinutesContracts.*;
+import static ama.contract.MinutesContracts.FailureCode.*;
 /** Complete bounded detached headers; no text/source I/O and no authority in these values. */
 final class MinutesPendingDiscovery {
  static final List<String> DOMAIN=List.of("generation_input","generation_candidate");
@@ -52,12 +54,17 @@ final class MinutesPendingDiscovery {
  private static Query query(String table,List<String> cols,List<String> keys,String where,List<Object> args){return new Query(table,cols,keys,where,List.copyOf(args));}
  private static String in(String column,int count){return count==0?"1=0":column+" IN ("+String.join(",",Collections.nCopies(count,"?"))+")";}
  static List<Map<String,Object>> read(JdbcTemplate j,Query q,boolean lock,TranscriptAcquisitionBudget.Ledger budget){
-  budget.check();int cap=Math.min(256,budget.taskLimit());String from=" FROM "+q.table()+(q.table().equals("generation_candidate")?" FORCE INDEX (candidate_pending)":"")+" WHERE "+q.where();String order=" ORDER BY "+(q.table().equals("generation_candidate")?"created_at,id":String.join(",",q.keys()));
-  long count=j.queryForObject("SELECT COUNT(*) FROM (SELECT 1"+from+order+" LIMIT "+(cap+1)+") pending_count",Long.class,q.args().toArray());
-  ama.contract.MinutesContracts.require(count<=cap&&count<=budget.remainingRows(),ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED);
-  long admitted=count+1,cells=admitted*q.columns().size();budget.admitCapture(cells*2048,cells*512,cells*1024,3);for(long n=0;n<admitted;n++)budget.row(q.columns().size());
-  var rows=j.queryForList("SELECT "+String.join(",",q.columns())+from+order+" LIMIT "+admitted+(lock?" FOR UPDATE":""),q.args().toArray());if(rows.size()!=count)throw unavailable();
-  return rows.stream().map(row->{var normalized=new LinkedHashMap<String,Object>();row.forEach((key,value)->{if(value instanceof Number number)value=new java.math.BigDecimal(number.toString()).longValueExact();else if(value instanceof java.sql.Timestamp timestamp)value=timestamp.toLocalDateTime().toString();else if(value instanceof java.sql.Date date)value=date.toLocalDate().toString();if(value instanceof String text){ama.contract.MinutesContracts.require(text.codePointCount(0,text.length())<=512,ama.contract.MinutesContracts.FailureCode.BUDGET_EXCEEDED);budget.capture(text.getBytes(java.nio.charset.StandardCharsets.UTF_8).length,text.codePointCount(0,text.length()),text.length(),3);}normalized.put(key,value);});return Collections.unmodifiableMap(normalized);}).toList();
+  var all=new ArrayList<Map<String,Object>>();List<String> order=q.table().equals("generation_candidate")?List.of("created_at","id"):q.keys();List<Object> last=null;int cap=Math.min(256,budget.taskLimit());
+  for(;;){budget.check();int requested=(int)Math.min(16,Math.min(cap-all.size()+1,budget.remainingRows()+1));require(requested>0,BUDGET_EXCEEDED);var bound=MinutesMetadataBounds.row(q.columns());int limit=budget.captureRowLimit(bound.bytes(),bound.points(),bound.units(),3,requested);var args=new ArrayList<>(q.args());String after="";if(last!=null){after=" AND ("+String.join(",",order)+") > ("+String.join(",",Collections.nCopies(order.size(),"?"))+")";args.addAll(last);}String from=" FROM "+q.table()+(q.table().equals("generation_candidate")?" FORCE INDEX (candidate_pending)":"")+" WHERE ("+q.where()+")"+after;String tail=" ORDER BY "+String.join(",",order)+" LIMIT "+Math.max(1,limit);
+   long count=j.queryForObject("SELECT COUNT(*) FROM (SELECT 1"+from+tail+") pending_count",Long.class,args.toArray());if(count==0)break;require(limit>0,BUDGET_EXCEEDED);require(count<=cap-all.size()&&count<=budget.remainingRows(),BUDGET_EXCEEDED);
+   // All projected strings are bounded metadata (schema maximum VARCHAR(512)); the
+   // conservative transient reservation includes a concurrent extra row before transfer.
+   long admitted=Math.min(limit,count+1);budget.admitCapture(admitted*bound.bytes(),admitted*bound.points(),admitted*bound.units(),3);
+   for(long n=0;n<admitted;n++)budget.row(q.columns().size());
+   var page=j.queryForList("SELECT "+String.join(",",q.columns())+from+" ORDER BY "+String.join(",",order)+" LIMIT "+admitted+(lock?" FOR UPDATE":""),args.toArray());if(page.size()!=count)throw unavailable();
+   for(var raw:page){var normalized=new LinkedHashMap<String,Object>();for(var cell:raw.entrySet()){Object v=cell.getValue();if(v instanceof Number number)v=new java.math.BigDecimal(number.toString()).longValueExact();else if(v instanceof java.sql.Timestamp timestamp)v=timestamp.toLocalDateTime().toString();else if(v instanceof java.sql.Date date)v=date.toLocalDate().toString();if(v instanceof String text){require(text.codePointCount(0,text.length())<=512,BUDGET_EXCEEDED);budget.capture(text.getBytes(java.nio.charset.StandardCharsets.UTF_8).length,text.codePointCount(0,text.length()),text.length(),3);}normalized.put(cell.getKey(),v);}all.add(Collections.unmodifiableMap(normalized));}
+   if(page.size()<limit)break;var row=page.getLast();last=order.stream().map(row::get).toList();
+  }all.sort((a,b)->{for(String key:q.keys()){Object x=a.get(key),y=b.get(key);int comparison=x instanceof Number&&y instanceof Number?Long.compare(((Number)x).longValue(),((Number)y).longValue()):((String)x).compareTo((String)y);if(comparison!=0)return comparison;}return 0;});return List.copyOf(all);
  }
  static long number(Map<String,Object> row,String column){return ((Number)row.get(column)).longValue();}
  private static boolean same(Map<String,Object>a,String x,Map<String,Object>b,String y){return Objects.equals(a.get(x),b.get(y));}

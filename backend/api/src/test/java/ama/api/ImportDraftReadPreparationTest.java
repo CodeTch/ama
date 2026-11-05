@@ -16,6 +16,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 class ImportDraftReadPreparationTest {
+ @Test void onlyTheDisplayRenewalHandlerDefersExternalPreparationToItsOwnGate()throws Exception{
+  var access=mock(JdbcMeetingAccess.class);
+  var preparation=new ExternalReadPreparation(access,mock(javax.sql.DataSource.class),mock(ama.transcript.JdbcMaterialAuthority.class));
+  var actor=new Actor("owner",Status.ACTIVE,Set.of(Role.USER));
+  var session=new ResolvedSession(actor,"x".repeat(43),Instant.now().plusSeconds(300));
+  String meeting="12345678-1234-1234-1234-123456789012";
+  var controller=mock(WorkspaceNavigationController.class);
+  var request=new MockHttpServletRequest("GET","/api/v1/meetings/"+meeting+"/workspace/access");request.setAttribute(SessionSecurityFilter.SESSION,session);
+  var renewal=new HandlerMethod(controller,WorkspaceNavigationController.class.getDeclaredMethod("access",String.class,jakarta.servlet.http.HttpServletRequest.class));
+  assertTrue(preparation.preHandle(request,new MockHttpServletResponse(),renewal));verifyNoInteractions(access);
+  var workspace=new HandlerMethod(controller,WorkspaceNavigationController.class.getDeclaredMethod("workspace",String.class,jakarta.servlet.http.HttpServletRequest.class));
+  assertTrue(preparation.preHandle(request,new MockHttpServletResponse(),workspace));verify(access).prepareExternalRead(actor,meeting);
+ }
  @Test void onlyDiscardReachesItsOwnAuthorizationAfterMeetingWithdrawal() throws Exception {
   var access = mock(JdbcMeetingAccess.class);
   var preparation = new ExternalReadPreparation(access, mock(javax.sql.DataSource.class),

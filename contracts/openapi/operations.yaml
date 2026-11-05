@@ -81,7 +81,8 @@
           "PENDING",
           "APPROVED",
           "REJECTED",
-          "REVOKED"
+          "REVOKED",
+          "NEEDS_MORE"
         ]
       },
       "revisionToken": {
@@ -874,7 +875,8 @@
                 "decision": {
                   "enum": [
                     "APPROVED",
-                    "REJECTED"
+                    "REJECTED",
+                    "NEEDS_MORE"
                   ]
                 },
                 "reason": {
@@ -3390,7 +3392,8 @@
             "sampleCount",
             "expiresAt",
             "usageState",
-            "reviewReason"
+            "reviewReason",
+            "libraryRevisionToken"
           ],
           "properties": {
             "id": {
@@ -3452,6 +3455,17 @@
                 {
                   "type": "string",
                   "maxLength": 2048
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "libraryRevisionToken": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
                 },
                 {
                   "type": "null"
@@ -3672,7 +3686,14 @@
       "expiresAt",
       "usageState",
       "reviewReason",
-      "history"
+      "history",
+      "libraryRevisionToken",
+      "consentReference",
+      "sampleSha",
+      "dimension",
+      "meetingId",
+      "policyVersion",
+      "sampleHistory"
     ],
     "properties": {
       "id": {
@@ -3765,6 +3786,110 @@
             "reason": {
               "type": "string",
               "maxLength": 2048
+            },
+            "createdAt": {
+              "type": "string",
+              "maxLength": 40
+            }
+          }
+        }
+      },
+      "libraryRevisionToken": {
+        "anyOf": [
+          {
+            "type": "string",
+            "pattern": "^(0|[1-9][0-9]{0,18})$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "consentReference": {
+        "type": "string",
+        "maxLength": 1024
+      },
+      "sampleSha": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "dimension": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 16384
+      },
+      "meetingId": {
+        "anyOf": [
+          {
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "policyVersion": {
+        "type": "string",
+        "maxLength": 128
+      },
+      "sampleHistory": {
+        "type": "array",
+        "maxItems": 51,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "origin",
+            "sampleSha",
+            "sampleCount",
+            "modelVersion",
+            "dimension",
+            "consentReference",
+            "expiresAt",
+            "revisionToken",
+            "actorId",
+            "createdAt"
+          ],
+          "properties": {
+            "origin": {
+              "enum": [
+                "SELF",
+                "MEETING"
+              ]
+            },
+            "sampleSha": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "sampleCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "modelVersion": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "dimension": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 16384
+            },
+            "consentReference": {
+              "type": "string",
+              "maxLength": 1024
+            },
+            "expiresAt": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "revisionToken": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]{0,18})$"
+            },
+            "actorId": {
+              "type": "string",
+              "maxLength": 255
             },
             "createdAt": {
               "type": "string",
@@ -5497,7 +5622,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/OperationsSubmissionReceipt"
+                "$ref": "#/OperationsVoiceResamplingReceipt"
               }
             }
           }
@@ -5798,6 +5923,134 @@
           }
         }
       ]
+    }
+  },
+  "voiceSampleReplacement": {
+    "post": {
+      "operationId": "operationsVoiceSampleReplacement",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Exact current governance result",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/OperationsVoiceprint"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "Idempotency-Key",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 128
+          }
+        },
+        {
+          "name": "X-CSRF-Token",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "maxLength": 128
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "expectedRevisionToken",
+                "reason",
+                "consentReference",
+                "expiresAt",
+                "wavBase64"
+              ],
+              "properties": {
+                "expectedRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                },
+                "consentReference": {
+                  "type": "string",
+                  "maxLength": 1024
+                },
+                "expiresAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "wavBase64": {
+                  "type": "string",
+                  "maxLength": 1280060
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "OperationsVoiceResamplingReceipt": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "meetingId",
+      "category",
+      "comment",
+      "state",
+      "revisionToken"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "meetingId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "category": {
+        "const": "VOICEPRINT"
+      },
+      "comment": {
+        "type": "string",
+        "maxLength": 4096
+      },
+      "state": {
+        "const": "PENDING"
+      },
+      "revisionToken": {
+        "type": "string",
+        "pattern": "^[1-9][0-9]{0,18}$"
+      }
     }
   }
 }

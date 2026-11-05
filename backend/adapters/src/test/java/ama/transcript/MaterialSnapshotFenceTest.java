@@ -17,6 +17,14 @@ class MaterialSnapshotFenceTest {
         var projections = new java.util.ArrayList<Object[]>();
         var jdbc = new JdbcTemplate() {
             @Override
+            public <T> java.util.List<T> queryForList(String sql, Class<T> type, Object... args) {
+                // This fixture exercises an ordinary material change without an active recording.
+                assertEquals("SELECT session_id FROM recording_processing WHERE meeting_id=? AND state IN ('WAITING_ARCHIVE','COPYING','TRANSCRIBING','ENHANCING','FAILED') LIMIT 2 FOR UPDATE",sql);
+                assertEquals(String.class,type);
+                assertEquals(java.util.List.of(meeting),java.util.Arrays.asList(args));
+                return java.util.List.of();
+            }
+            @Override
             public int update(String sql, Object... args) {
                 if(sql.startsWith("UPDATE meeting_search_projection"))projections.add(args);
                 return 1;

@@ -13,11 +13,15 @@ final class MinutesStoredReviews {
   }return List.copyOf(result);
  }
  static List<Ref> validate(StoredProvenanceFacts facts,ConfigArchiveSource.Snapshot snapshot,ConfigBindings bindings,ArchiveReadBudget read,GraphBudget graphBudget,TranscriptAcquisitionBudget.Ledger budget){
-  var roots=new LinkedHashSet<Ref>();for(var row:facts.rows())if(row.table()==Table.RESULT_REVIEW){
+  var roots=new LinkedHashSet<Ref>();var groups=new LinkedHashMap<List<Ref>,List<FullRow>>();
+  for(var row:facts.rows())if(row.table()==Table.RESULT_REVIEW){
    budget.check();var scopes=facts.reviewScopes().stream().filter(s->s.reviewId().equals(row.string("id"))).toList();require(scopes.size()==1,PROVENANCE_UNAVAILABLE);var evidence=facts.rows().stream().filter(e->e.table()==Table.RESULT_REVIEW_EVIDENCE&&row.string("id").equals(e.string("review_id"))).map(e->e.string("evidence_id")).toList();var scope=new ReviewFacts(row.string("meeting_id"),ReviewKind.valueOf(row.string("review_kind")),row.nullableString("element_id"),row.nullableString("minutes_revision_id"),scopes.getFirst().anchor(),evidence,facts);
-   var profileRefs=snapshot.index().entries().stream().map(ConfigArchiveIndex.Entry::ref).filter(ref->ref.artifactType()==ArtifactType.REVIEW_HASH&&ref.version().equals(row.string("hash_profile"))).toList();require(profileRefs.size()==1,PROFILE_UNAVAILABLE);var targetRaw=load(snapshot,profileRefs,read,budget);var context=bindings.begin(facts,targetRaw,read,()->false);var profile=context.review(row.string("hash_profile"));context.finish();String target=new ResultHashProfiles(bindings,targetRaw,read).target(scope,profile,graphBudget,()->false);require(target.equals(row.string("target_hash")),FINGERPRINT_MISMATCH);
-   var sourceRefs=new GenerationArchiveRefs(facts,snapshot.index(),new StrictProcessingManifestReader(),read,graphBudget,()->false).review(scope,profile.version());var sourceRaw=load(snapshot,sourceRefs,read,budget);require(new ResultHashProfiles(bindings,sourceRaw,read).sources(scope,profile,graphBudget,()->false).equals(row.string("source_set_hash")),FINGERPRINT_MISMATCH);roots.addAll(sourceRefs);
-  }return List.copyOf(roots);
+   var profileRefs=snapshot.index().entries().stream().map(ConfigArchiveIndex.Entry::ref).filter(ref->ref.artifactType()==ArtifactType.REVIEW_HASH&&ref.version().equals(row.string("hash_profile"))).toList();require(profileRefs.size()==1,PROFILE_UNAVAILABLE);
+   var sourceRefs=new GenerationArchiveRefs(facts,snapshot.index(),new StrictProcessingManifestReader(),read,graphBudget,()->false).review(scope,row.string("hash_profile"));
+   groups.computeIfAbsent(List.copyOf(sourceRefs),unused->new ArrayList<>()).add(row);roots.addAll(sourceRefs);
+  }
+  for(var group:groups.entrySet())new ResultHashProfiles(bindings,load(snapshot,group.getKey(),read,budget),read).verifyReviews(facts,group.getValue(),graphBudget,()->{budget.check();return false;});
+  return List.copyOf(roots);
  }
  static List<RawArchive> load(ConfigArchiveSource.Snapshot snapshot,List<Ref> refs,ArchiveReadBudget read,TranscriptAcquisitionBudget.Ledger budget){var raw=snapshot.loadClosure(refs,read,0,()->false);for(var archive:raw){var bytes=archive.bytes();budget.capture(bytes.length,bytes.length,bytes.length,16);}return raw;}
 }

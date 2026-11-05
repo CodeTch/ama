@@ -7,6 +7,8 @@ servers:
   - url: http://127.0.0.1:8081
     description: Loopback management listener; never publish through the public ingress.
 paths:
+  /api/v1/operations/voiceprints/{id}/samples:
+    $ref: './operations.yaml#/voiceSampleReplacement'
   /api/v1/operations/configuration/history:
     $ref: './operations.yaml#/configurationHistory'
   /api/v1/operations/candidates/{candidate}/history:

@@ -18,5 +18,5 @@ if __name__ == '__main__':
         state=json.loads((local_app.RUNTIME/'state.json').read_text())
         if state.get('owner')!=local_app.OWNER:
             raise SystemExit('Local state belongs to another checkout')
-        local_app.start(state)
+        local_app.start(state,bundled_frontend=True)
         raise SystemExit(subprocess.run(['node',str(script)],cwd=root).returncode)

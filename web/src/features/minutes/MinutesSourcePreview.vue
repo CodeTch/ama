@@ -6,7 +6,7 @@ import type {Source} from '../../shared/api/minutes-inspection';
 import type {MinutesSourceLabel} from './useMinutesSourceLabels';
 import {useMinutesSourceMedia} from './useMinutesSourceMedia';
 const props=defineProps<{meetingId:string;source:Source;active:boolean;label?:MinutesSourceLabel}>(),emit=defineEmits<{denied:[cause:unknown]}>(),app=useApplication();
-const state=useMinutesSourceMedia({revision:(...args)=>app.transcripts.revision(...args),source:(...args)=>app.transcripts.source(...args),materials:(...args)=>app.materials.list(...args)},()=>app.session.current.value?.actor.enterpriseId??null,()=>props.meetingId,()=>props.active,()=>props.source,cause=>emit('denied',cause));
+const state=useMinutesSourceMedia({source:(...args)=>app.transcripts.source(...args),materials:(...args)=>app.materials.list(...args)},()=>app.session.current.value?.actor.enterpriseId??null,()=>props.meetingId,()=>props.active,()=>props.source,cause=>emit('denied',cause));
 const element=ref<HTMLMediaElement>(),playing=ref(false),ready=ref(false),playError=ref('');
 const video=computed(()=>state.media.type.value.startsWith('video/'));
 function clock(ms:number){const seconds=Math.floor(ms/1000);return String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0');}
@@ -26,4 +26,4 @@ onBeforeUnmount(stop);
  <video v-if="video&&state.media.url.value" ref="element" :src="state.media.url.value" :hidden="!playing" class="source-original-video mt12" preload="metadata" playsinline controls @loadedmetadata="metadata" @play="playing=true" @pause="playing=false" @ended="playing=false" @error="failure"/>
  <audio v-else-if="state.media.url.value" ref="element" :src="state.media.url.value" preload="metadata" @loadedmetadata="metadata" @play="playing=true" @pause="playing=false" @ended="playing=false" @error="failure"/>
  <p v-if="error" role="alert" class="small mt12">{{error}} <button type="button" class="btn sm" @click="state.reload">重试读取原件</button></p></section></template>
-<style scoped>.source-original-title{font-size:16px;margin:0;overflow-wrap:anywhere}.source-original-title a{color:inherit;text-decoration:none}.source-original-title a:focus-visible{outline:1px solid var(--navy);outline-offset:3px}.source-original-quote{white-space:pre-wrap;line-height:1.8}.source-original-video{width:100%;max-height:40vh}</style>
+<style scoped>.source-original-card{min-width:0;overflow-wrap:anywhere}.source-original-title{font-size:16px;margin:0;overflow-wrap:anywhere}.source-original-title a{color:inherit;text-decoration:none}.source-original-title a:focus-visible{outline:1px solid var(--navy);outline-offset:3px}.source-original-quote{white-space:pre-wrap;line-height:1.8}.source-original-video{width:100%;max-height:40vh}</style>

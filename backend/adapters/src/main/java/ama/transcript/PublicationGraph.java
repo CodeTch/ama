@@ -2,6 +2,7 @@ package ama.transcript;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import java.util.*;
+import java.util.function.Supplier;
 import ama.contract.TaskContracts.TaskLease;
 import java.time.LocalDateTime;
 import static ama.contract.MinutesContracts.*;
@@ -23,11 +24,11 @@ final class PublicationGraph {
  static Plan fresh(DataSource source,Plan plan){var j=new JdbcTemplate(source);var rows=new LinkedHashMap<String,List<Map<String,Object>>>();for(var q:plan.controls())rows.put(q.table(),read(j,q,true,plan.budget()));for(var q:plan.tasks())rows.put(q.table(),read(j,q,true,plan.budget()));return new Plan(plan.meeting(),plan.controls(),plan.tasks(),Map.copyOf(rows),plan.budget());}
  private static List<Map<String,Object>> read(JdbcTemplate j,MinutesPendingDiscovery.Query q,boolean lock,TranscriptAcquisitionBudget.Ledger budget){
   var all=new ArrayList<Map<String,Object>>();List<String> order=!lock&&q.table().equals("durable_task")?List.of("created_at","id"):q.keys();List<Object> last=null;int cap=Math.min(256,budget.taskLimit());
-  for(;;){budget.check();int requested=(int)Math.min(16,Math.min(cap-all.size()+1,budget.remainingRows()+1));require(requested>0,BUDGET_EXCEEDED);long columns=q.columns().size();int limit=budget.captureRowLimit(Math.multiplyExact(columns,2048),Math.multiplyExact(columns,512),Math.multiplyExact(columns,1024),2,requested);require(limit>0,BUDGET_EXCEEDED);var args=new ArrayList<>(q.args());String after="";if(last!=null){after=" AND ("+String.join(",",order)+") > ("+String.join(",",Collections.nCopies(order.size(),"?"))+")";args.addAll(last);}String from=" FROM "+q.table()+" WHERE ("+q.where()+")"+after;String tail=" ORDER BY "+String.join(",",order)+" LIMIT "+limit;
-   long count=j.queryForObject("SELECT COUNT(*) FROM (SELECT 1"+from+tail+") publication_count",Long.class,args.toArray());if(count==0)break;require(count<=cap-all.size()&&count<=budget.remainingRows(),BUDGET_EXCEEDED);
+  for(;;){budget.check();int requested=(int)Math.min(16,Math.min(cap-all.size()+1,budget.remainingRows()+1));require(requested>0,BUDGET_EXCEEDED);var bound=MinutesMetadataBounds.row(q.columns());int limit=budget.captureRowLimit(bound.bytes(),bound.points(),bound.units(),2,requested);var args=new ArrayList<>(q.args());String after="";if(last!=null){after=" AND ("+String.join(",",order)+") > ("+String.join(",",Collections.nCopies(order.size(),"?"))+")";args.addAll(last);}String from=" FROM "+q.table()+" WHERE ("+q.where()+")"+after;String tail=" ORDER BY "+String.join(",",order)+" LIMIT "+Math.max(1,limit);
+   long count=j.queryForObject("SELECT COUNT(*) FROM (SELECT 1"+from+tail+") publication_count",Long.class,args.toArray());if(count==0)break;if(limit<=0||count>cap-all.size()||count>budget.remainingRows())System.getLogger(PublicationGraph.class.getName()).log(System.Logger.Level.WARNING,"Publication metadata admission: table="+q.table()+" limit="+limit+" page="+count+" retained="+all.size()+" cap="+cap+" remainingRows="+budget.remainingRows()+" usage="+Arrays.toString(budget.usage())+" rowBound="+bound);require(limit>0,BUDGET_EXCEEDED);require(count<=cap-all.size()&&count<=budget.remainingRows(),BUDGET_EXCEEDED);
    // All projected strings are bounded metadata (schema maximum VARCHAR(512)); the
    // conservative transient reservation includes a concurrent extra row before transfer.
-   long admitted=Math.min(limit,count+1);long cells=Math.multiplyExact(admitted,q.columns().size());budget.admitCapture(cells*2048,cells*512,cells*1024,2);
+   long admitted=Math.min(limit,count+1);budget.admitCapture(admitted*bound.bytes(),admitted*bound.points(),admitted*bound.units(),2);
    for(long n=0;n<admitted;n++)budget.row(q.columns().size());
    var page=j.queryForList("SELECT "+String.join(",",q.columns())+from+" ORDER BY "+String.join(",",order)+" LIMIT "+admitted+(lock?" FOR UPDATE":""),args.toArray());require(page.size()==count,PROVENANCE_UNAVAILABLE);
    for(var raw:page){var normalized=new LinkedHashMap<String,Object>();for(var cell:raw.entrySet()){Object v=cell.getValue();if(v instanceof Number number)v=new java.math.BigDecimal(number.toString()).longValueExact();else if(v instanceof java.sql.Timestamp timestamp)v=timestamp.toLocalDateTime().toString();else if(v instanceof java.sql.Date date)v=date.toLocalDate().toString();if(v instanceof String text){require(text.codePointCount(0,text.length())<=512,BUDGET_EXCEEDED);budget.capture(text.getBytes(java.nio.charset.StandardCharsets.UTF_8).length,text.codePointCount(0,text.length()),text.length(),3);}normalized.put(cell.getKey(),v);}all.add(Collections.unmodifiableMap(normalized));}
@@ -60,7 +61,7 @@ final class PublicationGraph {
  }
  private static LocalDateTime expiry(Object value){
   // Connector/J returns DATETIME as LocalDateTime; the metadata reader also supports ISO-normalized Timestamp values.
-  return value instanceof LocalDateTime time?time:value instanceof String text?LocalDateTime.parse(text):null;
+  return value instanceof LocalDateTime time?time:value instanceof String text?(text.endsWith("Z")?java.time.Instant.parse(text).atOffset(java.time.ZoneOffset.UTC).toLocalDateTime():LocalDateTime.parse(text)):null;
  }
  static void requirePreparationUnion(TaskLease lease,Map<String,List<Map<String,Object>>> before,Map<String,List<Map<String,Object>>> after){
   var tables=Set.of("durable_task","task_attempt","external_operation","external_execution");
@@ -69,14 +70,40 @@ final class PublicationGraph {
   if(onlyOwnExpiryChanged(lease,before,after))throw new PreparationRenewed(lease);
   throw fail(PROVENANCE_UNAVAILABLE);
  }
+ /** Same owner/attempt forward renewal preserves the original, more conservative expiry.
+  * The complete union is still checked; final task admission checks the live DB lease. */
+ static void requirePreparationContinuation(TaskLease lease,Map<String,List<Map<String,Object>>> before,Map<String,List<Map<String,Object>>> after){
+  try{requirePreparationUnion(lease,before,after);}catch(PreparationRenewed renewal){if(!renewal.issuedFor(lease))throw renewal;}
+ }
+ static List<Map<String,Object>> conservativeTasks(TaskLease lease,List<Map<String,Object>> declared,List<Map<String,Object>> captured){
+  var before=Map.of("durable_task",declared,"task_attempt",List.<Map<String,Object>>of(),"external_operation",List.<Map<String,Object>>of(),"external_execution",List.<Map<String,Object>>of());
+  var after=Map.of("durable_task",captured,"task_attempt",List.<Map<String,Object>>of(),"external_operation",List.<Map<String,Object>>of(),"external_execution",List.<Map<String,Object>>of());
+  requirePreparationContinuation(lease,before,after);
+  return declared;
+ }
+ /** Captured rows use UTC microsecond timestamps; discovery uses JDBC metadata timestamps. */
+ static List<Map<String,Object>> conservativeCapturedTasks(TaskLease lease,List<Map<String,Object>> declared,List<Map<String,Object>> captured){
+  var format=java.time.format.DateTimeFormatter.ofPattern("uuuu-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+  var normalized=new ArrayList<Map<String,Object>>();
+  for(var row:declared){var copy=new LinkedHashMap<>(row);for(String field:MinutesSourceRows.SHAPES.get("durable_task").timestamps())if(copy.get(field)!=null)copy.put(field,format.format(expiry(copy.get(field))));normalized.add(Collections.unmodifiableMap(copy));}
+  return conservativeTasks(lease,List.copyOf(normalized),captured);
+ }
  static void lockForPreparation(DataSource source,Plan plan,boolean controls,TaskLease lease){
   if(controls||lease==null){lock(source,plan,controls);return;}
   var j=new JdbcTemplate(source);j.setQueryTimeout(2);var before=new LinkedHashMap<String,List<Map<String,Object>>>();var after=new LinkedHashMap<String,List<Map<String,Object>>>();
-  // Preserve declaration and lock order, and compare the complete union before issuing a renewal signal.
+  // Preserve declaration and lock order, and compare the complete union before accepting a renewal.
   for(var query:plan.tasks()){before.put(query.table(),plan.rows().get(query.table()));after.put(query.table(),read(j,query,true,plan.budget()));}
-  requirePreparationUnion(lease,before,after);
+  requirePreparationContinuation(lease,before,after);
  }
- static void lock(DataSource source,Plan plan,boolean controls){var j=new JdbcTemplate(source);j.setQueryTimeout(2);for(var q:controls?plan.controls():plan.tasks())require(read(j,q,true,plan.budget()).equals(plan.rows().get(q.table())),PROVENANCE_UNAVAILABLE);}
+ static void lock(DataSource source,Plan plan,boolean controls){var j=new JdbcTemplate(source);j.setQueryTimeout(2);for(var q:controls?plan.controls():plan.tasks())PublicationMetadataComparison.requireSame(j,q,plan.rows().get(q.table()),plan.budget());}
+ /** A technical observation may restart its complete acquisition after rollback.
+  * No partial match or changed row is accepted by this signal. */
+ static final class ObservationChanged extends RuntimeException {ObservationChanged(){super("Publication metadata observation changed",null,false,false);}}
+ static <T>T retryObservation(Supplier<T> acquisition){
+  for(int attempt=0;attempt<3;attempt++)try{return acquisition.get();}catch(PublicationGraph.ObservationChanged changed){if(attempt==2)throw fail(PROVENANCE_UNAVAILABLE);}
+  throw new IllegalStateException("Unreachable publication observation");
+ }
+ static void lockObservation(DataSource source,Plan plan,boolean controls){var j=new JdbcTemplate(source);j.setQueryTimeout(2);for(var q:controls?plan.controls():plan.tasks())if(!PublicationMetadataComparison.matches(j,q,plan.rows().get(q.table()),plan.budget()))throw new ObservationChanged();}
  static void lockStorage(DataSource source,Plan plan){
   var j=new JdbcTemplate(source);j.setQueryTimeout(2);boolean changed=false;
   // Capture and compare the complete union in the existing lock order. A changed

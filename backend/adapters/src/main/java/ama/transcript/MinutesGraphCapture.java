@@ -22,13 +22,57 @@ final class MinutesGraphCapture {
   return captureMode(authority,scope,gate,actor,expected,budget,false,false);
  }
  static Graph captureCurrent(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget){return captureMode(authority,scope,gate,actor,expected,budget,true,false);}
- static Graph captureGenerationPreparation(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,ama.contract.TaskContracts.TaskLease lease){
-  MinutesTaskDomainPolicy.shape(lease.spec());require(expected.meeting().equals(lease.spec().subject().id()),PROVENANCE_UNAVAILABLE);
-  try{return captureRaw(authority,scope,gate,actor,expected,budget,true,false,null,null,null,lease);}catch(PublicationSourceEligibilityUnavailable denied){throw fail(PROVENANCE_UNAVAILABLE);}
+ /** Final read check retains the same declaration, full row union and fresh authority gate. */
+ static Graph compareCaptured(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Graph captured,boolean currentSources){
+  require(captured!=null&&captured.discovery()==expected,PROVENANCE_UNAVAILABLE);
+  try{return captureRaw(authority,scope,gate,actor,expected,budget,currentSources,false,null,null,null,null,null,null,captured);}catch(PublicationSourceEligibilityUnavailable denied){throw fail(PROVENANCE_UNAVAILABLE);}
+ }
+ /** A task can finish between the read's two gates. On a bounded retry only
+  * reuse historical rows with identical membership and locked full-cell equality. */
+ static Graph reacquireStoredRead(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,
+     MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Graph previous){
+  require(previous!=null&&"STORED_INPUT_READ".equals(expected.kind())&&expected.kind().equals(previous.discovery().kind())&&
+      expected.meeting().equals(previous.discovery().meeting())&&expected.selected().equals(previous.discovery().selected()),PROVENANCE_UNAVAILABLE);
+  return captureRaw(authority,scope,gate,actor,expected,budget,false,false,null,null,null,null,null,null,previous,true);
+ }
+ /** Recheck the original content in SQL on the final capture. Keep the native
+  * lease and lookup checks for fields which may legitimately renew meanwhile. */
+ static Graph captureStoredPreparation(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,
+     MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,ama.contract.TaskContracts.TaskLease lease,
+     ama.contract.ExternalContracts.OperationToken token,Graph captured){
+  require(captured==null||captured.discovery()==expected,PROVENANCE_UNAVAILABLE);
+  if(lease!=null){
+   MinutesTaskDomainPolicy.shape(lease.spec());
+   require(token==null&&expected.meeting().equals(lease.spec().subject().id()),PROVENANCE_UNAVAILABLE);
+  }
+  if(token!=null){
+   require(token.subject().id().equals(expected.meeting())&&"MEETING".equals(token.subject().kind()),PROVENANCE_UNAVAILABLE);
+   var executions=expected.tables().getOrDefault("external_execution",List.of()).stream().filter(e->
+       token.executionId().equals(e.get("id"))&&token.operationId().equals(e.get("operation_id"))&&
+       Long.valueOf(token.executionNo()).equals(e.get("execution_no"))).toList();
+   require(executions.size()==1,PROVENANCE_UNAVAILABLE);
+  }
+  try{return captureRaw(authority,scope,gate,actor,expected,budget,lease!=null,false,null,null,null,lease,null,token,captured);}
+  catch(PublicationSourceEligibilityUnavailable denied){throw fail(PROVENANCE_UNAVAILABLE);}
  }
  static Graph captureTask(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources){return captureMode(authority,scope,gate,actor,expected,budget,currentSources,true);}
  static Graph capturePublication(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Runnable controls,Runnable tasks){return captureMode(authority,scope,gate,actor,expected,budget,false,false,controls,tasks);}
  static Graph capturePublicationCurrent(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Runnable controls,Runnable tasks){return captureMode(authority,scope,gate,actor,expected,budget,true,false,controls,tasks);}
+ /** Same full-content F check, using binary SQL equality instead of a second raw transfer. */
+ static Graph comparePublicationCurrent(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Runnable controls,Runnable tasks,Graph captured){
+  try{return comparePublicationReceiptCandidate(authority,scope,gate,actor,expected,budget,controls,tasks,captured);}catch(PublicationSourceEligibilityUnavailable denied){throw fail(PROVENANCE_UNAVAILABLE);}
+ }
+ static Graph comparePublicationReceiptCandidate(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Runnable controls,Runnable tasks,Graph captured){
+  require(captured!=null&&captured.discovery()==expected,PROVENANCE_UNAVAILABLE);
+  return captureRaw(authority,scope,gate,actor,expected,budget,true,false,controls,tasks,null,null,null,null,captured);
+ }
+ /** The private publication issuer supplies an earlier complete capture. Fresh discovery and locks
+  * still protect the full current membership; every retained content cell is compared again. */
+ static Graph comparePublicationPolicy(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,Runnable controls,Runnable tasks,Graph captured,boolean receipt){
+  require(captured!=null&&expected.meeting().equals(captured.discovery().meeting())&&expected.kind().equals(captured.discovery().kind())&&Objects.equals(expected.selected(),captured.discovery().selected()),PROVENANCE_UNAVAILABLE);
+  try{return captureRaw(authority,scope,gate,actor,expected,budget,true,false,controls,tasks,null,null,null,null,captured);}
+  catch(PublicationSourceEligibilityUnavailable denied){if(receipt)throw denied;throw fail(PROVENANCE_UNAVAILABLE);}
+ }
  private static final class ExportFiles {
   final List<String> extra;FileRegistry.AcquiredSources acquired;
   ExportFiles(List<String> extra){this.extra=List.copyOf(extra);}
@@ -41,6 +85,10 @@ final class MinutesGraphCapture {
  }
  private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,boolean taskCapture){return captureMode(authority,scope,gate,actor,expected,budget,currentSources,taskCapture,null,null);}
  static Graph captureReplacement(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,String publication,Runnable controls,Runnable tasks){return captureMode(authority,scope,gate,actor,expected,budget,true,false,controls,tasks,publication);}
+ static Graph compareReplacement(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,String publication,Runnable controls,Runnable tasks,Graph captured){
+  require(captured!=null&&captured.discovery()==expected,PROVENANCE_UNAVAILABLE);
+  try{return captureRaw(authority,scope,gate,actor,expected,budget,true,false,controls,tasks,publication,null,null,null,captured);}catch(PublicationSourceEligibilityUnavailable denied){throw fail(PROVENANCE_UNAVAILABLE);}
+ }
  private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,boolean taskCapture,Runnable publicationControls,Runnable publicationTasks){return captureMode(authority,scope,gate,actor,expected,budget,currentSources,taskCapture,publicationControls,publicationTasks,null);}
  private static Graph captureMode(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,boolean taskCapture,Runnable publicationControls,Runnable publicationTasks,String replacementPublication){
   try{return captureRaw(authority,scope,gate,actor,expected,budget,currentSources,taskCapture,publicationControls,publicationTasks,replacementPublication);}catch(PublicationSourceEligibilityUnavailable denied){throw fail(PROVENANCE_UNAVAILABLE);}
@@ -53,6 +101,15 @@ final class MinutesGraphCapture {
   return captureRaw(authority,scope,gate,actor,expected,budget,currentSources,taskCapture,publicationControls,publicationTasks,replacementPublication,preparationLease,null);
  }
  private static Graph captureRaw(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,boolean taskCapture,Runnable publicationControls,Runnable publicationTasks,String replacementPublication,ama.contract.TaskContracts.TaskLease preparationLease,ExportFiles exportFiles){
+  return captureRaw(authority,scope,gate,actor,expected,budget,currentSources,taskCapture,publicationControls,publicationTasks,replacementPublication,preparationLease,exportFiles,null);
+ }
+ private static Graph captureRaw(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,boolean taskCapture,Runnable publicationControls,Runnable publicationTasks,String replacementPublication,ama.contract.TaskContracts.TaskLease preparationLease,ExportFiles exportFiles,ama.contract.ExternalContracts.OperationToken lookupToken){
+  return captureRaw(authority,scope,gate,actor,expected,budget,currentSources,taskCapture,publicationControls,publicationTasks,replacementPublication,preparationLease,exportFiles,lookupToken,null);
+ }
+ private static Graph captureRaw(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,boolean taskCapture,Runnable publicationControls,Runnable publicationTasks,String replacementPublication,ama.contract.TaskContracts.TaskLease preparationLease,ExportFiles exportFiles,ama.contract.ExternalContracts.OperationToken lookupToken,Graph contentComparison){
+  return captureRaw(authority,scope,gate,actor,expected,budget,currentSources,taskCapture,publicationControls,publicationTasks,replacementPublication,preparationLease,exportFiles,lookupToken,contentComparison,false);
+ }
+ private static Graph captureRaw(JdbcTranscriptAuthority authority,Object scope,FileRegistry.LockedMeeting gate,Actor actor,MinutesGraphDiscovery.Discovery expected,TranscriptAcquisitionBudget.Ledger budget,boolean currentSources,boolean taskCapture,Runnable publicationControls,Runnable publicationTasks,String replacementPublication,ama.contract.TaskContracts.TaskLease preparationLease,ExportFiles exportFiles,ama.contract.ExternalContracts.OperationToken lookupToken,Graph contentComparison,boolean retryRead){
   authority.requireMinutesScope(scope,gate,actor,expected.meeting());budget.check();
   MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,"meeting",budget);
   // New selection cannot inspect another owner's private template body before denying it.
@@ -89,8 +146,11 @@ final class MinutesGraphCapture {
    for(int offset=0;offset<declared.size();offset+=128){
     budget.check();var batch=declared.subList(offset,Math.min(declared.size(),offset+128));int count=batch.size();
     String exact=String.join(" AND ",shape.keys().stream().map(k->k+"=?").toList()),where=String.join(" OR ",Collections.nCopies(count,"("+exact+")"));Object[] keys=batch.stream().flatMap(row->shape.keys().stream().map(row::get)).toArray();String order=String.join(",",shape.keys());
-    if(table!=null){var transfer=read.deferRows(table,where,order,count,true,keys);transfers.add(()->{var found=transfer.get();require(found.size()==count,PROVENANCE_UNAVAILABLE);return found;});}
-    else {var transfer=read.deferRead(shape,where,order,count,false,keys);auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(()->{var found=transfer.get();require(found.size()==count,PROVENANCE_UNAVAILABLE);return found;});}
+    boolean compareRows=contentComparison!=null&&(!retryRead||
+        table!=null&&Set.of(Table.MINUTES_REVISION,Table.MINUTES_ELEMENT,Table.EVIDENCE_LINK,Table.TRANSCRIPT_SEGMENT).contains(table)&&
+        declared.equals(contentComparison.discovery().tables().get(name)));
+    if(table!=null){Supplier<List<FullRow>> transfer=!compareRows?read.deferRows(table,where,order,count,true,keys):()->SavedTranscriptComparison.rows(j,budget,table,batch,contentComparison.rows());transfers.add(()->{var found=transfer.get();require(found.size()==count,PROVENANCE_UNAVAILABLE);return found;});}
+    else {Supplier<List<Map<String,Object>>> transfer=!compareRows?read.deferRead(shape,where,order,count,false,keys):()->SavedTranscriptComparison.auxiliary(j,budget,shape,batch,contentComparison.auxiliary().getOrDefault(name,List.of()));auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(()->{var found=transfer.get();require(found.size()==count,PROVENANCE_UNAVAILABLE);return found;});}
    }
   }
   // Readiness and publication submission capture actual pending decisions under the same gate/budget.
@@ -109,10 +169,19 @@ final class MinutesGraphCapture {
    if(name.equals("durable_task")&&ordinaryPublication!=null){if(preparationLease==null)authority.publicationWriteGuard().tasks(ordinaryPublication,authority.fileRegistry().access(gate));else authority.publicationWriteGuard().tasksForGenerationPreparation(ordinaryPublication,authority.fileRegistry().access(gate),preparationLease);}
    if(name.equals("durable_task")&&publicationTasks!=null)publicationTasks.run();
    if(preparationLease!=null&&taskUnion.contains(name)){var comparison=MinutesGraphDiscovery.lockAndRead(authority.dataSource(),expected,name,budget);taskUnionBefore.put(name,comparison.expected());taskUnionAfter.put(name,comparison.actual());}
+   else if(lookupToken!=null&&name.equals("external_operation")){var comparison=MinutesGraphDiscovery.lockAndRead(authority.dataSource(),expected,name,budget);MinutesLookupRenewal.conservative(lookupToken,comparison.expected(),comparison.actual());}
    else MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,name,budget);
    Shape shape=MinutesSourceRows.SHAPES.get(name);var declared=new ArrayList<>(expected.tables().getOrDefault(name,List.of()));
    if(name.equals("external_execution"))declared.sort(Comparator.comparing((Map<String,Object> r)->(String)r.get("operation_id")).thenComparingLong(r->(Long)r.get("execution_no")));
-   for(var row:declared)auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(read.deferRead(shape,String.join(" AND ",shape.keys().stream().map(k->k+"=?").toList()),String.join(",",shape.keys()),1,false,shape.keys().stream().map(row::get).toArray()));
+   for(int offset=0;offset<declared.size();offset+=128){
+    var batch=declared.subList(offset,Math.min(declared.size(),offset+128));int count=batch.size();
+    String exact=String.join(" AND ",shape.keys().stream().map(k->k+"=?").toList()),where=String.join(" OR ",Collections.nCopies(count,"("+exact+")"));
+    // Compare renewable timestamps against the actual current row under the
+    // existing token rules below, before retaining the original expiry.
+    boolean renewable=preparationLease!=null&&name.equals("durable_task")||lookupToken!=null&&name.equals("external_operation");
+    Supplier<List<Map<String,Object>>> transfer=contentComparison==null||retryRead||renewable?read.deferRead(shape,where,String.join(",",shape.keys()),count,false,batch.stream().flatMap(row->shape.keys().stream().map(row::get)).toArray()):()->SavedTranscriptComparison.auxiliary(j,budget,shape,batch,contentComparison.auxiliary().getOrDefault(name,List.of()));
+    auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(()->{var found=transfer.get();require(found.size()==count,PROVENANCE_UNAVAILABLE);return found;});
+   }
    if(currentSources&&name.equals("file_reference")){
    var ids=expected.tables().getOrDefault("file_object",List.of()).stream().map(r->(String)r.get("id")).sorted().toList();if(ids.isEmpty()&&Set.of("SAVED_EFFECTIVE","READINESS").contains(expected.kind())&&expected.root().get("minutes_revision_id")==null&&expected.root().get("element_set_id")==null)continue;require(!ids.isEmpty(),PROVENANCE_UNAVAILABLE);try{authority.requireTaskPurpose(actor,expected.meeting());}catch(ama.storage.FilePurposePolicy.Unavailable denied){throw new PublicationSourceEligibilityUnavailable();}
    if(expected.tables().get("file_object").stream().anyMatch(row->!"AVAILABLE".equals(row.get("state"))))throw new PublicationSourceEligibilityUnavailable();
@@ -121,10 +190,12 @@ final class MinutesGraphCapture {
    for(var source:originals){var row=expected.tables().get("file_object").stream().filter(r->source.file().fileId().equals(r.get("id"))).findFirst().orElseThrow(()->fail(PROVENANCE_UNAVAILABLE));require(source.file().sha256().equals(row.get("sha256"))&&source.file().size()==((Number)row.get("size_bytes")).longValue(),PROVENANCE_UNAVAILABLE);boolean material=expected.tables().getOrDefault("material_revision",List.of()).stream().anyMatch(r->source.file().fileId().equals(r.get("content_file_id")))||expected.tables().getOrDefault("parsed_document",List.of()).stream().anyMatch(r->source.file().fileId().equals(r.get("text_file_id")));if(!(material?MaterialFileReferencePolicy.PURPOSE:JdbcTranscriptAuthority.PURPOSE).equals(source.originalPurpose()))throw new PublicationSourceEligibilityUnavailable();}
   }
   }
-  if(preparationLease!=null)PublicationGraph.requirePreparationUnion(preparationLease,taskUnionBefore,taskUnionAfter);
+  if(preparationLease!=null)PublicationGraph.requirePreparationContinuation(preparationLease,taskUnionBefore,taskUnionAfter);
   // No existing-row lock is discovered by a deferred content SELECT; exact protected PKs only.
   for(var transfer:transfers){var found=transfer.get();require(!found.isEmpty(),PROVENANCE_UNAVAILABLE);rows.addAll(found);}
   for(var group:auxiliaryTransfers.entrySet()){var found=new ArrayList<Map<String,Object>>();for(var transfer:group.getValue()){var one=transfer.get();require(!one.isEmpty(),PROVENANCE_UNAVAILABLE);found.addAll(one);}auxiliary.put(group.getKey(),List.copyOf(found));}
+  if(preparationLease!=null)auxiliary.put("durable_task",PublicationGraph.conservativeCapturedTasks(preparationLease,expected.tables().getOrDefault("durable_task",List.of()),auxiliary.getOrDefault("durable_task",List.of())));
+  if(lookupToken!=null)auxiliary.put("external_operation",MinutesLookupRenewal.captured(lookupToken,expected.tables().getOrDefault("external_operation",List.of()),auxiliary.getOrDefault("external_operation",List.of())));
   TranscriptSpeakerRows.mirrors(j,rows);
   var graph=new Graph(expected,List.copyOf(rows),Collections.unmodifiableMap(auxiliary));authority.sealMinutesCapture(scope,gate,actor,graph,ordinaryPublication);if(ordinaryPublication!=null&&!taskCapture)authority.publicationWriteGuard().requirePermitted(ordinaryPublication,authority.fileRegistry().access(gate));return graph;
  }

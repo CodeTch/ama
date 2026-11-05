@@ -32,6 +32,12 @@ final class MinutesMetadataPages {
  List<Map<String,Object>> allTaskRows(Actor actor,String meeting){uuid(meeting);var before=capture(new Position(meeting,"TASKS",null,null),maximum,true);return authority.transactionRunner().required(()->{authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);require(Objects.equals(before.position.high,highwater(meeting,"TASKS")),PROVENANCE_UNAVAILABLE);var after=capture(before.position,maximum,false);require(before.proofs.equals(after.proofs)&&ids(before.rows).equals(ids(after.rows)),PROVENANCE_UNAVAILABLE);return after.rows;});}
  /** Current eligibility consumes the same request budget and a complete bounded task union. */
  List<Map<String,Object>> allTaskRows(Actor actor,String meeting,TranscriptAcquisitionBudget.Ledger budget){
+  return TranscriptReadRetry.read(()->MinutesReadVersion.capture(j,meeting,"MEETING_TASKS",null,(rows,bytes)->{budget.row(rows);budget.capture(bytes,bytes,bytes,2);}),()->{
+   try{return allTaskRowsOnce(actor,meeting,budget);}
+   catch(ama.contract.TranscriptContracts.Failure changed){if(changed.status()==503&&changed.code().equals("MINUTES_TRANSITION_UNAVAILABLE"))throw fail(PROVENANCE_UNAVAILABLE);throw changed;}
+  });
+ }
+ private List<Map<String,Object>> allTaskRowsOnce(Actor actor,String meeting,TranscriptAcquisitionBudget.Ledger budget){
   uuid(meeting);var plan=MinutesPendingDiscovery.discover(authority.dataSource(),meeting,budget);
   var rows=plan.rows().get("durable_task").stream().filter(row->"MINUTES_GENERATE_V1".equals(row.get("task_type"))).toList();
   for(var row:rows){budget.check();var spec=TranscriptReadGraph.spec(row);MinutesTaskDomainPolicy.shape(spec);var inputs=plan.rows().get("generation_input").stream().filter(input->spec.input().id().equals(input.get("id"))).toList();require(inputs.size()==1,PROVENANCE_UNAVAILABLE);var input=inputs.getFirst();require(meeting.equals(input.get("meeting_id"))&&((Number)input.get("base_revision")).longValue()==spec.businessVersion()&&spec.inputFingerprint().equals(input.get("input_fingerprint"))&&Set.of("FULL","REGION").contains(input.get("scope"))&&input.get("target_element_id")==null,PROVENANCE_UNAVAILABLE);require(ama.minutes.MinutesGenerateProducer.compute(meeting,spec.input().id(),spec.inputFingerprint(),spec.businessVersion(),spec.cancelEpoch(),authority.canonicalBudget(),()->false).equals(spec.producerKey()),PROVENANCE_UNAVAILABLE);}

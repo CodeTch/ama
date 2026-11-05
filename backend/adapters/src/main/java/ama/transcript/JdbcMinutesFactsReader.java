@@ -42,20 +42,38 @@ public final class JdbcMinutesFactsReader {
  private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget){
   independent();uuid(meeting);Objects.requireNonNull(budget);
   var jdbc=new org.springframework.jdbc.core.JdbcTemplate(authority.dataSource());jdbc.setQueryTimeout(2);
-  return TranscriptReadRetry.read(()->MinutesReadVersion.capture(jdbc,meeting,selector,selected,(rows,bytes)->{budget.row(rows);budget.capture(bytes,bytes,bytes,2);}),()->readOnce(actor,meeting,selector,selected,member,budget));
+  var retry=selector.equals("STORED_INPUT_READ")?new StoredReadAttempt():null;
+  java.util.function.Supplier<Object> version=()->MinutesReadVersion.capture(jdbc,meeting,selector,selected,(rows,bytes)->{budget.row(rows);budget.capture(bytes,bytes,bytes,2);});
+  return TranscriptReadRetry.read(()->{var current=version.get();if(retry!=null)retry.version=current;return current;},
+      ()->readOnce(actor,meeting,selector,selected,member,budget,retry,version));
  }
- private Snapshot readOnce(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget){
-  independent();uuid(meeting);require(Set.of("INITIAL_SETTINGS","CURRENT_GENERATION","STORED_INPUT","CANDIDATE","SAVED_EFFECTIVE","OWNER_REVISION","WORKSPACE_READ","REVIEW_BODY","REVIEW_ELEMENT","FINAL","REUSE_SOURCES","OWNER_SET","REVIEW_ID","READINESS","SETTINGS_READ").contains(selector),INVALID_ARGUMENT);
+ private static final class StoredReadAttempt {Object version;MinutesGraphCapture.Graph previous;}
+ private Snapshot readOnce(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget,StoredReadAttempt retry,java.util.function.Supplier<Object> version){
+  independent();uuid(meeting);require(Set.of("INITIAL_SETTINGS","CURRENT_GENERATION","STORED_INPUT","STORED_INPUT_READ","CANDIDATE","SAVED_EFFECTIVE","OWNER_REVISION","WORKSPACE_READ","REVIEW_BODY","REVIEW_ELEMENT","FINAL","REUSE_SOURCES","OWNER_SET","REVIEW_ID","READINESS","SETTINGS_READ").contains(selector),INVALID_ARGUMENT);
   Objects.requireNonNull(budget);authority.savedAccess().prepareExternalRead(actor,meeting);
   MinutesGraphDiscovery.Discovery discovered=null;RuntimeException discoveryError=null;
   try{discovered=MinutesGraphDiscovery.discover(authority.dataSource(),meeting,selector,selected,limits,authority.readBudget());if(selector.equals("READINESS"))discovered=MinutesGraphDiscovery.withPending(authority.dataSource(),discovered,limits.tasks(),budget);charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}
   final var plan=discovered;final var failedDiscovery=discoveryError;
-  var captured=authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,plan,member?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);if(failedDiscovery!=null)throw failedDiscovery;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);var graph=member&&!selector.equals("FINAL")||selector.equals("READINESS")?MinutesGraphCapture.captureCurrent(authority,scope,gate,actor,plan,budget):MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);if(member&&selector.equals("FINAL"))requireEffectiveFinal(plan.root(),JdbcMinutesSavedQueries.project(one(graph,Table.FINAL_CONFIRMATION,selected)));return graph;});
+  var captured=captureRead(actor,meeting,plan,member,budget,gate->{if(failedDiscovery!=null)throw failedDiscovery;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);if(retry!=null){
+   require(Objects.equals(retry.version,version.get()),PROVENANCE_UNAVAILABLE);
+   if(retry.previous!=null)return MinutesGraphCapture.reacquireStoredRead(authority,scope,gate,actor,plan,budget,retry.previous);
+  }
+  var graph=member&&!selector.equals("FINAL")||selector.equals("READINESS")?MinutesGraphCapture.captureCurrent(authority,scope,gate,actor,plan,budget):MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);if(member&&selector.equals("FINAL"))requireEffectiveFinal(plan.root(),JdbcMinutesSavedQueries.project(one(graph,Table.FINAL_CONFIRMATION,selected)));return graph;});
+  if(retry!=null)retry.previous=captured;
   Snapshot prepared=null;RuntimeException preparationError=null;
   try{prepared=prepare(captured,budget);}catch(RuntimeException failure){cancellation(failure);preparationError=failure;}
   final var result=prepared;final var failed=preparationError;
-  authority.savedAccess().prepareExternalRead(actor,meeting);
-  return authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,plan,member?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);if(failed!=null)throw failed;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);var fresh=member&&!selector.equals("FINAL")||selector.equals("READINESS")?MinutesGraphCapture.captureCurrent(authority,scope,gate,actor,plan,budget):MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);if(member&&selector.equals("FINAL"))requireEffectiveFinal(fresh.discovery().root(),JdbcMinutesSavedQueries.project(one(fresh,Table.FINAL_CONFIRMATION,selected)));require(captured.equals(fresh),PROVENANCE_UNAVAILABLE);return result;});
+  return captureRead(actor,meeting,plan,member,budget,gate->{if(failed!=null)throw failed;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);var fresh=MinutesGraphCapture.compareCaptured(authority,scope,gate,actor,plan,budget,captured,member&&!selector.equals("FINAL")||selector.equals("READINESS"));if(member&&selector.equals("FINAL"))requireEffectiveFinal(fresh.discovery().root(),JdbcMinutesSavedQueries.project(one(fresh,Table.FINAL_CONFIRMATION,selected)));require(captured.equals(fresh),PROVENANCE_UNAVAILABLE);return result;});
+ }
+ /** A proof can expire while waiting for another reader's root lock. Retry only before
+  * content acquisition, after rollback and a new external proof, using the same ledger. */
+ private <T>T captureRead(Actor actor,String meeting,MinutesGraphDiscovery.Discovery plan,boolean member,TranscriptAcquisitionBudget.Ledger budget,java.util.function.Function<ama.storage.FileRegistry.LockedMeeting,T> capture){
+  for(int attempt=0;attempt<3;attempt++){
+   budget.check();authority.savedAccess().prepareExternalRead(actor,meeting);boolean[] admitted={false};
+   try{return authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,plan,member?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);admitted[0]=true;return capture.apply(gate);});}
+   catch(MeetingAccess.AuthorityUnavailableException unavailable){if(admitted[0]||attempt==2)throw unavailable;}
+  }
+  throw new IllegalStateException("Unreachable read acquisition");
  }
  static ama.storage.FileRegistry.LockedMeeting lockGraph(JdbcTranscriptAuthority authority,Actor actor,String meeting,MinutesGraphDiscovery.Discovery plan){return lockGraph(authority,actor,meeting,plan,MeetingAccess.Action.EDIT);}
  static ama.storage.FileRegistry.LockedMeeting lockGraph(JdbcTranscriptAuthority authority,Actor actor,String meeting,MinutesGraphDiscovery.Discovery plan,MeetingAccess.Action action){
@@ -63,7 +81,7 @@ public final class JdbcMinutesFactsReader {
   require(authority.meetingAccess() instanceof ama.meeting.JdbcMeetingAccess,PROVENANCE_UNAVAILABLE);var access=(ama.meeting.JdbcMeetingAccess)authority.meetingAccess();var ids=access.tryLockHistoricalIdentities(actor,plan.identities(),false).orElseThrow();var root=access.lockPrepared(ids,meeting,false).orElseThrow();access.requirePrepared(root,actor,meeting,plan.identities(),action);return authority.fileRegistry().adopt(actor,meeting,root,action);
  }
  void recheck(Actor actor,String meeting,Snapshot snapshot){recheck(actor,meeting,snapshot,null,null,false);}
- void recheck(Actor actor,String meeting,Snapshot snapshot,JdbcSavedTranscripts transcripts,CorrectionInstallation installation,boolean ready){authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,snapshot.graph().discovery());var scope=authority.minutesScope(gate,actor,meeting);var fresh=snapshot.graph().discovery().kind().equals("READINESS")?MinutesGraphCapture.captureCurrent(authority,scope,gate,actor,snapshot.graph().discovery(),snapshot.budget()):MinutesGraphCapture.capture(authority,scope,gate,actor,snapshot.graph().discovery(),snapshot.budget());require(fresh.equals(snapshot.graph()),PROVENANCE_UNAVAILABLE);if(transcripts!=null)transcripts.requireCorrection(authority,installation,ready);return null;});}
+ void recheck(Actor actor,String meeting,Snapshot snapshot,JdbcSavedTranscripts transcripts,CorrectionInstallation installation,boolean ready){authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,snapshot.graph().discovery());var scope=authority.minutesScope(gate,actor,meeting);var fresh=MinutesGraphCapture.compareCaptured(authority,scope,gate,actor,snapshot.graph().discovery(),snapshot.budget(),snapshot.graph(),snapshot.graph().discovery().kind().equals("READINESS"));require(fresh.equals(snapshot.graph()),PROVENANCE_UNAVAILABLE);if(transcripts!=null)transcripts.requireCorrection(authority,installation,ready);return null;});}
  static void independent(){if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Minutes preparation requires no ambient transaction");}
  private static void cancellation(RuntimeException error){if(Thread.currentThread().isInterrupted()||error instanceof Failure f&&f.code()==CANCELLED)throw error;}
  static void charge(MinutesGraphDiscovery.Discovery graph,TranscriptAcquisitionBudget.Ledger budget){budget.row(graph.root().size());for(var value:graph.root().values())if(value instanceof String s)budget.capture(ama.canonical.CanonicalValueCodec.utf8Length(s,()->false),s.codePointCount(0,s.length()),s.length(),4);for(var group:graph.tables().values())for(var row:group){budget.row(row.size());for(var value:row.values())if(value instanceof String s)budget.capture(ama.canonical.CanonicalValueCodec.utf8Length(s,()->false),s.codePointCount(0,s.length()),s.length(),4);}for(var set:graph.memberships().values()){budget.row(set.size());for(var key:set)for(var value:key)if(value instanceof String s)budget.capture(s.length(),s.length(),s.length(),4);}}
@@ -88,13 +106,28 @@ public final class JdbcMinutesFactsReader {
    for(var confirmation:rows(graph,Table.TRANSCRIPT_CONFIRMATION)){var revision=one(graph,Table.TRANSCRIPT_REVISION,confirmation.string("revision_id"));if(!input.string("id").equals(revision.string("processing_input_id")))continue;require("WORKING".equals(revision.string("kind")),PROVENANCE_UNAVAILABLE);String actual=new TranscriptConfirmationHash(bindings,raw,read).hash(new ConfirmationFacts(confirmation.string("id"),facts),profile,gb,()->false);require(actual.equals(confirmation.string("content_hash")),FINGERPRINT_MISMATCH);}
   }
   var graphBudget=new GraphBudget(canonical,limits.revisionDepth(),limits.revisionNodes(),read.maxFactRows());var configurations=new ArrayList<GenerationConfiguration>();
+  // Inputs frequently share the identical archived configuration closure. Decode that
+  // closure once, bind every input separately, and finish the same exact-closure check.
+  var bindingGroups=new LinkedHashMap<List<Ref>,List<FullRow>>();
   for(var input:rows(graph,Table.GENERATION_INPUT)){
-   var selected=new ama.minutes.contract.GenerationArchiveRefs(facts,snapshot.index(),new StrictProcessingManifestReader(),read,graphBudget,()->false).binding(input.string("id"));for(var root:selected){var old=roots.putIfAbsent(root.artifactType()+"|"+root.version(),root);require(old==null||old.equals(root),PROFILE_UNAVAILABLE);}var raw=snapshot.loadClosure(selected,read,0,()->false);for(var archive:raw){var bytes=archive.bytes();budget.capture(bytes.length,bytes.length,bytes.length,16);}var context=bindings.begin(facts,raw,read,()->false);configurations.add(context.generation(input));context.finish();
+   var selected=new ama.minutes.contract.GenerationArchiveRefs(facts,snapshot.index(),new StrictProcessingManifestReader(),read,graphBudget,()->false).binding(input.string("id"));
+   for(var root:selected){var old=roots.putIfAbsent(root.artifactType()+"|"+root.version(),root);require(old==null||old.equals(root),PROFILE_UNAVAILABLE);}
+   bindingGroups.computeIfAbsent(List.copyOf(selected),unused->new ArrayList<>()).add(input);
+  }
+  for(var group:bindingGroups.entrySet()){
+   var raw=snapshot.loadClosure(group.getKey(),read,0,()->false);for(var archive:raw){var bytes=archive.bytes();budget.capture(bytes.length,bytes.length,bytes.length,16);}
+   var context=bindings.begin(facts,raw,read,()->false);for(var input:group.getValue()){budget.check();configurations.add(context.generation(input));}context.finish();
   }
   facts=new StoredProvenanceFacts(facts.rows(),facts.files(),configurations,facts.evidenceAnchors(),facts.taskSpecs(),facts.reviewScopes(),facts.taskFacts(),read.maxFactRows());
+  var verificationGroups=new LinkedHashMap<List<Ref>,List<TaskSpec>>();
   for(var input:rows(graph,Table.GENERATION_INPUT)){
    var candidates=facts.taskFacts().stream().filter(t->t.spec().input().kind().equals("GENERATION_INPUT")&&t.spec().input().id().equals(input.string("id"))).toList();require(candidates.size()==1,PROVENANCE_UNAVAILABLE);var task=candidates.getFirst().spec();MinutesTaskDomainPolicy.shape(task);require(task.producerKey().equals(ama.minutes.MinutesGenerateProducer.compute(meeting,input.string("id"),input.string("input_fingerprint"),input.number("base_revision"),task.cancelEpoch(),canonical,()->false)),PROVENANCE_UNAVAILABLE);
-   var selected=new ama.minutes.contract.GenerationArchiveRefs(facts,snapshot.index(),new StrictProcessingManifestReader(),read,graphBudget,()->false).generation(input.string("id"));var raw=snapshot.loadClosure(selected,read,0,()->false);for(var archive:raw){var bytes=archive.bytes();budget.capture(bytes.length,bytes.length,bytes.length,16);}var verified=bindings.verifyGeneration(new GenerationFacts(input.string("id"),facts),task,raw,graphBudget,read,()->false);byte[] manifestBytes=CanonicalJson.encode(verified.manifest(),65536,()->false);budget.capture(manifestBytes.length,manifestBytes.length,manifestBytes.length,4);manifests.put(input.string("id"),new String(manifestBytes,StandardCharsets.UTF_8));
+   var selected=new ama.minutes.contract.GenerationArchiveRefs(facts,snapshot.index(),new StrictProcessingManifestReader(),read,graphBudget,()->false).generation(input.string("id"));verificationGroups.computeIfAbsent(List.copyOf(selected),unused->new ArrayList<>()).add(task);
+  }
+  for(var group:verificationGroups.entrySet()){
+   var raw=snapshot.loadClosure(group.getKey(),read,0,()->false);for(var archive:raw){var bytes=archive.bytes();budget.capture(bytes.length,bytes.length,bytes.length,16);}
+   var verified=bindings.verifyGenerations(facts,group.getValue(),raw,graphBudget,read,()->false);
+   for(var entry:verified.entrySet()){budget.check();byte[] manifestBytes=CanonicalJson.encode(entry.getValue().manifest(),65536,()->false);budget.capture(manifestBytes.length,manifestBytes.length,manifestBytes.length,4);manifests.put(entry.getKey(),new String(manifestBytes,StandardCharsets.UTF_8));}
   }
   for(var ref:MinutesStoredReviews.validate(facts,snapshot,bindings,read,graphBudget,budget)){var old=roots.putIfAbsent(ref.artifactType()+"|"+ref.version(),ref);require(old==null||old.equals(ref),PROFILE_UNAVAILABLE);}
   for(var ref:MinutesStoredFinals.validate(graph,facts,snapshot,bindings,read,graphBudget,budget)){var old=roots.putIfAbsent(ref.artifactType()+"|"+ref.version(),ref);require(old==null||old.equals(ref),PROFILE_UNAVAILABLE);}

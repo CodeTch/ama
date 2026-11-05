@@ -7,9 +7,20 @@ import {ApiError} from '../../shared/api/client';
 type Api={authorize?:(id:string,signal:AbortSignal)=>Promise<unknown>;current:(id:string,signal:AbortSignal)=>Promise<GenerationCurrent>;templates:(id:string,cursor:string|null,signal:AbortSignal)=>Promise<GenerationTemplates>;send:(c:CommandSnapshot)=>Promise<GenerationReceipt>};
 const denied=(e:unknown)=>e instanceof ApiError&&e.kind==='http'&&[401,403].includes(e.status??0);
 export function useMinutesGeneration(api:Api,actor:()=>string|null,meeting:()=>string,eligible:()=>boolean,context?:TabJournalContext){
- const current=shallowRef<GenerationCurrent|null>(null),templates=shallowRef<GenerationTemplates|null>(null),loading=shallowRef(false),busy=shallowRef(false),ready=shallowRef(false),blocked=shallowRef(false),error=shallowRef<unknown>(null),command=useCommand(api.send);
+ const current=shallowRef<GenerationCurrent|null>(null),templates=shallowRef<GenerationTemplates|null>(null),loading=shallowRef(false),busy=shallowRef(false),ready=shallowRef(false),blocked=shallowRef(false),error=shallowRef<unknown>(null);
  const journal=context?createScopedPrivateJournal<CommandSnapshot>(context,'minutes-generation',validGenerationCommand):null;
  let epoch=0,readTurn=0,disposed=false,controller:AbortController|null=null,flight:Promise<void>|null=null,owner=actor(),resource=meeting(),retained:CommandSnapshot|null=null;
+ let acknowledgementCleanupError:Error|null=null;
+ const command=useCommand(async original=>{
+  const generation=epoch;acknowledgementCleanupError=null;
+  const receipt=await api.send(original);
+  if(!disposed&&generation===epoch&&actor()===original.actor&&meeting()===original.resource&&eligible()){
+   // Receipt observers can synchronously unmount this panel. Retire only this active
+   // request's journal before exposing its acknowledged result to those observers.
+   if(journal&&!journal.clear()){blocked.value=true;acknowledgementCleanupError=new Error('操作已收到回执，恢复记录清理失败；重新读取后查回原结果。');}
+  }
+  return receipt;
+ });
  function invalidate(){epoch++;readTurn++;controller?.abort();controller=null;flight=null;
   if(command.state.value==='ACKNOWLEDGED'&&!blocked.value)retained=null;else if(command.snapshot.value)retained=command.snapshot.value;if(owner!==null&&actor()!==null&&actor()!==owner||meeting()!==resource)retained=null;
   if(actor()!==null)owner=actor();resource=meeting();if(journal&&!journal.synchronize(actor(),meeting()))blocked.value=true;
@@ -51,8 +62,7 @@ export function useMinutesGeneration(api:Api,actor:()=>string|null,meeting:()=>s
    }
    if(!active())return;const original=command.snapshot.value;if(!original||journal&&journal.save(who,id,original)!=='SAVED')throw new Error('原请求无法保存，请保持页面打开并重试。');
    await command.send();if(!active())return;
-   // A failed clear keeps the original accepted request recoverable; never invent a replacement.
-   if(journal&&!journal.clear()){blocked.value=true;throw new Error('操作已收到回执，恢复记录清理失败；重新读取后查回原结果。');}
+   if(acknowledgementCleanupError)throw acknowledgementCleanupError;
    await reload(true);
   }catch(cause){if(active()){if(denied(cause))invalidate();error.value=cause;}}finally{if(active())busy.value=false;}};
   let finish!:()=>void;const result=new Promise<void>(r=>{finish=r;});flight=result;void result.then(()=>{if(generation===epoch)flight=null;});void run().then(finish,finish);return result;

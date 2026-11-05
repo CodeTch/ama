@@ -1,6 +1,6 @@
 import {shallowRef,watch,onScopeDispose} from 'vue';
-import type {MinutesCurrent} from '../../shared/api/minutes-saved';import type {Source} from '../../shared/api/minutes-inspection';import type {TranscriptDetail} from '../../shared/api/transcripts';import type {SpeechSpeakers} from '../../shared/api/transcript-corrections';
-type Ports={source:(meeting:string,locator:string,target:{kind:'BODY'|'ELEMENT'|'SET';id:string},signal:AbortSignal)=>Promise<Source>;revision:(meeting:string,revision:string,signal:AbortSignal)=>Promise<TranscriptDetail>;speakers:(meeting:string,revision:string,signal:AbortSignal)=>Promise<SpeechSpeakers>};
+import type {MinutesCurrent} from '../../shared/api/minutes-saved';import type {Source} from '../../shared/api/minutes-inspection';
+type Ports={source:(meeting:string,locator:string,target:{kind:'BODY'|'ELEMENT'|'SET';id:string},signal:AbortSignal)=>Promise<Source>};
 export type MinutesSourceLabel={label:string;kind:'recording'|'transcript'|'material'};
 /** Read-only labels from current evidence and its exact immutable transcript version. */
 export function useMinutesSourceLabels(ports:Ports,actor:()=>string|null,meeting:()=>string,active:()=>boolean,current:()=>MinutesCurrent|null,denied:(cause:unknown)=>void){
@@ -14,7 +14,6 @@ export function useMinutesSourceLabels(ports:Ports,actor:()=>string|null,meeting
   const targets=new Map<string,{kind:'BODY'|'ELEMENT'|'SET';id:string}>();
   for(const evidence of v.evidence){if(targets.size>=128)break;if(evidence.element_id&&elements.has(evidence.element_id))targets.set(evidence.locator_id,{kind:'ELEMENT',id:evidence.element_id});else if(evidence.minutes_revision_id===v.body?.id)targets.set(evidence.locator_id,{kind:'BODY',id:evidence.minutes_revision_id!});}
   if(v.setId)for(const entry of [...v.sensitive,...v.background])for(const locator of entry.locatorIds){if(targets.size<128&&!targets.has(locator))targets.set(locator,{kind:'SET',id:v.setId});}
-  const revisions=new Map<string,Promise<TranscriptDetail>>(),speakers=new Map<string,Promise<SpeechSpeakers>>();
   const jobs=[...targets];let next=0;
   async function worker(){while(valid()&&next<jobs.length){const [locator,target]=jobs[next++]!;
    try{
@@ -22,11 +21,10 @@ export function useMinutesSourceLabels(ports:Ports,actor:()=>string|null,meeting
     let result:MinutesSourceLabel;
     if(source.locator.kind==='TRANSCRIPT'){
      const version=source.sourceVersion;if(version!==source.locator.transcript_revision_id)throw Error('来源版本无法核实');
-     if(!revisions.has(version))revisions.set(version,ports.revision(id,version,signal));
-     const transcript=await revisions.get(version)!;if(!valid())return;const segment=transcript.selected.segments.find(s=>s.segmentId===source.locator.segment_id);if(!segment)throw Error('来源段落无法核实');
+     const segment=source.transcript;if(!segment||segment.revisionId!==version||segment.segmentId!==source.locator.segment_id)throw Error('来源段落无法核实');
      if(segment.startMs===null)result={kind:'transcript',label:'转写文件'};
      else{
-      let speaker='匿名说话人';if(segment.speakerId){if(!speakers.has(version))speakers.set(version,ports.speakers(id,version,signal));const saved=await speakers.get(version)!;if(!valid())return;const label=saved.items.find(s=>s.id===segment.speakerId);if(!label)throw Error('来源说话人标签无法核实');speaker=label.label;}
+      const speaker=segment.speakerLabel??'匿名说话人';
       const seconds=Math.floor(segment.startMs/1000);result={kind:'recording',label:`${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')} ${speaker}`};
      }
     }else result={kind:'material',label:'背景材料'+(source.locator.page_noToken?' · 第'+source.locator.page_noToken+'页':'')};

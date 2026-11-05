@@ -19,7 +19,14 @@ final class PublicationDocumentView {
   for(String key:List.of("providerId","storeInstanceId","publicationId","payloadSha256"))require(Objects.equals(manifest.get(key),response.get(key)),PROVENANCE_UNAVAILABLE);
   require(document.equals(response.get("documentId"))&&result.equals(response.get("resultId")),PROVENANCE_UNAVAILABLE);
   var payload=object(response.get("payload"));
-  if("ama.controlled-knowledge-document.v2".equals(payload.get("schemaVersion"))){fields(payload,"schemaVersion","title","meeting","minutes","sections","provenance","publicationMetadata");PublicationConfigurationData.validate(payload.get("publicationMetadata"));require(Objects.equals(payload.get("publicationMetadata"),manifest.get("publicationMetadata")),PROVENANCE_UNAVAILABLE);}
+  if("ama.controlled-knowledge-document.v2".equals(payload.get("schemaVersion"))){
+   fields(payload,"schemaVersion","title","meeting","minutes","sections","provenance","publicationMetadata");
+   var metadata=PublicationConfigurationData.validate(payload.get("publicationMetadata"));
+   var original=PublicationConfigurationData.validate(manifest.get("publicationMetadata"));
+   // The bounded provider parser uses Long; archived JSON may use Integer. Compare
+   // exact canonical values, including every rule and tag, on the same ledger.
+   require(Arrays.equals(ControlledKnowledgeReadJson.canonical(metadata,budget),ControlledKnowledgeReadJson.canonical(original,budget)),PROVENANCE_UNAVAILABLE);
+  }
   else{fields(payload,"schemaVersion","title","meeting","minutes","sections","provenance");require("ama.controlled-knowledge-document.v1".equals(payload.get("schemaVersion"))&&!manifest.containsKey("publicationMetadata"),PROVENANCE_UNAVAILABLE);}
   var provenance=object(payload.get("provenance"));fields(provenance,"confirmationId","minutesRevisionId","elementSetId","transcriptConfirmationId","inputFingerprint","sourceManifestHash","renderArtifact");
   for(var pair:Map.of("confirmationId","id","minutesRevisionId","minutes_revision_id","elementSetId","element_set_id","transcriptConfirmationId","transcript_confirmation_id","inputFingerprint","input_fingerprint","sourceManifestHash","source_manifest_hash").entrySet())require(Objects.equals(provenance.get(pair.getKey()),confirmation.get(pair.getValue())),PROVENANCE_UNAVAILABLE);

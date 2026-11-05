@@ -39,7 +39,12 @@ public final class QualityMetrics {
   double confused=Math.max(0,common-dp[dp.length-1]);return Map.of("referenceSpeakerSamples",total,"missed",miss,"falseAlarm",falseAlarm,"confused",confused,"der",(miss+falseAlarm+confused)/total);
  }
  public static Map<String,Double> entities(Set<String> reference,Set<String> actual){
-  if(reference.isEmpty())throw new IllegalArgumentException("Annotated entities required");long tp=reference.stream().filter(actual::contains).count();double p=actual.isEmpty()?0:(double)tp/actual.size(),r=(double)tp/reference.size();
-  return Map.of("truePositive",(double)tp,"falsePositive",(double)(actual.size()-tp),"falseNegative",(double)(reference.size()-tp),"precision",p,"recall",r,"f1",p+r==0?0:2*p*r/(p+r));
+  if(reference.isEmpty())throw new IllegalArgumentException("Annotated entities required");
+  var types=List.of("PERSON","DEPARTMENT","PRODUCT","FINANCIAL_TERM");
+  for(var entries:List.of(reference,actual))for(String entry:entries){int split=entry.indexOf(':');if(split<1||!types.contains(entry.substring(0,split))||entry.substring(split+1).isBlank())throw new IllegalArgumentException("Typed entity annotation required");}
+  var result=new LinkedHashMap<>(entityCounts(reference,actual));
+  for(String type:types){var refs=reference.stream().filter(s->s.startsWith(type+":")).collect(java.util.stream.Collectors.toSet());var predicted=actual.stream().filter(s->s.startsWith(type+":")).collect(java.util.stream.Collectors.toSet());if(!refs.isEmpty()||!predicted.isEmpty())entityCounts(refs,predicted).forEach((key,value)->result.put(type+"."+key,value));}
+  return Collections.unmodifiableMap(result);
  }
+ private static Map<String,Double> entityCounts(Set<String> reference,Set<String> actual){long tp=reference.stream().filter(actual::contains).count();double p=actual.isEmpty()?0:(double)tp/actual.size(),r=reference.isEmpty()?0:(double)tp/reference.size();return Map.of("truePositive",(double)tp,"falsePositive",(double)(actual.size()-tp),"falseNegative",(double)(reference.size()-tp),"precision",p,"recall",r,"f1",p+r==0?0:2*p*r/(p+r));}
 }

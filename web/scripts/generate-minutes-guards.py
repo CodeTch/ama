@@ -5,7 +5,7 @@ selected={'minutes.yaml':['SavedWorkspaceHistory','SavedWorkspaceDetail','SavedP
 selected['transcripts.yaml']=['TranscriptReplacementSearch','TranscriptOperationReceipt','Receipt','SpeechCorrections','CorrectionProposalReceipt','SpeechSpeakers']
 selected['recording.yaml']=['RecordingSubtitles', 'RecordingTranscriptSource']
 selected['operations.yaml']=['OperationsCapabilities', 'OperationsVoiceprints', 'OperationsDatasets', 'OperationsEvaluations', 'OperationsEvaluationDetail', 'OperationsConfiguration', 'OperationsMailJob', 'OperationsMailJobs', 'OperationsMailContext', 'OperationsCorpus', 'OperationsCandidateMatches']
-selected['operations.yaml'] += ['OperationsDatasetReceipt','OperationsEvaluationReceipt','OperationsEvaluationReviewReceipt','OperationsConfigurationReceipt','OperationsWithdrawalReceipt','OperationsSubmissionReceipt']
+selected['operations.yaml'] += ['OperationsDatasetReceipt','OperationsEvaluationReceipt','OperationsEvaluationReviewReceipt','OperationsConfigurationReceipt','OperationsWithdrawalReceipt','OperationsVoiceResamplingReceipt','OperationsSubmissionReceipt']
 selected['operations.yaml'] += ['OperationsConfigurationHistoryPage','OperationsCandidateHistoryPage','OperationsCatalog', 'OperationsAssetReceipt', 'OperationsDatasetDetail', 'OperationsCandidate', 'OperationsCandidateDetail', 'OperationsReport', 'OperationsVoiceDetail', 'OperationsCancellationReceipt', 'OperationsSampleReviewReceipt', 'OperationsSpeakerCandidates', 'OperationsDatasetsPage', 'OperationsEvaluationsPage', 'OperationsCandidatesPage', 'OperationsVoiceprintsPage', 'OperationsCorpusPage']
 annotations={'description','title','example','examples','deprecated','readOnly','writeOnly','default'}
 keywords={'$ref','type','const','enum','oneOf','anyOf','allOf','required','properties','additionalProperties','items','maxItems','minItems','uniqueItems','pattern','maxLength','minLength','format','minimum','maximum','exclusiveMinimum','exclusiveMaximum'}
@@ -22,6 +22,7 @@ def include(file,name):
   out={}
   for k,x in v.items():
    if k in annotations:continue
+   if k=='type' and not isinstance(x,str):raise ValueError('Runtime response schema requires a scalar type; use oneOf for nullable values')
    if k=='$ref':
     path,pointer=x.split('#/');out[k]=include(path.removeprefix('./') or file,pointer)
    elif k=='properties':out[k]={n:walk(s) for n,s in x.items()}

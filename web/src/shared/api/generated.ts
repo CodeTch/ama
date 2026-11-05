@@ -4,6 +4,22 @@
  */
 
 export interface paths {
+    "/api/v1/operations/voiceprints/{id}/samples": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["operationsVoiceSampleReplacement"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/operations/configuration/history": {
         parameters: {
             query?: never;
@@ -4229,6 +4245,23 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        OperationsVoiceprint: {
+            /** Format: uuid */
+            id: string;
+            subjectId: string;
+            consentReference: string;
+            /** @constant */
+            purpose: "SPEAKER_CANDIDATE";
+            modelVersion: string;
+            dimension: number;
+            sampleCount: number;
+            /** Format: date-time */
+            expiresAt: string;
+            /** @enum {unknown} */
+            state: "PENDING" | "APPROVED" | "REJECTED" | "REVOKED" | "NEEDS_MORE";
+            revisionToken: string;
+            reviewReason: string | null;
+        };
         OperationsConfigurationHistoryPage: {
             items: {
                 revisionToken: string;
@@ -4303,6 +4336,7 @@ export interface components {
                 expiresAt: string;
                 usageState: string;
                 reviewReason: string | null;
+                libraryRevisionToken: string | null;
             }[];
             counts: {
                 [key: string]: number;
@@ -4310,18 +4344,17 @@ export interface components {
             total: number;
             nextCursor: string | null;
         };
-        OperationsSubmissionReceipt: {
+        OperationsVoiceResamplingReceipt: {
             /** Format: uuid */
             id: string;
             /** Format: uuid */
             meetingId: string;
-            /** @enum {string} */
-            category: "WORDING" | "LABEL" | "ACTION_OWNER" | "PERSON" | "DEPARTMENT" | "PRODUCT" | "FINANCIAL_TERM" | "PRODUCT_ALIAS" | "TERM_PRONUNCIATION" | "VOICEPRINT";
+            /** @constant */
+            category: "VOICEPRINT";
             comment: string;
             /** @constant */
             state: "PENDING";
-            /** @constant */
-            revisionToken: "0";
+            revisionToken: string;
         };
         OperationsDatasetsPage: {
             items: {
@@ -4548,6 +4581,25 @@ export interface components {
                 reason: string;
                 createdAt: string;
             }[];
+            libraryRevisionToken: string | null;
+            consentReference: string;
+            sampleSha: string;
+            dimension: number;
+            meetingId: string | null;
+            policyVersion: string;
+            sampleHistory: {
+                /** @enum {unknown} */
+                origin: "SELF" | "MEETING";
+                sampleSha: string;
+                sampleCount: number;
+                modelVersion: string;
+                dimension: number;
+                consentReference: string;
+                expiresAt: string;
+                revisionToken: string;
+                actorId: string;
+                createdAt: string;
+            }[];
         };
         OperationsSpeakerCandidates: {
             /** Format: uuid */
@@ -4749,23 +4801,6 @@ export interface components {
             };
             datasetSampleLimit?: number;
         };
-        OperationsVoiceprint: {
-            /** Format: uuid */
-            id: string;
-            subjectId: string;
-            consentReference: string;
-            /** @constant */
-            purpose: "SPEAKER_CANDIDATE";
-            modelVersion: string;
-            dimension: number;
-            sampleCount: number;
-            /** Format: date-time */
-            expiresAt: string;
-            /** @enum {unknown} */
-            state: "PENDING" | "APPROVED" | "REJECTED" | "REVOKED";
-            revisionToken: string;
-            reviewReason: string | null;
-        };
         OperationsVoiceprints: components["schemas"]["OperationsVoiceprint"][];
         OperationsCandidateMatches: {
             /** Format: uuid */
@@ -4841,6 +4876,19 @@ export interface components {
             /** @constant */
             withdrawn: true;
             revisionToken: string;
+        };
+        OperationsSubmissionReceipt: {
+            /** Format: uuid */
+            id: string;
+            /** Format: uuid */
+            meetingId: string;
+            /** @enum {string} */
+            category: "WORDING" | "LABEL" | "ACTION_OWNER" | "PERSON" | "DEPARTMENT" | "PRODUCT" | "FINANCIAL_TERM" | "PRODUCT_ALIAS" | "TERM_PRONUNCIATION" | "VOICEPRINT";
+            comment: string;
+            /** @constant */
+            state: "PENDING";
+            /** @constant */
+            revisionToken: "0";
         };
         OperationsMailJob: {
             /** Format: uuid */
@@ -6993,6 +7041,21 @@ export interface components {
                 documentId: string | null;
                 externalVersion: string | null;
             };
+            transcript?: {
+                /** Format: uuid */
+                revisionId: string;
+                /** Format: uuid */
+                segmentId: string;
+                /** Format: uuid */
+                fileId: string;
+                sha256: string;
+                sizeBytesToken: string;
+                parserVersion: string;
+                ordinalToken: string;
+                startMs: number | null;
+                endMs: number | null;
+                speakerLabel: string | null;
+            };
         };
         SavedReviewRow: {
             /** Format: uuid */
@@ -8044,6 +8107,42 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    operationsVoiceSampleReplacement: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+                "X-CSRF-Token": string;
+            };
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    expectedRevisionToken: string;
+                    reason: string;
+                    consentReference: string;
+                    /** Format: date-time */
+                    expiresAt: string;
+                    wavBase64: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Exact current governance result */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsVoiceprint"];
+                };
+            };
+        };
+    };
     operationsConfigurationHistoryPage: {
         parameters: {
             query?: {
@@ -8149,7 +8248,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["OperationsSubmissionReceipt"];
+                    "application/json": components["schemas"]["OperationsVoiceResamplingReceipt"];
                 };
             };
         };
@@ -9024,7 +9123,7 @@ export interface operations {
                 "application/json": {
                     expectedRevisionToken: string;
                     /** @enum {unknown} */
-                    decision: "APPROVED" | "REJECTED";
+                    decision: "APPROVED" | "REJECTED" | "NEEDS_MORE";
                     reason: string;
                 };
             };

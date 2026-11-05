@@ -126,6 +126,13 @@ public final class GenerationFingerprint {
  public Projection verify(GenerationFacts facts,TaskSpec task,Profiles profiles,GraphBudget budget,BooleanSupplier cancelled){
   var operation=resolver.open(facts.stored(),cancelled);var helper=new GenerationFingerprint(operation.resolver());var result=helper.verifyBound(facts,task,profiles,budget,cancelled);var verified=operation.finish();check(cancelled);return verified==null?result:result.complete(verified);
  }
+ /** Verify several inputs from one detached facts graph against one exact raw archive closure.
+  * Each input/task/fingerprint/origin is checked; no projection escapes before closure finish. */
+ public Map<String,Projection> verifyAll(StoredProvenanceFacts facts,List<TaskSpec> tasks,GraphBudget budget,BooleanSupplier cancelled){
+  require(facts!=null&&tasks!=null&&!tasks.isEmpty(),INVALID_ARGUMENT);var operation=resolver.open(facts,cancelled);var helper=new GenerationFingerprint(operation.resolver());var results=new LinkedHashMap<String,Projection>();
+  for(var task:tasks){check(cancelled);String input=task.input().id();require(!results.containsKey(input),INPUT_INVALID);var configs=facts.configurations().stream().filter(c->c.inputId().equals(input)).toList();require(configs.size()==1,PROFILE_UNAVAILABLE);results.put(input,helper.verifyBound(new GenerationFacts(input,facts),task,configs.getFirst().profiles(),budget,cancelled));}
+  var verified=operation.finish();require(verified!=null,PROFILE_UNAVAILABLE);var completed=new LinkedHashMap<String,Projection>();for(var entry:results.entrySet())completed.put(entry.getKey(),entry.getValue().complete(verified));check(cancelled);return Collections.unmodifiableMap(completed);
+ }
  private Projection verifyBound(GenerationFacts facts,TaskSpec task,Profiles profiles,GraphBudget budget,BooleanSupplier cancelled){
   var index=new StoredFactsIndex(facts.stored(),budget,cancelled);var input=index.one(Table.GENERATION_INPUT,facts.inputId(),PROVENANCE_UNAVAILABLE);task(input,task);
   var historical=historicalFence(input,facts.stored(),cancelled);require(historical.subjectBusinessVersion()==task.businessVersion()&&historical.cancelEpoch()==task.cancelEpoch(),INPUT_INVALID);

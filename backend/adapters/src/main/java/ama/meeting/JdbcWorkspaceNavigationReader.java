@@ -32,6 +32,50 @@ public final class JdbcWorkspaceNavigationReader {
   try{return tx.required(()->readHeld(actor,meeting,budget));}
   catch(org.springframework.dao.DataAccessException|org.springframework.transaction.TransactionException failure){throw new WorkspaceReadBudget.Unavailable(failure);}
  }
+ /** Display renewal does not return content, saved pointers, or a capability for a write. */
+ public void renewAccess(Actor actor,String meeting){
+  if(TransactionSynchronizationManager.isActualTransactionActive())throw unavailable();
+  ama.contract.OutboxContracts.uuid(meeting);WorkspaceText.check(actor.enterpriseId(),1020,true);
+  var budget=new WorkspaceReadBudget(limits,()->Thread.currentThread().isInterrupted());
+  if(!displayProofCurrent(actor,meeting,budget)){
+   access.prepareExternalRead(actor,meeting);
+   // Preparation refreshed only proof, not the committed ACL. Check both again;
+   // a now-current publication proof needs no second wait on a content reader.
+   if(!displayProofCurrent(actor,meeting,budget))read(actor,meeting);
+  }
+ }
+ private boolean displayProofCurrent(Actor actor,String meeting,WorkspaceReadBudget budget){
+  budget.reserve(1,1,1,1,1,1,false);budget.check();
+  // One statement observes a committed ACL snapshot without joining the content writer's
+  // identity/root locks. The browser still expires this result 4.5s from REQUEST START.
+  // No saved content is transferred and this boolean is never a backend read/write gate.
+  var rows=jdbc.query("""
+   SELECT NOT EXISTS (
+     SELECT 1 FROM material_reference material WHERE material.meeting_id=m.id AND material.kind='KNOWLEDGE'
+   ) AND (m.ever_published=0 OR EXISTS (
+     SELECT 1 FROM publication published
+     JOIN external_document_mapping mapping ON mapping.publication_id=published.id AND mapping.authority_state='ACTIVE'
+     JOIN publication_governance_authority proof ON proof.publication_id=published.id
+       AND proof.document_id=mapping.external_document_id AND proof.state='ACTIVE'
+       AND proof.verified_until>UTC_TIMESTAMP(6)
+     WHERE published.meeting_id=m.id AND published.confirmation_id=m.final_confirmation_id AND published.state='SUCCEEDED'
+   )) AS display_proof_current
+   FROM meeting m
+   JOIN enterprise_identity actor ON actor.enterprise_id=? AND actor.status='ACTIVE'
+   JOIN task_subject fence ON fence.subject_kind='MEETING' AND fence.subject_id=m.id
+     AND fence.deleted=0 AND fence.business_version=m.revision AND fence.cancel_epoch=m.cancel_epoch
+   WHERE m.id=? AND m.lifecycle='ACTIVE' AND m.governance_state='ACTIVE'
+     AND (m.owner_id=actor.enterprise_id OR EXISTS (
+       SELECT 1 FROM meeting_access_grant grant_row
+       JOIN roster_revision roster ON roster.id=grant_row.roster_id AND roster.meeting_id=m.id AND roster.state='CONFIRMED'
+       JOIN roster_member member_row ON member_row.roster_id=roster.id AND member_row.enterprise_id=actor.enterprise_id AND member_row.member_kind='ENTERPRISE'
+       WHERE grant_row.meeting_id=m.id AND grant_row.enterprise_id=actor.enterprise_id
+         AND grant_row.action='READ' AND grant_row.roster_id=m.roster_revision_id
+     ))
+   """,(row,index)->row.getBoolean("display_proof_current"),actor.enterpriseId(),meeting);
+  budget.check();if(rows.size()!=1)throw new MeetingAccess.AccessDeniedException();
+  return rows.getFirst();
+ }
  private Navigation readHeld(Actor actor,String meeting,WorkspaceReadBudget budget){
   budget.check();var gate=(JdbcMeetingAccess.Held)access.lock(actor,meeting);access.require(gate,MeetingAccess.Action.READ);var root=gate.root;
   counter(root.revision());counter(root.accessRevision());if(!MeetingListScan.STAGES.contains(root.stage()))throw unavailable();

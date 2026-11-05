@@ -217,7 +217,8 @@ async function openSpeakers(mode:'edit'|'merge'|'split'='edit',id?:string){
   voiceCandidates.value=[];candidateError.value='';const target=namingTarget.value;
   try{const value=await operationsCommands.read<SpeakerCandidates>(`/api/v1/meetings/${props.meetingId}/speaker-candidates`);if(!namingContext(target))return;
    const segments=provenance.value.filter(s=>group.segmentIds.includes(s.segmentId)),matching=value.groups.filter(g=>segments.some(s=>s.sourceFileId===g.fileId&&s.startMs!==null&&BigInt(g.startSample)===BigInt(s.startMs)*16n));
-   const unique=new Map(matching.flatMap(g=>g.candidates).map(c=>[c.voiceprintId,c]));voiceCandidates.value=[...unique.values()].filter(c=>segments.length>0&&segments.every(s=>matching.some(g=>g.fileId===s.sourceFileId&&s.startMs!==null&&BigInt(g.startSample)===BigInt(s.startMs)*16n&&g.candidates.some(v=>v.voiceprintId===c.voiceprintId))));
+   const unambiguous=matching.filter(g=>matching.filter(other=>other.fileId===g.fileId&&other.startSample===g.startSample).length===1);
+   const unique=new Map(unambiguous.flatMap(g=>g.candidates).map(c=>[c.voiceprintId,c]));voiceCandidates.value=[...unique.values()].filter(c=>segments.length>0&&segments.every(s=>unambiguous.some(g=>g.fileId===s.sourceFileId&&s.startMs!==null&&BigInt(g.startSample)===BigInt(s.startMs)*16n&&g.candidates.some(v=>v.voiceprintId===c.voiceprintId))));
   }catch{if(namingContext(target))candidateError.value='候选暂不可用，可继续手动核对人员或保留匿名。';}
   return;
  }
