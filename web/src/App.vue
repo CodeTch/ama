@@ -15,6 +15,7 @@ import MeetingDateRange from './features/meetings/MeetingDateRange.vue';
 import {fitSelectedTags,positionSelectedPopover} from './features/meetings/selected-filter-tags';
 const {session,list,create,createDiscovery,options:useApplicationOptions,setMeetingScope,topicCommands,pendingImports}=useApplication(),router=useRouter(),createOpen=ref(false),importAfterCreate=ref(false);
 const sessionChecking=ref(!session.current.value);
+const resolvingSession=computed(()=>!session.current.value&&(sessionChecking.value||session.status.value==='LOADING'));
 const importMeeting=ref<string|null>(null),importOpen=ref(false),importPanel=ref<InstanceType<typeof UploadImportPanel>>();
 const pendingImportEntries=computed(()=>{
  const actor=session.current.value?.actor.enterpriseId;
@@ -129,8 +130,8 @@ const future=ref<InstanceType<typeof FuturePanels>>();
 
   <main class="content"><button v-if="topicWorkspace?.showRecoveryEntry()" class="btn" type="button" @click="topicWorkspace.recover()">恢复原专题请求</button><div v-if="pendingImports.error.value" class="banner error" role="alert">导入恢复记录暂无法更新。</div><div v-if="!importOpen&&pendingImportEntries.length" class="banner" aria-label="待确认的导入操作"><div v-for="(entry,index) in pendingImportEntries" :key="entry.command.key"><span>{{pendingImportEntries.length>1?'第 '+(index+1)+' 项 · ':''}}{{entry.command.operation==='IMPORT_DRAFT_DISCARD'?'放弃导入':'保存导入'}}结果待确认</span> <button class="btn sm" type="button" @click="resumeImport(entry)">继续处理</button></div></div><div class="m19-page" :class="{'aci-import-background':importOpen}">
    <div class="page-head"><div><h1 class="page-title">我的会议</h1><div class="page-desc">集中管理你负责和参与的会议，从录音采集、AI增强转写到纪要生成与发布，让会议内容可核对、结论可追溯、成果随时回看。</div></div><div class="page-actions">
-    <button class="btn primary" @click="startRecording"><Icon name="mic" :size="14"/> 开始录音</button>
-    <button class="btn" @click="openImport"><Icon name="plus" :size="14"/> 导入会议</button>
+    <button class="btn primary" :disabled="resolvingSession" @click="startRecording"><Icon name="mic" :size="14"/> 开始录音</button>
+    <button class="btn" :disabled="resolvingSession" @click="openImport"><Icon name="plus" :size="14"/> 导入会议</button>
    </div></div>
    <MeetingCreatePanel v-if="session.current.value&&!importMeeting&&!importAfterCreate&&(createOpen||create.command.state.value!=='EMPTY'||create.recoveryBlocked.value)" :state="create.command.state.value" :busy="createFlow.busy.value" :blocked="create.recoveryBlocked.value" :storage-status="create.storageStatus.value" :cleanup-failed="create.cleanupFailed.value" :message="createMessage" :discovery="createDiscovery.result.value?.status??null" :discovering="createDiscovery.loading.value" :discovery-error="!!createDiscovery.error.value" @submit="createFlow.open" @lookup="createDiscovery.reload" @recover="create.retryRecovery" @session="reloadSession" @close="createOpen=false"/>
    <div class="m19-scope-row"><div class="tabs" role="tablist" aria-label="会议范围" @keydown="selectScope">

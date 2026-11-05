@@ -1,6 +1,7 @@
 import type {components} from './generated';
 import type {createBusinessClient} from './business-client';
 import type {CommandSnapshot} from '../composables/useCommand';
+import {isSpeakerSnapshot} from './transcript-corrections';
 import {ApiError} from './client';
 import {revisionToken} from './intent-contract';
 import {fitsUtf8} from '../bounded-text';
@@ -33,15 +34,28 @@ function common(v:Record<string,unknown>,meeting:string){
  &&(v.confirmation===null||confirmation(v.confirmation))&&Array.isArray(v.sources)&&v.sources.length<=4096&&v.sources.every(s=>(shape(s,'fileId,ordinal,sha256,sizeBytes,sizeBytesToken')||(shape(s,'fileId,kind,name,ordinal,sha256,sizeBytes,sizeBytesToken')||shape(s,'fileId,kind,name,ordinal,recognitionOrigin,sha256,sizeBytes,sizeBytesToken')&&['FILE','LOCAL_HARNESS','UNKNOWN'].includes(String(s.recognitionOrigin)))&&text(s.name)&&['AUDIO','VIDEO','SUBTITLE','DOCUMENT'].includes(String(s.kind)))&&uuid(s.fileId)&&number(s.ordinal)&&hash(s.sha256)&&number(s.sizeBytes)&&revisionToken(s.sizeBytesToken))&&new Set(v.sources.map(s=>s.fileId)).size===v.sources.length
  &&Array.isArray(v.sourceBytes)&&v.sourceBytes.length===v.sources.length&&v.sourceBytes.every(s=>shape(s,'eligibility,fileId,reason')&&uuid(s.fileId)&&['ELIGIBLE','INELIGIBLE','UNAVAILABLE'].includes(String(s.eligibility))&&['AVAILABLE','SOURCE_EPOCH_CHANGED','FILE_UNAVAILABLE','ROUTE_UNAVAILABLE'].includes(String(s.reason)))&&new Set(v.sourceBytes.map(s=>s.fileId)).size===v.sourceBytes.length;
 }
+function matchingSpeakers(view:Record<string,unknown>,meeting:string,revision:TranscriptCurrent['saved']){
+ if(!('speakerSnapshot' in view))return true;
+ if(!revision||!observation(view.observation)||!isSpeakerSnapshot(view.speakerSnapshot,meeting,revision.id))return false;
+ const people=view.speakerSnapshot,assigned=new Map(revision.segments.filter(s=>s.speakerId!==null).map(s=>[s.segmentId,s.speakerId]));
+ if(people.observation.revisionToken!==view.observation.revisionToken||people.observation.accessRevisionToken!==view.observation.accessRevisionToken)return false;
+ for(const group of people.items)for(const id of group.segmentIds){if(assigned.get(id)!==group.id)return false;assigned.delete(id);}
+ return assigned.size===0;
+}
 function current(v:unknown,meeting:string):v is TranscriptCurrent{
  if(!object(v)||!common(v,meeting)||!observation(v.observation)||!(v.saved===null||saved(v.saved)))return false;
  const required=['capabilities','confirmation','correction','meetingId','needsGeneration','observation','saved','sourceBytes','sources','storedInspection'];
- const optional=['parserVersion','processingConfigVersion','confirmationHashProfile','selectedConfirmation'];
- if(!required.every(k=>k in v)||Object.keys(v).some(k=>!required.includes(k)&&!optional.includes(k))||'parserVersion' in v&&!text(v.parserVersion)||'processingConfigVersion' in v&&!text(v.processingConfigVersion)||'confirmationHashProfile' in v&&v.confirmationHashProfile!=='ama.transcript-confirmation.v1'||'selectedConfirmation' in v&&v.selectedConfirmation!==null&&!confirmation(v.selectedConfirmation))return false;
+ const optional=['speakerSnapshot','previouslyConfirmed','parserVersion','processingConfigVersion','confirmationHashProfile','selectedConfirmation'];
+ if(!required.every(k=>k in v)||Object.keys(v).some(k=>!required.includes(k)&&!optional.includes(k))||'previouslyConfirmed' in v&&typeof v.previouslyConfirmed!=='boolean'||'parserVersion' in v&&!text(v.parserVersion)||'processingConfigVersion' in v&&!text(v.processingConfigVersion)||'confirmationHashProfile' in v&&v.confirmationHashProfile!=='ama.transcript-confirmation.v1'||'selectedConfirmation' in v&&v.selectedConfirmation!==null&&!confirmation(v.selectedConfirmation))return false;
+ if(!matchingSpeakers(v,meeting,v.saved))return false;
  if(v.saved===null)return v.observation.currentSavedRevisionId===null&&v.confirmation===null;
  return v.saved.kind==='WORKING'&&v.saved.id===v.observation.currentSavedRevisionId&&(v.confirmation===null?v.observation.currentConfirmationId===null:confirmation(v.confirmation)&&v.confirmation.id===v.observation.currentConfirmationId&&v.confirmation.revisionId===v.saved.id&&v.confirmation.isCurrent);
 }
-function detail(v:unknown,meeting:string,revision:string):v is TranscriptDetail{return object(v)&&exact(v,'capabilities,confirmation,confirmationHashProfile,correction,meetingId,needsGeneration,observation,parserVersion,processingConfigVersion,selected,selectedConfirmation,sourceBytes,sources,storedInspection')&&common(v,meeting)&&text(v.parserVersion)&&text(v.processingConfigVersion)&&v.confirmationHashProfile==='ama.transcript-confirmation.v1'&&(v.selectedConfirmation===null||confirmation(v.selectedConfirmation))&&saved(v.selected,true)&&v.selected.id===revision;}
+function detail(v:unknown,meeting:string,revision:string):v is TranscriptDetail{
+ if(!object(v)||!saved(v.selected,true)||v.selected.id!==revision||!common(v,meeting))return false;
+ const keys='capabilities,confirmation,confirmationHashProfile,correction,meetingId,needsGeneration,observation,parserVersion,processingConfigVersion,selected,selectedConfirmation,sourceBytes,sources';
+ return exact(v,keys+('speakerSnapshot' in v?',speakerSnapshot':'')+',storedInspection')&&matchingSpeakers(v,meeting,v.selected)&&text(v.parserVersion)&&text(v.processingConfigVersion)&&v.confirmationHashProfile==='ama.transcript-confirmation.v1'&&(v.selectedConfirmation===null||confirmation(v.selectedConfirmation));
+}
 function receipt(v:unknown,meeting:string,confirm:boolean):v is TranscriptReceipt{
  if(!shape(v,'observation,replayed,result,resultIsCurrent')||typeof v.replayed!=='boolean'||typeof v.resultIsCurrent!=='boolean'||!observation(v.observation)||!object(v.result)||v.result.meetingId!==meeting||!uuid(v.result.revisionId))return false;
  return confirm?exact(v.result,'confirmationId,contentHash,kind,meetingId,revisionId')&&v.result.kind==='TRANSCRIPT_CONFIRMATION'&&uuid(v.result.confirmationId)&&hash(v.result.contentHash):exact(v.result,'historyRevision,historyRevisionToken,kind,meetingId,revisionId')&&v.result.kind==='SAVED_REVISION'&&number(v.result.historyRevision)&&revisionToken(v.result.historyRevisionToken);

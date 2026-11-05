@@ -25,3 +25,18 @@ test('foreign, unknown or malformed processing facts never become accepted UI st
   }
  }finally{globalThis.fetch=original;}
 });
+test('frozen material rows retain the submitted knowledge version and support older receipts',async()=>{
+ const original=fetch;try{
+  const api=recordingProcessingApi(createBusinessClient('https://ama.test',()=>identity,()=>{}));
+  const legacy={materialRevisionId:key,name:'议程',state:'READY'};
+  const versioned={...legacy,source:'KNOWLEDGE',sourceVersion:'a'.repeat(64),sourceLibraryId:'library',error:null};
+  for(const row of [legacy,versioned]){
+   globalThis.fetch=async()=>Response.json({...observed,materialFiles:[row]});
+   assert.deepEqual((await api.read(session)).materialFiles,[row]);
+  }
+  for(const rows of [[{...versioned,sourceVersion:'latest'}],[{...versioned,sourceLibraryId:{}}],[legacy,legacy]]){
+   globalThis.fetch=async()=>Response.json({...observed,materialFiles:rows});
+   await assert.rejects(api.read(session));
+  }
+ }finally{globalThis.fetch=original;}
+});

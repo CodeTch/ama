@@ -508,6 +508,13 @@
       "saved"
     ],
     "properties": {
+      "previouslyConfirmed": {
+        "type": "boolean",
+        "description": "Owner view: a confirmation exists in the meeting history."
+      },
+      "speakerSnapshot": {
+        "$ref": "#/SpeechSpeakers"
+      },
       "meetingId": {
         "type": "string",
         "format": "uuid",
@@ -611,6 +618,9 @@
       "confirmationHashProfile"
     ],
     "properties": {
+      "speakerSnapshot": {
+        "$ref": "#/SpeechSpeakers"
+      },
       "meetingId": {
         "type": "string",
         "format": "uuid",
@@ -5310,6 +5320,12 @@
         "type": "integer",
         "minimum": 0,
         "maximum": 60
+      },
+      "availableProposalCount": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 60,
+        "description": "Completed checkpoint suggestions that can still be added to this working revision."
       },
       "canPropose": {
         "type": "boolean"

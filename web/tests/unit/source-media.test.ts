@@ -13,3 +13,13 @@ test('an equivalent fresh projection does not strand an in-flight media read',as
  const effect=effectScope(),scope=ref<MediaScope|null>(structuredClone(initial));let finish:(v:{blob:Blob;name:string|null})=>void=()=>{};const state=effect.run(()=>useSourceMedia(()=>new Promise(resolve=>{finish=resolve;}),()=> 'owner',()=>scope.value,{createObjectURL(){return 'blob:fresh';},revokeObjectURL(){}}))!;
  try{scope.value=structuredClone(initial);finish({blob:new Blob(['x']),name:'same.wav'});await turn();assert.equal(state.url.value,'blob:fresh');assert.equal(state.busy.value,false);}finally{effect.stop();}
 });
+
+test('a hidden stage retains one verified Blob, immediately revoking it when its access scope changes',async()=>{
+ const owner=ref('owner'),scope=ref(initial),visible=ref(true),effect=effectScope();
+ const revoked:string[]=[];let reads=0;
+ const state=effect.run(()=>useSourceMedia(async()=>{reads++;return {name:'录音.wav',blob:new Blob(['123'])};},()=>owner.value,()=>scope.value,{createObjectURL:()=>'blob:'+reads,revokeObjectURL:url=>revoked.push(url)},()=>visible.value))!;
+ await turn();assert.equal(state.url.value,'blob:1');
+ visible.value=false;visible.value=true;await turn();assert.equal(reads,1);
+ visible.value=false;scope.value={...initial,accessRevisionToken:'2'};assert.equal(state.url.value,null);assert.deepEqual(revoked,['blob:1']);await turn();assert.equal(reads,1);
+ visible.value=true;await turn();assert.equal(state.url.value,'blob:2');effect.stop();assert.deepEqual(revoked,['blob:1','blob:2']);
+});

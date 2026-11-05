@@ -438,8 +438,11 @@ def start(state, *, bundled_frontend=False):
         'ama.model.ControlledMinutesProvider', RUNTIME / 'minutes/runtime.properties'], {**env, 'AMA_MINUTES_COMPOSITION_ORIGIN': 'http://127.0.0.1:8792'}, 'model.log')
     save(RUNTIME / 'state.json', state)
     knowledge_ready = RUNTIME / 'knowledge/provider.ready'
-    state['knowledge'] = launch([sys.executable, ROOT / 'tools/providers/controlled_knowledge.py',
-        '--config', RUNTIME / 'knowledge/provider.json'], env, 'knowledge.log')
+    knowledge_command = [sys.executable, ROOT / 'tools/providers/controlled_knowledge.py',
+                         '--config', RUNTIME / 'knowledge/provider.json']
+    if integration_origin == 'http://127.0.0.1:8792':
+        knowledge_command.append('--harness-publication-catalog')
+    state['knowledge'] = launch(knowledge_command, env, 'knowledge.log')
     save(RUNTIME / 'state.json', state)
     deadline = time.monotonic() + 30
     while time.monotonic() < deadline:

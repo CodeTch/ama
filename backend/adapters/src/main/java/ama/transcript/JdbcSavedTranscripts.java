@@ -64,11 +64,22 @@ public final class JdbcSavedTranscripts {
   independent();uuid(meeting);uuid(trace);var identity=JdbcSavedTranscriptReceipts.identity(actor,meeting,key,command);
   var replay=receipts.lookup(actor,meeting,identity,command);if(replay.isPresent())return replay.orElseThrow();
   var budget=limits.ledger(authority.readBudget(),admission.canonical(),()->false);var selection=discover(meeting,command.sourceRevisionId(),budget);
+  boolean checkProposals=speechReviewInstalled()&&command.operation()==ama.contract.TranscriptContracts.Operation.CONFIRM;
   SavedTranscriptGraph snapshot;
-  try{snapshot=acquire(actor,meeting,selection,JdbcTranscriptAuthority.SavedPurpose.MUTATION,budget);}
+  try{snapshot=acquire(actor,meeting,selection,JdbcTranscriptAuthority.SavedPurpose.MUTATION,budget,checkProposals);}
   catch(RuntimeException failure){cancellation(failure);if(!ordinaryPreparationFailure(failure))throw failure;var winner=receipts.lookup(actor,meeting,identity,command);if(winner.isPresent())return winner.orElseThrow();throw failure;}
   Write write=null;RuntimeException error=null;JdbcTranscriptAuthority.PreparedMinutesTransition pending=null;
-  try{requireTransitions();writable(snapshot,command);if(command.speakers()!=null&&command.speakers().voiceprintId()!=null&&!ama.governance.GovernanceVoiceConsent.current(j,command.speakers().voiceprintId()))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_STALE");write=plan(actor,prepare(snapshot,budget),command,budget);pending=authority.prepareMinutesTransition(actor,meeting,selection.discovered().ancestry().values().stream().map(row->row.get(4)).filter(Objects::nonNull).toList(),budget);}catch(RuntimeException failure){cancellation(failure);error=failure;}
+  try{
+   requireTransitions();writable(snapshot,command);
+   var prepared=prepare(snapshot,budget);
+   if(checkProposals&&snapshot.root().get("transcript_confirmation_id")==null&&!snapshot.review().audio().isEmpty()
+      &&!speechReviews.plan(snapshot,prepared.speechEngine()).proposals.isEmpty())
+    throw new ama.contract.TranscriptContracts.Failure(422,"CORRECTIONS_PENDING");
+   if(command.speakers()!=null&&command.speakers().voiceprintId()!=null&&!ama.governance.GovernanceVoiceConsent.current(j,command.speakers().voiceprintId()))
+    throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_STALE");
+   write=plan(actor,prepared,command,budget);
+   pending=authority.prepareMinutesTransition(actor,meeting,selection.discovered().ancestry().values().stream().map(row->row.get(4)).filter(Objects::nonNull).toList(),budget);
+  }catch(RuntimeException failure){cancellation(failure);error=failure;}
   final var expected=write;final var failed=error;final var contribution=pending;
   return authority.transactionRunner().required(()->{
    var stored=receipts.claim(actor,meeting,identity);var gate=mutationGate(actor,meeting,command);JdbcSavedTranscriptReceipts.match(stored);
@@ -77,7 +88,7 @@ public final class JdbcSavedTranscripts {
    if(failed!=null)throw failed;
    var scope=authority.savedScope(gate,actor,meeting,JdbcTranscriptAuthority.SavedPurpose.MUTATION);
    var transition=authority.beginMinutesTransition(contribution,actor,meeting,gate);
-   var fresh=captureReviews(scope,gate,actor,JdbcTranscriptAuthority.SavedPurpose.MUTATION,SavedTranscriptGraph.acquire(authority,j,gate,scope,actor,meeting,JdbcTranscriptAuthority.SavedPurpose.MUTATION,selection.discovered(),limits,budget,transition),budget,false);
+   var fresh=captureReviews(scope,gate,actor,JdbcTranscriptAuthority.SavedPurpose.MUTATION,SavedTranscriptGraph.acquire(authority,j,gate,scope,actor,meeting,JdbcTranscriptAuthority.SavedPurpose.MUTATION,selection.discovered(),limits,budget,transition),budget,checkProposals);
    writable(fresh,command);require(fresh.equals(expected.prepared().graph()),PROVENANCE_UNAVAILABLE);
    if(command.speakers()!=null&&command.speakers().voiceprintId()!=null)new ama.governance.JdbcGovernanceRuntime(j.getDataSource()).requireCandidate(fresh.input().string("id"),command.speakers().voiceprintId(),command.speakers().enterpriseId(),command.sourceRevisionId(),command.speakers().segmentIds());
    var held=authority.sealSavedGraph(scope,gate,actor,meeting,fresh);authority.requireSavedHeld(held,gate,actor,meeting);requireTransitions();
@@ -209,7 +220,7 @@ public final class JdbcSavedTranscripts {
    var fresh=captureReviews(scope,gate,actor,JdbcTranscriptAuthority.SavedPurpose.OWNER_INSPECTION,SavedTranscriptGraph.acquire(authority,j,gate,scope,actor,meeting,JdbcTranscriptAuthority.SavedPurpose.OWNER_INSPECTION,selection.discovered(),limits,budget),budget,true);
    require(fresh.equals(prepared.graph()),PROVENANCE_UNAVAILABLE);reviewSource(fresh,sourceRevision,SavedTranscriptGraph.num(fresh.root(),"revision"),false);
    boolean canPropose=model.available&&reviewEditable(fresh)&&fresh.root().get("transcript_confirmation_id")==null;
-   return Map.of("meetingId",meeting,"sourceRevisionId",sourceRevision,"observation",observation(fresh.root()),"items",speechReviews.items(fresh,reviewEditable(fresh)),"pendingCount",speechReviews.pending(fresh),"canPropose",canPropose);
+   return Map.of("meetingId",meeting,"sourceRevisionId",sourceRevision,"observation",observation(fresh.root()),"items",speechReviews.items(fresh,reviewEditable(fresh)),"pendingCount",speechReviews.pending(fresh),"availableProposalCount",canPropose?model.proposals.size():0,"canPropose",canPropose);
   });
  }
  private void requireSpeechReview(){if(!speechReviewInstalled())throw new ama.contract.TranscriptContracts.Failure(503,"CORRECTION_UNAVAILABLE");}
@@ -258,7 +269,19 @@ public final class JdbcSavedTranscripts {
   uuid(meeting);uuid(revision);boolean current=j.queryForList("SELECT transcript_revision_id FROM meeting WHERE id=?",String.class,meeting).equals(List.of(revision));return read(actor,meeting,revision,current?JdbcTranscriptAuthority.SavedPurpose.CURRENT:JdbcTranscriptAuthority.SavedPurpose.OWNER_INSPECTION,true);
  }
  private Map<String,Object> speakerProjection(SavedTranscriptGraph graph){
-  var items=new ArrayList<Map<String,Object>>();for(var snapshot:graph.rows())if(snapshot.table()==Table.TRANSCRIPT_SPEAKER_SNAPSHOT){var segments=graph.segments(graph.selected()).stream().filter(r->snapshot.string("id").equals(r.nullableString("speaker_id"))).map(r->r.string("segment_id")).toList();if(segments.isEmpty())continue;var item=new LinkedHashMap<String,Object>();item.put("id",snapshot.string("id"));item.put("label",snapshot.string("label"));item.put("enterpriseId",snapshot.nullableString("enterprise_id"));item.put("source","HUMAN");item.put("segmentIds",segments);items.add(Collections.unmodifiableMap(item));}
+  var bySpeaker=new HashMap<String,List<String>>();
+  for(var segment:graph.segments(graph.selected())){
+   String speakerId=segment.nullableString("speaker_id");
+   if(speakerId!=null)bySpeaker.computeIfAbsent(speakerId,ignored->new ArrayList<>()).add(segment.string("segment_id"));
+  }
+  var items=new ArrayList<Map<String,Object>>();
+  for(var snapshot:graph.rows())if(snapshot.table()==Table.TRANSCRIPT_SPEAKER_SNAPSHOT){
+   var segments=bySpeaker.get(snapshot.string("id"));
+   if(segments==null)continue;
+   var item=new LinkedHashMap<String,Object>();
+   item.put("id",snapshot.string("id"));item.put("label",snapshot.string("label"));item.put("enterpriseId",snapshot.nullableString("enterprise_id"));
+   item.put("source","HUMAN");item.put("segmentIds",List.copyOf(segments));items.add(Collections.unmodifiableMap(item));
+  }
   items.sort(Comparator.comparing(v->(String)v.get("id")));return Map.of("meetingId",graph.meeting(),"sourceRevisionId",graph.selected(),"observation",observation(graph.root()),"items",List.copyOf(items));
  }
  private Map<String,Object> read(Actor actor,String meeting,String revision,JdbcTranscriptAuthority.SavedPurpose purpose){return read(actor,meeting,revision,purpose,false);}
@@ -282,7 +305,16 @@ public final class JdbcSavedTranscripts {
    boolean owner=actor.enterpriseId().equals(fresh.root().get("owner_id"));
    if(!owner&&fresh.selected()!=null)require(fresh.root().get("transcript_confirmation_id")!=null&&fresh.rows().stream().anyMatch(r->r.table()==Table.TRANSCRIPT_CONFIRMATION&&r.string("id").equals(fresh.root().get("transcript_confirmation_id"))),CAPABILITY_UNAVAILABLE);
    if(purpose==JdbcTranscriptAuthority.SavedPurpose.CURRENT&&fresh.selected()!=null)require(fresh.selectedRow().string("kind").equals("WORKING"),PROVENANCE_UNAVAILABLE);
-   return speakersOnly?speakerProjection(fresh):projection(expected,owner);
+   if(speakersOnly)return speakerProjection(fresh);
+   var result=new LinkedHashMap<String,Object>(projection(expected,owner));
+   if(fresh.selected()!=null&&fresh.rows().stream().anyMatch(row->row.table()==Table.TRANSCRIPT_SPEAKER_SNAPSHOT))
+    result.put("speakerSnapshot",speakerProjection(fresh));
+   if(owner&&purpose==JdbcTranscriptAuthority.SavedPurpose.CURRENT){
+    boolean confirmedBefore=fresh.root().get("transcript_confirmation_id")!=null ||
+     Boolean.TRUE.equals(j.queryForObject("SELECT EXISTS(SELECT 1 FROM transcript_confirmation WHERE meeting_id=?)",Boolean.class,meeting));
+    result.put("previouslyConfirmed",confirmedBefore);
+   }
+   return Collections.unmodifiableMap(result);
   });
  }
  private Prepared prepare(SavedTranscriptGraph graph,TranscriptAcquisitionBudget.Ledger budget){
@@ -361,9 +393,13 @@ public final class JdbcSavedTranscripts {
  private Map<String,Object> detail(SavedTranscriptGraph g,boolean owner){
   var r=g.selectedRow();var out=new LinkedHashMap<String,Object>();out.put("id",g.selected());out.put("kind",r.string("kind"));out.put("revision",r.number("revision"));out.put("revisionToken",Long.toString(r.number("revision")));
   if(owner)for(String name:List.of("parent_id","batch_id","processing_input_id","input_fingerprint","created_by","created_at","producer_task_id"))out.put(switch(name){case "parent_id"->"parentId";case "batch_id"->"batchId";case "processing_input_id"->"processingInputId";case "input_fingerprint"->"inputFingerprint";case "created_by"->"createdBy";case "created_at"->"createdAt";default->"producerTaskId";},r.nullableString(name));
+  var marksBySegment=new HashMap<String,EnumSet<Mark>>();
+  for(var row:g.rows())if(row.table()==Table.TRANSCRIPT_SEGMENT_MARK&&row.string("revision_id").equals(g.selected())){
+   marksBySegment.computeIfAbsent(row.string("segment_id"),ignored->EnumSet.noneOf(Mark.class)).add(Mark.valueOf(row.string("mark")));
+  }
   var segments=new ArrayList<Map<String,Object>>();for(var s:g.segments(g.selected())){
    var item=new LinkedHashMap<String,Object>();item.put("segmentId",s.string("segment_id"));item.put("ordinal",s.number("ordinal"));item.put("body",s.string("body"));item.put("sourceFileId",s.string("source_file_id"));item.put("sourceParagraph",s.nullableNumber("source_paragraph"));item.put("startMs",s.nullableNumber("start_ms"));item.put("endMs",s.nullableNumber("end_ms"));item.put("speakerId",s.nullableString("speaker_id"));
-   item.put("marks",g.rows().stream().filter(m->m.table()==Table.TRANSCRIPT_SEGMENT_MARK&&m.string("revision_id").equals(g.selected())&&m.string("segment_id").equals(s.string("segment_id"))).map(m->Mark.valueOf(m.string("mark"))).sorted().map(Enum::name).toList());segments.add(Collections.unmodifiableMap(item));
+   var marks=marksBySegment.get(s.string("segment_id"));item.put("marks",marks==null?List.of():marks.stream().map(Enum::name).toList());segments.add(Collections.unmodifiableMap(item));
   }out.put("segments",List.copyOf(segments));return Collections.unmodifiableMap(out);
  }
  static Map<String,Object> observation(Map<String,Object> root){var o=new LinkedHashMap<String,Object>();o.put("meetingRevision",root.get("revision"));o.put("revisionToken",root.get("revision").toString());o.put("accessRevision",root.get("access_revision"));o.put("accessRevisionToken",root.get("access_revision").toString());o.put("currentSavedRevisionId",root.get("transcript_revision_id"));o.put("currentConfirmationId",root.get("transcript_confirmation_id"));return Collections.unmodifiableMap(o);}

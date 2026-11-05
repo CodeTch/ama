@@ -45,20 +45,61 @@ export function useTranscriptEditor(api:Api,actor:()=>string|null,meeting:()=>st
    }
   }finally{restoring=false;}
  }
- async function reload(afterSend=false){
-  if(disposed||flight&&!afterSend)return;const who=actor(),id=meeting();if(!who||!eligible()){invalidate();return;}
-  const generation=epoch,turn=++readTurn;controller?.abort();const request=new AbortController();controller=request;
+ async function reload(afterSend=false,signal?:AbortSignal):Promise<TranscriptCurrent|undefined>{
+  if(disposed||flight&&!afterSend||signal?.aborted)return;
+  const who=actor(),id=meeting();
+  if(!who||!eligible()){invalidate();return;}
+  const generation=epoch,turn=++readTurn;
+  controller?.abort();
+  const request=new AbortController();controller=request;
+  const cancel=()=>request.abort();
+  signal?.addEventListener('abort',cancel,{once:true});
   const active=()=>!disposed&&generation===epoch&&turn===readTurn&&actor()===who&&meeting()===id&&eligible()&&!request.signal.aborted;
   loading.value=true;error.value=null;
   try{
-   if(api.authorize){const allowed=await api.authorize(id,request.signal);if(!active())return;authorizedOwner=allowed;if(allowed)restoreDraft(null,who,id);else{const nextEpoch=epoch+1;invalidate();if(epoch===nextEpoch){const publicRequest=new AbortController();controller=publicRequest;loading.value=true;const publicActive=()=>!disposed&&epoch===nextEpoch&&actor()===who&&meeting()===id&&eligible()&&!publicRequest.signal.aborted;try{const readOnly=await api.current(id,publicRequest.signal);if(publicActive())saved.value=readOnly;}catch(cause){if(publicActive())error.value=cause;}finally{if(publicActive()){controller=null;loading.value=false;}}}return;}if(!active())return;}
-   const value=await api.current(id,request.signal);if(!active())return;saved.value=value;authorizedOwner=value.capabilities.canReadHistory;if(!active())return;
-   if(!value.capabilities.canReadHistory){const nextEpoch=epoch+1;invalidate();if(epoch===nextEpoch)saved.value=value;return;}
+   let value:TranscriptCurrent;
+   try{value=await api.current(id,request.signal);}
+   catch(cause){
+    // The producer normally supplies both content and authority. A separate fresh
+    // owner check is needed only to recover a local command during an outage.
+    if(active()&&!denied(cause)&&api.authorize){
+     const owner=await api.authorize(id,request.signal);
+     if(!active())return;
+     if(owner){authorizedOwner=true;restoreDraft(null,who,id);}
+     else{invalidate();error.value=cause;return;}
+    }
+    throw cause;
+   }
+   if(!active())return;
+   if(!value.capabilities.canReadHistory){
+    if(authorizedOwner||draft.value||pending)invalidate();
+    saved.value=value;return value;
+   }
+   authorizedOwner=true;saved.value=value;
    restoreDraft(value,who,id);
    if(!active())return;
-   if(draft.value&&(!pending||['CONFLICT','REJECTED'].includes(command.state.value))){if(['CONFLICT','REJECTED'].includes(command.state.value))pending=null;const d=draft.value;if(!d.dirty.value||d.baseToken.value!==value.observation.revisionToken)d.observe(content(value),value.observation.revisionToken);if(!d.dirty.value)sourceRevisionId=value.saved?.id??null;persist();}
+   if(draft.value&&(!pending||['CONFLICT','REJECTED'].includes(command.state.value))){
+    const rejected=!!pending,d=draft.value;
+    pending=null;
+    if(d.baseToken.value!==value.observation.revisionToken||!d.dirty.value&&sourceRevisionId!==(value.saved?.id??null)){
+     d.observe(content(value),value.observation.revisionToken);
+     if(!d.dirty.value)sourceRevisionId=value.saved?.id??null;
+     persist();
+    }else if(rejected)persist();
+   }
+   return value;
   }catch(cause){if(active()){if(denied(cause))invalidate();error.value=cause;}}
-  finally{if(active()){loading.value=false;controller=null;}}
+  finally{
+   signal?.removeEventListener('abort',cancel);
+   if(controller===request){loading.value=false;controller=null;}
+  }
+ }
+ async function readForCommand(id:string,signal:AbortSignal):Promise<TranscriptCurrent>{
+  if(id!==meeting()||signal.aborted)throw new DOMException('Transcript scope changed','AbortError');
+  const current=await reload(false,signal);
+  if(!current)throw error.value??new DOMException('Transcript read superseded','AbortError');
+  if(!current.capabilities.canReadHistory)throw new ApiError('http',403,'当前权限已变更，请重新读取转写。');
+  return current;
  }
  function mutate(operation:'TRANSCRIPT_SAVE'|'TRANSCRIPT_CONFIRM'|'TRANSCRIPT_RESTORE',selected?:string):Promise<void>{
   if(disposed)return Promise.resolve();if(flight)return flight;const who=actor(),id=meeting(),generation=epoch;
@@ -88,7 +129,11 @@ export function useTranscriptEditor(api:Api,actor:()=>string|null,meeting:()=>st
     pending=null;sourceRevisionId=current.saved.id;d.accept(original.ticket,content(current),current.observation.revisionToken);
    }else{pending=null;d.observe(content(current),current.observation.revisionToken);if(!d.dirty.value)sourceRevisionId=current.saved?.id??null;}
    if(active())persist();
-  }catch(cause){if(active()){if(denied(cause))invalidate();error.value=cause;}}finally{if(active())busy.value=false;}};
+  }catch(cause){if(active()){
+   if(denied(cause))invalidate();
+   else if(command.state.value==='CONFLICT'){await reload(true);if(!active())return;}
+   error.value=cause;
+  }}finally{if(active())busy.value=false;}};
   let finish!:()=>void;const result=new Promise<void>(r=>{finish=r;});flight=result;void result.then(()=>{if(generation===epoch)flight=null;});void run().then(finish,finish);return result;
  }
  function resolve(action:'discard'|'reapply'){
@@ -99,7 +144,7 @@ export function useTranscriptEditor(api:Api,actor:()=>string|null,meeting:()=>st
   pending=null;command.invalidate();d[action]();sourceRevisionId=saved.value.saved.id;persist();
  }
  return {saved:shallowReadonly(saved),draft:shallowReadonly(draft),loading:shallowReadonly(loading),busy:shallowReadonly(busy),error:shallowReadonly(error),storageStatus:shallowReadonly(storageStatus),recoveryBlocked:shallowReadonly(recoveryBlocked),command,
-  pendingOperation:()=>pending?.operation??null,reload:()=>reload(),save:()=>mutate('TRANSCRIPT_SAVE'),confirm:()=>mutate('TRANSCRIPT_CONFIRM'),restore:(id:string)=>mutate('TRANSCRIPT_RESTORE',id),retry:()=>{const operation=command.snapshot.value?.operation;if(operation==='TRANSCRIPT_SAVE'||operation==='TRANSCRIPT_CONFIRM'||operation==='TRANSCRIPT_RESTORE')return mutate(operation);return Promise.resolve();},
+  readForCommand,pendingOperation:()=>pending?.operation??null,reload:()=>reload(),save:()=>draft.value?.dirty.value||pending?mutate('TRANSCRIPT_SAVE'):Promise.resolve(),confirm:()=>mutate('TRANSCRIPT_CONFIRM'),restore:(id:string)=>mutate('TRANSCRIPT_RESTORE',id),retry:()=>{const operation=command.snapshot.value?.operation;if(operation==='TRANSCRIPT_SAVE'||operation==='TRANSCRIPT_CONFIRM'||operation==='TRANSCRIPT_RESTORE')return mutate(operation);return Promise.resolve();},
   edit(value:TranscriptEdits){if(!draft.value||!canEdit()||!edits(value)||value.length!==draft.value.value.value.length||value.some((x,i)=>x.segmentId!==draft.value!.value.value[i]?.segmentId))throw new Error('只能编辑当前完整段落。');draft.value.edit(value);persist();},
   deny(cause:unknown){invalidate();error.value=cause;},discard:()=>resolve('discard'),reapply:()=>resolve('reapply'),logout(){retained=null;if(journal&&!journal.clear())recoveryBlocked.value=true;invalidate();retained=null;},dispose(){disposed=true;stop();invalidate();}
  };

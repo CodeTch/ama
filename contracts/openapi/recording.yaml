@@ -2529,7 +2529,8 @@
           "ENHANCING",
           "SUCCEEDED",
           "FAILED",
-          "STALE"
+          "STALE",
+          "CANCELLED"
         ]
       },
       "materialSnapshotId": {
@@ -2583,9 +2584,47 @@
                 "FAILED",
                 "UNSUPPORTED"
               ]
+            },
+            "source": {
+              "enum": [
+                "LOCAL",
+                "KNOWLEDGE"
+              ]
+            },
+            "sourceLibraryId": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 128
+            },
+            "sourceVersion": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "error": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 128
+            },
+            "sourceLibraryName": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 1024
             }
           }
         }
+      },
+      "runId": {
+        "type": "string",
+        "format": "uuid"
       }
     }
   },

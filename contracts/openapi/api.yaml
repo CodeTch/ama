@@ -69,6 +69,18 @@ paths:
     $ref: './publications.yaml#/configuration'
   /api/v1/recordings/{sessionId}/processing:
     $ref: './recording.yaml#/processing'
+  /api/v1/recordings/{sessionId}/processing/cancel:
+    $ref: './material-workflow.yaml#/recordingCancel'
+  /api/v1/recordings/{sessionId}/processing/restart:
+    $ref: './material-workflow.yaml#/recordingRestart'
+  /api/v1/meetings/{meeting}/processing-tasks/{task}/enhancement/cancel:
+    $ref: './material-workflow.yaml#/cancelImportEnhancement'
+  /api/v1/meetings/{meeting}/processing-tasks/{task}/enhancement/retry:
+    $ref: './material-workflow.yaml#/retryImportEnhancement'
+  /api/v1/meetings/{meeting}/material-adjustments/latest:
+    $ref: './material-workflow.yaml#/readLatestMaterialAdjustment'
+  /api/v1/meetings/{meeting}/material-adjustments/{id}/retry:
+    $ref: './material-workflow.yaml#/retryMaterialAdjustment'
   /api/v1/recordings/{sessionId}/processing/retry:
     $ref: './recording.yaml#/processingRetry'
   /api/v1/recordings/{sessionId}/subtitles/retry:

@@ -18,12 +18,16 @@ export function validCorrectionCommand(v:unknown,actor:string,meeting:string):v 
 }
 const invalid=():never=>{throw new ApiError('response',200,'纠错结果暂无法核实，请保留原请求。');};
 function freeze<T>(v:T):T{if(v!==null&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
+export function isSpeakerSnapshot(value:unknown,meeting:string,source:string):value is SpeechSpeakers {
+ if(!responseMatches('transcripts.yaml#/SpeechSpeakers',value))return false;
+ const result=value as SpeechSpeakers,segments=result.items.flatMap(item=>item.segmentIds);
+ return result.meetingId===meeting&&result.sourceRevisionId===source&&new Set(result.items.map(item=>item.id)).size===result.items.length&&new Set(segments).size===segments.length;
+}
 export function createTranscriptCorrectionsApi(client:ReturnType<typeof createBusinessClient>,actor:()=>string|null){return{
  async speakers(meeting:string,source:string,signal:AbortSignal):Promise<SpeechSpeakers>{
   if(!uuid(meeting)||!uuid(source))throw new TypeError('Invalid speaker scope');const who=actor();if(!who)throw new DOMException('Speaker actor unavailable','AbortError');
   const value=await client.json<unknown>(`/api/v1/meetings/${meeting}/transcript/speakers?${new URLSearchParams({sourceRevisionId:source})}`,{signal,expectedStatus:200,maxResponseBytes:4*1024*1024});
-  if(signal.aborted||who!==actor())throw new DOMException('Speaker scope changed','AbortError');if(!responseMatches('transcripts.yaml#/SpeechSpeakers',value))return invalid();const result=value as SpeechSpeakers;
-  const segments=result.items.flatMap(x=>x.segmentIds);if(result.meetingId!==meeting||result.sourceRevisionId!==source||new Set(result.items.map(x=>x.id)).size!==result.items.length||new Set(segments).size!==segments.length)return invalid();return freeze(result);
+  if(signal.aborted||who!==actor())throw new DOMException('Speaker scope changed','AbortError');if(!isSpeakerSnapshot(value,meeting,source))return invalid();return freeze(value);
  },
  async read(meeting:string,source:string,signal:AbortSignal):Promise<SpeechCorrections>{
   if(!uuid(meeting)||!uuid(source))throw new TypeError('Invalid correction scope');const who=actor();if(!who)throw new DOMException('Correction actor unavailable','AbortError');

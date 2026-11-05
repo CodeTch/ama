@@ -30,6 +30,18 @@ public final class JdbcWorkspaceOverview {
   var roots=metadata("SELECT "+columns+" FROM meeting WHERE id=?",1,512,budget,meeting);if(roots.size()!=1||status.infoId()==null)throw unavailable();var root=roots.getFirst();for(String key:columns.split(","))nullableId(root.get(key));
   String transcript=(String)root.get("transcript_revision_id"),confirmation=(String)root.get("transcript_confirmation_id"),body=(String)root.get("minutes_revision_id"),set=(String)root.get("element_set_id");
   var taskPage=status.owner()?scan.discover(meeting,20,null,budget):List.<WorkspaceTaskScan.Metadata>of();var allTasks=new TreeMap<String,WorkspaceTaskScan.Metadata>();for(var row:taskPage)allTasks.put(row.id(),row);
+  WorkspaceTaskScan.Metadata origin=null;
+  if(status.owner()){
+   // Recording imports also create a RAW task. Prefer their sealed archive as the processing entry.
+   for(String kind:List.of("RECORDING_ARCHIVE_V1","TRANSCRIPT_IMPORT_V1")){
+    origin=taskPage.stream().filter(row->kind.equals(row.spec().type())).findFirst().orElse(null);
+    if(origin==null&&taskPage.size()>20){
+     var ids=metadata("SELECT id FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? AND task_type=? ORDER BY created_at DESC,id DESC LIMIT 1",1,36,budget,meeting,kind);
+     if(!ids.isEmpty()){origin=scan.captureExact(meeting,id(ids.getFirst().get("id")),budget);allTasks.put(origin.id(),origin);}
+    }
+    if(origin!=null)break;
+   }
+  }
   var candidates=status.owner()?candidateRows(meeting,budget):List.<Map<String,Object>>of();
   for(var candidate:candidates){String task=id(candidate.get("task_id"));var taskRow=allTasks.get(task);if(taskRow==null){taskRow=scan.captureExact(meeting,task,budget);allTasks.put(task,taskRow);}if(!taskRow.spec().type().equals("MINUTES_GENERATE_V1")||!Objects.equals(taskRow.spec().input().id(),candidate.get("input_id"))||!Objects.equals(taskRow.spec().inputFingerprint(),candidate.get("input_fingerprint")))throw unavailable();}
   var parents=new WorkspaceTaskRelations(jdbc,budget,status.owner());parents.capture(List.copyOf(allTasks.values()));
@@ -55,13 +67,22 @@ public final class JdbcWorkspaceOverview {
   budget.reserve(1,24,2048,2048,2048,4,true);var result=new LinkedHashMap<String,Object>();result.put("meetingId",meeting);result.put("revisionToken",status.revisionToken());result.put("accessRevisionToken",status.accessRevisionToken());result.put("stage",status.stage());result.put("relation",status.owner()?"OWNER":"MEMBER");result.put("navigationState",!status.owner()?"MEMBER_READ_ONLY":status.published()?"PUBLISHED_READ_ONLY":"CHECK_PRODUCER");result.put("contentEligibility","RECHECK_REQUIRED");result.put("lifecycle",status.lifecycle());result.put("governanceState",status.governance());
   result.put("saved",new JdbcWorkspaceNavigationReader.SavedReferences(status.infoId(),status.rosterId(),transcript,confirmation,body,set));
   if(status.owner()){
+   result.put("temporaryTitle",MeetingDisplayTitle.temporary(jdbc,meeting));
+   if(origin!=null){
+    result.put("processingSource",taskItem(origin,parents));
+    if("TRANSCRIPT_IMPORT_V1".equals(origin.spec().type())){
+     var stage=metadata("SELECT stage,snapshot_id FROM offline_material_processing WHERE task_id=? AND meeting_id=?",1,20,budget,origin.id(),meeting);
+     if(!stage.isEmpty()){result.put("processingMaterialStage",stage.getFirst().get("stage"));result.put("processingMaterialsChanged",JdbcMaterials.awaitingAdoption(jdbc,meeting,(String)stage.getFirst().get("snapshot_id"),origin.spec().businessVersion()));}
+    }
+   }
    var page=page(actor,meeting,taskPage,budget,parents);var items=new ArrayList<Candidate>();for(var row:candidates.subList(0,Math.min(20,candidates.size()))){budget.reserve(1,5,256,256,256,4,true);items.add(new Candidate(id(row.get("id")),id(row.get("input_id")),id(row.get("task_id")),"PENDING"));}
    result.put("privateSectionsState","AVAILABLE");result.put("privateSections",new PrivateSections(processing,generation,(String)root.get("template_revision_id"),(String)root.get("exclusion_revision_id"),(String)root.get("final_confirmation_id"),publicationId,publicationState,page,new CandidatePage(items,candidates.size()>20,"/api/v1/meetings/"+meeting+"/minutes/candidates"),"PERSISTED_REFERENCES_RECHECK_PRODUCER"));
   }
   budget.check();return Collections.unmodifiableMap(result);
  }
+ private JdbcWorkspaceTasks.Item taskItem(WorkspaceTaskScan.Metadata row,WorkspaceTaskRelations parents){return new JdbcWorkspaceTasks.Item(row.id(),row.spec().type(),row.state(),Long.toString(row.attempt()),Long.toString(row.spec().businessVersion()),row.spec().input().id(),parents.detailPath(row));}
  private JdbcWorkspaceTasks.Page page(Actor actor,String meeting,List<WorkspaceTaskScan.Metadata> rows,WorkspaceReadBudget budget,WorkspaceTaskRelations parents){
-  var items=new ArrayList<JdbcWorkspaceTasks.Item>();for(var row:rows.subList(0,Math.min(20,rows.size()))){budget.reserve(1,8,1024,1024,1024,4,true);String path=parents.detailPath(row);items.add(new JdbcWorkspaceTasks.Item(row.id(),row.spec().type(),row.state(),Long.toString(row.attempt()),Long.toString(row.spec().businessVersion()),row.spec().input().id(),path));}
+  var items=new ArrayList<JdbcWorkspaceTasks.Item>();for(var row:rows.subList(0,Math.min(20,rows.size()))){budget.reserve(1,8,1024,1024,1024,4,true);items.add(taskItem(row,parents));}
   budget.reserve(1,2,2048,2048,2048,4,true);boolean more=rows.size()>20;return new JdbcWorkspaceTasks.Page(items,more?cursors.encode(actor.enterpriseId(),"tasks:"+meeting+":ALL",rows.get(19).position().encode()):null,more,"PERSISTED_RELATION");
  }
  private List<Map<String,Object>> candidateRows(String meeting,WorkspaceReadBudget budget){return metadata("SELECT id,meeting_id,input_id,task_id,minutes_revision_id,element_set_id,state,input_fingerprint FROM generation_candidate FORCE INDEX (candidate_pending) WHERE meeting_id=? AND state='PENDING' ORDER BY created_at DESC,id DESC LIMIT 21",21,512,budget,meeting);}

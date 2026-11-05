@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController class ProcessingController {
     private final JdbcProcessingIntake intake;
     private final ObjectMapper json=new ObjectMapper(JsonFactory.builder().enable(StreamReadFeature.STRICT_DUPLICATE_DETECTION).streamReadConstraints(StreamReadConstraints.builder().maxNestingDepth(8).maxStringLength(256).maxNumberLength(19).build()).build()).enable(DeserializationFeature.FAIL_ON_TRAILING_TOKENS);
-    ProcessingController(JdbcProcessingIntake intake) {
+    private final org.springframework.beans.factory.ObjectProvider<ama.transcript.OfflineMaterialProcessing> enhancement;
+    ProcessingController(JdbcProcessingIntake intake,org.springframework.beans.factory.ObjectProvider<ama.transcript.OfflineMaterialProcessing> enhancement) {
+        this.enhancement=enhancement;
         this.intake=intake;
     }
     @PostMapping("/api/v1/meetings/{id}/transcript-imports") ResponseEntity<ImportAccepted> accept(@PathVariable String id,HttpServletRequest request)throws IOException {
@@ -39,7 +41,7 @@ import org.springframework.web.bind.annotation.*;
         }
         if(body==null||!body.isObject())throw new IllegalArgumentException("Object required");
         body.fieldNames().forEachRemaining(field-> {
-            if(!Set.of("expectedRevision","expectedRevisionToken","orderedFileIds").contains(field))throw new IllegalArgumentException("Unknown field");
+            if(!Set.of("expectedRevision","expectedRevisionToken","orderedFileIds","enhance").contains(field))throw new IllegalArgumentException("Unknown field");
         });
         var files=body.get("orderedFileIds");
         if(files==null||!files.isArray())throw new IllegalArgumentException("Ordered files required");
@@ -51,7 +53,9 @@ import org.springframework.web.bind.annotation.*;
         }
         var keys=Collections.list(request.getHeaders("Idempotency-Key"));
         if(keys.size()!=1)throw new IllegalArgumentException("Exactly one idempotency key required");
-        var accepted=intake.accept(((ResolvedSession)request.getAttribute(SessionSecurityFilter.SESSION)).actor(),id,keys.getFirst(),new ImportRequest(HttpRevisionTokens.expected(body),ids),UUID.randomUUID().toString());
+        if(body.has("enhance")&&!body.get("enhance").isBoolean())throw new IllegalArgumentException("Boolean enhance required");
+        if(body.path("enhance").asBoolean(false)&&enhancement.getIfAvailable()==null)throw new Failure(503,"ENHANCEMENT_UNAVAILABLE");
+        var accepted=intake.accept(((ResolvedSession)request.getAttribute(SessionSecurityFilter.SESSION)).actor(),id,keys.getFirst(),new ImportRequest(HttpRevisionTokens.expected(body),ids),UUID.randomUUID().toString(),body.path("enhance").asBoolean(false));
         return ResponseEntity.accepted().location(URI.create("/api/v1/meetings/"+id+"/processing-inputs/"+accepted.inputId())).header("Cache-Control","private, no-store").body(accepted);
     }
 }

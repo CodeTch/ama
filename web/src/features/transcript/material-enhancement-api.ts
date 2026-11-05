@@ -1,15 +1,15 @@
 import type {createBusinessClient} from '../../shared/api/business-client';
 import {ApiError} from '../../shared/api/client';import {revisionToken} from '../../shared/api/intent-contract';import {responseMatches} from '../../shared/api/response-schema';import {materialUuid as uuid} from '../../shared/api/materials';
 export type EnhancementInput={expectedRevisionToken:string;sourceRevisionId:string;materialSnapshotId:string|null};
-export type MaterialEnhancement=EnhancementInput&{candidateId:string;profile:'ama-material-enhancement.v1';state:'PENDING'|'READY'|'STALE'|'APPLYING'|'APPLIED';changes:{segmentId:string;before:string;after:string}[];canApply:boolean};
+export type MaterialEnhancement=EnhancementInput&{candidateId:string;profile:'ama-material-enhancement.v1';state:'PENDING'|'READY'|'STALE'|'APPLYING'|'APPLIED';changes:{segmentId:string;before:string;after:string}[];materialRefresh?:true;canApply:boolean};
 export function validEnhancementInput(v:unknown):v is EnhancementInput{if(!v||typeof v!=='object'||Array.isArray(v))return false;const p=v as EnhancementInput;return Object.keys(p).sort().join(',')==='expectedRevisionToken,materialSnapshotId,sourceRevisionId'&&revisionToken(p.expectedRevisionToken)&&uuid(p.sourceRevisionId)&&(p.materialSnapshotId===null||uuid(p.materialSnapshotId));}
 const invalid=():never=>{throw new ApiError('response',200,'材料增强结果无法核实，请恢复原请求。');};
 function candidate(value:unknown,expected?:EnhancementInput):MaterialEnhancement{
  if(!value||typeof value!=='object'||Array.isArray(value))return invalid();const p=value as MaterialEnhancement;
- const base='candidateId,expectedRevisionToken,materialSnapshotId,profile,sourceRevisionId,state',ready='canApply,candidateId,changes,expectedRevisionToken,materialSnapshotId,profile,sourceRevisionId,state';
+ const base='candidateId,expectedRevisionToken,materialSnapshotId,profile,sourceRevisionId,state',ready='canApply,candidateId,changes,expectedRevisionToken,'+(p.materialRefresh===true?'materialRefresh,':'')+'materialSnapshotId,profile,sourceRevisionId,state';
  if(!uuid(p.candidateId)||!validEnhancementInput({expectedRevisionToken:p.expectedRevisionToken,sourceRevisionId:p.sourceRevisionId,materialSnapshotId:p.materialSnapshotId})||p.profile!=='ama-material-enhancement.v1'||!['PENDING','READY','STALE','APPLYING','APPLIED'].includes(p.state)||Object.keys(p).sort().join(',')!==(p.state==='READY'?ready:base))return invalid();
  if(expected&&(p.expectedRevisionToken!==expected.expectedRevisionToken||p.sourceRevisionId!==expected.sourceRevisionId||p.materialSnapshotId!==expected.materialSnapshotId))return invalid();
- if(p.state==='READY'&&(!Array.isArray(p.changes)||p.changes.length>4096||typeof p.canApply!=='boolean'||p.canApply!==(p.changes.length>0)||p.changes.some(x=>!x||Object.keys(x).sort().join(',')!=='after,before,segmentId'||!uuid(x.segmentId)||typeof x.before!=='string'||typeof x.after!=='string'||x.before.length>65536||x.after.length>65536||x.before===x.after)||new Set(p.changes.map(x=>x.segmentId)).size!==p.changes.length))return invalid();
+ if(p.state==='READY'&&(!Array.isArray(p.changes)||p.changes.length>4096||typeof p.canApply!=='boolean'||p.canApply!==(p.changes.length>0||p.materialRefresh===true)||p.changes.some(x=>!x||Object.keys(x).sort().join(',')!=='after,before,segmentId'||!uuid(x.segmentId)||typeof x.before!=='string'||typeof x.after!=='string'||x.before.length>65536||x.after.length>65536||x.before===x.after)||new Set(p.changes.map(x=>x.segmentId)).size!==p.changes.length))return invalid();
  return {...p,changes:p.changes??[],canApply:p.canApply??false};
 }
 export function createMaterialEnhancementApi(client:ReturnType<typeof createBusinessClient>,actor:()=>string|null){

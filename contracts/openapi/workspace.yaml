@@ -329,6 +329,10 @@ WorkspaceNavigation:
   additionalProperties: false
   required: [meetingId, revisionToken, accessRevisionToken, stage, relation, navigationState, contentEligibility, saved]
   properties:
+    processingMaterialsChanged: {type: boolean}
+    processingMaterialStage: {type: string, enum: [TRANSCRIBING, ENHANCING, ADOPTING, SUCCEEDED, FAILED, STALE, CANCELLED]}
+    temporaryTitle: {type: [string, 'null'], maxLength: 256}
+    processingSource: {$ref: '#/WorkspaceTaskItem'}
     meetingId: {type: string, format: uuid}
     revisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}
     accessRevisionToken: {$ref: './meetings.yaml#/ExpectedRevisionToken'}

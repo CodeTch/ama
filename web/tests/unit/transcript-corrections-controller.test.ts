@@ -22,3 +22,12 @@ test('permission denial immediately hides private candidates but retains the unr
 test('late suggestions never reappear after an identity change and dirty drafts cannot create new decisions',async()=>{
  const f=fixture(),tool=useSpeechCorrections(f.api as any,f.options);tool.synchronize();let finish!:(v:any)=>void;f.api.read=async()=>new Promise(resolve=>{finish=resolve;});const loading=tool.load();f.setActor('other');tool.synchronize();finish({items:[{id:candidate}]});await loading;assert.equal(tool.view.value,null);f.setAllowed(false);await assert.rejects(tool.propose());assert.equal(f.seen.length,0);
 });
+
+test('rechecking the same version keeps the previous review, but a later permission denial outranks a transient speaker failure',async()=>{
+ const f=fixture(),tool=useSpeechCorrections(f.api as any,f.options);tool.synchronize();await tool.load();
+ const previous=tool.view.value;let deny!:(e:Error)=>void;
+ f.api.speakers=async()=>{throw Error('temporary');};f.api.read=()=>new Promise((_resolve,reject)=>{deny=reject;});
+ const refresh=tool.load();assert.equal(tool.view.value,previous);assert.equal(tool.busy.value,false);
+ await Promise.resolve();deny(new ApiError('http',403,'denied'));
+ await assert.rejects(refresh,/denied/);assert.equal(tool.view.value,null);assert.equal(tool.speakers.value,null);tool.dispose();
+});

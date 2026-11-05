@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MaterialSnapshotFenceTest {
     @Test
@@ -19,7 +20,7 @@ class MaterialSnapshotFenceTest {
             @Override
             public <T> java.util.List<T> queryForList(String sql, Class<T> type, Object... args) {
                 // This fixture exercises an ordinary material change without an active recording.
-                assertEquals("SELECT session_id FROM recording_processing WHERE meeting_id=? AND state IN ('WAITING_ARCHIVE','COPYING','TRANSCRIBING','ENHANCING','FAILED') LIMIT 2 FOR UPDATE",sql);
+                assertTrue(java.util.Set.of("SELECT session_id FROM recording_processing WHERE meeting_id=? AND state IN ('WAITING_ARCHIVE','COPYING','TRANSCRIBING','ENHANCING','FAILED') LIMIT 2 FOR UPDATE","SELECT task_id FROM offline_material_processing WHERE meeting_id=? AND stage IN ('TRANSCRIBING','ENHANCING','ADOPTING') LIMIT 2 FOR UPDATE").contains(sql));
                 assertEquals(String.class,type);
                 assertEquals(java.util.List.of(meeting),java.util.Arrays.asList(args));
                 return java.util.List.of();

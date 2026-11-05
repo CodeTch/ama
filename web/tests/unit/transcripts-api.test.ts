@@ -58,3 +58,15 @@ test('transcript reads retain server source classification for timed subtitles',
   assert.equal((result.sources[0] as {kind?:string}).kind,'SUBTITLE');
  }finally{globalThis.fetch=old;}
 });
+
+test('embedded speaker names must match the selected revision, access scope and every assigned segment',async()=>{
+ const old=fetch,api=createTranscriptsApi(createBusinessClient('https://ama.test',()=>session,()=>{}),()=> 'owner');
+ const voice='00000000-0000-4000-8000-000000000005';
+ const speakerSnapshot={meetingId:id,sourceRevisionId:revision,observation,items:[{id:voice,label:'李工',enterpriseId:null,source:'HUMAN',segmentIds:[segment]}]};
+ const data={...current,saved:{...current.saved,segments:current.saved.segments.map(s=>({...s,speakerId:voice}))},speakerSnapshot};
+ try{
+  globalThis.fetch=async()=>Response.json(data);assert.equal((await api.current(id,new AbortController().signal)).speakerSnapshot?.items[0]?.label,'李工');
+  globalThis.fetch=async()=>Response.json({...data,speakerSnapshot:{...speakerSnapshot,observation:{...observation,accessRevisionToken:'1'}}});await assert.rejects(api.current(id,new AbortController().signal));
+  globalThis.fetch=async()=>Response.json({...data,speakerSnapshot:{...speakerSnapshot,items:[]}});await assert.rejects(api.current(id,new AbortController().signal));
+ }finally{globalThis.fetch=old;}
+});

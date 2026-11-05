@@ -134,6 +134,7 @@
             "type": "string",
             "const": "READY"
           },
+          "materialRefresh": {"type":"boolean","const":true},
           "canApply": {
             "type": "boolean"
           },

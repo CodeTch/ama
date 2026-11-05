@@ -67,6 +67,51 @@ class RecordingProcessingIT {
    }
   }
  }
+ @Test void cancellationIsScopedToTheObservedRunAndRestartPreservesItsHistory()throws Exception{
+  var support=new RecordingTranscriptSourceIT();support.root=root;
+  try(var f=support.new Fixture();var process=new JdbcRecordingProcessing(f.components.authority(),f.copies,null,null,null)){
+   f.archive();String session=f.session.sessionId(),old=id(),next=id();
+   long revision=new org.springframework.jdbc.core.JdbcTemplate(source).queryForObject("SELECT revision FROM meeting WHERE id=?",Long.class,f.meeting);
+   process.accept(f.actor,session,old,revision,null);
+   assertEquals("CANCELLED",process.changeRun(f.actor,session,old,"cancel",id(),0).get("state"));
+   assertEquals("CANCELLED",process.changeRun(f.actor,session,old,"cancel",id(),0).get("state"));
+   assertThrows(Failure.class,()->process.changeRun(f.actor,session,old,"restart",next,revision+1));
+   assertEquals(next,process.changeRun(f.actor,session,old,"restart",next,revision).get("runId"));
+   assertEquals(next,process.changeRun(f.actor,session,old,"restart",next,revision).get("runId"));
+   assertThrows(Failure.class,()->process.changeRun(f.actor,session,old,"cancel",id(),0));
+   assertEquals(1,new org.springframework.jdbc.core.JdbcTemplate(source).queryForObject("SELECT COUNT(*) FROM recording_processing_history WHERE run_id=?",Integer.class,old));
+  }
+ }
+ @Test void statusDisplaysOnlyLockedMaterialRevisionsAfterDeferredRemovalAndBatchAddition()throws Exception{
+  var support=new RecordingTranscriptSourceIT();support.root=root;
+  try(var f=support.new Fixture();var process=new JdbcRecordingProcessing(f.components.authority(),f.copies,null,null,null)){
+   f.archive();
+   var materials=new JdbcMaterials(f.components.authority(),f.uploads,null,new ama.material.MaterialParser.Budget(1048576,1048576,100));
+   var original=materials.add(f.actor,f.meeting,id(),materialFile(f,"初始议程.txt"),id());
+   var before=materials.list(f.actor,f.meeting);long revision=Long.parseLong(before.meetingRevision());
+   process.accept(f.actor,f.session.sessionId(),id(),revision,before.materialSnapshotId());
+   materials.remove(f.actor,f.meeting,original.id());
+   var selection=List.of(materialFile(f,"追加材料.txt"));String key=id();
+   var pending=materials.addBatch(f.actor,f.meeting,key,revision,selection,id());
+   assertEquals(pending,materials.addBatch(f.actor,f.meeting,key,revision,selection,id()));
+   assertEquals(before.meetingRevision(),pending.meetingRevision());
+   assertNotEquals(before.materialSnapshotId(),pending.materialSnapshotId());
+   assertEquals(pending.items(),materials.list(f.actor,f.meeting).items());
+   var status=process.read(f.actor,f.session.sessionId());
+   assertEquals(before.materialSnapshotId(),status.get("materialSnapshotId"));assertEquals(true,status.get("materialsChanged"));
+   var rows=(List<?>)status.get("materialFiles");assertEquals(1,rows.size());
+   var row=(Map<?,?>)rows.getFirst();
+   assertEquals(original.materialRevisionId(),row.get("materialRevisionId"));assertEquals("初始议程.txt",row.get("name"));
+   assertEquals("LOCAL",row.get("source"));assertEquals("READY",row.get("state"));assertNull(row.get("sourceVersion"));
+  }
+ }
+ private JdbcMaterials.Selection materialFile(RecordingTranscriptSourceIT.Fixture f,String name)throws Exception{
+  byte[] body=name.getBytes(java.nio.charset.StandardCharsets.UTF_8);String hash=sha(body);
+  var upload=f.uploads.begin(f.actor,f.meeting,id(),new ama.contract.FileContracts.Begin("MATERIAL_SOURCE",name,body.length,hash),id());
+  f.uploads.part(f.actor,upload.uploadId(),1,new java.io.ByteArrayInputStream(body),body.length,hash,id());
+  var complete=f.uploads.complete(f.actor,upload.uploadId(),new ama.contract.FileContracts.Completion(List.of(new ama.contract.FileContracts.ClientPart(1,hash)),hash),id());
+  return new JdbcMaterials.Selection(complete.fileId(),null,null,null);
+ }
  @Test void materialEditsDuringProcessingWaitWithoutChangingTheRunningTaskOrItsSourceSnapshot()throws Exception{
   var support=new RecordingTranscriptSourceIT();support.root=root;
   try(var f=support.new Fixture();var model=new HttpMaterialEnhancement(URI.create("http://127.0.0.1:8792"))){

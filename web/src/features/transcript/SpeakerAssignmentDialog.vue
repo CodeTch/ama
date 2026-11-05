@@ -18,15 +18,20 @@ const emit = defineEmits<{
   split: [source: string, segments: string[]];
   seek: [fileId: string, ms: number];
 }>();
-const source = ref(props.groups[0]?.id ?? '');
-const target = ref(source.value);
+const sources = computed(() => props.mode === 'merge' ? props.groups : props.groups.filter(group => group.segmentIds.length > 1));
+const source = ref(sources.value[0]?.id ?? '');
+const targets = computed(() => props.groups.filter(group => group.id !== source.value));
+const target = ref(targets.value[0]?.id ?? '');
 const selected = ref<string[]>([]);
 const validation = ref('');
 const sourceSegments = computed(() => {
   const ids = new Set(props.groups.find(group => group.id === source.value)?.segmentIds);
   return props.segments.filter(segment => ids.has(segment.segmentId));
 });
-watch(source, () => { selected.value = []; validation.value = ''; });
+watch(source, () => {
+  selected.value = []; validation.value = '';
+  if (!targets.value.some(group => group.id === target.value)) target.value = targets.value[0]?.id ?? '';
+});
 function clock(ms: number | null) {
   if (ms === null) return '--:--';
   const seconds = Math.floor(ms / 1000);
@@ -36,10 +41,11 @@ function submit() {
   if (props.busy) return;
   validation.value = '';
   if (props.mode === 'merge') {
-    if (source.value === target.value) { validation.value = '来源与目标不能相同'; return; }
+    if (!target.value || source.value === target.value) { validation.value = '来源与目标不能相同'; return; }
     emit('merge', source.value, target.value);
   } else {
     if (!selected.value.length) { validation.value = '请选择至少一个片段'; return; }
+    if (selected.value.length === sourceSegments.value.length) { validation.value = '请为原说话人保留至少一个片段'; return; }
     emit('split', source.value, [...selected.value]);
   }
 }
@@ -51,17 +57,18 @@ function submit() {
       : '选择要拆分出去的说话片段，将生成新的匿名说话人。' }}</p>
     <label class="field">{{ mode === 'merge' ? '来源说话人' : '源说话人' }}
       <select v-model="source" class="select" :disabled="busy">
-        <option v-for="group in groups" :key="group.id" :value="group.id">
+        <option v-for="group in sources" :key="group.id" :value="group.id">
           {{ mode === 'merge' ? group.label + '（' + group.segmentIds.length + '段）' : group.label }}
         </option>
       </select>
     </label>
     <label v-if="mode === 'merge'" class="field">目标说话人
       <select v-model="target" class="select" :disabled="busy">
-        <option v-for="group in groups" :key="group.id" :value="group.id">{{ group.label }}</option>
+        <option v-for="group in targets" :key="group.id" :value="group.id">{{ group.label }}</option>
       </select>
     </label>
-    <fieldset v-else class="field segments" :disabled="busy">
+    <p v-if="mode === 'merge' && target" class="small muted">将移动 {{ sourceSegments.length }} 段发言，保留「{{ targets.find(group => group.id === target)?.label }}」的身份。</p>
+    <fieldset v-else-if="mode === 'split'" class="field segments" :disabled="busy">
       <legend>选择片段</legend>
       <div class="choices">
         <div v-for="segment in sourceSegments" :key="segment.segmentId" class="radio-row choice">

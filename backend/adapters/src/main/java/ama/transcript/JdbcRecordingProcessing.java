@@ -45,10 +45,35 @@ public final class JdbcRecordingProcessing implements AutoCloseable {
     }
     public Map<String,Object> read(Actor actor,String session){
         ama.contract.MinutesContracts.uuid(session);String meeting=jdbc.queryForObject("SELECT meeting_id FROM recording_session WHERE session_id=?",String.class,session);prepare(actor,meeting);
-        return authority.transactionRunner().required(()->{gate(actor,meeting);var value=row(session);var result=new LinkedHashMap<String,Object>();result.put("sessionId",session);result.put("meetingId",meeting);result.put("state",value==null?"NOT_REQUESTED":value.get("state"));if(value!=null){result.put("materialSnapshotId",value.get("material_snapshot_id"));result.put("taskId",value.get("task_id"));result.put("errorCode",value.get("error_code"));
-                result.put("materialsChanged",Boolean.TRUE.equals(value.get("pending_materials_changed"))||value.get("pending_materials_changed") instanceof Number changed&&changed.intValue()==1||!Objects.equals(value.get("material_snapshot_id"),root(meeting).get("material_snapshot_id")));
-                result.put("materialFiles",jdbc.queryForList("SELECT r.id materialRevisionId,u.display_name name,r.parse_state state FROM material_snapshot_item s JOIN material_revision r ON r.id=s.material_revision_id JOIN material_reference m ON m.id=r.reference_id JOIN upload_session u ON u.completed_file_id=r.content_file_id AND u.state='COMPLETED' WHERE s.snapshot_id=? AND m.meeting_id=? ORDER BY s.ordinal LIMIT 64",value.get("material_snapshot_id"),meeting));
+        return authority.transactionRunner().required(()->{gate(actor,meeting);var value=row(session);var result=new LinkedHashMap<String,Object>();result.put("sessionId",session);result.put("meetingId",meeting);result.put("state",value==null?"NOT_REQUESTED":value.get("state"));if(value!=null){result.put("runId",value.get("request_key"));if("USER_CANCELLED".equals(value.get("error_code")))result.put("state","CANCELLED");result.put("materialSnapshotId",value.get("material_snapshot_id"));result.put("taskId",value.get("task_id"));result.put("errorCode",value.get("error_code"));
+                result.put("materialsChanged",Boolean.TRUE.equals(value.get("pending_materials_changed"))||value.get("pending_materials_changed") instanceof Number changed&&changed.intValue()==1||JdbcMaterials.awaitingAdoption(jdbc,meeting,(String)value.get("material_snapshot_id"),number(value,"expected_revision")));
+                String snapshot=(String)value.get("material_snapshot_id");
+                result.put("materialFiles",JdbcMaterials.frozenFiles(jdbc,snapshot,meeting));
             }return result;});
+    }
+    public Map<String,Object> changeRun(Actor actor,String session,String run,String action,String key,long revision){
+        ama.contract.MinutesContracts.uuid(run);ama.contract.MinutesContracts.uuid(key);
+        var current=read(actor,session);String meeting=(String)current.get("meetingId");
+        authority.transactionRunner().required(()->{
+            gate(actor,meeting);var job=row(session);if(job==null)throw conflict("RECORDING_PROCESS_NOT_REQUESTED");
+            if(action.equals("restart")&&key.equals(job.get("request_key"))){
+                if(number(job,"expected_revision")!=revision||jdbc.queryForObject("SELECT COUNT(*) FROM recording_processing_history WHERE run_id=? AND session_id=? AND successor_id=?",Integer.class,run,session,key)!=1)throw conflict("IDEMPOTENCY_CONFLICT");
+                return null;
+            }
+            if(!run.equals(job.get("request_key")))throw conflict("PROCESSING_STAGE_CHANGED");
+            if(action.equals("cancel")){
+                if("USER_CANCELLED".equals(job.get("error_code")))return null;
+                if(!Set.of("WAITING_ARCHIVE","COPYING","TRANSCRIBING","ENHANCING","FAILED").contains(job.get("state")))throw conflict("PROCESSING_STAGE_CHANGED");
+                if(jdbc.update("UPDATE recording_processing SET state='STALE',error_code='USER_CANCELLED',lease_owner=NULL,lease_until=NULL WHERE session_id=? AND request_key=? AND adoption_started=0 AND (task_id IS NOT NULL OR lease_owner IS NULL OR lease_until<UTC_TIMESTAMP(6))",session,run)!=1)throw conflict("PROCESSING_STAGE_BUSY");
+                applyPending(meeting,session,job);
+            }else{
+                var root=root(meeting);
+                if(!"STALE".equals(job.get("state"))||root.get("transcript_revision_id")!=null||number(root,"revision")!=revision||number(root,"materials_pending")!=0)throw conflict("PROCESSING_STAGE_CHANGED");
+                jdbc.update("INSERT INTO recording_processing_history SELECT request_key,meeting_id,session_id,task_id,material_snapshot_id,source_revision_id,expected_revision,state,error_code,UTC_TIMESTAMP(6),? FROM recording_processing WHERE session_id=?",key,session);
+                jdbc.update("UPDATE recording_processing SET request_key=?,expected_revision=?,material_snapshot_id=?,state='WAITING_ARCHIVE',error_code=NULL,task_id=NULL,source_revision_id=NULL,source_meeting_revision=NULL,adoption_started=0,import_request_key=?,decision_key=?,import_revision=?,lease_owner=NULL,lease_until=NULL WHERE session_id=?",key,revision,root.get("material_snapshot_id"),UUID.randomUUID().toString(),UUID.randomUUID().toString(),revision,session);
+            }
+            return null;
+        });return read(actor,session);
     }
     public Map<String,Object> retry(Actor actor,String session,String expectedTask){
         if(expectedTask!=null)ama.contract.MinutesContracts.uuid(expectedTask);
@@ -69,7 +94,7 @@ public final class JdbcRecordingProcessing implements AutoCloseable {
             jdbc.update("UPDATE recording_processing SET state=?,error_code=NULL,lease_until=NULL,lease_owner=NULL WHERE session_id=? AND state='FAILED'",value.get("source_revision_id")!=null?"ENHANCING":value.get("task_id")!=null?"TRANSCRIBING":"WAITING_ARCHIVE",session);return null;
         });return read(actor,session);
     }
-    public void start(){scheduler.scheduleWithFixedDelay(()->{try{for(var session:jdbc.queryForList("SELECT session_id FROM recording_processing WHERE state IN ('WAITING_ARCHIVE','COPYING','TRANSCRIBING','ENHANCING') AND (lease_until IS NULL OR lease_until<UTC_TIMESTAMP(6)) ORDER BY updated_at LIMIT 8",String.class))if(dispatched.add(session))try{workers.execute(()->{try{runOnce(session);}finally{dispatched.remove(session);}});}catch(RejectedExecutionException full){dispatched.remove(session);}}catch(RuntimeException failure){System.getLogger(getClass().getName()).log(System.Logger.Level.WARNING,"Recording processing poll unavailable");}},0,1,TimeUnit.SECONDS);}
+    public void start(){scheduler.scheduleWithFixedDelay(()->{try{for(var session:jdbc.queryForList("SELECT p.session_id FROM recording_processing p LEFT JOIN durable_task t ON t.id=p.task_id WHERE p.state IN ('WAITING_ARCHIVE','COPYING','TRANSCRIBING','ENHANCING') AND (p.lease_until IS NULL OR p.lease_until<UTC_TIMESTAMP(6)) AND (p.state<>'TRANSCRIBING' OR t.id IS NULL OR t.state IN ('SUCCEEDED','FAILED','CANCELLED','STALE')) ORDER BY p.updated_at LIMIT 8",String.class))if(dispatched.add(session))try{workers.execute(()->{try{runOnce(session);}finally{dispatched.remove(session);}});}catch(RejectedExecutionException full){dispatched.remove(session);}}catch(RuntimeException failure){System.getLogger(getClass().getName()).log(System.Logger.Level.WARNING,"Recording processing poll unavailable");}},0,1,TimeUnit.SECONDS);}
     public void runOnce(String session){
         String lease=UUID.randomUUID().toString();
         if(jdbc.update("UPDATE recording_processing SET lease_owner=?,lease_until=UTC_TIMESTAMP(6)+INTERVAL 5 MINUTE WHERE session_id=? AND state IN ('WAITING_ARCHIVE','COPYING','TRANSCRIBING','ENHANCING') AND (lease_until IS NULL OR lease_until<UTC_TIMESTAMP(6))",lease,session)!=1)return;
@@ -98,6 +123,7 @@ public final class JdbcRecordingProcessing implements AutoCloseable {
             var enhanced=row(session);String raw=(String)enhanced.get("source_revision_id"),key=(String)job.get("request_key"),decision=(String)job.get("decision_key");long revision=number(enhanced,"source_meeting_revision");
             var candidate=enhancements.generateInitial(actor,meeting,key,revision,raw,(String)job.get("material_snapshot_id"));
             if(!Set.of("READY","APPLYING","APPLIED").contains(candidate.get("state")))throw conflict("ENHANCEMENT_SOURCE_CHANGED");
+            if(jdbc.update("UPDATE recording_processing SET adoption_started=1 WHERE session_id=? AND lease_owner=? AND state='ENHANCING'",session,lease)!=1)return;
             enhancements.adoptInitial(actor,meeting,(String)candidate.get("candidateId"),decision);
             complete(actor,meeting,session,lease,"SUCCEEDED",null);
         }catch(RuntimeException failure){String code=failure instanceof ama.contract.TranscriptContracts.Failure f?f.code():failure instanceof ama.contract.ProcessingContracts.Failure f?f.code():failure.getClass().getSimpleName();if(!code.matches("[A-Za-z0-9_]{1,128}"))code="RECORDING_PROCESSING_UNAVAILABLE";if(code.contains("CHANGED"))complete(actor,meeting,session,lease,"STALE",code);else jdbc.update("UPDATE recording_processing SET state='FAILED',error_code=? WHERE session_id=? AND lease_owner=?",code,session,lease);}
@@ -109,13 +135,16 @@ public final class JdbcRecordingProcessing implements AutoCloseable {
             gate(actor,meeting);
             if(jdbc.update("UPDATE recording_processing SET state=?,error_code=? WHERE session_id=? AND lease_owner=?",state,error,session,lease)!=1)return null;
             var finished=row(session);
+            applyPending(meeting,session,finished);
+            return null;
+        });
+    }
+    private void applyPending(String meeting,String session,Map<String,Object> finished){
             if(Boolean.TRUE.equals(finished.get("pending_materials_changed"))||finished.get("pending_materials_changed") instanceof Number flag&&flag.intValue()==1){
                 boolean failed=Boolean.TRUE.equals(finished.get("pending_materials_failed"))||finished.get("pending_materials_failed") instanceof Number flag&&flag.intValue()==1;
                 JdbcMaterials.advanceSnapshot(jdbc,new ama.task.JdbcSubjectFences(authority.dataSource(),Set.of("MEETING")),meeting,(String)finished.get("pending_material_snapshot_id"),failed);
                 jdbc.update("UPDATE recording_processing SET pending_materials_changed=0 WHERE session_id=?",session);
             }
-            return null;
-        });
     }
     @Override public void close(){scheduler.shutdownNow();workers.shutdownNow();try{scheduler.awaitTermination(5,TimeUnit.SECONDS);workers.awaitTermination(5,TimeUnit.SECONDS);}catch(InterruptedException e){Thread.currentThread().interrupt();}}
 }

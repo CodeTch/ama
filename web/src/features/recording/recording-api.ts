@@ -7,6 +7,10 @@ export type RecordingAck={highestContiguousSeq:number;missingSeqs:number[]};
 export type RecordingManifest={sessionId:string;paused:boolean;finished:boolean;parts:{partId:string;highestContiguousSeq:number;highestReceivedSeq:number;sampleCount:number}[]};
 export type RecordingPartSource={partId:string;partNo:number;startSample:number;sampleCount:number;state:'EMPTY'|'CAPTURING'|'AVAILABLE'};
 export type RecordingArchiveStatus={taskId:string;state:'READY'|'RUNNING'|'RECONCILING'|'SUCCEEDED'|'FAILED'|'CANCELLED'|'STALE';available:boolean;sampleCount:number};
+export function recordingDuration(samples:number){
+ const seconds=Math.floor(samples/16000);
+ return [Math.floor(seconds/3600),Math.floor(seconds/60)%60,seconds%60].map(n=>String(n).padStart(2,'0')).join(':');
+}
 export const recordingUuid=(value:unknown):value is string=>typeof value==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(value);
 const integer=(value:unknown,min:number,max=Number.MAX_SAFE_INTEGER):value is number=>typeof value==='number'&&Number.isSafeInteger(value)&&value>=min&&value<=max;
 function id(value:string){if(!recordingUuid(value))throw new TypeError('录音标识无效');return value;}
@@ -19,11 +23,11 @@ function archive(value:unknown):RecordingArchiveStatus{const body=object(value,[
 /** Current business session owns cookies and CSRF. Every binary write requires an explicit collector lease. */
 export function createRecordingApi(client:ReturnType<typeof createBusinessClient>){
  const base=(sid:string)=>`/api/v1/recordings/${id(sid)}`;
- const json=(path:string,options:Parameters<typeof client.json>[1]={})=>client.json<unknown>(path,{maxResponseBytes:16384,signal:AbortSignal.timeout(15000),...options});
+ const json=(path:string,options:Parameters<typeof client.json>[1]={})=>client.json<unknown>(path,{maxResponseBytes:16384,...options,signal:options.signal?AbortSignal.any([options.signal,AbortSignal.timeout(15000)]):AbortSignal.timeout(15000)});
  return {
-  async currentForMeeting(meetingId:string){const value=object(await json(`/api/v1/meetings/${id(meetingId)}/recordings`,{expectedStatus:200}),['session']);return value.session===null?null:session(value.session);},
+  async currentForMeeting(meetingId:string,signal?:AbortSignal){const value=object(await json(`/api/v1/meetings/${id(meetingId)}/recordings`,{signal,expectedStatus:200}),['session']);return value.session===null?null:session(value.session);},
   async create(meetingId:string){return session(await json(`/api/v1/meetings/${id(meetingId)}/recordings`,{method:'POST',body:'{}',expectedStatus:201}));},
-  async current(sessionId:string){const value=session(await json(base(sessionId),{expectedStatus:200}));if(value.sessionId!==sessionId)throw new TypeError('录音会话不匹配');return value;},
+  async current(sessionId:string,signal?:AbortSignal){const value=session(await json(base(sessionId),{signal,expectedStatus:200}));if(value.sessionId!==sessionId)throw new TypeError('录音会话不匹配');return value;},
   async manifest(current:RecordingSession):Promise<RecordingManifest>{const body=object(await json(`${base(current.sessionId)}/manifest`,{expectedStatus:200}),['sessionId','paused','finished','parts']);if(body.sessionId!==current.sessionId||typeof body.paused!=='boolean'||typeof body.finished!=='boolean'||!Array.isArray(body.parts)||body.parts.length<1||body.parts.length>16)throw new TypeError('录音恢复清单无效');const ids=new Set<string>();let samples=0;for(const raw of body.parts){const p=object(raw,['partId','highestContiguousSeq','highestReceivedSeq','sampleCount']);if(!recordingUuid(p.partId)||ids.has(p.partId)||!integer(p.highestReceivedSeq,0,4096)||!integer(p.highestContiguousSeq,0,p.highestReceivedSeq)||!integer(p.sampleCount,0,115200000)||(p.highestReceivedSeq===0)!==(p.sampleCount===0))throw new TypeError('录音恢复分段无效');ids.add(p.partId);samples+=p.sampleCount;}if(samples>115200000||body.parts.at(-1)?.partId!==current.partId)throw new TypeError('录音恢复范围已变化');return body as RecordingManifest;},
   async acquireWriter(current:RecordingSession,collectorId:string,requestId:string){id(collectorId);id(requestId);if(!integer(current.writerEpoch,1,Number.MAX_SAFE_INTEGER-1))throw new TypeError('录音版本无效');const value=session(await json(`${base(current.sessionId)}/writer-lease`,{method:'POST',body:JSON.stringify({expectedEpoch:current.writerEpoch,collectorId,requestId}),expectedStatus:200}),true);return{...scope(value,current,current.writerEpoch+1),collectorId};},
   async renewWriter(current:RecordingSession){writer(current);const value=session(await json(`${base(current.sessionId)}/writer-lease/renew`,{method:'POST',body:JSON.stringify({expectedEpoch:current.writerEpoch,collectorId:current.collectorId}),expectedStatus:200}),true);return{...scope(value,current,current.writerEpoch),collectorId:current.collectorId};},
@@ -36,8 +40,8 @@ export function createRecordingApi(client:ReturnType<typeof createBusinessClient
   async finish(current:RecordingSession,finalSequences:Record<string,number>){const parts=Object.entries(finalSequences);if(parts.length<1||parts.length>16||!parts.some(([,seq])=>seq>0)||parts.some(([part,seq])=>!recordingUuid(part)||!integer(seq,0,4096)))throw new TypeError('录音结束清单无效');const headers={'Content-Type':'application/json','X-Expected-Epoch':String(current.writerEpoch),...(current.collectorId?{'X-Collector-Id':current.collectorId}:{})};const body=object(await json(`${base(current.sessionId)}/finish`,{method:'POST',headers,body:JSON.stringify(finalSequences),expectedStatus:200}),['sessionId','finalSequence','archiveTaskId']);if(body.sessionId!==current.sessionId||!integer(body.finalSequence,1,65536)||!recordingUuid(body.archiveTaskId))throw new TypeError('录音归档提交未确认');return body as{sessionId:string;finalSequence:number;archiveTaskId:string};},
   async archive(current:RecordingSession){return archive(await json(`${base(current.sessionId)}/archive`,{expectedStatus:200}));},
   async retryArchive(current:RecordingSession){return archive(await json(`${base(current.sessionId)}/archive`,{method:'POST',expectedStatus:200}));},
-  async partSources(current:RecordingSession):Promise<RecordingPartSource[]>{
-   const body=object(await json(`${base(current.sessionId)}/part-sources`,{expectedStatus:200}),['sessionId','parts']);
+  async partSources(current:RecordingSession,signal?:AbortSignal):Promise<RecordingPartSource[]>{
+   const body=object(await json(`${base(current.sessionId)}/part-sources`,{signal,expectedStatus:200}),['sessionId','parts']);
    if(body.sessionId!==current.sessionId||!Array.isArray(body.parts)||body.parts.length<1||body.parts.length>16)throw new TypeError('录音分段来源无效');
    const ids=new Set<string>();let sample=0;
    for(const [index,raw] of body.parts.entries()){

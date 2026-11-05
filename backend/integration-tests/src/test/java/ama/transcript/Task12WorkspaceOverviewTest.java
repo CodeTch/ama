@@ -4,6 +4,10 @@ import ama.meeting.*;import java.util.*;import org.junit.jupiter.api.*;import st
 class Task12WorkspaceOverviewTest extends Task12WorkspaceTasksTest {
  boolean member;boolean candidatePending;boolean hideCandidateTaskFromPage;String candidateTask=T;String candidateInput=I;
  @Override List<Map<String,Object>> rows(String q,Map<Integer,Object> args){
+  if(q.stripLeading().startsWith("SELECT COALESCE("))return List.of(row("suggestion","会议主文件.txt"));
+  if(q.contains(" FROM offline_material_processing "))return List.of();
+  if(q.startsWith("SELECT id FROM durable_task WHERE subject_kind"))return taskRows.stream().filter(r->r.get("task_type").equals(args.get(2))).findFirst().map(r->List.of(row("id",r.get("id")))).orElse(List.of());
+  if(q.contains(" FORCE INDEX (task_subject_history)")&&taskRows.size()>21)return taskRows.subList(0,21);
   if(q.contains(" FROM meeting ")){var root=new LinkedHashMap<>(super.rows(q,args).getFirst());root.put("info_revision_id",C);root.put("roster_revision_id",member?B:null);for(String key:List.of("transcript_revision_id","transcript_confirmation_id","minutes_revision_id","element_set_id","template_revision_id","exclusion_revision_id","final_confirmation_id"))root.put(key,null);return List.of(root);}
   if(q.contains(" FROM meeting_info_revision "))return List.of(row("id",C,"meeting_id",M,"revision",1L));
   if(hideCandidateTaskFromPage&&q.contains(" FROM durable_task ")&&!q.contains(" WHERE id=?"))return List.of();
@@ -18,6 +22,21 @@ class Task12WorkspaceOverviewTest extends Task12WorkspaceTasksTest {
  JdbcWorkspaceOverview overview(){return new JdbcWorkspaceOverview(authority,queue,new WorkspaceCursor(),WorkspaceReadBudget.DEFAULT);}
  @Test void ownerWorkspaceComposesSavedPrivateAndTaskReferencesWithOneGateAndTaskPhaseLast(){importTask();var value=overview().read(actor(),M);assertEquals("OWNER",value.get("relation"));assertEquals("9007199254740993",value.get("revisionToken"));var details=(JdbcWorkspaceOverview.PrivateSections)value.get("privateSections");assertNotNull(details);assertEquals(T,details.tasks().items().getFirst().taskId());assertEquals(1,sql.stream().filter(q->q.startsWith("SELECT enterprise_id,status")).count());
   var locks=sql.stream().filter(q->q.endsWith("FOR UPDATE")&&!q.contains(" FROM meeting ")).toList();int task=-1;for(int i=0;i<locks.size();i++)if(locks.get(i).contains(" FROM durable_task ")){task=i;break;}assertTrue(task>0);assertTrue(locks.subList(task,locks.size()).stream().allMatch(q->q.contains(" FROM durable_task ")));assertTrue(sql.stream().noneMatch(q->q.contains("SELECT *")||q.contains("summary")||q.contains("config_manifest")||q.contains("document_url")));
+ }
+ @Test void recordingArchiveOutsideFirstTwentyTasksStillOwnsTheProcessingEntry(){
+  importTask();var original=taskRows.getFirst();
+  var archive=new LinkedHashMap<>(original);
+  archive.putAll(row("id",C,"task_type","RECORDING_ARCHIVE_V1","pool","RECORDING_ARCHIVE","input_kind","RECORDING_ARCHIVE_INPUT"));
+  parents.put("recording_archive_input",row("id",I,"session_id",B,"meeting_id",M,"requested_by","owner","base_revision",7L,"cancel_epoch",0L,"input_fingerprint","b".repeat(64),"producer_key","a".repeat(64)));
+  parents.put("recording_session",row("session_id",B,"meeting_id",M,"backend_id","LOCAL","state","FINISHED"));
+  for(int n=0;n<20;n++){
+   var entry=new LinkedHashMap<>(original);entry.put("id",java.util.UUID.randomUUID().toString());
+   entry.put("created_at",java.time.LocalDateTime.of(2026,10,28,0,n));taskRows.addFirst(entry);
+  }
+  taskRows.add(archive);var result=overview().read(actor(),M);
+  assertEquals(C,((JdbcWorkspaceTasks.Item)result.get("processingSource")).taskId());
+  var tasks=((JdbcWorkspaceOverview.PrivateSections)result.get("privateSections")).tasks();
+  assertEquals(20,tasks.items().size());assertTrue(tasks.hasMore());assertTrue(tasks.items().stream().noneMatch(item->item.taskId().equals(C)));
  }
  @Test void memberHasNoPrivateSectionsAndDoesNotAcquirePrivateTaskOrInputRows(){owner="different";member=true;var value=overview().read(actor(),M);assertEquals("MEMBER",value.get("relation"));assertFalse(value.containsKey("privateSections"));assertTrue(sql.stream().noneMatch(q->q.contains("durable_task")||q.contains("transcription_input")||q.contains(" FROM publication ")||q.contains("processing_input_id")||q.contains("generation_input_id")));}
  @Test void overviewRejectsAmbientTransactionBeforeAnySql(){assertThrows(WorkspaceReadBudget.Unavailable.class,()->tx.required(()->overview().read(actor(),M)));assertTrue(sql.isEmpty());}

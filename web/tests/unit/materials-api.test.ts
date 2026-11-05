@@ -36,3 +36,19 @@ test('knowledge pages bind meeting, escaped library, search and opaque cursor; r
   globalThis.fetch=async()=>Response.json({items:[{...document,libraryId:'other'}],cursor:null});await assert.rejects(a.documents(meeting,'library-1','',null,new AbortController().signal));
  }finally{globalThis.fetch=original;}
 });
+
+test('batch receipts can defer a snapshot at the original revision and must match every known source',async()=>{
+ const original=fetch,a=api();
+ const selection={libraryId:'library',documentId:'document',version:hash};
+ const command={actor:'owner',resource:meeting,key:crypto.randomUUID(),operation:'MATERIAL_BATCH',path:`/api/v1/meetings/${meeting}/materials/batches`,body:JSON.stringify({expectedRevisionToken:'8',items:[selection]})};
+ const bound={...item,source:'KNOWLEDGE',sourceVersion:hash,sourceLibraryId:'library',sourceDocumentId:'document'};
+ try{
+  for(const revision of ['8','9']){
+   globalThis.fetch=async()=>Response.json({items:[bound],materialSnapshotId:meeting,meetingRevision:revision},{status:201});
+   assert.equal((await a.batch(command)).meetingRevision,revision);
+  }
+  for(const [revision,row] of [['7',bound],['10',bound],['8',{...bound,sourceDocumentId:'different-document'}]]){
+   globalThis.fetch=async()=>Response.json({items:[row],materialSnapshotId:meeting,meetingRevision:revision},{status:201});await assert.rejects(a.batch(command));
+  }
+ }finally{globalThis.fetch=original;}
+});

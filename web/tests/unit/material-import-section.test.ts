@@ -8,7 +8,7 @@ test('pending parse retry disables competing retry and removal until its receipt
   const api={list:async()=>({items:[{id,materialRevisionId:id,name:'损坏材料.docx',source:'LOCAL',sizeBytesToken:'40',state:'FAILED',error:'INVALID_DOCUMENT'}],materialSnapshotId:null,materialsPending:true,meetingRevision:'1'}),send:()=>new Promise<void>(resolve=>release=resolve)};
   const wrapped={...view,async setup(props:any,context:any){state=view.setup(props,context);await state.material.reload();pending=state.material.retry(id);await new Promise(resolve=>setImmediate(resolve));return state;}};
   const app=createSSRApp({setup(){provide(applicationKey,{session:{current:ref({actor:{enterpriseId:'owner'}})},materials:api,journals:{tab:'material-busy-test',recovery:'NEW_NAMESPACE',storage:{getItem:()=>null,setItem:()=>{},removeItem:()=>{}}}} as any);return()=>h(wrapped,{meetingId:meeting});}});
-  const html=await renderToString(app);assert.match(html,/<button[^>]*disabled[^>]*>重试解析<\/button>/);assert.match(html,/<button[^>]*disabled[^>]*>移除<\/button>/);
+  const html=await renderToString(app);assert.match(html,/<button[^>]*disabled[^>]*>重试解析<\/button>/);assert.match(html,/<button[^>]*disabled[^>]*>明确不使用<\/button>/);
   release();await pending;assert.equal(state.material.state.value.busy,false);assert.equal(state.material.jobs.value.length,0);
  }finally{release();await pending;state?.material.dispose();state?.picker.dispose();await server.close();}
 });

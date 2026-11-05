@@ -248,7 +248,10 @@ public final class JdbcProcessingDiscovery {
         return owner(actor,meeting,(gate,root)-> {
             var rows=reader().select("durable_task",TASK,"id=? AND subject_kind='MEETING' AND subject_id=? AND task_type='TRANSCRIPT_IMPORT_V1'","id",2,task,meeting);
             if(rows.size()!=1)throw missing();
-            return taskSummary(meeting,rows.getFirst(),proofs);
+            var result=new LinkedHashMap<>(taskSummary(meeting,rows.getFirst(),proofs));
+            var stages=j.queryForList("SELECT stage,error_code,snapshot_id FROM offline_material_processing WHERE meeting_id=? AND task_id=?",meeting,task);
+            if(!stages.isEmpty()){result.put("materialFiles",JdbcMaterials.frozenFiles(j,(String)stages.getFirst().get("snapshot_id"),meeting));result.put("materialStage",stages.getFirst().get("stage"));if(stages.getFirst().get("error_code")!=null)result.put("errorCode",stages.getFirst().get("error_code"));}
+            return result;
         });
     }
     private Map<String,Object> taskSummary(String meeting,Map<String,Object> row,InputProofs proofs) {

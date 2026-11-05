@@ -701,6 +701,117 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/recordings/{sessionId}/processing/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["recordingCancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/recordings/{sessionId}/processing/restart": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["recordingRestart"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting}/processing-tasks/{task}/enhancement/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meeting: string;
+                task: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["cancelImportEnhancement"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting}/processing-tasks/{task}/enhancement/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meeting: string;
+                task: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["retryImportEnhancement"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting}/material-adjustments/latest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meeting: string;
+            };
+            cookie?: never;
+        };
+        get: operations["readLatestMaterialAdjustment"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/meetings/{meeting}/material-adjustments/{id}/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meeting: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["retryMaterialAdjustment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/recordings/{sessionId}/processing/retry": {
         parameters: {
             query?: never;
@@ -1207,7 +1318,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description Atomic 1–64 exact source selection. Validate the entire external batch before staging; current local ACL and signed exact-version proof are rechecked at commit. One invalid source adds no references and changes no effective snapshot. Original ordered body/key replays the immutable receipt; changing order/body conflicts. Managed staging files may remain for cleanup. */
+        /** @description Atomic 1–64 exact source selection. Validate the entire external batch before staging; current local ACL and signed exact-version proof are rechecked at commit. One invalid source adds no references and changes no effective snapshot. Original ordered body/key replays the immutable receipt; changing order/body conflicts. Managed staging files may remain for cleanup. Supplying removed revision IDs applies a private draft and schedules a reviewable enhancement for the current working transcript in the same transaction. Before a working transcript exists, applying to a failed or cancelled first run schedules a new run from its original main files and the new material snapshot. */
         post: operations["addMeetingMaterialBatch"];
         delete?: never;
         options?: never;
@@ -4758,7 +4869,7 @@ export interface components {
             /** Format: uuid */
             meetingId: string;
             /** @enum {unknown} */
-            state: "NOT_REQUESTED" | "WAITING_ARCHIVE" | "COPYING" | "TRANSCRIBING" | "ENHANCING" | "SUCCEEDED" | "FAILED" | "STALE";
+            state: "NOT_REQUESTED" | "WAITING_ARCHIVE" | "COPYING" | "TRANSCRIBING" | "ENHANCING" | "SUCCEEDED" | "FAILED" | "STALE" | "CANCELLED";
             /** Format: uuid */
             materialSnapshotId?: string | null;
             /** Format: uuid */
@@ -4771,7 +4882,15 @@ export interface components {
                 name: string;
                 /** @enum {unknown} */
                 state: "READY" | "FAILED" | "UNSUPPORTED";
+                /** @enum {unknown} */
+                source?: "LOCAL" | "KNOWLEDGE";
+                sourceLibraryId?: string | null;
+                sourceVersion?: string | null;
+                error?: string | null;
+                sourceLibraryName?: string | null;
             }[];
+            /** Format: uuid */
+            runId?: string;
         };
         RecordingError: {
             error: {
@@ -5002,6 +5121,7 @@ export interface components {
             items: components["schemas"]["MaterialItem"][];
             /** Format: uuid */
             materialSnapshotId: string | null;
+            /** @description Advances by one when applied immediately. A deferred material change on a running recording returns the submitted meeting revision. */
             meetingRevision: string;
         };
         DeletionJob: {
@@ -5128,20 +5248,6 @@ export interface components {
             association: null;
             current: components["schemas"]["CommandObservation"] | null;
         };
-        WorkspaceSavedReferences: {
-            /** Format: uuid */
-            infoRevisionId: string;
-            /** Format: uuid */
-            rosterRevisionId: string | null;
-            /** Format: uuid */
-            transcriptRevisionId: string | null;
-            /** Format: uuid */
-            transcriptConfirmationId: string | null;
-            /** Format: uuid */
-            minutesRevisionId: string | null;
-            /** Format: uuid */
-            elementSetId: string | null;
-        };
         WorkspaceTaskItem: {
             /** Format: uuid */
             taskId: string;
@@ -5155,6 +5261,20 @@ export interface components {
             inputId: string;
             /** @description Actual producer detail route. Publication links address the publication root; original task identity remains taskId. Export links address /api/v1/exports/{taskId} and require fresh authorization when opened. */
             detailPath: string;
+        };
+        WorkspaceSavedReferences: {
+            /** Format: uuid */
+            infoRevisionId: string;
+            /** Format: uuid */
+            rosterRevisionId: string | null;
+            /** Format: uuid */
+            transcriptRevisionId: string | null;
+            /** Format: uuid */
+            transcriptConfirmationId: string | null;
+            /** Format: uuid */
+            minutesRevisionId: string | null;
+            /** Format: uuid */
+            elementSetId: string | null;
         };
         WorkspaceTaskPage: {
             items: components["schemas"]["WorkspaceTaskItem"][];
@@ -5203,6 +5323,11 @@ export interface components {
             verification: "PERSISTED_REFERENCES_RECHECK_PRODUCER";
         };
         WorkspaceNavigation: {
+            processingMaterialsChanged?: boolean;
+            /** @enum {string} */
+            processingMaterialStage?: "TRANSCRIBING" | "ENHANCING" | "ADOPTING" | "SUCCEEDED" | "FAILED" | "STALE" | "CANCELLED";
+            temporaryTitle?: string | null;
+            processingSource?: components["schemas"]["WorkspaceTaskItem"];
             /** Format: uuid */
             meetingId: string;
             revisionToken: components["schemas"]["ExpectedRevisionToken"];
@@ -5572,6 +5697,8 @@ export interface components {
         };
         /** @description At least one exact revision representation; dual values must agree before digest. Strict duplicate/unknown fields, Unicode, depth8, token4096 and 65536-byte transport envelope. Current effective intake limits apply only after accepted-result lookup. */
         ImportRequest: {
+            /** @description Lock the submitted material snapshot and create an initial enhanced working transcript. */
+            enhance?: boolean;
             expectedRevision?: components["schemas"]["ExpectedRevision"];
             /** @description Opaque canonical decimal counter; preserve as a string. Revisions support 0..9223372036854775806. */
             expectedRevisionToken?: string;
@@ -5730,7 +5857,23 @@ export interface components {
             /** Format: uuid */
             taskId: string;
         };
+        items: {
+            /** Format: uuid */
+            materialRevisionId: string;
+            name: string;
+            /** @enum {unknown} */
+            state: "READY" | "FAILED" | "UNSUPPORTED";
+            /** @enum {unknown} */
+            source?: "LOCAL" | "KNOWLEDGE";
+            sourceLibraryId?: string | null;
+            sourceVersion?: string | null;
+            error?: string | null;
+            sourceLibraryName?: string | null;
+        };
         ImportTaskSummary: {
+            materialFiles?: components["schemas"]["items"][];
+            /** @enum {string} */
+            materialStage?: "TRANSCRIBING" | "ENHANCING" | "ADOPTING" | "SUCCEEDED" | "FAILED" | "STALE" | "CANCELLED";
             /** Format: uuid */
             taskId: string;
             /** @enum {string} */
@@ -5783,6 +5926,23 @@ export interface components {
             accessRevisionToken: string;
             currentSavedRevisionId: string | null;
             currentConfirmationId: string | null;
+        };
+        SpeechSpeakerSnapshot: {
+            /** Format: uuid */
+            id: string;
+            label: string;
+            enterpriseId: string | null;
+            /** @constant */
+            source: "HUMAN";
+            segmentIds: string[];
+        };
+        SpeechSpeakers: {
+            /** Format: uuid */
+            meetingId: string;
+            /** Format: uuid */
+            sourceRevisionId: string;
+            observation: components["schemas"]["Observation"];
+            items: components["schemas"]["SpeechSpeakerSnapshot"][];
         };
         SourceEligibility: {
             /** Format: uuid */
@@ -5886,6 +6046,9 @@ export interface components {
         };
         /** @description Actual current saved WORKING or saved:null; never substitutes RAW. Original complete internal graph remains required, while member output omits owner-only metadata. selectedConfirmation appears only for the owner. */
         Current: {
+            /** @description Owner view: a confirmation exists in the meeting history. */
+            previouslyConfirmed?: boolean;
+            speakerSnapshot?: components["schemas"]["SpeechSpeakers"];
             /** Format: uuid */
             meetingId: string;
             observation: components["schemas"]["Observation"];
@@ -5963,23 +6126,6 @@ export interface components {
                 traceId: string;
             };
         };
-        SpeechSpeakerSnapshot: {
-            /** Format: uuid */
-            id: string;
-            label: string;
-            enterpriseId: string | null;
-            /** @constant */
-            source: "HUMAN";
-            segmentIds: string[];
-        };
-        SpeechSpeakers: {
-            /** Format: uuid */
-            meetingId: string;
-            /** Format: uuid */
-            sourceRevisionId: string;
-            observation: components["schemas"]["Observation"];
-            items: components["schemas"]["SpeechSpeakerSnapshot"][];
-        };
         SpeakerEditRequest: {
             expectedRevisionToken: string;
             /** Format: uuid */
@@ -6044,6 +6190,8 @@ export interface components {
             observation: components["schemas"]["Observation"];
             items: components["schemas"]["SpeechCorrectionItem"][];
             pendingCount: number;
+            /** @description Completed checkpoint suggestions that can still be added to this working revision. */
+            availableProposalCount?: number;
             canPropose: boolean;
         };
         EnhancementInput: {
@@ -6074,6 +6222,8 @@ export interface components {
             profile: "ama-material-enhancement.v1";
             /** @constant */
             state: "READY";
+            /** @constant */
+            materialRefresh?: true;
             canApply: boolean;
             changes: {
                 /** Format: uuid */
@@ -6180,6 +6330,7 @@ export interface components {
         };
         /** @description Exact owner RAW/WORKING retained text and all marks. Byte-only epoch/route failures are separately reported; missing/corrupt original provenance or archives fail closed. */
         OwnerDetail: {
+            speakerSnapshot?: components["schemas"]["SpeechSpeakers"];
             /** Format: uuid */
             meetingId: string;
             observation: components["schemas"]["Observation"];
@@ -8943,6 +9094,198 @@ export interface operations {
             };
         };
     };
+    recordingCancel: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+                "Idempotency-Key": string;
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    runId: string;
+                    expectedRevisionToken: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Observed outcome */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingProcessing"];
+                };
+            };
+        };
+    };
+    recordingRestart: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+                "Idempotency-Key": string;
+            };
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** Format: uuid */
+                    runId: string;
+                    expectedRevisionToken: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Observed outcome */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RecordingProcessing"];
+                };
+            };
+        };
+    };
+    cancelImportEnhancement: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meeting: string;
+                task: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Observed outcome */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        accepted: boolean;
+                    };
+                };
+            };
+        };
+    };
+    retryImportEnhancement: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meeting: string;
+                task: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Observed outcome */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        accepted: boolean;
+                    };
+                };
+            };
+        };
+    };
+    readLatestMaterialAdjustment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                meeting: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Observed outcome */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        stage: "NONE" | "PENDING" | "SUBMITTED" | "READY" | "STALE" | "FAILED";
+                        /** Format: uuid */
+                        id?: string;
+                        /** Format: uuid */
+                        candidateId?: string | null;
+                        errorCode?: string | null;
+                    };
+                };
+            };
+        };
+    };
+    retryMaterialAdjustment: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description Must exactly match the configured allowed origin */
+                Origin: components["parameters"]["Origin"];
+                /** @description Independent session-bound token returned by currentSession */
+                "X-CSRF-Token": components["parameters"]["Csrf"];
+            };
+            path: {
+                meeting: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Observed outcome */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        accepted: boolean;
+                    };
+                };
+            };
+        };
+    };
     discardEmptyRecording: {
         parameters: {
             query?: never;
@@ -10281,6 +10624,9 @@ export interface operations {
                 "application/json": {
                     expectedRevisionToken: string;
                     items: components["schemas"]["MaterialSelection"][];
+                    removed?: string[];
+                } | unknown | {
+                    items?: unknown;
                 };
             };
         };

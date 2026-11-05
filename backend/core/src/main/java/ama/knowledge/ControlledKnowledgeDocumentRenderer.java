@@ -4,6 +4,7 @@ import ama.config.CanonicalJson;
 import ama.contract.MinutesContracts.*;
 import java.util.*;
 import java.util.function.BooleanSupplier;
+import java.util.function.Predicate;
 import static ama.canonical.CanonicalValue.*;
 import static ama.contract.MinutesContracts.*;
 import static ama.contract.MinutesContracts.FailureCode.*;
@@ -11,6 +12,11 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 /** Exact saved content rendering. Provenance authority remains with the registered S/A/F caller. */
 public final class ControlledKnowledgeDocumentRenderer {
  public static final String VERSION="ama.controlled-minutes-render.v1",PERSONAL_VERSION="ama.controlled-minutes-render.v2";
+ private final Predicate<FullRow> matchesBuiltinTemplate;
+ public ControlledKnowledgeDocumentRenderer(){this(template -> false);}
+ public ControlledKnowledgeDocumentRenderer(Predicate<FullRow> matchesBuiltinTemplate){
+  this.matchesBuiltinTemplate=Objects.requireNonNull(matchesBuiltinTemplate);
+ }
  public record Member(String memberKind,String displayName){}
  public record Meeting(String name,String categoryId,String actualDate,List<Member> roster){public Meeting{roster=List.copyOf(roster);}}
  public byte[] render(FinalFacts selected,Meeting meeting,String rendererVersion,String defaultTemplateRevisionId,Artifact artifact,long limit,BooleanSupplier cancelled){return render(selected,meeting,rendererVersion,defaultTemplateRevisionId,artifact,limit,cancelled,null);}
@@ -22,7 +28,8 @@ public final class ControlledKnowledgeDocumentRenderer {
    // The closed frozen input already binds the validated layout. Export the exact saved body;
    // never regenerate it from the owner's mutable current template or lifecycle state.
    require(template.nullableString("owner_id").equals(finalRow.string("confirmed_by"))&&template.number("theme_count")>=1&&template.number("theme_count")<=8,PROVENANCE_UNAVAILABLE);
-  }else{require(defaultTemplateRevisionId.equals(template.string("id")),PROFILE_UNAVAILABLE);
+  }else if(!personal || !matchesBuiltinTemplate.test(template)){
+  require(defaultTemplateRevisionId.equals(template.string("id")),PROFILE_UNAVAILABLE);
   require(template.string("themes").equals("{\"schemaVersion\":\"ama.controlled-minutes-template.v1\",\"themes\":[\"OVERVIEW\",\"DISCUSSION\",\"CONCLUSION\",\"ACTION\",\"RISK\",\"OPEN_QUESTION\",\"DISAGREEMENT\"]}"),PROFILE_UNAVAILABLE);
   }
   if(budget!=null){long bound=8192+6L*(body.string("title").length()*2L+body.string("body").length()+meeting.name().length()+meeting.categoryId().length()+(meeting.actualDate()==null?0:meeting.actualDate().length())+artifact.version().length());budget.row(32);for(var member:meeting.roster()){budget.row(2);bound=Math.addExact(bound,128+6L*(member.memberKind().length()+member.displayName().length()));}for(var row:facts.rows())if(row.table()==Table.MINUTES_ELEMENT&&finalRow.string("element_set_id").equals(row.string("set_id"))||row.table()==Table.ACTION_ITEM){budget.row(row.cells().size());bound=Math.addExact(bound,512);for(var cell:row.cells())if(cell instanceof TextCell text)bound=Math.addExact(bound,6L*text.value().length());}require(bound<=limit,BUDGET_EXCEEDED);budget.capture(bound,bound,bound,6);}

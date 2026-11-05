@@ -7,6 +7,26 @@ class Task11KnowledgeCanonicalTest {
  @Test void exactRendererJsonBytesSurviveTransportAndFieldOrdering()throws Exception {var outputs=new ArrayList<Object>();try(var in=getClass().getResourceAsStream("/ama/knowledge/canonical-v1.json")){var cases=json.readTree(in);for(var test:cases){var value=json.convertValue(test.get("value"),Object.class);byte[] actual=ControlledKnowledgeClient.canonical(value);assertArrayEquals(test.get("canonical").asText().getBytes(StandardCharsets.UTF_8),actual);outputs.add(Map.of("value",value,"javaBase64",Base64.getEncoder().encodeToString(actual),"javaSha256",ControlledKnowledgeClient.digest(actual)));}}Files.writeString(evidence("canonical-java-actual.json"),json.writeValueAsString(outputs));}
  static String id(int n){return String.format("00000000-0000-4000-8000-%012d",n);}
  static FullRow row(Table table,Object... values){var cells=new ArrayList<Cell>();for(Object v:values)cells.add(v==null?new NullCell():v instanceof Long n?new UIntCell(n):new TextCell((String)v));return new FullRow(table,cells);}
+ @Test void publicationRendersBothRegisteredBuiltinTemplatesAndRejectsAlteredRevisions()throws Exception {
+  var renderer=new ama.knowledge.ControlledKnowledgeDocumentRenderer(ama.minutes.BuiltinMinutesTemplates::matches);
+  String time="2026-10-25T00:00:00.000000Z",hash="a".repeat(64);
+  byte[] archive="{}".getBytes(StandardCharsets.UTF_8);
+  var artifact=new Artifact("render-test",ControlledKnowledgeClient.digest(archive),ama.contract.ConfigArchiveContracts.ArchiveBytes.capture(archive,65536,65536,()->false));
+  var meeting=new ama.knowledge.ControlledKnowledgeDocumentRenderer.Meeting("会议","category",null,List.of());
+  for(var template:ama.minutes.BuiltinMinutesTemplates.definitions()){
+   var body=row(Table.MINUTES_REVISION,id(13),id(1),1L,null,"已保存标题","HUMAN","已确认正文",null,"owner",time);
+   var confirmation=row(Table.FINAL_CONFIRMATION,id(20),id(1),1L,id(21),id(22),id(7),id(13),null,id(11),template.revisionId(),id(10),hash,hash,"owner",time);
+   for(String name:List.of(template.name(),"修改后的模板")){
+    var revision=row(Table.TEMPLATE_REVISION,template.revisionId(),template.templateId(),1L,null,name,template.document(),(long)template.themes().size(),time);
+    var facts=new FinalFacts(id(20),new StoredProvenanceFacts(List.of(revision,body,confirmation),List.of(),List.of(),List.of(),100000L));
+    if(name.equals(template.name())){
+     var rendered=renderer.render(facts,meeting,ama.knowledge.ControlledKnowledgeDocumentRenderer.PERSONAL_VERSION,id(99),artifact,8388608,()->false);
+     assertEquals("已确认正文",json.readTree(rendered).at("/minutes/body").textValue());
+     assertThrows(Failure.class,()->renderer.render(facts,meeting,ama.knowledge.ControlledKnowledgeDocumentRenderer.VERSION,id(99),artifact,8388608,()->false));
+    }else assertThrows(Failure.class,()->renderer.render(facts,meeting,ama.knowledge.ControlledKnowledgeDocumentRenderer.PERSONAL_VERSION,id(99),artifact,8388608,()->false));
+   }
+  }
+ }
  @Test void actualDocumentRendererBytesEqualActualClientAndExportForPython()throws Exception {
   String time="2026-10-25T00:00:00.000000Z",h="a".repeat(64),body="原文😀\n\" /\n\t\b\f\r";
   var rows=List.of(row(Table.TEMPLATE_REVISION,id(9),id(8),1L,"owner","template","{\"schemaVersion\":\"ama.controlled-minutes-template.v1\",\"themes\":[\"OVERVIEW\",\"DISCUSSION\",\"CONCLUSION\",\"ACTION\",\"RISK\",\"OPEN_QUESTION\",\"DISAGREEMENT\"]}",7L,time),row(Table.MINUTES_REVISION,id(13),id(1),1L,null,"标题😀","HUMAN",body,null,"owner",time),row(Table.FINAL_CONFIRMATION,id(20),id(1),1L,id(21),id(22),id(7),id(13),null,id(11),id(9),id(10),h,h,"owner",time),row(Table.MINUTES_ELEMENT,id(30),id(11),"ACTION",0L,body,"SUPPORTED"),row(Table.ACTION_ITEM,id(30),null,null,null));

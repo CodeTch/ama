@@ -63,3 +63,10 @@ test('pending save ticket survives a known ACK and failed readback until a succe
  let view=current(),fail=false,sends=0;const editor=useTranscriptEditor({current:async()=>{if(fail)throw new Error('lost current read');return view;},send:async()=>{sends++;view=current('2',next,'sent');fail=true;return receipt();}},()=> 'owner',()=>meeting,()=>true);
  try{await editor.reload();editor.edit(edits('sent'));await editor.save();assert.equal(editor.command.state.value,'ACKNOWLEDGED');assert.equal(editor.pendingOperation(),'TRANSCRIPT_SAVE');assert.equal(editor.draft.value?.dirty.value,true);fail=false;await editor.retry();assert.equal(sends,1);assert.equal(editor.pendingOperation(),null);assert.equal(editor.draft.value?.dirty.value,false);assert.equal(editor.draft.value?.baseToken.value,'2');}finally{editor.dispose();}
 });
+
+test('saving a clean confirmed draft preserves its confirmation and does not authorize or write a new version',async()=>{
+ const view=current();view.confirmation={id:next,revisionId:revision,confirmedAt:'2026-11-05T10:00:00Z',confirmedBy:'owner',isCurrent:true,contentHash:'a'.repeat(64),profile:'ama.transcript-confirmation.v1'};view.observation.currentConfirmationId=next;
+ let reads=0,authorizations=0,writes=0;
+ const editor=useTranscriptEditor({authorize:async()=>{authorizations++;return true;},current:async()=>{reads++;return view;},send:async()=>{writes++;return receipt();}},()=> 'owner',()=>meeting,()=>true);
+ await editor.reload();await editor.save();assert.equal(editor.saved.value?.confirmation?.id,next);assert.deepEqual({reads,authorizations,writes},{reads:1,authorizations:0,writes:0});editor.dispose();
+});

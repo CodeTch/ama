@@ -1,0 +1,426 @@
+{
+  "recordingCancel": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "recordingCancel",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Observed outcome",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./recording.yaml#/RecordingProcessing"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        },
+        {
+          "in": "header",
+          "name": "Idempotency-Key",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "runId",
+                "expectedRevisionToken"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "runId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "expectedRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "recordingRestart": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "sessionId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "recordingRestart",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Observed outcome",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./recording.yaml#/RecordingProcessing"
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        },
+        {
+          "in": "header",
+          "name": "Idempotency-Key",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "runId",
+                "expectedRevisionToken"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "runId": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "expectedRevisionToken": {
+                  "type": "string",
+                  "pattern": "^(0|[1-9][0-9]{0,18})$"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "cancelImportEnhancement": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "meeting",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      {
+        "name": "task",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "cancelImportEnhancement",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Observed outcome",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "accepted"
+                ],
+                "properties": {
+                  "accepted": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ]
+    }
+  },
+  "retryImportEnhancement": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "meeting",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      {
+        "name": "task",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "retryImportEnhancement",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Observed outcome",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "accepted"
+                ],
+                "properties": {
+                  "accepted": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ]
+    }
+  },
+  "readLatestMaterialAdjustment": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "meeting",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "get": {
+      "operationId": "readLatestMaterialAdjustment",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Observed outcome",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "stage"
+                ],
+                "properties": {
+                  "stage": {
+                    "type": "string",
+                    "enum": [
+                      "NONE",
+                      "PENDING",
+                      "SUBMITTED",
+                      "READY",
+                      "STALE",
+                      "FAILED"
+                    ]
+                  },
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "candidateId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "uuid"
+                  },
+                  "errorCode": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "retryMaterialAdjustment": {
+    "servers": [
+      {
+        "url": "http://127.0.0.1:8080"
+      }
+    ],
+    "parameters": [
+      {
+        "name": "meeting",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    ],
+    "post": {
+      "operationId": "retryMaterialAdjustment",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Observed outcome",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "accepted"
+                ],
+                "properties": {
+                  "accepted": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "./identity.yaml#/Origin"
+        },
+        {
+          "$ref": "./identity.yaml#/Csrf"
+        }
+      ]
+    }
+  }
+}

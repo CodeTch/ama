@@ -40,6 +40,7 @@ public final class JdbcMaterials {
   MaterialParser.Result extracted=null;
   if(selected.fileId()!=null){try(var file=authority.readMaterialUpload(actor,meeting,selected.fileId())){if(!meeting.equals(file.file().meetingId()))throw new NotFound();source=new Source(file.file().fileId(),file.file().sha256(),file.file().displayName(),null,null,null);}}
   else{if(knowledge==null)throw failure(503,"MATERIAL_KNOWLEDGE_UNAVAILABLE");var document=knowledge.document(actor,meeting,selected.libraryId(),selected.documentId(),selected.version());String file=store(actor,meeting,scope,"knowledge",document.name()+".json",document.bytes(),trace);source=new Source(file,document.version(),document.name(),document.provider(),selected.documentId(),selected.version());byte[] text=document.text().getBytes(StandardCharsets.UTF_8);try{var parsed=parser.parse(new ByteArrayInputStream(text),"knowledge.txt",MaterialDocumentParser.sha(text),parseBudget,()->false);extracted=new MaterialParser.Result(parsed.format(),source.hash(),parsed.units(),parsed.textBytes());}catch(MaterialParser.ParseFailure invalid){if(Set.of("CANCELLED","PARSE_BUSY","PARSE_TIMEOUT","PARSE_PROCESS_FAILED").contains(invalid.code()))throw failure(503,"MATERIAL_PARSE_UNAVAILABLE");throw failure(422,"KNOWLEDGE_DOCUMENT_INVALID");}}
+  var capturedNames=source.provider()==null?Map.<String,String>of():knowledge.libraryNames(actor,meeting,Set.of(selected.libraryId()));
   var parsed=parse(actor,meeting,scope,source,extracted,trace);
   var preparation=authority.publicationWriteGuard().prepare(actor,meeting);
   var materialAuthority=authority.materialAuthority();var changed=materialAuthority==null?null:materialAuthority.prepareChange(actor,meeting,source.provider()==null?List.of():List.of(new ama.meeting.MaterialAuthorityDependencies.Item(source.provider(),selected.libraryId(),source.external(),source.version())));
@@ -48,20 +49,26 @@ public final class JdbcMaterials {
    var existing=active(meeting);if(existing.size()>=MAX_MATERIALS)throw failure(422,"MATERIAL_LIMIT_EXCEEDED");
    if(existing.stream().anyMatch(r->sameSelection(r,selected,source)))throw failure(409,"MATERIAL_ALREADY_SELECTED");
    String material=id(),revision=id(),document=id();j.update("INSERT INTO material_reference(id,meeting_id,kind,provider_id,external_id,file_id,state) VALUES (?,?,?,?,?,?,'ACTIVE')",material,meeting,source.provider()==null?"LOCAL":"KNOWLEDGE",source.provider(),source.external(),source.provider()==null?source.file():null);
-   if(source.provider()!=null)j.update("INSERT INTO material_knowledge_location(reference_id,library_id) VALUES (?,?)",material,selected.libraryId());
+   if(source.provider()!=null)j.update("INSERT INTO material_knowledge_location(reference_id,library_id,library_name) VALUES (?,?,?)",material,selected.libraryId(),capturedNames.get(selected.libraryId()));
    insertRevision(material,revision,1,document,source,parsed);if(materialAuthority!=null)materialAuthority.installChange(changed,actor,meeting,registry.access(gate));bind(gate,actor,meeting,guard,revision,document,source,parsed);snapshot(meeting);j.update("INSERT INTO material_command_receipt VALUES(?,?,?,?,?)",meeting,scope,request,material,revision);return item(material,revision);
   });
  }
  public record Batch(List<Item> items,String materialSnapshotId,String meetingRevision){public Batch{items=List.copyOf(items);}}
  private record Staged(Selection selection,Source source,MaterialKnowledge.Document knowledge,Parse parsed){}
  public Batch addBatch(Actor actor,String meeting,String key,long expected,List<Selection> selections,String trace)throws IOException {
-  uuid(meeting);uuid(trace);JdbcProcessingIntake.key(key);if(expected<0||selections==null||selections.isEmpty()||selections.size()>64||selections.stream().anyMatch(Objects::isNull)||new HashSet<>(selections).size()!=selections.size())throw new IllegalArgumentException("Unique bounded material batch required");
+  return batch(actor,meeting,key,expected,selections,null,trace);
+ }
+ public Batch batch(Actor actor,String meeting,String key,long expected,List<Selection> selections,List<String> removed,String trace)throws IOException {
+  boolean adjustment=removed!=null;
+  if(adjustment){uuid(key);if(removed.size()>MAX_MATERIALS||new HashSet<>(removed).size()!=removed.size())throw new IllegalArgumentException("Invalid removal set");removed.forEach(ama.contract.MinutesContracts::uuid);}
+  uuid(meeting);uuid(trace);JdbcProcessingIntake.key(key);if(expected<0||selections==null||selections.isEmpty()&&!adjustment||selections.size()>64||selections.stream().anyMatch(Objects::isNull)||new HashSet<>(selections).size()!=selections.size())throw new IllegalArgumentException("Unique bounded material batch required");
   var selected=List.copyOf(selections);String scope=JdbcProcessingIntake.digest(actor.enterpriseId(),meeting,"MATERIAL_BATCH",key);
   var wire=new ArrayList<Map<String,String>>();for(var selection:selected)wire.add(selection.fileId()!=null?Map.of("fileId",selection.fileId()):Map.of("libraryId",selection.libraryId(),"documentId",selection.documentId(),"version",selection.version()));
-  String request=ControlledKnowledgeClient.digest(ControlledKnowledgeClient.canonical(Map.of("expectedRevisionToken",Long.toString(expected),"items",wire)));
+  var payload=new TreeMap<String,Object>();payload.put("expectedRevisionToken",Long.toString(expected));payload.put("items",wire);if(adjustment)payload.put("removed",removed);
+  String request=ControlledKnowledgeClient.digest(ControlledKnowledgeClient.canonical(payload));
   authority.savedAccess().prepareExternalRead(actor,meeting);
   var prior=authority.transactionRunner().required(()->{registry.lock(actor,meeting,MeetingAccess.Action.EDIT);return batchReceipt(meeting,scope,request);});if(prior!=null)return prior;
-  var start=authority.transactionRunner().required(()->{registry.lock(actor,meeting,MeetingAccess.Action.EDIT);var root=root(meeting);if(root.revision()!=expected)throw failure(409,"REVISION_CONFLICT");if(active(meeting).size()+selected.size()>MAX_MATERIALS)throw failure(422,"MATERIAL_LIMIT_EXCEEDED");return root;});
+  var start=authority.transactionRunner().required(()->{registry.lock(actor,meeting,MeetingAccess.Action.EDIT);var root=root(meeting);if(root.revision()!=expected)throw failure(409,"REVISION_CONFLICT");if(active(meeting).size()+selected.size()-(adjustment?removed.size():0)>MAX_MATERIALS)throw failure(422,"MATERIAL_LIMIT_EXCEEDED");return root;});
   var inputs=new ArrayList<Staged>();long bytes=0;
   // Finish every exact external source/ACL/version preflight before any reference or cache upload.
   try{for(var selection:selected){
@@ -79,6 +86,8 @@ public final class JdbcMaterials {
    });
    if(committed!=null)return committed;throw failure(409,"MATERIAL_BATCH_VERSION_REJECTED");
   }
+  var libraries=new HashSet<String>();for(var selection:selected)if(selection.libraryId()!=null)libraries.add(selection.libraryId());
+  var capturedNames=libraries.isEmpty()?Map.<String,String>of():knowledge.libraryNames(actor,meeting,libraries);
   var staged=new ArrayList<Staged>();var additions=new ArrayList<ama.meeting.MaterialAuthorityDependencies.Item>();
   for(int i=0;i<inputs.size();i++){
    var input=inputs.get(i);var source=input.source();MaterialParser.Result extracted=null;String itemScope=JdbcProcessingIntake.digest(scope,Integer.toString(i));
@@ -88,15 +97,48 @@ public final class JdbcMaterials {
   var preparation=authority.publicationWriteGuard().prepare(actor,meeting);var materialAuthority=authority.materialAuthority();var proof=materialAuthority==null?null:materialAuthority.prepareChange(actor,meeting,additions);
   return authority.transactionRunner().required(()->{
    var gate=registry.lock(actor,meeting,MeetingAccess.Action.EDIT);var guard=authority.publicationWriteGuard().controls(preparation,actor,meeting,registry.access(gate));var replay=batchReceipt(meeting,scope,request);if(replay!=null)return replay;fence(meeting,start);
+   String working=null,originalTask=null,recordingSession=null,originalRun=null;
+   if(adjustment){
+    working=j.queryForObject("SELECT transcript_revision_id FROM meeting WHERE id=?",String.class,meeting);
+    if(j.queryForObject("SELECT EXISTS(SELECT 1 FROM recording_processing WHERE meeting_id=? AND state IN ('WAITING_ARCHIVE','COPYING','TRANSCRIBING','ENHANCING')) OR EXISTS(SELECT 1 FROM offline_material_processing WHERE meeting_id=? AND stage IN ('TRANSCRIBING','ENHANCING','ADOPTING'))",Integer.class,meeting,meeting)==1)throw failure(409,"MATERIAL_PROCESSING_PENDING");
+    if(working==null){
+     var recording=j.queryForList("SELECT session_id,request_key FROM recording_processing WHERE meeting_id=? AND actor_id=? AND state IN ('FAILED','STALE') AND adoption_started=0 FOR UPDATE",meeting,actor.enterpriseId());
+     if(!recording.isEmpty()){
+      recordingSession=(String)recording.getFirst().get("session_id");originalRun=(String)recording.getFirst().get("request_key");
+      // The snapshot below includes all current material references, including deferred edits.
+      j.update("UPDATE recording_processing SET state='STALE',pending_materials_changed=0 WHERE session_id=?",recordingSession);
+     }else{
+      var priorTask=j.queryForList("SELECT p.task_id,p.stage FROM offline_material_processing p JOIN durable_task t ON t.id=p.task_id WHERE p.meeting_id=? AND p.actor_id=? ORDER BY t.created_at DESC,t.id DESC LIMIT 1 FOR UPDATE",meeting,actor.enterpriseId());
+      if(priorTask.isEmpty()||!Set.of("FAILED","STALE","CANCELLED").contains(priorTask.getFirst().get("stage")))throw failure(409,"MATERIAL_PROCESSING_PENDING");
+      originalTask=(String)priorTask.getFirst().get("task_id");
+      j.update("UPDATE offline_material_processing SET stage='STALE' WHERE task_id=?",originalTask);
+     }
+    }
+    for(String revision:removed)if(j.update("UPDATE material_reference m JOIN material_revision r ON r.reference_id=m.id SET m.state='REMOVED' WHERE m.meeting_id=? AND m.state='ACTIVE' AND r.id=? AND r.revision=(SELECT MAX(r2.revision) FROM material_revision r2 WHERE r2.reference_id=m.id)",meeting,revision)!=1)throw failure(409,"MATERIAL_REVISION_CONFLICT");
+    if(staged.stream().anyMatch(entry->entry.parsed().error()!=null))throw failure(422,"MATERIAL_PARSE_FAILED");
+   }
    var existing=active(meeting);if(existing.size()+staged.size()>MAX_MATERIALS)throw failure(422,"MATERIAL_LIMIT_EXCEEDED");
    for(var input:staged){var source=input.source();if(existing.stream().anyMatch(r->sameSelection(r,input.selection(),source)))throw failure(409,"MATERIAL_ALREADY_SELECTED");}
    var materialIds=new ArrayList<String>();var revisions=new ArrayList<String>();var documents=new ArrayList<String>();
-   for(var input:staged){String material=id(),revision=id(),document=id();var source=input.source();j.update("INSERT INTO material_reference(id,meeting_id,kind,provider_id,external_id,file_id,state) VALUES (?,?,?,?,?,?,'ACTIVE')",material,meeting,source.provider()==null?"LOCAL":"KNOWLEDGE",source.provider(),source.external(),source.provider()==null?source.file():null);if(source.provider()!=null)j.update("INSERT INTO material_knowledge_location(reference_id,library_id) VALUES (?,?)",material,input.selection().libraryId());insertRevision(material,revision,1,document,source,input.parsed());materialIds.add(material);revisions.add(revision);documents.add(document);}
+   for(var input:staged){String material=id(),revision=id(),document=id();var source=input.source();j.update("INSERT INTO material_reference(id,meeting_id,kind,provider_id,external_id,file_id,state) VALUES (?,?,?,?,?,?,'ACTIVE')",material,meeting,source.provider()==null?"LOCAL":"KNOWLEDGE",source.provider(),source.external(),source.provider()==null?source.file():null);if(source.provider()!=null)j.update("INSERT INTO material_knowledge_location(reference_id,library_id,library_name) VALUES (?,?,?)",material,input.selection().libraryId(),capturedNames.get(input.selection().libraryId()));insertRevision(material,revision,1,document,source,input.parsed());materialIds.add(material);revisions.add(revision);documents.add(document);}
    if(materialAuthority!=null)materialAuthority.installChange(proof,actor,meeting,registry.access(gate));
    var files=new TreeMap<String,FileRegistry.LockedReference>();
    for(int i=0;i<staged.size();i++){var input=staged.get(i);files.put(input.source().file(),registry.prelock(gate,new FileRegistry.Reference(MaterialFileReferencePolicy.CONTENT,revisions.get(i),MaterialFileReferencePolicy.PURPOSE),input.source().file()));if(input.parsed().textFile()!=null)files.put(input.parsed().textFile(),registry.prelock(gate,new FileRegistry.Reference(MaterialFileReferencePolicy.TEXT,documents.get(i),MaterialFileReferencePolicy.PURPOSE),input.parsed().textFile()));}
-   var ids=List.copyOf(files.keySet());var held=registry.prelockSources(gate,ids,false).orElseThrow(NotFound::new);var originals=registry.sources(gate,held,ids);var bindings=new ArrayList<FileRegistry.Binding>();for(var original:originals){if(!MaterialFileReferencePolicy.PURPOSE.equals(original.originalPurpose()))throw new NotFound();bindings.add(new FileRegistry.Binding(files.get(original.file().fileId()),original.file().locationRevision(),original.uploadId()));}claim(actor,meeting,gate,guard);registry.bindAll(held,bindings);snapshot(meeting);
-   var results=new ArrayList<Item>();for(int i=0;i<materialIds.size();i++)results.add(item(materialIds.get(i),revisions.get(i)));var current=listing(meeting);var result=new Batch(results,current.materialSnapshotId(),current.meetingRevision());
+   if(!files.isEmpty()){var ids=List.copyOf(files.keySet());var held=registry.prelockSources(gate,ids,false).orElseThrow(NotFound::new);var originals=registry.sources(gate,held,ids);var bindings=new ArrayList<FileRegistry.Binding>();for(var original:originals){if(!MaterialFileReferencePolicy.PURPOSE.equals(original.originalPurpose()))throw new NotFound();bindings.add(new FileRegistry.Binding(files.get(original.file().fileId()),original.file().locationRevision(),original.uploadId()));}claim(actor,meeting,gate,guard);registry.bindAll(held,bindings);}else claim(actor,meeting,gate,guard);
+   snapshot(meeting);
+   var current=listing(meeting);var byRevision=new HashMap<String,Item>();
+   for(var entry:current.items())byRevision.put(entry.materialRevisionId(),entry);
+   if(adjustment){
+    if(current.materialsPending())throw failure(409,"MATERIAL_PARSE_FAILED");
+    j.update("INSERT INTO material_adjustment(id,meeting_id,actor_id,source_id,snapshot_id,meeting_revision,original_task_id,recording_session_id,original_run_id,stage) VALUES(?,?,?,?,?,?,?,?,?,'PENDING')",key,meeting,actor.enterpriseId(),working,current.materialSnapshotId(),Long.parseLong(current.meetingRevision()),originalTask,recordingSession,originalRun);
+   }
+   var results=new ArrayList<Item>();
+   for(int i=0;i<materialIds.size();i++){
+    var entry=byRevision.get(revisions.get(i));
+    if(entry==null||!entry.id().equals(materialIds.get(i)))throw failure(503,"MATERIAL_RECEIPT_UNAVAILABLE");
+    results.add(entry);
+   }
+   var result=new Batch(results,current.materialSnapshotId(),current.meetingRevision());
    try{String body=ControlledKnowledgeClient.JSON.writeValueAsString(result);if(body.length()>262144)throw new IllegalStateException("Material batch receipt budget");j.update("INSERT INTO material_batch_receipt VALUES(?,?,?,?,UTC_TIMESTAMP(6))",meeting,scope,request,body);}catch(com.fasterxml.jackson.core.JsonProcessingException invalid){throw new IllegalStateException(invalid);}return result;
   });
  }
@@ -124,6 +166,7 @@ public final class JdbcMaterials {
   // Only the admitted recording pipeline keeps its original snapshot while material edits wait.
   // Unrelated active producers retain the existing write exclusion.
   var recordingTasks=new HashSet<>(j.queryForList("SELECT t.id FROM recording_processing p LEFT JOIN recording_archive_current c ON c.session_id=p.session_id JOIN durable_task t ON t.id=p.task_id OR t.input_id=c.input_id WHERE p.meeting_id=? AND p.state IN ('WAITING_ARCHIVE','COPYING','TRANSCRIBING','ENHANCING','FAILED')",String.class,meeting));
+  recordingTasks.addAll(j.queryForList("SELECT task_id FROM offline_material_processing WHERE meeting_id=? AND stage IN ('TRANSCRIBING','ENHANCING','ADOPTING')",String.class,meeting));
   var tasks=j.queryForList("SELECT id,state FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? ORDER BY id LIMIT 257 FOR UPDATE",meeting);
   if(tasks.size()>256)throw failure(422,"MATERIAL_TASK_BUDGET_EXCEEDED");
   if(tasks.stream().anyMatch(t->Set.of("READY","RUNNING","RECONCILING").contains(t.get("state"))&&!recordingTasks.contains(t.get("id"))))throw failure(409,"MATERIAL_PROCESSING_ACTIVE");
@@ -137,19 +180,85 @@ public final class JdbcMaterials {
    j.update("UPDATE recording_processing SET pending_material_snapshot_id=?,pending_materials_failed=?,pending_materials_changed=1 WHERE session_id=?",snapshot,failed,pending.getFirst());
    return j.queryForObject("SELECT revision FROM meeting WHERE id=?",Long.class,meeting);
   }
+  var offline=j.queryForList("SELECT task_id FROM offline_material_processing WHERE meeting_id=? AND stage IN ('TRANSCRIBING','ENHANCING','ADOPTING') LIMIT 2 FOR UPDATE",String.class,meeting);
+  if(!offline.isEmpty()){
+   if(offline.size()!=1)throw failure(409,"MATERIAL_PROCESSING_ACTIVE");
+   j.update("UPDATE offline_material_processing SET pending_snapshot_id=?,pending_failed=?,pending_changed=1 WHERE task_id=?",snapshot,failed,offline.getFirst());
+   return j.queryForObject("SELECT revision FROM meeting WHERE id=?",Long.class,meeting);
+  }
   var subject=fences.lock(new SubjectRef("MEETING",meeting),false).orElseThrow();long revision=subject.businessVersion()+1;int changed;if(failed)changed=j.update("UPDATE meeting SET materials_pending=1,revision=?,needs_generation=1,generation_fingerprint=NULL,updated_at=UTC_TIMESTAMP(6) WHERE id=? AND revision=? AND cancel_epoch=?",revision,meeting,subject.businessVersion(),subject.cancelEpoch());else changed=j.update("UPDATE meeting SET material_snapshot_id=?,materials_pending=0,revision=?,needs_generation=1,generation_fingerprint=NULL,updated_at=UTC_TIMESTAMP(6) WHERE id=? AND revision=? AND cancel_epoch=?",snapshot,revision,meeting,subject.businessVersion(),subject.cancelEpoch());if(changed!=1)throw new IllegalStateException("Meeting revision changed while updating materials");if(j.update("UPDATE meeting_search_projection SET meeting_revision=? WHERE meeting_id=? AND meeting_revision=?",revision,meeting,subject.businessVersion())!=1)throw new IllegalStateException("Material search projection changed");fences.advance(subject,revision,subject.cancelEpoch(),false);return revision;}
  private static boolean sameSelection(Map<String,Object> row,Selection selection,Source source){
   if(selection.fileId()!=null)return selection.fileId().equals(row.get("content_file_id"));
   return source.provider().equals(row.get("provider_id"))&&selection.documentId().equals(row.get("external_id"))
    &&selection.version().equals(row.get("external_version"))&&(row.get("library_id")==null||selection.libraryId().equals(row.get("library_id")));
  }
- private List<Map<String,Object>> active(String meeting){var rows=j.queryForList("SELECT m.id,m.provider_id,m.external_id,COALESCE((SELECT k.library_id FROM material_knowledge_location k WHERE k.reference_id=m.id),(SELECT p.library_id FROM external_document_mapping x JOIN publication p ON p.id=x.publication_id AND p.state='SUCCEEDED' WHERE x.provider_id=m.provider_id AND x.external_document_id=m.external_id)) library_id,r.id revision_id,r.revision,r.external_version,r.content_file_id,r.content_hash,r.parse_state FROM material_reference m JOIN material_revision r ON r.reference_id=m.id WHERE m.meeting_id=? AND m.state='ACTIVE' AND NOT EXISTS(SELECT 1 FROM material_revision newer WHERE newer.reference_id=m.id AND newer.revision>r.revision) ORDER BY r.created_at,m.id LIMIT 65 FOR UPDATE",meeting);if(rows.size()>MAX_MATERIALS)throw failure(422,"MATERIAL_LIMIT_EXCEEDED");return rows;}
+ static final String SOURCE_LIBRARY_SQL="""
+    COALESCE((SELECT k.library_id FROM material_knowledge_location k WHERE k.reference_id=m.id),
+             (SELECT p.library_id FROM external_document_mapping x JOIN publication p ON p.id=x.publication_id
+              WHERE p.state='SUCCEEDED' AND x.provider_id=m.provider_id AND x.external_document_id=m.external_id))
+    """;
+ private static final String ITEM_SQL="""
+    SELECT m.id,m.kind,m.external_id,r.id revision_id,r.external_version,r.content_file_id,r.content_hash,
+           r.parse_state,d.id document_id,d.error_code,u.display_name,u.expected_size,
+    """+SOURCE_LIBRARY_SQL+"""
+           AS library_id
+    FROM material_reference m JOIN material_revision r ON r.reference_id=m.id
+    LEFT JOIN parsed_document d ON d.material_revision_id=r.id
+    LEFT JOIN upload_session u ON u.completed_file_id=r.content_file_id AND u.state='COMPLETED'
+    """;
+ private List<Map<String,Object>> active(String meeting){var rows=j.queryForList("SELECT m.id,m.provider_id,m.external_id,"+SOURCE_LIBRARY_SQL+" library_id,r.id revision_id,r.revision,r.external_version,r.content_file_id,r.content_hash,r.parse_state FROM material_reference m JOIN material_revision r ON r.reference_id=m.id WHERE m.meeting_id=? AND m.state='ACTIVE' AND NOT EXISTS(SELECT 1 FROM material_revision newer WHERE newer.reference_id=m.id AND newer.revision>r.revision) ORDER BY r.created_at,m.id LIMIT 65 FOR UPDATE",meeting);if(rows.size()>MAX_MATERIALS)throw failure(422,"MATERIAL_LIMIT_EXCEEDED");return rows;}
  private Map<String,Object> selected(String meeting,String material){return active(meeting).stream().filter(r->material.equals(r.get("id"))).findFirst().map(r->{var copy=new HashMap<>(r);copy.put("display_name",j.queryForObject("SELECT display_name FROM upload_session WHERE completed_file_id=? AND state='COMPLETED'",String.class,r.get("content_file_id")));return copy;}).orElseThrow(NotFound::new);}
  private Root root(String meeting){var row=j.queryForMap("SELECT revision,cancel_epoch,material_snapshot_id FROM meeting WHERE id=?",meeting);return new Root(((Number)row.get("revision")).longValue(),((Number)row.get("cancel_epoch")).longValue(),(String)row.get("material_snapshot_id"));}
  private void fence(String meeting,Root expected){if(!root(meeting).equals(expected))throw failure(409,"REVISION_CONFLICT");}
- private Listing listing(String meeting){var root=root(meeting);var rows=active(meeting);var pending=j.queryForList("SELECT pending_material_snapshot_id FROM recording_processing WHERE meeting_id=? AND pending_materials_changed=1 LIMIT 2",String.class,meeting);if(pending.size()>1)throw new IllegalStateException("Recording material scope is ambiguous");return new Listing(rows.stream().map(r->item((String)r.get("id"),(String)r.get("revision_id"))).toList(),pending.isEmpty()?root.snapshot():pending.getFirst(),rows.stream().anyMatch(r->!"READY".equals(r.get("parse_state"))),Long.toString(root.revision()));}
+ private Listing listing(String meeting){
+  var root=root(meeting);
+  var rows=j.queryForList(ITEM_SQL+"""
+      WHERE m.meeting_id=? AND m.state='ACTIVE'
+        AND NOT EXISTS(SELECT 1 FROM material_revision newer WHERE newer.reference_id=m.id AND newer.revision>r.revision)
+      ORDER BY r.created_at,m.id LIMIT 65
+      """,meeting);
+  if(rows.size()>MAX_MATERIALS)throw failure(422,"MATERIAL_LIMIT_EXCEEDED");
+  var items=new ArrayList<Item>();var seen=new HashSet<String>();
+  for(var row:rows){
+   var entry=materialItem(row);
+   if(!seen.add(entry.id()))throw failure(503,"MATERIAL_RECEIPT_UNAVAILABLE");
+   items.add(entry);
+  }
+  var pending=j.queryForList("SELECT pending_material_snapshot_id FROM recording_processing WHERE meeting_id=? AND pending_materials_changed=1 UNION ALL SELECT pending_snapshot_id FROM offline_material_processing WHERE meeting_id=? AND pending_changed=1 LIMIT 2",String.class,meeting,meeting);
+  if(pending.size()>1)throw new IllegalStateException("Recording material scope is ambiguous");
+  return new Listing(items,pending.isEmpty()?root.snapshot():pending.getFirst(),items.stream().anyMatch(item->!"READY".equals(item.state())),Long.toString(root.revision()));
+ }
  private Item receipt(String meeting,String scope,String request){var rows=j.queryForList("SELECT request_hash,material_id,material_revision_id FROM material_command_receipt WHERE meeting_id=? AND scope_hash=?",meeting,scope);if(rows.isEmpty())return null;var row=rows.getFirst();if(!request.equals(row.get("request_hash")))throw failure(409,"IDEMPOTENCY_CONFLICT");return item((String)row.get("material_id"),(String)row.get("material_revision_id"));}
- private Item item(String material,String revision){var row=j.queryForMap("SELECT m.kind,COALESCE((SELECT k.library_id FROM material_knowledge_location k WHERE k.reference_id=m.id),(SELECT p.library_id FROM external_document_mapping x JOIN publication p ON p.id=x.publication_id AND p.state='SUCCEEDED' WHERE x.provider_id=m.provider_id AND x.external_document_id=m.external_id)) library_id,m.external_id,r.external_version,r.content_file_id,r.content_hash,r.parse_state,d.id document_id,d.error_code,u.display_name,u.expected_size FROM material_reference m JOIN material_revision r ON r.reference_id=m.id JOIN parsed_document d ON d.material_revision_id=r.id JOIN upload_session u ON u.completed_file_id=r.content_file_id AND u.state='COMPLETED' WHERE m.id=? AND r.id=?",material,revision);return new Item(material,revision,(String)row.get("document_id"),(String)row.get("content_file_id"),(String)row.get("display_name"),(String)row.get("kind"),(String)row.get("external_version"),(String)row.get("library_id"),(String)row.get("external_id"),row.get("expected_size").toString(),(String)row.get("content_hash"),(String)row.get("parse_state"),(String)row.get("error_code"));}
+ private Item item(String material,String revision){
+  return materialItem(j.queryForMap(ITEM_SQL+" WHERE m.id=? AND r.id=?",material,revision));
+ }
+ private static Item materialItem(Map<String,Object> row){
+  if(row.get("document_id")==null||row.get("display_name")==null||row.get("expected_size")==null)throw failure(503,"MATERIAL_RECEIPT_UNAVAILABLE");
+  return new Item((String)row.get("id"),(String)row.get("revision_id"),(String)row.get("document_id"),(String)row.get("content_file_id"),
+          (String)row.get("display_name"),(String)row.get("kind"),(String)row.get("external_version"),(String)row.get("library_id"),
+          (String)row.get("external_id"),row.get("expected_size").toString(),(String)row.get("content_hash"),(String)row.get("parse_state"),(String)row.get("error_code"));
+ }
+ static boolean awaitingAdoption(JdbcTemplate jdbc,String meeting,String usedSnapshot,long runRevision){
+  return jdbc.queryForObject("""
+    SELECT COALESCE((
+      SELECT CASE WHEN a.source_id IS NOT NULL AND a.snapshot_id <=> m.material_snapshot_id
+                  THEN c.receipt_body IS NULL END
+      FROM material_adjustment a LEFT JOIN material_enhancement_candidate c ON c.id=a.candidate_id
+      WHERE a.meeting_id=m.id AND a.meeting_revision>? ORDER BY a.meeting_revision DESC LIMIT 1
+    ),NOT (m.material_snapshot_id <=> ?)) FROM meeting m WHERE m.id=?
+    """,Integer.class,runRevision,usedSnapshot,meeting)==1;
+ }
+ static List<Map<String,Object>> frozenFiles(JdbcTemplate jdbc,String snapshot,String meeting){return snapshot==null?List.of():jdbc.queryForList("""
+                    SELECT r.id materialRevisionId,u.display_name name,r.parse_state state,m.kind source,
+                           r.external_version sourceVersion,d.error_code error,
+                    """+JdbcMaterials.SOURCE_LIBRARY_SQL+"""
+                           AS sourceLibraryId,(SELECT location.library_name FROM material_knowledge_location location WHERE location.reference_id=m.id) AS sourceLibraryName
+                    FROM material_snapshot_item s JOIN material_revision r ON r.id=s.material_revision_id
+                    JOIN material_reference m ON m.id=r.reference_id
+                    JOIN upload_session u ON u.completed_file_id=r.content_file_id AND u.state='COMPLETED'
+                    LEFT JOIN parsed_document d ON d.material_revision_id=r.id
+                    WHERE s.snapshot_id=? AND m.meeting_id=? ORDER BY s.ordinal LIMIT 64
+                    """,snapshot,meeting);}
  private static String id(){return UUID.randomUUID().toString();}
  static ama.contract.TranscriptContracts.Failure failure(int status,String code){return new ama.contract.TranscriptContracts.Failure(status,code);}
 }

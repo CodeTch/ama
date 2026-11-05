@@ -42,7 +42,17 @@ class SpeechReviewIT {
    scenario("asr","/inference/asr-nano/modelserving/asr",Map.of("binary_sha256",sha(normalized)),Map.of("text",original));
   }
   scenario("punctuation","/inference/asr-punc/modelserving/punc",Map.of("text_equals",original),Map.of("text",enhanced));
-  var f=harness.new Fixture(audios);var lease=f.claim(f.queue);var carrier=TranscriptImportRuntime.prepare(f.queue,lease,f.settings,NEVER);assertTrue(f.queue.completeWithEffects(lease,carrier));return f;
+  var f=harness.new Fixture(audios);
+  try(var heartbeat=java.util.concurrent.Executors.newSingleThreadScheduledExecutor()){
+   var lease=f.claim(f.queue);
+   // This fixture runs the real speech pipeline without WorkerLoop. Renew the same lease while preparing its clips.
+   var renewal=heartbeat.scheduleWithFixedDelay(()->f.queue.renew(lease),5,5,java.util.concurrent.TimeUnit.SECONDS);
+   try{
+    var carrier=TranscriptImportRuntime.prepare(f.queue,lease,f.settings,NEVER);
+    assertTrue(f.queue.completeWithEffects(lease,carrier));
+    return f;
+   }finally{renewal.cancel(false);}
+  }catch(Exception|Error failure){f.close();throw failure;}
  }
  JdbcSavedTranscripts service(ControlledSpeechImportIT.Fixture f){return service(f,f.settings.archives());}
  JdbcSavedTranscripts service(ControlledSpeechImportIT.Fixture f,java.util.function.Supplier<ama.config.ConfigArchiveSource.Snapshot> archives){
@@ -78,7 +88,9 @@ class SpeechReviewIT {
  @SuppressWarnings("unchecked") @Test void realProposalBlocksConfirmationUntilAnExplicitDecisionAndReplaysTheOriginal()throws Exception {
   try(var f=fixture()){
    var service=service(f);String working=working(f,service),key=id();long base=revision(f);
-   var proposed=service.proposeCorrections(f.actor,f.meeting,key,base,working,id());var current=service.readCorrections(f.actor,f.meeting,working);var items=(List<Map<String,Object>>)current.get("items");assertEquals(1,items.size());var candidate=items.getFirst();assertEquals(ORIGINAL,candidate.get("source"));assertEquals(ENHANCED,candidate.get("replacement"));assertEquals("PENDING",candidate.get("status"));
+   assertEquals(1,service.readCorrections(f.actor,f.meeting,working).get("availableProposalCount"));
+   assertEquals("CORRECTIONS_PENDING",assertThrows(Failure.class,()->service.mutate(f.actor,f.meeting,id(),new Command(Operation.CONFIRM,base,working,List.of()),id())).code());
+   var proposed=service.proposeCorrections(f.actor,f.meeting,key,base,working,id());var current=service.readCorrections(f.actor,f.meeting,working);assertEquals(0,current.get("availableProposalCount"));var items=(List<Map<String,Object>>)current.get("items");assertEquals(1,items.size());var candidate=items.getFirst();assertEquals(ORIGINAL,candidate.get("source"));assertEquals(ENHANCED,candidate.get("replacement"));assertEquals("PENDING",candidate.get("status"));
    assertFalse((Boolean)((Map<String,Object>)service.readCurrent(f.actor,f.meeting).get("capabilities")).get("canConfirm"));
    assertEquals("CORRECTIONS_PENDING",assertThrows(Failure.class,()->service.mutate(f.actor,f.meeting,id(),new Command(Operation.CONFIRM,base,working,List.of()),id())).code());
    String decisionKey=id();var command=new Command(Operation.CORRECTION,base,working,List.of(),null,new Correction((String)candidate.get("id"),CorrectionDecision.ACCEPT));var accepted=service.mutate(f.actor,f.meeting,decisionKey,command,id());String edited=result(accepted,"revisionId");
@@ -170,7 +182,13 @@ class SpeechReviewIT {
    String renamed=result(service.mutate(f.actor,f.meeting,id(),new Command(Operation.SPEAKERS,revision(f),assigned,List.of(),null,null,new SpeakerEdit(List.of(segment),"人工核对的李工",null)),id()),"revisionId");String renamedSpeaker=(String)segments(service.readCurrent(f.actor,f.meeting)).getFirst().get("speakerId");assertNotEquals(speaker,renamedSpeaker);assertEquals("人工核对的王工",((List<Map<String,Object>>)service.readSpeakers(f.actor,f.meeting,assigned).get("items")).getFirst().get("label"));
    String undone=result(service.mutate(f.actor,f.meeting,id(),new Command(Operation.UNDO,revision(f),renamed,List.of()),id()),"revisionId");assertEquals(speaker,segments(service.readCurrent(f.actor,f.meeting)).getFirst().get("speakerId"));assertTrue((Boolean)service.mutate(f.actor,f.meeting,key,command,id()).get("replayed"));assertEquals(undone,selected(service.readCurrent(f.actor,f.meeting)).get("id"));
    assertEquals(originalRoot,j.queryForMap("SELECT owner_id,access_revision FROM meeting WHERE id=?",f.meeting));assertEquals(0,j.queryForObject("SELECT COUNT(*) FROM transcript_speaker_access WHERE meeting_id=?",Integer.class,f.meeting));
-   service.mutate(f.actor,f.meeting,id(),new Command(Operation.CONFIRM,revision(f),undone,List.of()),id());assertNotNull(service.readCurrent(f.actor,f.meeting).get("confirmation"));
+   assertEquals(old,((Map<?,?>)service.readOwner(f.actor,f.meeting,assigned).get("speakerSnapshot")).get("items"));
+   assertEquals(false,service.readCurrent(f.actor,f.meeting).get("previouslyConfirmed"));
+   assertEquals("CORRECTIONS_PENDING",assertThrows(Failure.class,()->service.mutate(f.actor,f.meeting,id(),new Command(Operation.CONFIRM,revision(f),undone,List.of()),id())).code());
+   String pending=candidate(f,service,undone);
+   String reviewed=result(service.mutate(f.actor,f.meeting,id(),new Command(Operation.CORRECTION,revision(f),undone,List.of(),null,new Correction(pending,CorrectionDecision.REJECT)),id()),"revisionId");
+   service.mutate(f.actor,f.meeting,id(),new Command(Operation.CONFIRM,revision(f),reviewed,List.of()),id());
+   var confirmed=service.readCurrent(f.actor,f.meeting);assertNotNull(confirmed.get("confirmation"));assertEquals(true,confirmed.get("previouslyConfirmed"));
   }
  }
  @Test void speakerHttpCreatesAVersionedLabelAndRejectsAForgedIdField()throws Exception {

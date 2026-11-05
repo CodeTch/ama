@@ -17,3 +17,13 @@ test('formal route and progress use the same saved-content and candidate gates; 
  assert.equal(resolveMeetingStage('confirm',meetingStages(navigation)),'confirm');
  assert.equal(resolveMeetingStage('confirm',meetingStages(navigation,true)),'published');
 });
+
+test('a previous successful RAW task cannot mark a later failed import complete',()=>{
+ const value:any={stage:'TRANSCRIPT_FAILED',saved:{},privateSections:{tasks:{items:[
+  {kind:'TRANSCRIPT_IMPORT_V1',state:'FAILED'},{kind:'TRANSCRIPT_IMPORT_V1',state:'SUCCEEDED'}]}}};
+ assert.equal(workspaceStages(value).complete[0],false);
+ assert.equal(workspaceStages(value).available.transcript,false);
+ value.saved.transcriptRevisionId='previous-working-version';
+ assert.equal(workspaceStages(value).complete[0],false);
+ assert.equal(workspaceStages(value).available.transcript,true);
+});

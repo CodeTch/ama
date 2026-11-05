@@ -191,7 +191,8 @@
       },
       "meetingRevision": {
         "type": "string",
-        "pattern": "^(0|[1-9][0-9]*)$"
+        "pattern": "^(0|[1-9][0-9]*)$",
+        "description": "Advances by one when applied immediately. A deferred material change on a running recording returns the submitted meeting revision."
       }
     }
   },
@@ -323,14 +324,37 @@
                 },
                 "items": {
                   "type": "array",
-                  "minItems": 1,
+                  "minItems": 0,
                   "maxItems": 64,
                   "uniqueItems": true,
                   "items": {
                     "$ref": "#/MaterialSelection"
                   }
+                },
+                "removed": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "uniqueItems": true,
+                  "maxItems": 64
                 }
-              }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "removed"
+                  ]
+                },
+                {
+                  "properties": {
+                    "items": {
+                      "minItems": 1
+                    }
+                  }
+                }
+              ]
             }
           }
         }
@@ -356,7 +380,7 @@
           "description": "Fresh authority unavailable; retry original request"
         }
       },
-      "description": "Atomic 1–64 exact source selection. Validate the entire external batch before staging; current local ACL and signed exact-version proof are rechecked at commit. One invalid source adds no references and changes no effective snapshot. Original ordered body/key replays the immutable receipt; changing order/body conflicts. Managed staging files may remain for cleanup."
+      "description": "Atomic 1–64 exact source selection. Validate the entire external batch before staging; current local ACL and signed exact-version proof are rechecked at commit. One invalid source adds no references and changes no effective snapshot. Original ordered body/key replays the immutable receipt; changing order/body conflicts. Managed staging files may remain for cleanup. Supplying removed revision IDs applies a private draft and schedules a reviewable enhancement for the current working transcript in the same transaction. Before a working transcript exists, applying to a failed or cancelled first run schedules a new run from its original main files and the new material snapshot."
     }
   },
   "retry": {

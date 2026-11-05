@@ -133,11 +133,14 @@ final class SpeechReviewRepository {
  }
  List<Map<String,Object>> items(SavedTranscriptGraph graph,boolean writable){
   var current=new HashMap<String,FullRow>();for(var s:graph.segments(graph.selected()))current.put(s.string("segment_id"),s);var result=new ArrayList<Map<String,Object>>();
+  Boolean corpusCurrent=null;
   for(var row:graph.review().candidates()){
    var segment=current.get(text(row,"segment_id"));require(segment!=null,PROVENANCE_UNAVAILABLE);boolean pending="PENDING".equals(row.get("state"));var item=new LinkedHashMap<String,Object>();
    item.put("id",row.get("id"));item.put("segmentId",row.get("segment_id"));item.put("source",row.get("before_text"));item.put("replacement",row.get("after_text"));item.put("status",row.get("state"));item.put("operationId",row.get("decision_revision_id"));
    item.put("range",TranscriptCorrectionRange.between(text(row,"before_text"),text(row,"after_text")));item.put("createdSourceRevisionId",row.get("created_source_revision_id"));item.put("kind","SPEECH_ENHANCEMENT");
-   item.put("canAccept",writable&&pending&&segment.string("body").equals(row.get("before_text"))&&new ama.governance.JdbcGovernanceRuntime(j.getDataSource()).corpusCurrent(graph.input().string("id")));item.put("canReject",writable&&pending);item.put("canUndo",writable&&"ACCEPTED".equals(row.get("state"))&&graph.selected().equals(row.get("decision_revision_id")));result.add(Collections.unmodifiableMap(item));
+   boolean applicable=writable&&pending&&segment.string("body").equals(row.get("before_text"));
+   if(applicable&&corpusCurrent==null)corpusCurrent=new ama.governance.JdbcGovernanceRuntime(j.getDataSource()).corpusCurrent(graph.input().string("id"));
+   item.put("canAccept",applicable&&Boolean.TRUE.equals(corpusCurrent));item.put("canReject",writable&&pending);item.put("canUndo",writable&&"ACCEPTED".equals(row.get("state"))&&graph.selected().equals(row.get("decision_revision_id")));result.add(Collections.unmodifiableMap(item));
   }
   return List.copyOf(result);
  }

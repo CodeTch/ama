@@ -55,6 +55,9 @@ public final class JdbcProcessingIntake {
         this.preparer=Objects.requireNonNull(preparer);
     }
     public ImportAccepted accept(Actor actor,String meeting,String key,ImportRequest request,String trace) {
+        return accept(actor,meeting,key,request,trace,false);
+    }
+    public ImportAccepted accept(Actor actor,String meeting,String key,ImportRequest request,String trace,boolean enhance) {
         independent();
         ama.contract.OutboxContracts.uuid(meeting);
         key(key);
@@ -62,6 +65,7 @@ public final class JdbcProcessingIntake {
         var fields=new ArrayList<String>();
         Collections.addAll(fields,"transcript-import-request-v1",Long.toString(request.expectedRevision()),Integer.toString(request.orderedFileIds().size()));
         fields.addAll(request.orderedFileIds());
+        if(enhance)fields.add("initial-material-enhancement-v1");
         String body=digest(fields.toArray(String[]::new));
         var replay=lookup(actor,meeting,scope,keyHash,body,request);
         if(replay.isPresent())return replay.orElseThrow();
@@ -113,6 +117,7 @@ public final class JdbcProcessingIntake {
             if(prepared.spec().businessVersion()!=expected+1)throw conflict();
             var subject=fences.lock(prepared.spec().subject(),false).orElseThrow(ama.contract.ProcessingContracts::unavailable);
             if(subject.businessVersion()!=expected||subject.cancelEpoch()!=prepared.spec().cancelEpoch()||subject.deleted())throw conflict();
+            if(enhance&&j.queryForObject("SELECT EXISTS(SELECT 1 FROM offline_material_processing WHERE meeting_id=? AND stage IN ('TRANSCRIBING','ENHANCING','ADOPTING'))",Integer.class,meeting)==1)throw new Failure(409,"MATERIAL_PROCESSING_ACTIVE");
             var authority=c.authority();
             var transition=authority.beginMinutesTransition(pending,actor,meeting,gate);
             var reserved=authority.reserveIntake(gate,prepared);
@@ -129,6 +134,7 @@ public final class JdbcProcessingIntake {
             fences.advance(subject,expected+1,prepared.spec().cancelEpoch(),false);
             authority.finishMinutesTransition(transition,expected+1);
             String task=queue.enqueue(prepared.spec(),authority.adoptCreated(gate,held,prepared.spec()));
+            if(enhance&&j.update("INSERT INTO offline_material_processing(task_id,meeting_id,actor_id,snapshot_id,generation_key,decision_key) SELECT ?,id,?,material_snapshot_id,?,? FROM meeting WHERE id=? AND materials_pending=0",task,actor.enterpriseId(),UUID.randomUUID().toString(),UUID.randomUUID().toString(),meeting)!=1)throw conflict();
             if(j.update("UPDATE idempotency_record SET result_id=?,http_status=202 WHERE scope_hash=? AND result_id IS NULL",task,scope)!=1)throw unavailable();
             var result=new ImportAccepted(meeting,prepared.batchId(),prepared.inputId(),task,expected+1,Long.toString(expected+1),prepared.spec().inputFingerprint());
             audit.append(new AuditEvent(actor.enterpriseId(),"TRANSCRIPT_IMPORT_ACCEPTED",meeting,expected+1,"SUCCEEDED",trace,Instant.now()));

@@ -8,12 +8,17 @@ const uuid=(v:unknown):v is string=>typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{
 function shape(v:unknown,keys:string):v is Record<string,unknown>{return typeof v==='object'&&v!==null&&!Array.isArray(v)&&Object.keys(v).sort().join(',')===keys;}
 function navigation(v:unknown,meeting:string):v is WorkspaceNavigation{
  if(typeof v!=='object'||v===null||Array.isArray(v))return false;
- const allowed=['accessRevisionToken','contentEligibility','meetingId','navigationState','relation','revisionToken','saved','stage','lifecycle','governanceState','privateSectionsState','privateSectionsReason','privateSections'];
+ const allowed=['accessRevisionToken','contentEligibility','meetingId','navigationState','relation','revisionToken','saved','stage','lifecycle','governanceState','privateSectionsState','privateSectionsReason','privateSections','temporaryTitle','processingSource','processingMaterialStage','processingMaterialsChanged'];
  if(Object.keys(v).some(k=>!allowed.includes(k)))return false;
  const row=v as Record<string,unknown>;
  return navigationFields(row,meeting);
 }
 function navigationFields(v:Record<string,unknown>,meeting:string):v is WorkspaceNavigation{
+ if(('temporaryTitle' in v||'processingSource' in v)&&v.relation!=='OWNER')return false;
+ if('processingMaterialsChanged' in v&&(v.relation!=='OWNER'||typeof v.processingMaterialsChanged!=='boolean'))return false;
+ if('processingMaterialStage' in v&&(v.relation!=='OWNER'||!['TRANSCRIBING','ENHANCING','ADOPTING','SUCCEEDED','FAILED','STALE','CANCELLED'].includes(String(v.processingMaterialStage))))return false;
+ if(v.temporaryTitle!=null&&(typeof v.temporaryTitle!=='string'||[...v.temporaryTitle].length>256))return false;
+ if('processingSource' in v&&!workspaceTaskPage({items:[v.processingSource],hasMore:false,nextCursor:null,verification:'PERSISTED_RELATION'},meeting,'ALL'))return false;
  if('lifecycle' in v&&v.lifecycle!=='ACTIVE'||'governanceState' in v&&v.governanceState!=='ACTIVE')return false;
  if('privateSectionsState' in v||'privateSections' in v||'privateSectionsReason' in v){
   if(v.relation!=='OWNER')return false;

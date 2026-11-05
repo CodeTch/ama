@@ -6,6 +6,7 @@
       "orderedFileIds"
     ],
     "properties": {
+      "enhance": {"type":"boolean","description":"Lock the submitted material snapshot and create an initial enhanced working transcript."},
       "expectedRevision": {
         "$ref": "./meetings.yaml#/ExpectedRevision"
       },
@@ -741,6 +742,8 @@
       "output"
     ],
     "properties": {
+      "materialFiles": {"type":"array","maxItems":64,"items":{"$ref":"./recording.yaml#/RecordingProcessing/properties/materialFiles/items"}},
+      "materialStage": {"type":"string","enum":["TRANSCRIBING","ENHANCING","ADOPTING","SUCCEEDED","FAILED","STALE","CANCELLED"]},
       "taskId": {
         "type": "string",
         "format": "uuid"

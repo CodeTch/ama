@@ -146,6 +146,7 @@ CREATE TABLE IF NOT EXISTS governance_command(document TEXT NOT NULL REFERENCES 
 CREATE TABLE IF NOT EXISTS library_profile(library TEXT PRIMARY KEY REFERENCES library(id),description TEXT NOT NULL,visibility TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS governance_grant(actor TEXT NOT NULL,library TEXT NOT NULL REFERENCES library(id),can_manage INTEGER NOT NULL CHECK(can_manage IN (0,1)),PRIMARY KEY(actor,library));
 COMMIT;""")
+  self.harness_catalog=None
   self.tag_rules=config.get('publicationTagRules',dict(maxCount=20,maxLength=64,allowEmpty=True,trim=True,caseSensitive=True))
   exact(self.tag_rules,'maxCount maxLength allowEmpty trim caseSensitive')
   if any(type(self.tag_rules[k])!=int or not 1<=self.tag_rules[k]<=256 for k in ('maxCount','maxLength')) or any(type(self.tag_rules[k])!=bool for k in ('allowEmpty','trim','caseSensitive')):raise RuntimeError('Explicit publication tag rules required')
@@ -205,6 +206,8 @@ COMMIT;""")
   if method=='POST' and not isinstance(body,dict):raise Denied(400,'INVALID_PROVIDER_RECEIPT')
   if body is not None and body.get('actorId')!=actor:raise Denied()
   with self.lock:
+   if self.harness_catalog:
+    self.harness_catalog.refresh_for(actor,path,body)
    if method=='GET' and (path.startswith('/v1/knowledge/documents/index?') or re.fullmatch(r'/v1/knowledge/documents/doc-[0-9a-f]{32}\?view=permissions',path)):return self.publication_index(actor,path)
    if path.startswith('/v1/knowledge/governance/'):return self.governance(method,path,actor,body)
    if method=='POST' and path=='/v1/knowledge/material-authorizations':return self.material_authority(actor,body)
@@ -601,7 +604,9 @@ class Server(http.server.ThreadingHTTPServer):
    if not self.connections.wait_for(lambda:not self.active,timeout=5):raise TimeoutError('Controlled connection drain exceeded bound')
 
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--config',required=True);parser.add_argument('--initialize',action='store_true');parser.add_argument('--grant-actor');parser.add_argument('--grant-folder',default='controlled-root');parser.add_argument('--create-folder');parser.add_argument('--grant-read',action='store_true');parser.add_argument('--grant-publish',action='store_true');args=parser.parse_args()
+ parser=argparse.ArgumentParser();parser.add_argument('--config',required=True);parser.add_argument('--initialize',action='store_true');parser.add_argument('--grant-actor');parser.add_argument('--grant-folder',default='controlled-root');parser.add_argument('--create-folder');parser.add_argument('--grant-read',action='store_true');parser.add_argument('--grant-publish',action='store_true')
+ parser.add_argument('--harness-publication-catalog',action='store_true',help='Read demo publication destinations from the fixed local integration harness')
+ args=parser.parse_args()
  config=strict(private(args.config),8192)
  tls=transport_context(config)
  threading.stack_size(262144)
@@ -613,6 +618,10 @@ def main():
   provider.create_child_folder(args.create_folder);provider.db.close();return
  if args.grant_actor:
   provider.administer(args.grant_actor,'controlled-library',args.grant_folder,args.grant_publish,args.grant_read);provider.db.close();return
+ if args.harness_publication_catalog:
+  if config['mode']!='ISOLATED_LOOPBACK_TEST':raise RuntimeError('Local harness profile required')
+  from harness_publication_catalog import HarnessPublicationCatalog
+  provider.harness_catalog=HarnessPublicationCatalog(provider.db)
  server=Server(('127.0.0.1',int(config['port'])),provider,tls=tls)
  ready=pathlib.Path(config['readyFile']);ready.write_bytes(canonical({'port':server.server_port,'identities':provider.ids,'store':str(provider.path),'pid':os.getpid(),'pgid':os.getpgid(0)}));os.chmod(ready,0o600)
  try:server.serve_forever(poll_interval=.2)

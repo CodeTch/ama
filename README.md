@@ -38,6 +38,8 @@ python3 tools/dev/local_app.py start \
 
 启动后访问 <http://127.0.0.1:5174/meetings>。需要 CAS 登录时，为启动器提供 `AMA_CAS_ORIGIN` 及对应的 CAS 服务地址。
 
+与兄弟项目 `ama-integration-harness` 联调知识库发布时，使用 `AMA_INTEGRATION_KNOWLEDGE_ORIGIN=http://127.0.0.1:8792` 启动 AMA，并将 harness 的 `MOCK_CONTROLLED_KNOWLEDGE_ORIGIN` 指向 AMA 的本地受控知识库服务。测试账号 `1` 可在会议详情的「知识库发布」步骤选择五个示例库及已有文件夹。库名、说明和目录从 harness 接口读取，发布配置、签名授权和任务回执沿用 AMA 的发布流程。
+
 停止本地环境并保留本地数据：
 
 ```sh
