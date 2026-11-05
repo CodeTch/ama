@@ -4980,6 +4980,8 @@ export interface components {
             /** @enum {string} */
             state: "READY" | "FAILED";
             error: string | null;
+            sourceLibraryId?: string | null;
+            sourceDocumentId?: string | null;
         };
         MaterialListing: {
             items: components["schemas"]["MaterialItem"][];
@@ -7870,6 +7872,11 @@ export interface components {
             sourceFinalSeq: number;
             /** Format: date-time */
             createdAt: string;
+            speakerTurns?: {
+                offset: number;
+                startMs: number;
+                label: string;
+            }[];
         };
         RecordingSubtitles: {
             /** Format: uuid */

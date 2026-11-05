@@ -102,8 +102,8 @@ test('parsing materials leaves both intake buttons and local upload usable',asyn
   await page.getByRole('button',{name:'调整背景材料',exact:true}).click();
   const dialog=page.getByRole('dialog',{name:'会议背景材料',exact:true});
   await dialog.getByRole('button',{name:'从知识库选择',exact:true}).click();
-  const picker=page.getByRole('dialog',{name:'从知识库选择背景材料',exact:true});
-  await picker.getByRole('checkbox').check();await picker.getByRole('button',{name:'添加到会议',exact:true}).click();
+  const picker=page.getByRole('dialog',{name:'从知识库选择材料',exact:true});
+  await picker.getByRole('checkbox').check();await picker.getByRole('button',{name:'添加所选文件',exact:true}).click();
   await expect.poll(()=>batchStarted).toBe(true);
   await picker.getByRole('button',{name:'关闭知识库选择',exact:true}).click();
   await expect(dialog.getByRole('button',{name:'上传本地文件',exact:true})).toBeEnabled();

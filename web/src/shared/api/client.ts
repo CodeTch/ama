@@ -7,6 +7,8 @@ const admission=requestAdmission();
 type DeclaredErrorCode = { [K in keyof components['schemas']]: components['schemas'][K] extends {error: {code: infer C extends string}} ? C : never }[keyof components['schemas']];
 const knownCodes: ReadonlySet<string> = new Set(["CATEGORY_DICTIONARY_UNAVAILABLE", "FILE_CONFLICT", "FILE_INVALID_RANGE", "FILE_NOT_FOUND", "FILE_PURPOSE_UNAVAILABLE", "FILE_STORAGE_UNAVAILABLE", "FORBIDDEN", "IDENTITY_PROVIDER_UNAVAILABLE", "IDENTITY_UNAVAILABLE", "INVALID_ARGUMENT", "MEETING_CONFLICT", "TOPIC_NOT_PUBLISHED", "MEETING_FORBIDDEN", "MEETING_UNAVAILABLE", "REQUEST_TOO_LARGE", "UNAUTHENTICATED", "RECORDING_CONFLICT", "RECORDING_GAP", "RECORDING_PAUSED", "RECORDING_UNAVAILABLE", "RECORDING_RATE_LIMITED", "RECORDING_READ_ONLY", "RECORDING_ARCHIVE_NOT_READY", "RECORDING_ARCHIVE_CONFLICT", "RECORDING_ARCHIVE_UNAVAILABLE", "INVALID_RANGE"] satisfies readonly DeclaredErrorCode[]);
 const materialMessages:Readonly<Record<string,readonly [number,string]>>={
+ RECORDING_MATERIALS_CHANGED:[409,'背景材料版本已更新，请核对后继续处理。'],
+ MATERIAL_PROCESSING_ACTIVE:[409,'会议任务正在处理，请在完成后查回原材料请求。'],
  MATERIAL_UNAVAILABLE:[503,'材料服务暂不可用，请保留原请求后重试。'],
  MATERIAL_KNOWLEDGE_UNAVAILABLE:[503,'知识库材料服务尚未就绪，请稍后重试。'],
  MATERIAL_KNOWLEDGE_CONTENT_INVALID:[503,'知识库文档内容校验失败，请联系管理员核对文件版本。'],

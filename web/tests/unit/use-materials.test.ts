@@ -126,3 +126,24 @@ test('queued knowledge batches capture the revision after previous mutations com
  try{await state.reload();const first=state.addKnowledge(selection('a'));await tick();const second=state.addKnowledge(selection('b'));await tick();assert.deepEqual(revisions,['1']);release();await Promise.all([first,second]);assert.deepEqual(revisions,['1','2']);assert.equal(state.busy.value,false);assert.equal(state.jobs.value.length,0);
  }finally{release();state.dispose();}
 });
+
+test('all libraries continues past empty file pages, preserves composite identities and clears an explicitly cancelled draft',async()=>{
+ const prior=fetch,version='c'.repeat(64),ctx=context(),calls:string[]=[];
+ globalThis.fetch=async url=>{
+  const path=new URL(String(url)),q=path.searchParams.get('search'),cursor=path.searchParams.get('cursor');
+  if(path.pathname.endsWith('material-libraries'))return Response.json(cursor?{items:[{id:'lib-b',name:'预算资料',documentCount:1,updatedAt:null}],cursor:null}:{items:[{id:'lib-a',name:'会议'}],cursor:'next-library'});
+  const lib=path.pathname.split('/').at(-2)!;calls.push(lib+':'+(q??''));
+  const doc={libraryId:lib,id:'shared',name:'说明',version,sha256:version,sizeBytesToken:'4'};
+  return Response.json({items:q?[]:[doc],cursor:null});
+ };
+ const picker=useKnowledgeMaterials(api(),()=>'owner',()=>meeting,ctx);
+ try{
+  await picker.open();picker.toggle(picker.documents.value[0]!);
+  await picker.search('预算');
+  assert.deepEqual(picker.documents.value.map(x=>x.libraryId),['lib-b']);
+  assert(calls.includes('lib-a:预算'));assert(calls.includes('lib-b:'));
+  picker.toggle(picker.documents.value[0]!);
+  assert.equal(picker.selected.value.length,2);
+  assert(picker.close());await picker.open();assert.equal(picker.selected.value.length,0);assert.equal(picker.query.value,'');
+ }finally{picker.dispose();globalThis.fetch=prior;}
+});

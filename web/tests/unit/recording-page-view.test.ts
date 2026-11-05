@@ -18,8 +18,8 @@ async function renderPage(component:unknown,applicationKey:unknown,phase:Phase='
  const current=ref({actor:{enterpriseId:'actor-1',status:'ACTIVE',roles:['USER'] as const},csrfToken:'csrf',expiresAt:'2099-01-01T00:00:00.000Z'});
  const recorder={record:shallowReadonly(ref(record)),phase:shallowReadonly(ref(phase)),error:shallowReadonly(ref<string|null>(null)),partElapsed:shallowReadonly(ref(9000)),elapsed:shallowReadonly(ref(9000)),attach:async()=>{},start:async()=>{},pause:()=>{},resume:async()=>{},interrupt:async()=>{},end:async()=>{},retry:async()=>{},files:async()=>[],finish:async()=>{},invalidate:async()=>{},logout:async()=>{},dispose:()=>{}};
  const command={state:shallowReadonly(ref('EMPTY')),snapshot:shallowReadonly(ref(null)),ack:shallowReadonly(ref(null))};
- const pcmRecord=record.parts.length?{schema:1,actor:record.actor,meetingId:record.meeting,session:{sessionId:meetingId,partId:record.parts.at(-1)!.id,writerEpoch:2,backendId:'a'.repeat(64)},parts:record.parts.map(p=>({partId:p.id,finalSequence:p.chunks.length,sampleCount:p.elapsedMs*16,confirmedSequence:1,confirmedSamples:p.savedElapsedMs*16,endReason:'MANUAL',tailIntegrity:'COMPLETE'})),finished:record.finished}:null;
- const pcmRecorder={...recorder,record:shallowReadonly(ref(pcmRecord)),meetingId:ref(meetingId),pendingCount:ref(!record.finished&&record.parts.length?1:0),pendingBytes:ref(!record.finished&&record.parts.length?1024:0),connected:ref(true),reconnect:async()=>{},restore:async()=>null};
+ const pcmRecord=record.parts.length?{schema:1,actor:record.actor,meetingId:record.meeting,session:{sessionId:meetingId,partId:record.parts.at(-1)!.id,writerEpoch:2,backendId:'a'.repeat(64)},parts:record.parts.map(p=>({partId:p.id,finalSequence:p.chunks.length,sampleCount:p.elapsedMs*16,confirmedSequence:1,confirmedSamples:p.savedElapsedMs*16,endReason:['RECORDING','PAUSED','SAVING'].includes(phase)?'ACTIVE':'MANUAL',tailIntegrity:'COMPLETE'})),finished:record.finished}:null;
+ const pcmRecorder={...recorder,record:shallowReadonly(ref(pcmRecord)),meetingId:ref(meetingId),pendingCount:ref(phase==='RECORDING'||phase==='PAUSED'?1:0),pendingBytes:ref(!record.finished&&record.parts.length?1024:0),connected:ref(true),reconnect:async()=>{},restore:async()=>null};
  const storage=new Map<string,string>();
  const app={pcmRecorder,subtitleApi:{read:async()=>({meetingId,sessionId:meetingId,events:[],nextCursor:'0',hasMore:false,delayed:false,state:'IDLE'})},recordingApi:{archive:async()=>({taskId:meetingId,state:'SUCCEEDED',available:true,sampleCount:144000}),audioUrl:()=>'/api/v1/recordings/'+meetingId+'/audio'},session:{current:shallowReadonly(current),status:shallowReadonly(ref('ACTIVE')),refresh:async()=>{},invalidate:()=>{},logout:async()=>{},onLogout:()=>()=>{}},recorder,recordingStore:{latest:async()=>null,load:async()=>null,save:async()=>{},append:async()=>{},file:async()=>new File([], 'empty.webm'),clear:async()=>{}},create:{command,submit:async()=>({id:meetingId})},uploadQueue:{ready:shallowReadonly(ref(false)),blocked:shallowReadonly(ref(false)),items:shallowReadonly(ref([])),importCommand:command,open:async()=>{},add:async()=>{},retry:async()=>{},submitImport:async()=>{}},setMeetingScope:()=>{},meetingScope:shallowReadonly(ref(meetingId)),infoScopeReady:shallowReadonly(ref(true)),info:{},journals:{tab:'recording-page-view',recovery:'NEW_NAMESPACE',storage:{getItem:(key:string)=>storage.get(key)??null,setItem:(key:string,value:string)=>storage.set(key,value),removeItem:(key:string)=>storage.delete(key)}},options:{people:async()=>({items:[{stableId:'actor-1',displayName:'录音负责人'}],nextCursor:null})},dispose:()=>{}};
  const view=capture?{...(component as any),setup(props:any,context:any){const state=(component as any).setup(props,context);capture(state,{pcmRecorder,current,router});return state;}}:component;const html=await renderToString(createSSRApp({render:()=>h(view as any)}).provide(applicationKey as any,app).use(router));
@@ -43,12 +43,12 @@ test('online recording view matches prototype structure and state copy',async()=
   assert.match(active,/暂停录音/);
   assert.match(active,/class="recording-live"/);
   assert.doesNotMatch(active,/实时识别尚未安装/);
-  assert.match(active,/待服务端确认/);
+  assert.match(active,/待服务端确认/);assert.doesNotMatch(active,/已保存录音 · 1个文件/);
   const interrupted=await renderPage(component,applicationKey,'INTERRUPTED',{...emptyRecord(),parts:[part('INTERRUPTED')]});
   assert.match(interrupted,/内容保留/);
   assert.match(interrupted,/已保留可恢复的音频范围，可开始下一段。/);
   const finished=await renderPage(component,applicationKey,'FINISHED',{...emptyRecord(),finished:true,parts:[part('SAVED')]});
-  assert.match(finished,/归档/);
+  assert.match(finished,/录音已保存/);assert.doesNotMatch(finished,/aria-label="录音归档"|aria-label="录音处理"/);
  }finally{await server.close();}
 });
 
@@ -75,7 +75,7 @@ test('authorization and saving cannot advertise an interrupted part ready to con
   assert.match(authorizing,/第1段 · 等待麦克风授权/);
   assert.doesNotMatch(authorizing,/可开始下一段|已中断，内容保留/);
   const saving=await renderPage(component,applicationKey,'SAVING',record);
-  assert.match(saving,/第1段 · 保存中/);
+  assert.match(saving,/第1段 · 保存中/);assert.doesNotMatch(saving,/已保存录音 · 1个文件/);
   assert.doesNotMatch(saving,/可开始下一段|已中断，内容保留/);
  }finally{await server.close();}
 });

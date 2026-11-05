@@ -71,6 +71,8 @@ final class JdbcSpeechExecutionObserver implements HttpSpeechModelPort.Execution
   if(recoveryUpper==null){var upper=q.jdbc.queryForList("SELECT id FROM speech_execution WHERE service_key=? AND settled_at IS NULL ORDER BY id DESC LIMIT 1",String.class,ControlledSpeechProfile.SERVICE);if(upper.isEmpty())return 0;recoveryUpper=upper.getFirst();recoveryAfter="";}
   var rows=q.jdbc.queryForList("SELECT id,scope_sha256,path,request_sha256,state,lease_task_id,lease_attempt,lease_owner_sha256,lane FROM speech_execution WHERE service_key=? AND settled_at IS NULL AND id>? AND id<=? ORDER BY id LIMIT ?",ControlledSpeechProfile.SERVICE,recoveryAfter,recoveryUpper,limit);int recovered=0;
   for(var row:rows){check();recoveryAfter=text(row,"id");try{
+   // A live caption HTTP call settles its own reservation. Probe immediately on uncertain delivery or an expired writer.
+   if("REALTIME".equals(row.get("lane"))&&"RESERVED".equals(row.get("state"))&&ownerCurrent(row))continue;
    String id=text(row,"id"),path=text(row,"path"),sha=text(row,"request_sha256");var observed=proofs.lookup(id);
    if(observed.isEmpty()&&("UNKNOWN".equals(row.get("state"))||!ownerCurrent(row)))observed=Optional.of(proofs.fence(id,path,sha));
    if(observed.isEmpty()||!observed.get().terminal())continue;var proof=observed.get();

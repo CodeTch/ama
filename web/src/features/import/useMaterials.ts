@@ -36,10 +36,14 @@ function validJobs(v:unknown,actor:string,meeting:string):v is StoredJob[]{
  });
 }
 
+export function materialJobsJournal(context:TabJournalContext){
+ return createScopedPrivateJournal(context,'import-materials',validJobs);
+}
+
 /** Independent material intake. Journals retain original commands, never bytes or restored ACK authority. */
 export function useMaterials(api:Api,actor:()=>string|null,meeting:()=>string,context:TabJournalContext,eligible:()=>boolean=()=>true,discardedBatch:()=>void=()=>{}){
  const items=shallowRef<readonly MaterialItem[]>([]),jobs=shallowRef<readonly MaterialJob[]>([]),ready=shallowRef(false),busy=shallowRef(false),loading=shallowRef(false),error=shallowRef<string|null>(null),storageBlocked=shallowRef(false),listing=shallowRef<MaterialListing|null>(null);
- const journal=createScopedPrivateJournal(context,'import-materials',validJobs),files=new Map<string,File>();
+ const journal=materialJobsJournal(context),files=new Map<string,File>();
  let epoch=0,disposed=false,controller=new AbortController(),restored=false,reloadFlight:Promise<void>|null=null,readSequence=0;
  // Bound byte preparation independently of serialized meeting mutations.
  let uploadTails=[Promise.resolve(),Promise.resolve()],uploadSlot=0,mutationTail=Promise.resolve(),running=0,reservedKnowledge=0;
@@ -136,17 +140,68 @@ export function useKnowledgeMaterials(api:Api,actor:()=>string|null,meeting:()=>
  const journal=createScopedPrivateJournal(context,'material-picker',(v):v is PickerDraft=>validPicker(v));let epoch=0,read=0,libRead=0,controller=new AbortController(),disposed=false;
  function active(turn:number){if(disposed||turn!==epoch||!actor()||!materialUuid(meeting()))throw aborted();}
  function persist(){if(!actor()||!materialUuid(meeting()))throw aborted();if(journal.save(actor()!,meeting(),{search:query.value,library:library.value,review:review.value,selected:[...selected.value]})!=='SAVED')throw new Error('无法保存知识库选择，请恢复浏览器存储后重试。');}
- function invalidate(){epoch++;read++;libRead++;controller.abort();controller=new AbortController();libraries.value=[];documents.value=[];selected.value=[];query.value='';library.value='';review.value=false;loading.value=false;libraryLoading.value=false;error.value=null;libraryError.value=null;cursor.value=null;libraryCursor.value=null;opened.value=false;}
+ function invalidate(){documentRequest?.abort();epoch++;read++;libRead++;controller.abort();controller=new AbortController();libraries.value=[];documents.value=[];selected.value=[];query.value='';library.value='';review.value=false;loading.value=false;libraryLoading.value=false;error.value=null;libraryError.value=null;cursor.value=null;libraryCursor.value=null;opened.value=false;}
  const stop=watch(()=>[actor(),meeting()],()=>{invalidate();journal.synchronize(actor(),materialUuid(meeting())?meeting():null);},{flush:'sync'});
  async function loadLibraries(more=false){const turn=epoch,serial=++libRead;libraryLoading.value=true;libraryError.value=null;try{active(turn);const page=await api.libraries(meeting(),'',more?libraryCursor.value:null,controller.signal);active(turn);if(serial!==libRead)return;libraries.value=Object.freeze(more?[...libraries.value,...page.items.filter(x=>!libraries.value.some(k=>k.id===x.id))]:page.items);libraryCursor.value=page.cursor;}catch(cause){if(turn===epoch&&serial===libRead)libraryError.value=message(cause);}finally{if(turn===epoch&&serial===libRead)libraryLoading.value=false;}}
- async function loadDocuments(more=false){const turn=epoch,serial=++read,id=library.value,search=query.value;documents.value=more?documents.value:[];cursor.value=more?cursor.value:null;error.value=null;if(!id)return;loading.value=true;try{active(turn);const name=libraries.value.find(k=>k.id===id)?.name??'',q=search&&name.toLowerCase().includes(search.toLowerCase())?'':search;const page=await api.documents(meeting(),id,q,more?cursor.value:null,controller.signal);active(turn);if(serial!==read||library.value!==id||query.value!==search)return;documents.value=Object.freeze(more?[...documents.value,...page.items.filter(x=>!documents.value.some(d=>knowledgeKey(d)===knowledgeKey(x)))]:page.items);cursor.value=page.cursor;}catch(cause){if(turn===epoch&&serial===read)error.value=message(cause);}finally{if(turn===epoch&&serial===read)loading.value=false;}}
- async function open(){if(opened.value)return;const turn=epoch;active(turn);const found=journal.load(actor()!,meeting());if(found.kind!=='EMPTY'&&found.kind!=='RESTORED'){error.value='知识库选择恢复记录不可用，请保留原操作并重试。';return;}if(found.kind==='RESTORED'){query.value=found.value.search;library.value=found.value.library;review.value=found.value.review;selected.value=found.value.selected;}opened.value=true;await loadLibraries();active(turn);if(!library.value)library.value=libraries.value[0]?.id??'';if(!review.value)await loadDocuments();}
- async function chooseLibrary(id:string){if(!libraries.value.some(k=>k.id===id))return;library.value=id;review.value=false;persist();await loadDocuments();}
- async function search(value:string){if(!fitsUtf8(value,1024)){error.value='搜索内容过长。';return;}query.value=value;review.value=false;persist();await loadDocuments();}
+ let nextLibrary=0,nextDocument:string|null=null,documentRequest:AbortController|null=null;
+ async function loadDocuments(more=false){
+  const turn=epoch,serial=++read,id=library.value,search=query.value.trim();
+  documentRequest?.abort();
+  const request=new AbortController();documentRequest=request;
+  if(!more){documents.value=[];cursor.value=null;nextLibrary=0;nextDocument=null;}
+  loading.value=true;error.value=null;
+  try{
+   let index=nextLibrary,after=nextDocument;
+   // A continuation is a document cursor within a library, or the next accessible library.
+   while(true){
+    active(turn);
+    if(serial!==read)return;
+    const source=id?libraries.value.find(k=>k.id===id):libraries.value[index];
+    if(!source){
+     if(!id&&libraryCursor.value){
+      const before=libraryCursor.value;await loadLibraries(true);
+      if(libraryError.value||libraryCursor.value===before)throw Error(libraryError.value??'知识库分页暂不可读取');
+      continue;
+     }
+     cursor.value=null;return;
+    }
+    const q=source.name.toLowerCase().includes(search.toLowerCase())?'':search;
+    const page=await api.documents(meeting(),source.id,q,after,request.signal);
+    active(turn);if(serial!==read)return;
+    if(after&&page.cursor===after)throw Error('文件分页暂不可读取');
+    if(page.cursor)after=page.cursor;else{after=null;index++;}
+    const hasMore=!!after||!id&&(index<libraries.value.length||!!libraryCursor.value);
+    if(page.items.length||!hasMore){
+     documents.value=Object.freeze([...new Map([...documents.value,...page.items].map(doc=>[knowledgeKey(doc),doc])).values()]);
+     nextLibrary=index;nextDocument=after;cursor.value=hasMore?'more':null;
+     return;
+    }
+   }
+  }catch(cause){if(turn===epoch&&serial===read)error.value=message(cause);}
+  finally{if(turn===epoch&&serial===read)loading.value=false;}
+ }
+ async function open(){
+  if(opened.value)return;
+  const turn=epoch;active(turn);const found=journal.load(actor()!,meeting());
+  if(found.kind!=='EMPTY'&&found.kind!=='RESTORED'){error.value='知识库选择恢复记录不可用，请重试。';return;}
+  if(found.kind==='RESTORED'){query.value=found.value.search;library.value=found.value.library;review.value=found.value.review;selected.value=found.value.selected;}
+  opened.value=true;await loadLibraries();
+  if(turn!==epoch||!opened.value)return;
+  const needed=new Set([library.value,...selected.value.map(doc=>doc.libraryId)].filter(Boolean));
+  while(turn===epoch&&[...needed].some(id=>!libraries.value.some(k=>k.id===id))&&libraryCursor.value&&!libraryError.value)await loadLibraries(true);
+  if(turn!==epoch)return;
+  if(!libraries.value.some(k=>k.id===library.value))library.value='';
+  if(!review.value&&!libraryError.value)await loadDocuments();
+ }
+ async function chooseLibrary(id:string){if(id&&!libraries.value.some(k=>k.id===id))return;library.value=id;review.value=false;persist();await loadDocuments();}
+ async function search(value:string){if(value.length>128||!fitsUtf8(value,1024)){error.value='搜索内容过长。';return;}query.value=value;review.value=false;persist();await loadDocuments();}
  function toggle(d:KnowledgeDocument){if(!validKnowledgeDocument(d)||!documents.value.some(x=>knowledgeKey(x)===knowledgeKey(d))&&!selected.value.some(x=>knowledgeKey(x)===knowledgeKey(d)))throw new Error('请重新读取知识库文件。');const key=knowledgeKey(d),prior=selected.value;selected.value=Object.freeze(prior.some(x=>knowledgeKey(x)===key)?prior.filter(x=>knowledgeKey(x)!==key):[...prior,Object.freeze({...d})]);try{if(selected.value.length>64)throw new Error('最多选择64份背景材料。');persist();}catch(cause){selected.value=prior;throw cause;}}
  function settle(added:readonly string[]){selected.value=Object.freeze(selected.value.filter(d=>!added.includes(knowledgeKey(d))));persist();}
  function clear(){selected.value=[];persist();}
  function setReview(value:boolean){review.value=value;persist();if(!value)void loadDocuments();}
- function close(){opened.value=false;documents.value=[];cursor.value=null;persist();}
+ function close(){
+  if(!journal.clear()){error.value='无法清除知识库选择，请重试。';return false;}
+  invalidate();return true;
+ }
  return {libraries,documents,selected,query,library,review,loading,libraryLoading,error,libraryError,cursor,libraryCursor,opened,open,close,chooseLibrary,search,toggle,settle,clear,setReview,reloadLibraries:()=>loadLibraries(),reloadDocuments:()=>loadDocuments(),moreLibraries:()=>loadLibraries(true),moreDocuments:()=>loadDocuments(true),logout(){invalidate();journal.clear();},dispose(){disposed=true;stop();invalidate();}};
 }

@@ -23,13 +23,14 @@ test('one header preserves the identity across workspace routes and browser hist
   (window as any).__profileFrames=[];
   new MutationObserver(()=>{(window as any).__profileFrames.push({name:profile.querySelector('.rc-name')?.textContent,busy:profile.querySelector('summary')?.getAttribute('aria-busy')});}).observe(profile,{subtree:true,childList:true,characterData:true,attributes:true});
  });
- for(const [path,label] of [['/recording','在线录音'],['/feedback','我的语料反馈'],['/operations','运营治理'],['/meeting-library','会议库'],['/meeting/00000000-0000-4000-8000-000000000001','会议详情'],['/meeting/00000000-0000-4000-8000-000000000001/minutes','会议详情'],['/transcript-correction-demo','转写校正'],['/knowledge-publish-demo','知识库发布']]){
+ for(const [path,label] of [['/recording','会议详情'],['/feedback','我的语料反馈'],['/operations','运营治理'],['/meeting-library','会议库'],['/meeting/00000000-0000-4000-8000-000000000001','会议详情'],['/meeting/00000000-0000-4000-8000-000000000001/minutes','会议详情'],['/transcript-correction-demo','转写校正'],['/knowledge-publish-demo','知识库发布']]){
   await navigate(page,path!);
   await expect(page.locator('.topbar')).toHaveCount(1);
   expect(await original!.evaluate(element=>element===document.querySelector('.topbar'))).toBe(true);
-  await expect(page.locator('.topbar-home')).toHaveText('智会助手');
+  await expect(page.locator('.topbar-home')).toHaveText(path==='/recording'?'我的会议':'智会助手');
   await expect(page.locator('.topbar-crumb')).toHaveText(`/ ${label}`);
-  await expect(page.locator('.home-profile .rc-name')).toHaveText('测试账号1');
+  if(path==='/recording')await expect(page.locator('.topbar-right')).toHaveCount(0);
+  else await expect(page.locator('.home-profile .rc-name')).toHaveText('测试账号1');
  }
  expect(profileReads).toBe(reads);
  await page.locator('.topbar-home').click();

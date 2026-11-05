@@ -6,10 +6,10 @@ import type {CommandSnapshot} from '../composables/useCommand';
 import {fitsUtf8} from '../bounded-text';
 import {UPLOAD_FILE_BYTES} from '../../features/import/upload-bytes';
 
-export type MaterialItem=Readonly<{id:string;materialRevisionId:string;parsedDocumentId:string;fileId:string;name:string;source:'LOCAL'|'KNOWLEDGE';sourceVersion:string|null;sizeBytesToken:string;sha256:string;state:'READY'|'FAILED';error:string|null}>;
+export type MaterialItem=Readonly<{id:string;materialRevisionId:string;parsedDocumentId:string;fileId:string;name:string;source:'LOCAL'|'KNOWLEDGE';sourceVersion:string|null;sourceLibraryId?:string|null;sourceDocumentId?:string|null;sizeBytesToken:string;sha256:string;state:'READY'|'FAILED';error:string|null}>;
 export type MaterialListing=Readonly<{items:readonly MaterialItem[];materialSnapshotId:string|null;materialsPending:boolean;meetingRevision:string}>;
-export type MaterialLibrary=Readonly<{id:string;name:string}>;
-export type KnowledgeDocument=Readonly<{id:string;libraryId:string;name:string;version:string;sha256:string;sizeBytesToken:string}>;
+export type MaterialLibrary=Readonly<{id:string;name:string;updatedAt?:string|null;documentCount?:number}>;
+export type KnowledgeDocument=Readonly<{id:string;libraryId:string;name:string;version:string;sha256:string;sizeBytesToken:string;updatedAt?:string|null}>;
 export type MaterialPage<T>=Readonly<{items:readonly T[];cursor:string|null}>;
 export const materialUuid=(v:unknown):v is string=>typeof v==='string'&&/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(v);
 const object=(v:unknown):v is Record<string,unknown>=>typeof v==='object'&&v!==null&&!Array.isArray(v);
@@ -19,8 +19,13 @@ const hash=(v:unknown):v is string=>typeof v==='string'&&/^[0-9a-f]{64}$/.test(v
 const providerId=(v:unknown):v is string=>typeof v==='string'&&/^[A-Za-z0-9_-]{1,128}$/.test(v);
 export const materialFormat=(name:string)=>/\.(pdf|pptx|docx)$/i.test(name);
 export const knowledgeKey=(d:KnowledgeDocument)=>JSON.stringify([d.libraryId,d.id,d.version]);
-export function validKnowledgeDocument(v:unknown):v is KnowledgeDocument{return object(v)&&exact(v,'id,libraryId,name,sha256,sizeBytesToken,version')&&providerId(v.id)&&providerId(v.libraryId)&&text(v.name)&&hash(v.version)&&v.sha256===v.version&&revisionToken(v.sizeBytesToken);}
-function item(v:unknown):v is MaterialItem{return object(v)&&exact(v,'error,fileId,id,materialRevisionId,name,parsedDocumentId,sha256,sizeBytesToken,source,sourceVersion,state')&&materialUuid(v.id)&&materialUuid(v.materialRevisionId)&&materialUuid(v.parsedDocumentId)&&materialUuid(v.fileId)&&text(v.name)&&['LOCAL','KNOWLEDGE'].includes(String(v.source))&&(v.source==='LOCAL'?v.sourceVersion===null:hash(v.sourceVersion))&&revisionToken(v.sizeBytesToken)&&hash(v.sha256)&&(v.state==='READY'?v.error===null:v.state==='FAILED'&&text(v.error));}
+const knownDate=(v:unknown)=>v==null||typeof v==='string'&&v.length<=40&&Number.isFinite(Date.parse(v));
+function validLibrary(v:unknown):v is MaterialLibrary{
+ return object(v)&&Object.keys(v).every(key=>['id','name','documentCount','updatedAt'].includes(key))&&providerId(v.id)&&text(v.name)
+  &&knownDate(v.updatedAt)&&(v.documentCount===undefined||Number.isSafeInteger(v.documentCount)&&Number(v.documentCount)>=0);
+}
+export function validKnowledgeDocument(v:unknown):v is KnowledgeDocument{return object(v)&&(exact(v,'id,libraryId,name,sha256,sizeBytesToken,version')||exact(v,'id,libraryId,name,sha256,sizeBytesToken,updatedAt,version')&&knownDate(v.updatedAt))&&providerId(v.id)&&providerId(v.libraryId)&&text(v.name)&&hash(v.version)&&v.sha256===v.version&&revisionToken(v.sizeBytesToken);}
+function item(v:unknown):v is MaterialItem{return object(v)&&(exact(v,'error,fileId,id,materialRevisionId,name,parsedDocumentId,sha256,sizeBytesToken,source,sourceVersion,state')||exact(v,'error,fileId,id,materialRevisionId,name,parsedDocumentId,sha256,sizeBytesToken,source,sourceDocumentId,sourceLibraryId,sourceVersion,state')&&(v.sourceLibraryId===null||providerId(v.sourceLibraryId))&&(v.sourceDocumentId===null||providerId(v.sourceDocumentId)))&&materialUuid(v.id)&&materialUuid(v.materialRevisionId)&&materialUuid(v.parsedDocumentId)&&materialUuid(v.fileId)&&text(v.name)&&['LOCAL','KNOWLEDGE'].includes(String(v.source))&&(v.source==='LOCAL'?v.sourceVersion===null:hash(v.sourceVersion))&&revisionToken(v.sizeBytesToken)&&hash(v.sha256)&&(v.state==='READY'?v.error===null:v.state==='FAILED'&&text(v.error));}
 const invalid=()=>new ApiError('response',200,'材料响应暂无法确认，请保留原操作并重新查询。');
 function freeze<T>(v:T):T{if(typeof v==='object'&&v!==null){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
 function snapshot(v:unknown,actor:string,meeting:string):v is CommandSnapshot{return object(v)&&exact(v,'actor,body,key,operation,path,resource')&&v.actor===actor&&v.resource===meeting&&materialUuid(v.key)&&typeof v.operation==='string'&&typeof v.path==='string'&&typeof v.body==='string'&&fitsUtf8(v.body,2*1024*1024);}
@@ -69,7 +74,7 @@ export function createMaterialsApi(client:ReturnType<typeof createBusinessClient
    if(command.operation==='MATERIAL_ADD'){const b=JSON.parse(command.body);if(b.fileId!==undefined?b.fileId!==value.fileId||value.source!=='LOCAL':value.source!=='KNOWLEDGE'||value.sourceVersion!==b.version)throw invalid();}return freeze(value);
   },
   async remove(command:CommandSnapshot):Promise<void>{active(command.actor);if(!validMaterialCommand(command,command.actor,command.resource)||command.operation!=='MATERIAL_REMOVE')throw new TypeError('Invalid material removal');await client.json<void>(command.path,{method:'DELETE',headers:{'Idempotency-Key':command.key},expectedStatus:204});},
-  libraries:(id:string,search:string,cursor:string|null,signal:AbortSignal)=>page(id,null,search,cursor,signal,(v):v is MaterialLibrary=>object(v)&&exact(v,'id,name')&&providerId(v.id)&&text(v.name)),
+  libraries:(id:string,search:string,cursor:string|null,signal:AbortSignal)=>page(id,null,search,cursor,signal,validLibrary),
   documents:(id:string,library:string,search:string,cursor:string|null,signal:AbortSignal)=>page(id,library,search,cursor,signal,(v):v is KnowledgeDocument=>validKnowledgeDocument(v)&&v.libraryId===library),
   async begin(command:CommandSnapshot){active(command.actor);meeting(command.resource);if(!validMaterialBegin(command,command.actor,command.resource))throw new TypeError('Invalid material upload');const value=await client.json<unknown>(command.path,{method:'POST',body:command.body,headers:{'Idempotency-Key':command.key},expectedStatus:201,maxResponseBytes:16384});if(!object(value)||!exact(value,'partSize,partSizeToken,uploadId')||!materialUuid(value.uploadId)||typeof value.partSize!=='number'||!Number.isInteger(value.partSize)||value.partSize<=0||!revisionToken(value.partSizeToken)||value.partSizeToken==='0')throw invalid();return freeze(value as {uploadId:string;partSize:number;partSizeToken:string});},
   receipt:uploads.receipt,parts:uploads.parts,part:uploads.part,complete:uploads.complete,abort:uploads.abort,

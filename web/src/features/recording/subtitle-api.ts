@@ -9,7 +9,9 @@ export function createSubtitleApi(client:ReturnType<typeof createBusinessClient>
   if(!recordingUuid(meeting)||!recordingUuid(session)||!token(after))throw new TypeError('Invalid recording subtitle scope');
   const value=await client.json<unknown>(`/api/v1/recordings/${session}/subtitles?${new URLSearchParams({afterEventId:after,limit:'64'})}`,{signal,expectedStatus:200,maxResponseBytes:8*1024*1024});
   if(!responseMatches('recording.yaml#/RecordingSubtitles',value))return invalid();const result=value as SubtitlePage;if(result.meetingId!==meeting||result.sessionId!==session||!token(result.nextCursor)||result.hasMore&&!result.events.length||['DELAYED','DEFERRED'].includes(result.state)&&!result.delayed)return invalid();let cursor=BigInt(after);
-  for(const event of result.events){if(!token(event.eventId)||BigInt(event.eventId)!==++cursor||event.sessionId!==session||event.endMs<=event.startMs||event.status==='stable'&&event.revision<2)return invalid();}
+  for(const event of result.events){if(!token(event.eventId)||BigInt(event.eventId)!==++cursor||event.sessionId!==session||event.endMs<=event.startMs||event.status==='stable'&&event.revision<2)return invalid();
+   if(event.speakerTurns?.some((turn,i,turns)=>turn.startMs<event.startMs||turn.startMs>=event.endMs||turn.offset>=event.text.length||(i===0?turn.offset!==0:turn.offset<=turns[i-1]!.offset||turn.startMs<turns[i-1]!.startMs)))return invalid();
+  }
   if(result.nextCursor!==String(cursor)||result.state==='NOT_STARTED'&&(result.events.length>0||cursor!==0n))return invalid();return freeze(result);
  }
 };}

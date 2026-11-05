@@ -19,3 +19,16 @@ test('same recording scope updates do not abandon an in-flight subtitle page',as
   c.synchronize();const pending=c.refresh();c.synchronize();assert.deepEqual(f.calls,['0']);resolve(page([event('1',1)],'1'));await pending;assert.equal(c.cursor.value,'1');
  }finally{resolve?.(page([],'0'));c.dispose();}
 });
+
+test('empty subtitle polls preserve the rendered history while updating service state',async()=>{
+ const f=fixture(),c=useLiveSubtitles(f.api as any,f.options);
+ try{
+  f.responses.push(page([event('1',1)],'1'));
+  c.synchronize();await c.refresh();
+  const history=c.events.value;
+  f.responses.push({...page([],'1'),state:'DELAYED',delayed:true});
+  await c.refresh();
+  assert.equal(c.events.value,history);
+  assert.equal(c.delayed.value,true);
+ }finally{c.dispose();}
+});

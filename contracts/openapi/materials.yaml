@@ -68,6 +68,28 @@
           "string",
           "null"
         ]
+      },
+      "sourceLibraryId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "sourceDocumentId": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,128}$"
+          },
+          {
+            "type": "null"
+          }
+        ]
       }
     }
   },

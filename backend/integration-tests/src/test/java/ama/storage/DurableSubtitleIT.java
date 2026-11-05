@@ -5,6 +5,7 @@ class DurableSubtitleIT {
  @TempDir Path root;
  @BeforeAll static void schema(){ControlledSpeechImportIT.schema();assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM flyway_schema_history WHERE success=1 AND version='059'",Integer.class));}
  final class Fixture implements AutoCloseable {
+  final SpeechReviewIT scenarios=new SpeechReviewIT();
   final ManagedLocalFixture nativeFiles;final FileStoragePort storage;final FileBackendCatalog catalog;final TransactionRunner tx;final JdbcMeetingAccess access;final MeetingService meetings;final Actor actor;final String meeting;final JdbcRecordingPersistence persistence;final RecordingService recordings;final RecordingContracts.Session session;final JdbcLiveSubtitles live;final byte[] pcm=new byte[64000];
   Fixture()throws Exception {this(true);}
   Fixture(boolean install)throws Exception {
@@ -13,18 +14,19 @@ class DurableSubtitleIT {
   RecordingContracts.Ack accept(long seq)throws Exception {return tx.required(()->{access.require(access.lock(actor,meeting),ama.access.MeetingAccess.Action.EDIT);return recordings.accept(session.sessionId(),session.writerEpoch(),new RecordingContracts.Chunk(session.partId(),session.writerEpoch(),seq,(seq-1)*32000,32000,pcm));});}
   byte[] window(int chunks){byte[] bytes=new byte[chunks*pcm.length];for(int n=0;n<chunks;n++)System.arraycopy(pcm,0,bytes,n*pcm.length,pcm.length);return wavBytes(bytes);}
   void scenario(int chunks,String text,int delay)throws Exception {
-   var probe=new SpeechReviewIT();probe.scenario("asr","/inference/asr-nano/modelserving/asr",Map.of("binary_sha256",sha(window(chunks))),Map.of("text",text));
+   scenarios.scenario("asr","/inference/asr-nano/modelserving/asr",Map.of("binary_sha256",sha(window(chunks))),Map.of("text",text));
    if(delay>0){var json=new com.fasterxml.jackson.databind.ObjectMapper();try(var client=java.net.http.HttpClient.newBuilder().version(java.net.http.HttpClient.Version.HTTP_1_1).build()){
-    var value=Map.ofEntries(Map.entry("module","asr"),Map.entry("name","ama-live-delay-"+id()),Map.entry("enabled",true),Map.entry("priority",2000),Map.entry("method","POST"),Map.entry("path","/inference/asr-nano/modelserving/asr"),Map.entry("match",Map.of("binary_sha256",sha(window(chunks)))),Map.entry("status_code",200),Map.entry("delay_ms",delay),Map.entry("response_type","json"),Map.entry("response_body",Map.of("text",text)),Map.entry("response_headers",Map.of()));var r=client.send(java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://127.0.0.1:8792/admin/api/scenarios")).header("Content-Type","application/json").POST(java.net.http.HttpRequest.BodyPublishers.ofByteArray(json.writeValueAsBytes(value))).build(),java.net.http.HttpResponse.BodyHandlers.discarding());assertEquals(201,r.statusCode());
+    var value=Map.ofEntries(Map.entry("module","asr"),Map.entry("name","ama-live-delay-"+id()),Map.entry("enabled",true),Map.entry("priority",2000),Map.entry("method","POST"),Map.entry("path","/inference/asr-nano/modelserving/asr"),Map.entry("match",Map.of("binary_sha256",sha(window(chunks)))),Map.entry("status_code",200),Map.entry("delay_ms",delay),Map.entry("response_type","json"),Map.entry("response_body",Map.of("text",text)),Map.entry("response_headers",Map.of()));var r=client.send(java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://127.0.0.1:8792/admin/api/scenarios")).header("Content-Type","application/json").POST(java.net.http.HttpRequest.BodyPublishers.ofByteArray(json.writeValueAsBytes(value))).build(),java.net.http.HttpResponse.BodyHandlers.ofByteArray());assertEquals(201,r.statusCode());scenarios.ownedScenarios.add(json.readTree(r.body()).get("id").intValue());
    }}
   }
   @SuppressWarnings("unchecked") List<Map<String,Object>> events(){return (List<Map<String,Object>>)live.read(actor,session.sessionId(),"0",64).get("events");}
-  @Override public void close()throws Exception{live.close();nativeFiles.close();}
+  @Override public void close()throws Exception{try{live.close();}finally{try{scenarios.clearScenarios();}finally{nativeFiles.close();}}}
  }
  static byte[] wavBytes(byte[] pcm){var b=ByteBuffer.allocate(44+pcm.length).order(ByteOrder.LITTLE_ENDIAN);b.put("RIFF".getBytes(java.nio.charset.StandardCharsets.US_ASCII)).putInt(36+pcm.length).put("WAVEfmt ".getBytes(java.nio.charset.StandardCharsets.US_ASCII)).putInt(16).putShort((short)1).putShort((short)1).putInt(16000).putInt(32000).putShort((short)2).putShort((short)16).put("data".getBytes(java.nio.charset.StandardCharsets.US_ASCII)).putInt(pcm.length).put(pcm);return b.array();}
  @Test void actualThreeCommittedChunksReplaceOneSegmentWithoutRemovingRepeatedWordsAndSurviveRestart()throws Exception {
   try(var f=new Fixture()){
    for(int n=1;n<=3;n++){f.scenario(n,n==3?"非常非常重要12345":"临时"+n,0);assertEquals(n,f.accept(n).highestContiguousSeq());assertTrue(f.live.runOnce(f.session.sessionId()));}
+   assertEquals(1,j.queryForObject("SELECT COUNT(*) FROM speech_execution e JOIN recording_subtitle_job q ON q.id=e.lease_task_id WHERE q.session_id=? AND e.path='/vad'",Integer.class,f.session.sessionId()));
    var events=f.events();assertEquals(3,events.size());assertEquals(List.of("temporary","temporary","stable"),events.stream().map(e->e.get("status")).toList());assertEquals(1,events.stream().map(e->e.get("segmentId")).distinct().count());assertEquals("非常非常重要12345",events.getLast().get("text"));assertEquals(6000,((Number)events.getLast().get("endMs")).longValue());assertEquals(3,((Number)events.getLast().get("sourceFinalSeq")).longValue());assertFalse(f.live.runOnce(f.session.sessionId()));
    try(var next=new JdbcLiveSubtitles(source,f.access,new JdbcRecordingPersistence(source,f.catalog),ControlledSpeechProfile.fromRuntime(Path.of(System.getenv("AMA_LOCAL_SPEECH_RUNTIME"))))){var replay=(List<?>)next.read(f.actor,f.session.sessionId(),(String)events.getFirst().get("eventId"),64).get("events");assertEquals(2,replay.size());assertThrows(IllegalArgumentException.class,()->next.read(f.actor,f.session.sessionId(),"999",64));}
   }

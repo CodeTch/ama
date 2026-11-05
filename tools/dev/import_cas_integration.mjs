@@ -150,16 +150,16 @@ try {
   record('fresh-meeting-route-restores-saved-file-without-reupload');
 
   await restoredDialog.getByRole('button', {name: '从知识库选择', exact: true}).click();
-  const picker = page.getByRole('dialog', {name: '从知识库选择背景材料', exact: true});
+  const picker = page.getByRole('dialog', {name: '从知识库选择材料', exact: true});
   await expect(picker).toBeVisible();
-  await expect(picker.locator('.material-library-option').first()).toBeVisible();
-  await picker.locator('.material-library-option').first().click();
-  await expect(picker.locator('.material-document-row').first()).toBeVisible();
-  const documentRow = picker.locator('.material-document-row').first();
+  await expect(picker.locator('.ac-library').first()).toBeVisible();
+  await picker.locator('.ac-library').first().click();
+  await expect(picker.locator('.ac-kb-file').first()).toBeVisible();
+  const documentRow = picker.locator('.ac-kb-file').first();
   const documentText = await documentRow.innerText();
   assert.match(documentText, /版本 [0-9a-f]{12}/i);
   await documentRow.locator('input[type="checkbox"]').check();
-  await picker.getByRole('button', {name: '添加到会议', exact: true}).click();
+  await picker.getByRole('button', {name: '添加所选文件', exact: true}).click();
   await expect(picker).toBeHidden();
   record('knowledge-picker-reads-harness-document-version', {document: documentText});
 
@@ -179,7 +179,7 @@ try {
   const denialScenarioId = (await denialScenario.json()).id;
   try {
     await restoredDialog.getByRole('button', {name: '从知识库选择', exact: true}).click();
-    const deniedPicker = page.getByRole('dialog', {name: '从知识库选择背景材料', exact: true});
+    const deniedPicker = page.getByRole('dialog', {name: '从知识库选择材料', exact: true});
     await expect(deniedPicker).toBeVisible();
     await expect(deniedPicker.getByRole('alert')).toContainText('当前账号无权读取所选知识库文件');
     record('knowledge-picker-surfaces-provider-denial', {providerStatus: 403, amaStatus: 403});

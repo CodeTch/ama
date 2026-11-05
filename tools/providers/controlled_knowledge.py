@@ -425,16 +425,22 @@ COMMIT;""")
    if parsed.path=='/v1/knowledge/material-libraries':
     if set(query)-{'limit','cursor','search'}:raise Denied(400)
     rows=self.db.execute('SELECT DISTINCT l.id,l.name FROM library l JOIN grant_record g ON g.library=l.id JOIN folder f ON f.id=g.folder AND f.library=l.id WHERE g.actor=? AND g.can_read=1 AND l.id>? AND instr(lower(l.name),lower(?))>0 ORDER BY l.id LIMIT ?',(actor,after,search,limit+1)).fetchall()
-    items=[dict(row) for row in rows[:limit]]
+    items=[]
+    for row in rows[:limit]:
+     meta=self.db.execute("""SELECT count(*) documentCount,max(strftime('%Y-%m-%dT%H:%M:%SZ',json_extract(CAST(e.receipt AS TEXT),'$.verifiedAt'),'unixepoch')) updatedAt
+      FROM document d LEFT JOIN execution e ON e.publication=d.publication AND json_extract(CAST(e.receipt AS TEXT),'$.documentId')=d.id
+      WHERE d.library=? AND d.client=? AND EXISTS(SELECT 1 FROM grant_record g WHERE g.actor=? AND g.library=d.library AND g.folder=d.folder AND g.can_read=1)
+      AND NOT EXISTS(SELECT 1 FROM document_governance dg WHERE dg.document=d.id AND dg.state<>'ACTIVE')""",(row['id'],self.ids['clientId'],actor)).fetchone()
+     items.append({**dict(row),**dict(meta)})
    elif len(parts)==6 and parts[1:4]==['v1','knowledge','material-libraries'] and parts[5]=='documents':
     if set(query)-{'limit','cursor','search'}:raise Denied(400)
     library=identifier(parts[4])
     if not self.db.execute('SELECT 1 FROM grant_record g JOIN folder f ON f.id=g.folder AND f.library=g.library WHERE g.actor=? AND g.library=? AND g.can_read=1 LIMIT 1',(actor,library)).fetchone():raise Denied()
-    rows=self.db.execute("SELECT d.id,d.library libraryId,json_extract(CAST(d.payload AS TEXT),'$.title') name,d.payload_hash version,length(d.payload) size FROM document d JOIN grant_record g ON g.actor=? AND g.library=d.library AND g.folder=d.folder AND g.can_read=1 WHERE NOT EXISTS(SELECT 1 FROM document_governance dg WHERE dg.document=d.id AND dg.state<>'ACTIVE') AND d.library=? AND d.client=? AND d.id>? AND instr(lower(json_extract(CAST(d.payload AS TEXT),'$.title')),lower(?))>0 ORDER BY d.id LIMIT ?",(actor,library,self.ids['clientId'],after,search,limit+1)).fetchall()
+    rows=self.db.execute("SELECT d.id,d.library libraryId,json_extract(CAST(d.payload AS TEXT),'$.title') name,d.payload_hash version,length(d.payload) size,(SELECT strftime('%Y-%m-%dT%H:%M:%SZ',json_extract(CAST(e.receipt AS TEXT),'$.verifiedAt'),'unixepoch') FROM execution e WHERE e.publication=d.publication AND json_extract(CAST(e.receipt AS TEXT),'$.documentId')=d.id LIMIT 1) updatedAt FROM document d JOIN grant_record g ON g.actor=? AND g.library=d.library AND g.folder=d.folder AND g.can_read=1 WHERE NOT EXISTS(SELECT 1 FROM document_governance dg WHERE dg.document=d.id AND dg.state<>'ACTIVE') AND d.library=? AND d.client=? AND d.id>? AND instr(lower(json_extract(CAST(d.payload AS TEXT),'$.title')),lower(?))>0 ORDER BY d.id LIMIT ?",(actor,library,self.ids['clientId'],after,search,limit+1)).fetchall()
     items=[]
     for row in rows[:limit]:
      if not isinstance(row['name'],str) or len(row['name'])>1024 or not 0<row['size']<=MAX_PAYLOAD:raise Denied(413)
-     items.append({'id':row['id'],'libraryId':row['libraryId'],'name':row['name'],'version':row['version'],'sha256':row['version'],'sizeBytesToken':str(row['size'])})
+     items.append({'id':row['id'],'libraryId':row['libraryId'],'name':row['name'],'version':row['version'],'sha256':row['version'],'sizeBytesToken':str(row['size']),'updatedAt':row['updatedAt']})
    else:raise Denied(404)
    return {'providerId':self.ids['providerId'],'storeInstanceId':self.ids['storeInstanceId'],'items':items,'cursor':items[-1]['id'] if len(rows)>limit else None}
   except (ValueError,UnicodeError):raise Denied(400)

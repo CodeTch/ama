@@ -1648,6 +1648,36 @@
       "createdAt": {
         "type": "string",
         "format": "date-time"
+      },
+      "speakerTurns": {
+        "type": "array",
+        "maxItems": 128,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "offset",
+            "startMs",
+            "label"
+          ],
+          "properties": {
+            "offset": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 8192
+            },
+            "startMs": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 7200000
+            },
+            "label": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            }
+          }
+        }
       }
     }
   },
