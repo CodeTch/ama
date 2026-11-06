@@ -8,6 +8,16 @@ class Task12WorkspaceSecurityTest {
    assertEquals(unavailable?503:401,response.getStatus());assertEquals("private, no-store",response.getHeader("Cache-Control"));assertNull(chain.getRequest());assertFalse(response.getContentAsString().contains("private"));
   }
  }
+ @Test void exportStatusReportsSessionTransactionFailureAsUnavailable()throws Exception {
+  var sessions=mock(SessionPort.class);
+  when(sessions.resolveForRead(null)).thenThrow(new org.springframework.transaction.TransactionSystemException("private commit failure"));
+  var filter=new SessionSecurityFilter(sessions,new MockEnvironment().withProperty("local.server.port","8080"));
+  var request=new MockHttpServletRequest("GET","/api/v1/exports/00000000-0000-4000-8000-000000000001");
+  request.setLocalPort(8080);
+  var response=new MockHttpServletResponse();var chain=new MockFilterChain();
+  filter.doFilter(request,response,chain);
+  assertEquals(503,response.getStatus());assertTrue(response.getContentAsString().contains("IDENTITY_UNAVAILABLE"));assertNull(chain.getRequest());
+ }
  @Test void commandDiscoveryRequiresOriginAndCsrfBeforeController()throws Exception {
   var actor=new ama.contract.IdentityContracts.Actor("owner",ama.contract.IdentityContracts.Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
   var session=new ama.contract.IdentityContracts.ResolvedSession(actor,"T".repeat(43),java.time.Instant.now().plusSeconds(60));

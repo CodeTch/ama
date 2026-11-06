@@ -9,7 +9,7 @@ test('saved minutes may enter confirmation before required information and roste
 test('pending candidates and unfinished generation prevent every confirmation entry',()=>{
  const n=navigation();n.privateSections.candidates.items=[{id:'candidate'}];assert.equal(workspaceStages(n).available.confirm,false);
  n.privateSections.candidates.items=[];n.privateSections.candidates.hasMore=true;assert.equal(workspaceStages(n).available.confirm,false);
- n.privateSections.candidates.hasMore=false;n.privateSections.tasks.items=[{kind:'MINUTES_GENERATION_V1',state:'RUNNING'}];assert.equal(workspaceStages(n).available.confirm,false);
+ n.privateSections.candidates.hasMore=false;n.privateSections.tasks.items=[{kind:'MINUTES_GENERATE_V1',state:'RUNNING'}];assert.equal(workspaceStages(n).available.confirm,false);
  n.privateSections.tasks.items[0].state='SUCCEEDED';assert.equal(workspaceStages(n).available.confirm,true);
 });
 test('read failures do not invent a ready confirmation and publication requires a current final',()=>{
@@ -17,4 +17,13 @@ test('read failures do not invent a ready confirmation and publication requires 
  n.privateSections.finalConfirmationId='final';assert.equal(workspaceStages(n).available.publish,true);
  n.privateSections=undefined;assert.equal(workspaceStages(n).available.confirm,false);
  assert.equal(workspaceStages(null).available.confirm,false);
+});
+
+test('authoritative active generation is independent of historical pages and active exports',()=>{
+ const n=navigation();
+ n.privateSections.tasks={items:[{kind:'MINUTES_EXPORT_V1',state:'RUNNING'}],hasMore:true};
+ n.activeMinutesGeneration=false;
+ assert.equal(workspaceStages(n).available.confirm,true);
+ n.activeMinutesGeneration=true;
+ assert.equal(workspaceStages(n).available.confirm,false);
 });

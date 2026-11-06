@@ -57,11 +57,35 @@ public final class ControlledKnowledgeClient implements AutoCloseable {
   private MaterialProof(JdbcMaterialAuthority.Request request,String token){this.request=request;var claims=KnowledgeMaterialClaims.verify(assertion,identities,token,request.actor.enterpriseId(),request.hash,Instant.now().getEpochSecond());until=Instant.ofEpochSecond((Long)claims.get("expiresAt"));digest=ControlledKnowledgeClient.digest(token.getBytes(StandardCharsets.US_ASCII));}
   void require(JdbcMaterialAuthority.Request expected){if(request!=expected||!until.isAfter(Instant.now()))throw new ama.access.MeetingAccess.AuthorityUnavailableException();request.require(ControlledKnowledgeClient.this);}
  }
+ private static final class MaterialAssertionSlot {
+  String actor,itemsHash,token;
+  Instant until;
+ }
+ private final List<MaterialAssertionSlot> materialAssertions=java.util.stream.IntStream.range(0,64)
+     .mapToObj(i->new MaterialAssertionSlot()).toList();
  MaterialProof materialAuthority(JdbcMaterialAuthority.Request request)throws IOException {
-  request.require(this);byte[] body=canonical(Map.of("protocol","ama.controlled-material-authority.v1","actorId",request.actor.enterpriseId(),"items",request.items),request.budget);
+  request.require(this);
+  if(request.lease==null)return new MaterialProof(request,fetchMaterialAssertion(request));
+  // The signed assertion covers the actor and exact ordered source versions.
+  // Each meeting still reacquires its ACL, dependency fingerprint and original signed deadline.
+  String actor=request.actor.enterpriseId();
+  var slot=materialAssertions.get(Math.floorMod(Objects.hash(actor,request.hash),materialAssertions.size()));
+  synchronized(slot){
+   request.require(this);
+   if(actor.equals(slot.actor)&&request.hash.equals(slot.itemsHash)&&slot.until.isAfter(Instant.now().plusSeconds(3)))
+    return new MaterialProof(request,slot.token);
+   slot.token=null;slot.actor=null;
+   String token=fetchMaterialAssertion(request);
+   var proof=new MaterialProof(request,token);
+   slot.actor=actor;slot.itemsHash=request.hash;slot.token=token;slot.until=proof.until;
+   return proof;
+  }
+ }
+ private String fetchMaterialAssertion(JdbcMaterialAuthority.Request request)throws IOException {
+  byte[] body=canonical(Map.of("protocol","ama.controlled-material-authority.v1","actorId",request.actor.enterpriseId(),"items",request.items),request.budget);
   var call=new Call(this,request.actor.enterpriseId(),"MATERIAL_READ","POST","/v1/knowledge/material-authorizations",body,request.budget);
   var response=exchange(call,12288,JdbcPublicationService.NEVER);if(!response.keySet().equals(Set.of("providerId","storeInstanceId","assertion")))throw new IOException("INVALID_MATERIAL_AUTHORITY");
-  return new MaterialProof(request,string(response,"assertion"));
+  return string(response,"assertion");
  }
  Call governanceRead(PublicationGovernanceBinding.Prepared binding,String command){
   return governanceRead(binding,command,binding.actorId());

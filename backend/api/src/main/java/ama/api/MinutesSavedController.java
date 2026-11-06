@@ -3,7 +3,11 @@ import ama.contract.IdentityContracts.*;import ama.transcript.*;import ama.acces
 @RestController @RequestMapping("/api/v1/meetings/{meetingId}/minutes") final class MinutesSavedController {
  private final MinutesConfiguration.Runtime runtime;private final JdbcMinutesCommandReceipts receipts;private final TransactionRunner tx;private final MeetingAccess access;
  MinutesSavedController(MinutesConfiguration.Runtime runtime,JdbcMinutesCommandReceipts receipts,TransactionRunner tx,MeetingAccess access){this.runtime=runtime;this.receipts=receipts;this.tx=tx;this.access=access;}
- @GetMapping ResponseEntity<byte[]> current(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return json(queries(request,meetingId,false).current(actor(request),meetingId));}
+ @GetMapping ResponseEntity<byte[]> current(@PathVariable String meetingId,HttpServletRequest request)throws IOException{
+  ama.contract.MinutesContracts.uuid(meetingId);
+  if(runtime.saved()==null)access.prepareExternalRead(actor(request),meetingId);
+  return json(queries(request,meetingId,false).current(actor(request),meetingId));
+ }
  @GetMapping("/history") ResponseEntity<byte[]> bodies(@PathVariable String meetingId,@RequestParam(defaultValue="20") int limit,@RequestParam(required=false) String beforeRevisionToken,HttpServletRequest request)throws IOException{return json(queries(request,meetingId,true).history(actor(request),meetingId,true,limit,beforeRevisionToken));}
  @GetMapping("/element-sets") ResponseEntity<byte[]> sets(@PathVariable String meetingId,@RequestParam(defaultValue="20") int limit,@RequestParam(required=false) String beforeRevisionToken,HttpServletRequest request)throws IOException{return json(queries(request,meetingId,true).history(actor(request),meetingId,false,limit,beforeRevisionToken));}
  @GetMapping("/revisions/{id}") ResponseEntity<byte[]> body(@PathVariable String meetingId,@PathVariable String id,HttpServletRequest request)throws IOException{return json(queries(request,meetingId,true).detail(actor(request),meetingId,id,true));}

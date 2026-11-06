@@ -333,6 +333,7 @@ WorkspaceNavigation:
   additionalProperties: false
   required: [meetingId, revisionToken, accessRevisionToken, stage, relation, navigationState, contentEligibility, saved]
   properties:
+    activeMinutesGeneration: {type: boolean, description: Owner observation across all task history pages.}
     processingMaterialsChanged: {type: boolean}
     processingMaterialStage: {type: string, enum: [TRANSCRIBING, ENHANCING, ADOPTING, SUCCEEDED, FAILED, STALE, CANCELLED]}
     temporaryTitle: {type: [string, 'null'], maxLength: 256}

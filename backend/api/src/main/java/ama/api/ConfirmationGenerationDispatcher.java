@@ -3,6 +3,10 @@ package ama.api;
 import ama.contract.IdentityContracts.Actor;
 import ama.contract.IdentityContracts.Role;
 import ama.contract.IdentityContracts.Status;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +17,8 @@ import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /** Resume confirmation after browser or process loss. Every write goes through the owner command gate. */
+@Component
+@ConditionalOnProperty(name="minutes.enabled",havingValue="true")
 final class ConfirmationGenerationDispatcher implements AutoCloseable {
  private final JdbcTemplate jdbc;
  private final MinutesConfiguration.Runtime runtime;
@@ -22,14 +28,14 @@ final class ConfirmationGenerationDispatcher implements AutoCloseable {
  ConfirmationGenerationDispatcher(DataSource source,MinutesConfiguration.Runtime runtime){
   jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(3);this.runtime=runtime;
  }
- public void start(){executor.scheduleWithFixedDelay(this::poll,1,2,TimeUnit.SECONDS);}
+ @PostConstruct public void start(){executor.scheduleWithFixedDelay(this::poll,1,2,TimeUnit.SECONDS);}
  private final java.util.concurrent.atomic.AtomicBoolean wakeQueued=new java.util.concurrent.atomic.AtomicBoolean();
  void wake(){
   if(executor.isShutdown()||!wakeQueued.compareAndSet(false,true))return;
   try{executor.execute(()->{wakeQueued.set(false);poll();});}
   catch(java.util.concurrent.RejectedExecutionException stopped){wakeQueued.set(false);}
  }
- public void close(){executor.shutdownNow();}
+ @PreDestroy public void close(){executor.shutdownNow();}
  private record Intent(String confirmation,String meeting,String actor,String current,String owner,long revision,String template,boolean active){}
  private void poll(){
   try{
@@ -60,7 +66,7 @@ final class ConfirmationGenerationDispatcher implements AutoCloseable {
   var actor=new Actor(intent.actor,Status.ACTIVE,Set.of(Role.USER));String trace=UUID.randomUUID().toString();
   String key="confirm-"+intent.confirmation+"-"+intent.revision;
   if(intent.template==null){
-   var templates=(List<?>)runtime.queries().templates(actor,intent.meeting,50,null).get("items");
+   var templates=(List<?>)runtime.queries().templates(actor,intent.meeting,1,null).get("builtins");
    String template=templates.stream().map(Map.class::cast).filter(t->Boolean.TRUE.equals(t.get("default"))&&Boolean.TRUE.equals(t.get("selectable")))
     .map(t->(String)t.get("revisionId")).findFirst().orElseThrow();
    runtime.initial().initialize(actor,intent.meeting,key,intent.revision,template,trace);

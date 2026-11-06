@@ -191,7 +191,10 @@ public final class JdbcMinutesFactsReader {
   for(var group:verificationGroups.entrySet()){
    var raw=snapshot.loadClosure(group.getKey(),read,0,()->false);for(var archive:raw){var bytes=archive.bytes();budget.capture(bytes.length,bytes.length,bytes.length,16);}
    var verified=bindings.verifyGenerations(facts,group.getValue(),raw,graphBudget,read,()->false);
-   for(var entry:verified.entrySet()){budget.check();byte[] manifestBytes=CanonicalJson.encode(entry.getValue().manifest(),65536,()->false);budget.capture(manifestBytes.length,manifestBytes.length,manifestBytes.length,4);manifests.put(entry.getKey(),new String(manifestBytes,StandardCharsets.UTF_8));}
+   // All inputs above are verified. Only the requested stored-input response transports a JSON manifest.
+   for(var entry:verified.entrySet()){budget.check();
+    if(!"STORED_INPUT_READ".equals(graph.discovery().kind())||!entry.getKey().equals(graph.discovery().selected()))continue;
+    byte[] manifestBytes=CanonicalJson.encode(entry.getValue().manifest(),65536,()->false);budget.capture(manifestBytes.length,manifestBytes.length,manifestBytes.length,4);manifests.put(entry.getKey(),new String(manifestBytes,StandardCharsets.UTF_8));}
   }
   for(var ref:MinutesStoredReviews.validate(facts,snapshot,bindings,read,graphBudget,budget)){var old=roots.putIfAbsent(ref.artifactType()+"|"+ref.version(),ref);require(old==null||old.equals(ref),PROFILE_UNAVAILABLE);}
   for(var ref:MinutesStoredFinals.validate(graph,facts,snapshot,bindings,read,graphBudget,budget)){var old=roots.putIfAbsent(ref.artifactType()+"|"+ref.version(),ref);require(old==null||old.equals(ref),PROFILE_UNAVAILABLE);}

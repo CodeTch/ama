@@ -29,6 +29,9 @@ public interface ExternalOperationPort {
     default ObservationResult recoverPreparedFact(OperationToken token, PreparedObservation observation) {
         throw new IllegalStateException("Prepared receipt recovery not installed");
     }
+    /** Scheduling hints only. The independent bounded claim still authenticates each operation. */
+    default boolean hasDueReconciliation(){return true;}
+    default boolean hasMoreReconciliationPages(){return false;}
     /** Independent due-operation takeover; never sends or creates another execution for UNKNOWN. */
     Optional<OperationToken> claimReconciliation(String owner);
     boolean renew(OperationToken token);

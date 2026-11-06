@@ -7,6 +7,11 @@ import {fitsUtf8} from '../bounded-text';
 export type GenerationRegion={baseElementSetId:string;category:'OVERVIEW'|'DISCUSSION'|'CONCLUSION'|'ACTION'|'RISK'|'OPEN_QUESTION'|'DISAGREEMENT';instructions:string};
 export type GenerationCurrent=components['schemas']['MinutesCurrent'];
 export type GenerationTemplates=components['schemas']['MinutesTemplates'];
+export function visibleTemplates(page:GenerationTemplates|null|undefined){
+ const choices=new Map<string,GenerationTemplates['items'][number]>();
+ for(const item of [...(page?.builtins??[]),...(page?.items??[])])if(!choices.has(item.revisionId))choices.set(item.revisionId,item);
+ return [...choices.values()];
+}
 export type GenerationReceipt=components['schemas']['MinutesInitialReceipt']|components['schemas']['MinutesGenerationReceipt'];
 const object=(v:unknown):v is Record<string,unknown>=>typeof v==='object'&&v!==null&&!Array.isArray(v);
 const exact=(v:unknown,keys:string):v is Record<string,unknown>=>object(v)&&Object.keys(v).sort().join(',')===keys;
@@ -34,7 +39,9 @@ export function createMinutesGenerationApi(client:ReturnType<typeof createBusine
  async templates(meeting:string,cursor:string|null,signal:AbortSignal):Promise<GenerationTemplates>{
   if(!uuid(meeting)||cursor!==null&&(typeof cursor!=='string'||!fitsUtf8(cursor,4096)))throw new TypeError('Invalid template request');const query=new URLSearchParams({limit:'20'});if(cursor!==null)query.set('cursor',cursor);
   const v=await client.json<unknown>(`/api/v1/meetings/${meeting}/minutes/templates?${query}`,{signal,expectedStatus:200,maxResponseBytes:4*1024*1024});
-  if(!exact(v,'items,nextCursor,observation')||!observation(v.observation)||!(v.nextCursor===null||typeof v.nextCursor==='string'&&fitsUtf8(v.nextCursor,4096))||!Array.isArray(v.items)||v.items.length>50||!v.items.every(templateChoice)||new Set(v.items.map(x=>x.revisionId)).size!==v.items.length)return invalid();return freeze(v as GenerationTemplates);
+  if(!(exact(v,'items,nextCursor,observation')||exact(v,'builtins,items,nextCursor,observation'))||!observation(v.observation)||!(v.nextCursor===null||typeof v.nextCursor==='string'&&fitsUtf8(v.nextCursor,4096))||!Array.isArray(v.items)||v.items.length>50||!v.items.every(templateChoice)||new Set(v.items.map(x=>x.revisionId)).size!==v.items.length)return invalid();
+  if('builtins' in v&&(!Array.isArray(v.builtins)||v.builtins.length>3||!v.builtins.every(templateChoice)||new Set(v.builtins.map(t=>t.revisionId)).size!==v.builtins.length))return invalid();
+  return freeze(v as GenerationTemplates);
  },
  async send(command:CommandSnapshot):Promise<GenerationReceipt>{
   if(!actor()||actor()!==command.actor)throw new DOMException('Generation actor changed','AbortError');if(!validGenerationCommand(command,command.actor,command.resource)||!uuid(command.resource))throw new TypeError('Invalid generation command');

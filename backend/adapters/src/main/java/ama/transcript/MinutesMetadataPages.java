@@ -12,7 +12,11 @@ final class MinutesMetadataPages {
  private record Capture(Position position,List<Map<String,Object>> rows,Map<String,Proof> proofs){}
  MinutesMetadataPages(JdbcTranscriptAuthority authority,TranscriptAcquisitionBudget limits){this.authority=authority;maximum=(int)Math.min(256,Math.min(limits.tasks(),authority.readBudget().maxFactRows()));j=new JdbcTemplate(authority.dataSource());j.setQueryTimeout(2);}
  Map<String,Object> page(Actor actor,String meeting,int limit,String filter,String cursor){
-  uuid(meeting);require(limit>=1&&limit<=50,INVALID_ARGUMENT);Position position=decode(meeting,filter,cursor);Capture prepared=null;RuntimeException failure=null;
+  uuid(meeting);require(limit>=1&&limit<=50,INVALID_ARGUMENT);Position position=decode(meeting,filter,cursor);
+  return TranscriptReadRetry.read(()->List.of(j.queryForList("SELECT revision,access_revision FROM meeting WHERE id=?",meeting),Optional.ofNullable(highwater(meeting,filter))),()->pageOnce(actor,meeting,limit,filter,cursor,position));
+ }
+ private Map<String,Object> pageOnce(Actor actor,String meeting,int limit,String filter,String cursor,Position position){
+  Capture prepared=null;RuntimeException failure=null;
   try{prepared=capture(position,limit,true);}catch(RuntimeException unavailable){failure=unavailable;}
   final Capture before=prepared;final RuntimeException problem=failure;
   return authority.transactionRunner().required(()->{

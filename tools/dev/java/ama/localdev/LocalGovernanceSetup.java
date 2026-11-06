@@ -22,8 +22,13 @@ public final class LocalGovernanceSetup {
   var raw=old.loadClosure(List.of(base),LocalArchiveBudget.READ,0,()->false).stream().filter(r->r.claimedIdentity().equals(base.identity())).findFirst().orElseThrow();var body=fields(BoundedModelJson.parse(raw.bytes(),65536),"archiveSchema","artifactType","version","definitionSchema","definition","dependencies");
   String baseline=text(fields(body.get("definition"),"instructionText").get("instructionText"));var additions=new ArrayList<RawArchive>();var entries=new ArrayList<>(old.index().entries());
   for(String key:GovernanceCatalog.PROMPTS.keySet().stream().sorted().toList()){
-   String version=GovernanceCatalog.promptArchiveVersion(base.sha256(),key);var value=object(field("archiveSchema",body.get("archiveSchema")),field("artifactType",body.get("artifactType")),field("version",string(version)),field("definitionSchema",body.get("definitionSchema")),field("definition",object(field("instructionText",string(baseline+"\n"+GovernanceCatalog.PROMPTS.get(key))))),field("dependencies",body.get("dependencies")));
+   String original=GovernanceCatalog.promptArchiveVersion(base.sha256(),key);
+   String revised=GovernanceCatalog.rulesArchiveVersion(base.sha256(),key);
+   for(String version:List.of(original,revised)){
+   String instructions=baseline+"\n"+GovernanceCatalog.PROMPTS.get(key)+(version.equals(revised)?"\n"+GovernanceCatalog.MINUTES_RULES:"");
+   var value=object(field("archiveSchema",body.get("archiveSchema")),field("artifactType",body.get("artifactType")),field("version",string(version)),field("definitionSchema",body.get("definitionSchema")),field("definition",object(field("instructionText",string(instructions)))),field("dependencies",body.get("dependencies")));
    var archive=new RawArchive(ArtifactType.PROMPT_CONFIG,version,CanonicalJson.encode(value,65536,()->false));additions.add(archive);entries.add(new ConfigArchiveIndex.Entry(MaterialArchives.ref(archive),archive.bytes().length));
+   }
   }
   entries.sort(Comparator.comparing((ConfigArchiveIndex.Entry e)->e.ref().artifactType().name()).thenComparing(e->e.ref().version()));var index=new ConfigArchiveIndex(old.index().generation()+1,previous,entries);String expected=HexFormat.of().formatHex(CanonicalValueCodec.digest().digest(CanonicalJson.encode(index.wire(),4194304,()->false)));
   String pin=Files.exists(root.resolve("releases").resolve(expected),LinkOption.NOFOLLOW_LINKS)?expected:new ControlledArchiveReleaseWriter().publish(root,previous,additions,ControlledMinutesAdmin.INDEX,LocalArchiveBudget.READ,()->false);if(!expected.equals(pin))throw new IllegalStateException("Governed prompt index mismatch");source.open(root,pin,ControlledMinutesAdmin.INDEX,LocalArchiveBudget.READ,()->false);

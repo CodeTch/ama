@@ -17,6 +17,15 @@ class Task11LibraryContextServiceTest {
   void rehash(){location.remove("locationVersion");location.put("locationVersion",ControlledKnowledgeClient.digest(ControlledKnowledgeClient.canonical(location)));}
   Map<String,Object> context()throws IOException{return service.libraryContext(viewer,Task11DocumentServiceBoundaryTest.M,Task11DocumentServiceBoundaryTest.P,cancellation);}
  }
+ @Test void expiredReadProofIsRenewedOutsideTheTransactionBeforeReturningLocation()throws Exception {
+  var f=new Fixture();
+  doThrow(new MeetingAccess.AuthorityUnavailableException()).doNothing().when(f.access).require(any(MeetingAccess.Locked.class),eq(MeetingAccess.Action.READ));
+  doAnswer(call->{assertFalse(TransactionSynchronizationManager.isActualTransactionActive());return null;})
+      .when(f.access).prepareExternalRead(f.viewer,Task11DocumentServiceBoundaryTest.M);
+  assertEquals("Actual library",f.context().get("libraryName"));
+  verify(f.access).prepareExternalRead(f.viewer,Task11DocumentServiceBoundaryTest.M);
+  assertEquals(4,f.reads.get());
+ }
  @Test void currentMemberGetsOnlyVerifiedMetadataAndSameOriginDocumentWithoutOwnerReceipt()throws Exception {var f=new Fixture();var result=f.context();assertEquals("Actual library",result.get("libraryName"));assertEquals("/api/v1/meetings/"+Task11DocumentServiceBoundaryTest.M+"/publications/"+Task11DocumentServiceBoundaryTest.P+"/document",result.get("documentUrl"));assertEquals(3,f.reads.get());assertEquals(2,f.roots.get());assertEquals(4,f.contentReads.get());assertFalse(result.containsKey("payload"));verify(f.client,never()).exchange(any(),eq(8454144),any());}
  @Test void currentInitialOrFinalReadDenialAndRootDriftNeverReturnMetadata()throws Exception {var initial=new Fixture();initial.denyInitial=true;assertThrows(MeetingAccess.AccessDeniedException.class,initial::context);assertFalse(initial.network.get());var revoked=new Fixture();revoked.denyFinal=true;assertThrows(MeetingAccess.AccessDeniedException.class,revoked::context);assertTrue(revoked.network.get());var drift=new Fixture();drift.drift=true;assertThrows(RuntimeException.class,drift::context);}
  @Test void providerWrongDestinationInvalidVersionAndCancellationStopBeforeFinalCapture()throws Exception {var wrong=new Fixture();wrong.location.put("libraryId","foreign");wrong.rehash();assertThrows(RuntimeException.class,wrong::context);assertEquals(1,wrong.roots.get());var changed=new Fixture();changed.location.put("libraryName","unauthenticated edit");assertThrows(RuntimeException.class,changed::context);var cancelled=new Fixture();cancelled.cancelAfterNetwork=true;assertThrows(RuntimeException.class,cancelled::context);}

@@ -53,18 +53,27 @@ public final class ReconciliationLoop implements WorkerRuntime {
         if (started.compareAndSet(false, true)) scanner.scheduleWithFixedDelay(this::poll, 0, 5, TimeUnit.SECONDS);
     }
 
-    private void poll() {
+    private final AtomicBoolean continuationQueued=new AtomicBoolean();
+    private void continuePass(){
+        if(!operations.hasMoreReconciliationPages()||!continuationQueued.compareAndSet(false,true))return;
+        try{scanner.schedule(()->{continuationQueued.set(false);scan(false);},250,TimeUnit.MILLISECONDS);}
+        catch(RejectedExecutionException stopped){continuationQueued.set(false);}
+    }
+    private void poll(){scan(true);}
+
+    private void scan(boolean maintenance) {
         if (closed.get() || !scanning.compareAndSet(false, true)) return;
         try {
             // Maintenance precedes capacity/claim checks, including an entirely saturated worker.
-            if(permits!=null)permits.recoverSettlements(8);
-            if(localPublications!=null)try{localPublications.maintainLocalFailures();}catch(RuntimeException unavailable){LOG.log(System.Logger.Level.WARNING,"Publication local maintenance unavailable: "+unavailable.getClass().getSimpleName());}
+            if(maintenance&&permits!=null)permits.recoverSettlements(8);
+            if(maintenance&&localPublications!=null)try{localPublications.maintainLocalFailures();}catch(RuntimeException unavailable){LOG.log(System.Logger.Level.WARNING,"Publication local maintenance unavailable: "+unavailable.getClass().getSimpleName());}
             for(var session:pending){session.retry();if(!session.pending()&&pending.remove(session)){session.close();sessions.remove(session);slots.release();}}
+            if(!operations.hasDueReconciliation())return;
             while (!closed.get() && slots.tryAcquire()) {
                 boolean submitted = false;
                 try {
                     var claimed = operations.claimReconciliation(owner);
-                    if (claimed.isEmpty()) return;
+                    if (claimed.isEmpty()){continuePass();return;}
                     workers.execute(() -> reconcile(claimed.orElseThrow()));
                     submitted = true;
                 } finally { if (!submitted) slots.release(); }
@@ -95,7 +104,9 @@ public final class ReconciliationLoop implements WorkerRuntime {
     private void reconcilePrepared(OperationToken token){
         ExternalExecutionSession session=null;boolean retained=false;
         try{session=ExternalExecutionSession.reconciliation(token,operations,permits,heartbeats,()->!closed.get());sessions.add(session);preparedHandler.reconcile(session);}
-        catch(Exception unavailable){LOG.log(System.Logger.Level.WARNING,"Prepared reconciliation unavailable: "+unavailable.getClass().getSimpleName());}
+        catch(Exception unavailable){LOG.log(System.Logger.Level.WARNING,"Prepared reconciliation unavailable: "+unavailable.getClass().getSimpleName()+
+                (unavailable instanceof ama.contract.MinutesContracts.Failure domain?"/"+domain.code():"")+
+                " at "+java.util.Arrays.stream(unavailable.getStackTrace()).limit(8).toList());}
         finally{
             if(session!=null&&session.pending()&&!closed.get()){pending.add(session);retained=true;}
             else if(session!=null){session.close();sessions.remove(session);}

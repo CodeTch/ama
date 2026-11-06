@@ -1,5 +1,5 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
-import {createMinutesGenerationApi,validGenerationCommand} from '../../src/shared/api/minutes-generation.js';
+import {createMinutesGenerationApi,validGenerationCommand,visibleTemplates} from '../../src/shared/api/minutes-generation.js';
 import {createBusinessClient,type Session} from '../../src/shared/api/business-client.js';
 const meeting='00000000-0000-4000-8000-000000000001',id='00000000-0000-4000-8000-000000000002';
 const session:Session={actor:{enterpriseId:'owner',status:'ACTIVE',roles:['USER']},csrfToken:'csrf',expiresAt:'2099-01-01T00:00:00Z'};
@@ -45,4 +45,12 @@ test('confirmed generation state survives strict decoding on current and histori
   wire={...header,confirmationGeneration:invalid};await assert.rejects(read);
  }
  wire={...header,confirmationGeneration:'WAITING',extra:true};await assert.rejects(read);
+});
+
+test('installed choices remain visible when the UUID page consists of personal templates',()=>{
+ const personal={templateId:id,revisionId:id,name:'个人总结',themes:['讨论'],themeCount:1,selectable:true,default:false};
+ const builtin={...personal,templateId:meeting,revisionId:meeting,name:'正式会议纪要'};
+ const page={items:[personal],builtins:[builtin],nextCursor:id,observation};
+ assert.deepEqual(visibleTemplates(page).map(t=>t.name),['正式会议纪要','个人总结']);
+ assert.deepEqual(visibleTemplates({...page,items:[personal,builtin]}).map(t=>t.name),['正式会议纪要','个人总结']);
 });

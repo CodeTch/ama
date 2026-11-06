@@ -38,7 +38,7 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
  private final ReentrantLock scanLock=new ReentrantLock();
  // Enumeration only: no durable claim, cached policy, or task/send capability lives here.
  private final ScanCursor scanCursor=new ScanCursor();
- private static final class ScanCursor {boolean active;long after;long upper;}
+ private static final class ScanCursor {volatile boolean active;long after;long upper;}
  private record ScanCandidate(long sequence,String operationId) {}
  private record ScanOperation(Operation operation,long sequence,Instant nextCheck,boolean due) {}
  public JdbcExternalOperations(JdbcTaskQueue queue){this(queue,new ReconciliationScanBudget(64,64));}
@@ -140,6 +140,13 @@ public final class JdbcExternalOperations implements ExternalOperationPort {
   return Optional.of(new Locked(op.orElseThrow(),ex.orElseThrow(),heldTask.orElseThrow(),domain.orElseThrow()));
  }
  /** Empty can mean the finite scan budget was consumed; retain this instance across polls. */
+ @Override public boolean hasDueReconciliation(){
+  independent();
+  // No identifier or authority is returned by this indexed hint. The fair claim
+  // continues enumerating every raw ordinal and rechecks it under its normal locks.
+  return Boolean.TRUE.equals(j.queryForObject("SELECT EXISTS(SELECT 1 FROM external_operation WHERE state IN ('MARKED','UNKNOWN') AND next_check_at<=UTC_TIMESTAMP(6) AND reconcile_expires_at<=UTC_TIMESTAMP(6))",Boolean.class));
+ }
+ @Override public boolean hasMoreReconciliationPages(){return scanCursor.active;}
  @Override public Optional<OperationToken> claimReconciliation(String owner){
   independent();ama.contract.OutboxContracts.protocolCode(owner);
   if(!scanLock.tryLock())return Optional.empty();

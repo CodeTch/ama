@@ -7,6 +7,7 @@ const App=()=>import('./App.vue');
 const MeetingDetail=()=>import('./features/meetings/MeetingDetail.vue');
 import {createTabJournalContext} from './shared/composables/tab-journal';
 import {applicationKey,createApplication} from './application';
+import {startupSession,startupEntry,directMeeting,initialSession} from './minutes-startup';
 import './shared/styles/tokens.css';
 import './shared/styles/prototype.css';
 import './shared/styles/parity.css';
@@ -41,17 +42,17 @@ const router=createRouter({history:createWebHistory(),routes:[
 ]});
 const navigation=performance.getEntriesByType('navigation')[0];
 const journalContext=createTabJournalContext(()=>window.sessionStorage,navigation instanceof PerformanceNavigationTiming?navigation.type:'navigate');
-const application=createApplication(window.location.origin,journalContext);
+const application=createApplication(window.location.origin,journalContext,startupSession,startupEntry);
 router.beforeEach(async (to,from)=>{
- application.clearMinutesEntry();
  const directMinutes=!from.matched.length&&to.name==='meeting-detail'&&to.params.stage==='minutes'&&typeof to.params.id==='string'&&to.params.id!==DEMO_MEETING_ID;
+ if(!directMinutes||to.params.id!==directMeeting)application.clearMinutesEntry();
  if(directMinutes)void MeetingDetail().catch(()=>{}); // Static route code can load during the session check.
  // Keep the shell, deferred recording page, and unknown-route boundary
  // renderable while anonymous. They contain no protected data and can show
  // the login/disabled state without creating a session or touching a device.
  // Protected API-backed pages still refresh the session before entering.
  if(to.path==='/login'||to.path==='/meetings'||to.name==='recording'||to.path==='/transcript-correction-demo'||to.path==='/knowledge-publish-demo'||to.name==='meeting-detail'&&to.params.id===DEMO_MEETING_ID||to.matched.some(record=>record.path==='/:pathMatch(.*)*') )return true;
- try{if(!application.session.current.value)await application.session.refresh();}catch{return {path:'/login'};}
+ try{if(directMinutes&&to.params.id===directMeeting&&initialSession){if(!await initialSession||!application.session.current.value)return {path:'/login'};}else if(!application.session.current.value)await application.session.refresh();}catch{return {path:'/login'};}
  if(directMinutes)application.preloadMinutesEntry(String(to.params.id));
  return true;
 });

@@ -22,6 +22,11 @@ export function createMinutesInspectionApi(client:ReturnType<typeof createBusine
   workspaceVersion:(meeting:string,selected:string,signal:AbortSignal)=>get('SavedWorkspaceDetail',root(meeting)+'/workspace-versions/'+id(selected),signal),
   settings:(meeting:string,signal:AbortSignal)=>get('SavedSettings',root(meeting)+'/settings',signal),
   async source(meeting:string,locator:string,target:{kind:'BODY'|'ELEMENT'|'SET';id:string},signal:AbortSignal){if(!['BODY','ELEMENT','SET'].includes(target.kind))throw new TypeError('Invalid target');const v=await get('SavedSource',root(meeting)+`/sources/${id(locator)}?targetKind=${target.kind}&targetId=${id(target.id)}`,signal);if(v.locator.id!==locator||v.locator.meeting_id!==meeting||v.historical||!(v.locator.kind==='TRANSCRIPT'?v.originalBytes.route.startsWith(`/api/v1/meetings/${meeting}/transcript/sources/`)&&uuid(v.originalBytes.route.split('/').at(-1)):/^\/api\/v1\/files\/[0-9a-f-]{36}\/content$/.test(v.originalBytes.route)&&uuid(v.originalBytes.route.split('/')[4])))return invalid();return v;},
+  async historicalSource(meeting:string,set:string,locator:string,signal:AbortSignal){
+   const result=await get('SavedSource',root(meeting)+'/element-sets/'+id(set)+'/sources/'+id(locator),signal);
+   if(!result.historical||result.locator.id!==locator||result.locator.meeting_id!==meeting)return invalid();
+   return result;
+  },
   async reviews(meeting:string,target:{kind:'BODY'|'ELEMENT';id:string},next:string|null,signal:AbortSignal){if(next!==null&&!revisionToken(next)||!['BODY','ELEMENT'].includes(target.kind))throw new TypeError('Invalid review selector');const v=await get('SavedReviewHistory',root(meeting)+`/reviews?targetKind=${target.kind}&targetId=${id(target.id)}&limit=20`+(next===null?'':'&beforeReviewNoToken='+next),signal);if(v.items.some(x=>x.meeting_id!==meeting||(target.kind==='BODY'?x.minutes_revision_id!==target.id:x.element_id!==target.id))||v.hasMore!==(v.nextBeforeReviewNoToken!==null))return invalid();return v;},
  };
 }

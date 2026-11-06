@@ -5331,6 +5331,8 @@ export interface components {
             verification: "PERSISTED_REFERENCES_RECHECK_PRODUCER";
         };
         WorkspaceNavigation: {
+            /** @description Owner observation across all task history pages. */
+            activeMinutesGeneration?: boolean;
             processingMaterialsChanged?: boolean;
             /** @enum {string} */
             processingMaterialStage?: "TRANSCRIBING" | "ENHANCING" | "ADOPTING" | "SUCCEEDED" | "FAILED" | "STALE" | "CANCELLED";
@@ -6458,6 +6460,8 @@ export interface components {
         };
         MinutesTemplates: {
             items: components["schemas"]["MinutesTemplate"][];
+            /** @description Verified installed built-in choices, available independently of the UUID-paginated catalog. */
+            builtins?: components["schemas"]["MinutesTemplate"][];
             nextCursor: string | null;
             observation: components["schemas"]["MinutesObservation"];
         };
@@ -6636,6 +6640,13 @@ export interface components {
             /** @description Lossless decimal; preserve every digit. Revision values stop at 9223372036854775806. */
             attemptToken: string;
         };
+        MinutesRegionRequest: {
+            /** Format: uuid */
+            baseElementSetId: string;
+            /** @enum {string} */
+            category: "OVERVIEW" | "DISCUSSION" | "CONCLUSION" | "ACTION" | "RISK" | "OPEN_QUESTION" | "DISAGREEMENT";
+            instructions: string;
+        };
         MinutesTask: {
             task: components["schemas"]["MinutesTaskMetadata"];
             attempts: {
@@ -6651,6 +6662,7 @@ export interface components {
             candidateId: string | null;
             allowedActions: "INSPECT"[];
             observation: components["schemas"]["MinutesObservation"];
+            region?: components["schemas"]["MinutesRegionRequest"] | null;
         };
         MinutesCandidateListMetadata: {
             /** Format: uuid */
@@ -6819,13 +6831,6 @@ export interface components {
             support_state: "SUPPORTED" | "PARTIAL" | "UNSUPPORTED";
             target_anchor: string;
         };
-        MinutesRegionRequest: {
-            /** Format: uuid */
-            baseElementSetId: string;
-            /** @enum {string} */
-            category: "OVERVIEW" | "DISCUSSION" | "CONCLUSION" | "ACTION" | "RISK" | "OPEN_QUESTION" | "DISAGREEMENT";
-            instructions: string;
-        };
         MinutesCandidate: {
             candidate: components["schemas"]["MinutesCandidateMetadata"];
             graph: {
@@ -6947,6 +6952,12 @@ export interface components {
                 category: "POLITICAL_SENSITIVE" | "INTERNAL_BUSINESS_DATA";
                 /** Format: uuid */
                 locatorId: string;
+            }[];
+            elementExclusions?: {
+                /** Format: uuid */
+                elementId: string;
+                selected: boolean;
+                applied: boolean;
             }[];
         };
         SavedCurrent: {

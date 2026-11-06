@@ -39,24 +39,33 @@ public final class JdbcWebMeetingProjectionReader {
   budget.reserve(2,4,4096,2048,2048,4,true);String decoded=cursor==null?null:cursors.decode(actor.enterpriseId(),cursorScope,cursor);var after=decoded==null?null:MeetingListScan.Position.parse(decoded);
   // A signed proof may expire between preparation and the final locked projection.
   // Reacquire once under the same request ledger. Never return an expired or partial page.
-  try{return observedPage(actor,scope,limit,filter,budget,cursorScope,after);}
+  try{return observedPage(actor,scope,limit,filter,budget,cursorScope,after,false);}
   catch(MeetingAccess.AuthorityUnavailableException expired){
-   budget.check();return observedPage(actor,scope,limit,filter,budget,cursorScope,after);
+   budget.check();return observedPage(actor,scope,limit,filter,budget,cursorScope,after,true);
   }
  }
- private MeetingPage observedPage(Actor actor,String scope,int limit,MeetingListFilter filter,WorkspaceReadBudget budget,String cursorScope,MeetingListScan.Position after){
+ private MeetingPage observedPage(Actor actor,String scope,int limit,MeetingListFilter filter,WorkspaceReadBudget budget,String cursorScope,MeetingListScan.Position after,boolean forcePreparation){
   try {
-   record Preliminary(List<MeetingQueryRelation.Special> specials,List<String> refresh){}
-   var preliminary=tx.required(()->{
-    budget.check();var identities=access.lockReadIdentity(actor);topicOwner(actor,filter);
-    var specials=new MeetingQueryRelation(jdbc,actor,scope,filter,List.of(),budget).special();var refresh=new ArrayList<String>();
-    // One ordered lock acquisition avoids a separate identity/root transaction for every
-    // already valid proof. No external work runs while these locks are held.
-    for(var candidate:specials){budget.check();try{var gate=(JdbcMeetingAccess.Held)access.lockPrepared(identities,candidate.id(),false).orElseThrow(MeetingAccess.AccessDeniedException::new);access.require(gate,MeetingAccess.Action.READ);if(gate.authorityDeadline!=null&&!gate.authorityDeadline.isAfter(java.time.Instant.now().plusSeconds(3)))refresh.add(candidate.id());}catch(MeetingAccess.AuthorityUnavailableException|MeetingAccess.AccessDeniedException unavailable){refresh.add(candidate.id());}}
-    return new Preliminary(specials,List.copyOf(refresh));
+   record Preparation(List<MeetingQueryRelation.Special> specials,List<String> refresh){}
+   var preparation=tx.required(()->{
+    budget.check();access.lockReadIdentity(actor);topicOwner(actor,filter);
+    var specials=new MeetingQueryRelation(jdbc,actor,scope,filter,List.of(),budget).special();
+    var ids=specials.stream().map(MeetingQueryRelation.Special::id).toList();
+    if(ids.isEmpty()||forcePreparation)return new Preparation(specials,ids);
+    // These metadata hints only schedule external refresh. The final ordered locks and
+    // READ check verify the actual grant, dependency hash, pins and signed expiry.
+    budget.reserve(ids.size(),ids.size(),36L*ids.size(),36L*ids.size(),36L*ids.size(),2,false);
+    var args=new ArrayList<Object>(ids);args.add(actor.enterpriseId());
+    String params=String.join(",",Collections.nCopies(ids.size(),"?"));
+    var refresh=jdbc.queryForList("SELECT m.id FROM meeting m WHERE m.id IN ("+params+") AND ("+
+      "(m.ever_published=1 AND NOT EXISTS(SELECT 1 FROM publication p JOIN publication_governance_authority a ON a.publication_id=p.id WHERE p.meeting_id=m.id AND p.confirmation_id=m.final_confirmation_id AND p.state='SUCCEEDED' AND a.state='ACTIVE' AND a.verified_until>DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 3 SECOND))) OR "+
+      "(EXISTS(SELECT 1 FROM material_reference r WHERE r.meeting_id=m.id AND r.kind='KNOWLEDGE') AND NOT EXISTS(SELECT 1 FROM material_authority_cache c WHERE c.meeting_id=m.id AND c.actor_id=? AND c.state='ACTIVE' AND c.verified_until>DATE_ADD(UTC_TIMESTAMP(6),INTERVAL 3 SECOND)))) ORDER BY m.id",String.class,args.toArray());
+    return new Preparation(specials,refresh);
    });
-   var specials=preliminary.specials();var refused=java.util.concurrent.ConcurrentHashMap.<String>newKeySet();
-   WorkspaceReadPreparation.run(preliminary.refresh(),budget,meeting->{try{access.prepareExternalRead(actor,meeting);}catch(MeetingAccess.AccessDeniedException noAccess){refused.add(meeting);}});
+   var specials=preparation.specials();var refused=java.util.concurrent.ConcurrentHashMap.<String>newKeySet();
+   WorkspaceReadPreparation.run(preparation.refresh(),budget,id->{
+    try{access.prepareExternalRead(actor,id);}catch(MeetingAccess.AccessDeniedException noAccess){refused.add(id);}
+   });
    return tx.required(()->{
     var identities=access.lockReadIdentity(actor);topicOwner(actor,filter);
     var specialIds=new TreeSet<String>();specials.forEach(special->specialIds.add(special.id()));

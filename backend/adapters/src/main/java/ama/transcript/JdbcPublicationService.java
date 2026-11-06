@@ -77,17 +77,25 @@ public final class JdbcPublicationService {
  void activeKnowledgeActor(Actor actor){if(actor==null||j.queryForObject("SELECT COUNT(*) FROM enterprise_identity WHERE enterprise_id=? AND status='ACTIVE'",Long.class,actor.enterpriseId())!=1)throw new MeetingAccess.AccessDeniedException();}
  Authorization knowledgeReader(Actor actor,TranscriptAcquisitionBudget.Ledger budget){activeKnowledgeActor(actor);return new Authorization(this,actor.enterpriseId(),"DOCUMENT_READ",budget);}
  public Map<String,Object> libraryRecords(Actor actor,String view,String cursor,PreparationCancellation cancellation)throws java.io.IOException{return PublicationLibraryRecords.read(this,actor,view,cursor,cancellation);}
+ /** A signed grant can expire while the async request waits for the meeting lock.
+  * Refresh outside the rolled-back transaction and repeat the same gated read once. */
+ private <T>T currentLocationRead(Actor viewer,String meeting,TranscriptAcquisitionBudget.Ledger budget,java.util.function.Supplier<T> read){
+  try{return read.get();}
+  catch(MeetingAccess.AuthorityUnavailableException expired){
+   budget.check();authority.savedAccess().prepareExternalRead(viewer,meeting);budget.check();return read.get();
+  }
+ }
  /** Current member READ never borrows owner discovery or the original requester's receipt authority. */
  public Map<String,Object> libraryContext(Actor viewer,String meeting,String publication,PreparationCancellation cancellation)throws java.io.IOException {
   JdbcMinutesFactsReader.independent();uuid(meeting);uuid(publication);Objects.requireNonNull(cancellation);
   var budget=limits.ledger(authority.readBudget(),authority.canonicalBudget(),cancellation::cancelled);
-  authority.transactionRunner().required(()->{budget.check();authority.savedAccess().require(authority.savedAccess().lock(viewer,meeting),MeetingAccess.Action.READ);return null;});
-  var plan=PublicationGraph.discover(authority.dataSource(),meeting,budget);var initial=PublicationDocumentRead.capture(this,viewer,meeting,publication,plan);var manifest=PublicationDocumentRead.verify(this,initial,plan);budget.check();
+  currentLocationRead(viewer,meeting,budget,()->authority.transactionRunner().required(()->{budget.check();authority.savedAccess().require(authority.savedAccess().lock(viewer,meeting),MeetingAccess.Action.READ);return null;}));
+  var plan=PublicationGraph.discover(authority.dataSource(),meeting,budget);var initial=currentLocationRead(viewer,meeting,budget,()->PublicationDocumentRead.capture(this,viewer,meeting,publication,plan));var manifest=PublicationDocumentRead.verify(this,initial,plan);budget.check();
   String document=(String)initial.mapping().get("external_document_id");var authorized=new Authorization(this,viewer.enterpriseId(),"DOCUMENT_READ",budget);Map<String,Object> raw;
   try{raw=client.exchange(client.authorized(authorized,"DOCUMENT_READ","GET","/v1/knowledge/documents/"+PublicationDestinationPage.encode(document)+"?view=location",null),65536,cancellation);}
   catch(ControlledKnowledgeClient.ProviderFailure denied){if(denied.status==403)throw new ama.contract.TranscriptContracts.Failure(403,"OFFICIAL_DOCUMENT_FORBIDDEN");if(denied.status==404)throw new ama.contract.TranscriptContracts.Failure(404,"OFFICIAL_DOCUMENT_UNAVAILABLE");throw denied;}
   var result=new TreeMap<>(PublicationLibraryContext.validate(raw,manifest,viewer.enterpriseId(),document,initial.result(),budget));result.put("meetingId",meeting);result.put("publicationId",publication);result.put("documentUrl","/api/v1/meetings/"+meeting+"/publications/"+publication+"/document");
-  var fresh=PublicationDocumentRead.capture(this,viewer,meeting,publication,plan);require(initial.equals(fresh),PROVENANCE_UNAVAILABLE);budget.check();return Collections.unmodifiableMap(result);
+  var fresh=currentLocationRead(viewer,meeting,budget,()->PublicationDocumentRead.capture(this,viewer,meeting,publication,plan));require(initial.equals(fresh),PROVENANCE_UNAVAILABLE);budget.check();return Collections.unmodifiableMap(result);
  }
  record DestinationAssertion(String token,long expires){}
  DestinationAssertion destination(Authorization authorized,String publication,String provider,String library,String folder)throws java.io.IOException {var body=Map.of("actorId",authorized.actor(),"providerId",provider,"libraryId",library,"folderId",folder,"context",publication);var response=client.exchange(client.authorized(authorized,"DESTINATION_AUTHORIZE","POST","/v1/knowledge/destination-authorizations",body),65536,NEVER);String assertion=ControlledKnowledgeClient.string(response,"assertion");var fields=client.assertion(assertion,authorized.budget);require(authorized.actor().equals(fields.get("actorId"))&&library.equals(fields.get("libraryId"))&&folder.equals(fields.get("folderId"))&&publication.equals(fields.get("context")),PROVENANCE_UNAVAILABLE);return new DestinationAssertion(assertion,((Number)fields.get("expiresAt")).longValue());}

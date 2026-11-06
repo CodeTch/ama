@@ -122,6 +122,14 @@
           "$ref": "#/MinutesTemplate"
         }
       },
+      "builtins": {
+        "type": "array",
+        "maxItems": 3,
+        "description": "Verified installed built-in choices, available independently of the UUID-paginated catalog.",
+        "items": {
+          "$ref": "#/MinutesTemplate"
+        }
+      },
       "nextCursor": {
         "oneOf": [
           {
@@ -1503,6 +1511,16 @@
       },
       "observation": {
         "$ref": "#/MinutesObservation"
+      },
+      "region": {
+        "anyOf": [
+          {
+            "$ref": "#/MinutesRegionRequest"
+          },
+          {
+            "type": "null"
+          }
+        ]
       }
     }
   },
@@ -12388,6 +12406,31 @@
               "type": "string",
               "format": "uuid",
               "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            }
+          }
+        }
+      },
+      "elementExclusions": {
+        "type": "array",
+        "maxItems": 100000,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "elementId",
+            "selected",
+            "applied"
+          ],
+          "properties": {
+            "elementId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "selected": {
+              "type": "boolean"
+            },
+            "applied": {
+              "type": "boolean"
             }
           }
         }

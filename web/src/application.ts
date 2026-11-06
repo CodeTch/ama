@@ -13,12 +13,11 @@ import {inject,shallowRef,shallowReadonly,watch,type InjectionKey} from 'vue';
 import {useSession} from './shared/composables/useSession';
 import {createCurrentUserProfile} from './shared/composables/current-user-profile';
 import {createMeetingsApi} from './shared/api/meetings';
-import {createMeetingInfoApi} from './shared/api/meeting-info';
+import {createMinutesEntry} from './shared/api/minutes-entry';
 import {createCommandDiscoveryApi} from './shared/api/command-discovery';
 import {useCommandDiscovery} from './shared/composables/useCommandDiscovery';
 import {useMeetingCreate} from './features/meetings/useMeetingCreate';
 import type {TabJournalContext} from './shared/composables/tab-journal';
-import {createWorkspaceApi} from './shared/api/workspace';
 import {createWorkspaceTasksApi} from './shared/api/workspace-tasks';
 import {useMeetingList} from './features/meetings/useMeetingList';
 import {createMeetingOptionsApi} from './shared/api/meeting-options';
@@ -32,7 +31,7 @@ import {createTranscriptsApi} from './shared/api/transcripts';
 import {createTranscriptJournal} from './features/transcript/transcript-journal';
 import {createMinutesGenerationApi,validGenerationCommand} from './shared/api/minutes-generation';
 import {createScopedPrivateJournal} from './shared/composables/scoped-private-journal';
-import {createMinutesSavedApi,validMinutesCommand} from './shared/api/minutes-saved';
+import {validMinutesCommand} from './shared/api/minutes-saved';
 import {createMinutesInspectionApi} from './shared/api/minutes-inspection';
 import {createMinutesEditorJournal} from './features/minutes/minutes-editor-journal';
 import {createPublicationsApi,validPublicationCommand} from './shared/api/publications';
@@ -55,58 +54,33 @@ import {validRecordingImportCommand} from './features/recording/useRecordingTran
 import {createSubtitleApi} from './features/recording/subtitle-api';
 import {createRecordingApi} from './features/recording/recording-api';
 import {usePcmRecorder} from './features/recording/usePcmRecorder';
-export function createApplication(origin:string,journals:TabJournalContext={tab:crypto.randomUUID(),storage:null,recovery:'NEW_NAMESPACE'}){
- const session=useSession(origin),meetings=createMeetingsApi(session.client),list=useMeetingList(meetings.list,()=>session.current.value?.actor.enterpriseId??null);
- const workspace=createWorkspaceApi(session.client,()=>session.current.value),tasks=createWorkspaceTasksApi(session.client);
+export function createApplication(origin:string,journals:TabJournalContext={tab:crypto.randomUUID(),storage:null,recovery:'NEW_NAMESPACE'},session=useSession(origin),entry=createMinutesEntry(session)){
+ const {info,workspace,minutesSaved,clearMinutesEntry}=entry;
+ const meetings=createMeetingsApi(session.client),list=useMeetingList(meetings.list,()=>session.current.value?.actor.enterpriseId??null);
+ const tasks=createWorkspaceTasksApi(session.client);
  const meetingLibrary=createMeetingLibraryApi(session.client,()=>session.current.value?.actor.enterpriseId??null);
  const publications=createPublicationsApi(session.client,()=>session.current.value?.actor.enterpriseId??null),publicationJournal=createScopedPrivateJournal(journals,'minutes-publication',validPublicationCommand),publicationDestinationJournal=createScopedPrivateJournal(journals,'publication-destination',validPublicationDestinationDraft);
- const minutesSaved=createMinutesSavedApi(session.client,()=>session.current.value?.actor.enterpriseId??null),minutesInspection=createMinutesInspectionApi(session.client);
- // One direct URL entry may overlap the route chunk download with its independently authorized read.
- // Claims are single use, tied to the session object and a short startup window.
- function entryReader<T>(read:(meeting:string,signal:AbortSignal)=>Promise<T>){
-  let entry:{meeting:string;identity:typeof session.current.value;controller:AbortController;started:number;result:Promise<T>}|null=null;
-  function clear(){entry?.controller.abort();entry=null;}
-  function start(meeting:string){
-   clear();
-   const identity=session.current.value;
-   if(!identity)return;
-   const controller=new AbortController(),result=read(meeting,controller.signal);
-   void result.catch(()=>{}); // A redirect can supersede this request before the component claims it.
-   entry={meeting,identity,controller,started:performance.now(),result};
-  }
-  function claim(meeting:string,signal:AbortSignal){
-   const request=entry;entry=null;
-   if(!request)return;
-   if(request.meeting!==meeting||request.identity!==session.current.value||performance.now()-request.started>4000||signal.aborted){request.controller.abort();return;}
-   const cancel=()=>request.controller.abort();
-   signal.addEventListener('abort',cancel,{once:true});
-   return request.result.finally(()=>signal.removeEventListener('abort',cancel));
-  }
-  return {start,clear,claim};
- }
+ const minutesInspection=createMinutesInspectionApi(session.client);
  const minutesSensitiveJournal=createSensitiveJournal(journals),minutesEditorJournal=createMinutesEditorJournal(journals),minutesActionsJournal=createScopedPrivateJournal(journals,'minutes-actions',validMinutesCommand),minutesScopeReady=shallowRef(true);
  function syncMinutes(actor:string|null,id?:string|null){const editor=minutesEditorJournal.synchronize(actor,id),actions=minutesActionsJournal.synchronize(actor,id);const publication=publicationJournal.synchronize(actor,id);const destination=publicationDestinationJournal.synchronize(actor,id);const sensitive=minutesSensitiveJournal.synchronize(actor,id);minutesScopeReady.value=editor&&actions&&publication&&destination&&sensitive;}
- const stopMinutesIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)syncMinutes(actor);},{flush:'sync'});
+ const stopMinutesIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)syncMinutes(actor);},{flush:'sync',immediate:session.current.value!==null});
  const stop=session.onInvalidate(()=>{clearMinutesEntry();list.invalidate();});
- const info=createMeetingInfoApi(session.client,()=>session.current.value?.actor.enterpriseId??null),infoSuggestions=createInfoSuggestionsApi(session.client,()=>session.current.value?.actor.enterpriseId??null),infoSuggestionJournal=createScopedPrivateJournal(journals,'info-suggestions',validInfoSuggestionCommand);
- const directContent=entryReader(minutesSaved.current),directNavigation=entryReader(workspace.navigation),directInformation=entryReader(info.saved);
- function clearMinutesEntry(){directContent.clear();directNavigation.clear();directInformation.clear();}
- function preloadMinutesEntry(meeting:string){directNavigation.start(meeting);directInformation.start(meeting);directContent.start(meeting);}
+ const infoSuggestions=createInfoSuggestionsApi(session.client,()=>session.current.value?.actor.enterpriseId??null),infoSuggestionJournal=createScopedPrivateJournal(journals,'info-suggestions',validInfoSuggestionCommand);
  const create=useMeetingCreate(info.send,()=>session.current.value?.actor.enterpriseId??null,journals.storage,journals.tab,journals.recovery);
  const discovery=createCommandDiscoveryApi(session.client,()=>session.current.value?.actor.enterpriseId??null);
  const createDiscovery=useCommandDiscovery(discovery.lookup,()=>session.current.value?.actor.enterpriseId??null,()=>create.command.snapshot.value);
  const options=createMeetingOptionsApi(session.client),infoJournal=createInfoJournal(journals);
  const currentUser=createCurrentUserProfile(()=>session.current.value?.actor.enterpriseId??null,options.people);
  const generationJournal=createScopedPrivateJournal(journals,'minutes-generation',validGenerationCommand),generationScopeReady=shallowRef(true),minutesGeneration=createMinutesGenerationApi(session.client,()=>session.current.value?.actor.enterpriseId??null);
- const stopGenerationIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)generationScopeReady.value=generationJournal.synchronize(actor);},{flush:'sync'});
+ const stopGenerationIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)generationScopeReady.value=generationJournal.synchronize(actor);},{flush:'sync',immediate:session.current.value!==null});
  const transcriptJournal=createTranscriptJournal(journals),transcriptScopeReady=shallowRef(true),transcripts=createTranscriptsApi(session.client,()=>session.current.value?.actor.enterpriseId??null);
  const transcriptOperations=createTranscriptOperationsApi(session.client,()=>session.current.value?.actor.enterpriseId??null),transcriptOperationsJournal=createScopedPrivateJournal(journals,'transcript-operations',validTranscriptOperationCommand);
  const transcriptCorrections=createTranscriptCorrectionsApi(session.client,()=>session.current.value?.actor.enterpriseId??null),speechCorrectionJournal=createScopedPrivateJournal(journals,'speech-corrections',validCorrectionCommand);
  function syncTranscript(actor:string|null,id?:string|null){const edits=transcriptJournal.synchronize(actor,id),operations=transcriptOperationsJournal.synchronize(actor,id);const corrections=speechCorrectionJournal.synchronize(actor,id);transcriptScopeReady.value=edits&&operations&&corrections;}
- const stopTranscriptIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)syncTranscript(actor);},{flush:'sync'});
+ const stopTranscriptIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)syncTranscript(actor);},{flush:'sync',immediate:session.current.value!==null});
  const infoScopeReady=shallowRef(true),meetingScope=shallowRef<string|null>(null);
- const stopInfoSuggestionScope=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)infoSuggestionJournal.synchronize(actor);},{flush:'sync'});
- const stopInfoIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)infoScopeReady.value=infoJournal.synchronize(actor);},{flush:'sync'});
+ const stopInfoSuggestionScope=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)infoSuggestionJournal.synchronize(actor);},{flush:'sync',immediate:session.current.value!==null});
+ const stopInfoIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)infoScopeReady.value=infoJournal.synchronize(actor);},{flush:'sync',immediate:session.current.value!==null});
  function setMeetingScope(id:string|null){syncRecordingImport(session.current.value?.actor.enterpriseId??null,id);syncMinutes(session.current.value?.actor.enterpriseId??null,id);meetingScope.value=id;infoSuggestionJournal.synchronize(session.current.value?.actor.enterpriseId??null,id);generationScopeReady.value=generationJournal.synchronize(session.current.value?.actor.enterpriseId??null,id);syncTranscript(session.current.value?.actor.enterpriseId??null,id);infoScopeReady.value=infoJournal.synchronize(session.current.value?.actor.enterpriseId??null,id);}
  const actor=()=>session.current.value?.actor.enterpriseId??null,uploads=createUploadsApi(session.client,actor),intake=createTranscriptImportApi(session.client,actor);
  const operationsCommands=useOperations(session.client,actor,journals),operationsScopeError=shallowRef<string|null>(null);
@@ -121,7 +95,7 @@ export function createApplication(origin:string,journals:TabJournalContext={tab:
   // Keep the current page mounted during DELETE and its authorized readback. Clearing it
   // here replaces every row with an empty shell/skeleton and resets scroll and pagination.
   if(actor()&&(taskId||!blocked))void list.reload();
- },{flush:'sync'});
+ },{flush:'sync',immediate:session.current.value!==null});
  const governance=createGovernanceApi(session.client,actor),governanceCommands=useGovernance(governance,actor,()=>meetingScope.value??'',journals),governanceScopeError=shallowRef<string|null>(null);
  const stopGovernanceScope=watch([actor,()=>meetingScope.value],()=>{governanceScopeError.value=null;try{governanceCommands.synchronize();}catch(cause){governanceScopeError.value=cause instanceof Error?cause.message:'治理恢复记录暂不可用。';}},{flush:'sync',immediate:true});
  const minutesExports=createMinutesExportsApi(session.client,actor),minutesExportCommands=useMinutesExports(minutesExports,actor,()=>meetingScope.value??'',journals),minutesExportScopeError=shallowRef<string|null>(null);
@@ -132,11 +106,11 @@ export function createApplication(origin:string,journals:TabJournalContext={tab:
  async function loadTopics(){const who=actor();if(!who||!topicCommands.available.value)return;
   try{await topicCommands.reload();}catch{if(actor()===who)topicScopeError.value='专题暂无法读取，请重试。';}
  }
- const stopTopicIdentity=watch(actor,who=>{topicScopeError.value=null;try{topicCommands.synchronize();}catch(cause){topicScopeError.value=cause instanceof Error?cause.message:'专题恢复记录暂不可用。';}},{flush:'sync'});
+ const stopTopicIdentity=watch(actor,who=>{topicScopeError.value=null;try{topicCommands.synchronize();}catch(cause){topicScopeError.value=cause instanceof Error?cause.message:'专题恢复记录暂不可用。';}},{flush:'sync',immediate:session.current.value!==null});
  const feedbackActions=useFeedbackActions(feedback,actor,journals),feedbackScopeError=shallowRef<string|null>(null);
- const stopFeedbackActionsIdentity=watch(actor,()=>{feedbackScopeError.value=null;try{feedbackActions.synchronize();}catch(cause){feedbackScopeError.value=cause instanceof Error?cause.message:'反馈处理恢复记录暂不可用。';}},{flush:'sync'});
+ const stopFeedbackActionsIdentity=watch(actor,()=>{feedbackScopeError.value=null;try{feedbackActions.synchronize();}catch(cause){feedbackScopeError.value=cause instanceof Error?cause.message:'反馈处理恢复记录暂不可用。';}},{flush:'sync',immediate:session.current.value!==null});
  const feedbackJournal=createScopedPrivateJournal(journals,'feedback-submit',validFeedbackCommand);
- const stopFeedbackIdentity=watch(actor,who=>{if(who)feedbackJournal.synchronize(who);},{flush:'sync'});
+ const stopFeedbackIdentity=watch(actor,who=>{if(who)feedbackJournal.synchronize(who);},{flush:'sync',immediate:session.current.value!==null});
  const uploadQueue=useUploadQueue(uploads,async(id,signal)=>{const nav=await workspace.navigation(id,signal);if(nav.relation!=='OWNER'||nav.navigationState!=='CHECK_PRODUCER')throw new ApiError('http',403,'当前身份或会议状态不允许上传。');return nav;},actor,()=>meetingScope.value??'',()=>meetingScope.value!==null,journals,intake);
  const pendingImports=createPendingImportJournal(journals);
  let pendingImportActor=actor();
@@ -144,18 +118,18 @@ export function createApplication(origin:string,journals:TabJournalContext={tab:
   if(!who)return;
   if(pendingImportActor&&pendingImportActor!==who)pendingImports.clearActor(pendingImportActor);
   pendingImportActor=who;
- },{flush:'sync'});
+ },{flush:'sync',immediate:session.current.value!==null});
  const importDrafts=createImportDraftsApi(session.client,actor),materials=createMaterialsApi(session.client,actor);
  const recordingStore=createRecordingStore(journals.tab);let recordingCleanup:Promise<void>=Promise.resolve(),recordingOwner:string|null=null;
  const recorder=useRecorder(recordingStore,browserCapture,actor,async id=>{await recordingCleanup;const nav=await workspace.navigation(id,new AbortController().signal);if(nav.relation!=='OWNER'||nav.navigationState!=='CHECK_PRODUCER'||nav.stage==='PUBLISHED')throw new ApiError('http',403,'当前会议不允许继续录音。');});
  const recordingTranscriptionApi=createRecordingTranscriptionApi(session.client),recordingImportJournal=createScopedPrivateJournal(journals,'recording-transcript-import',validRecordingImportCommand),recordingImportScopeError=shallowRef<string|null>(null);
  function syncRecordingImport(who:string|null,id?:string|null){recordingImportScopeError.value=recordingImportJournal.synchronize(who,id)?null:'录音转写恢复记录暂未清理，请保留页面重试。';}
- const stopRecordingImportIdentity=watch(actor,who=>{if(who!==null)syncRecordingImport(who);},{flush:'sync'});
+ const stopRecordingImportIdentity=watch(actor,who=>{if(who!==null)syncRecordingImport(who);},{flush:'sync',immediate:session.current.value!==null});
  const recordingApi=createRecordingApi(session.client),subtitleApi=createSubtitleApi(session.client),pcmRecorder=usePcmRecorder(recordingApi,()=>session.current.value,journals.tab);
- const stopPcmIdentity=watch(actor,(who,previous)=>{if(who!==previous)void pcmRecorder.invalidate().catch(()=>{});},{flush:'sync'});
- const stopRecordingIdentity=watch(actor,who=>{if(!who){void recorder.invalidate();return;}if(recordingOwner&&recordingOwner!==who){recordingCleanup=recorder.logout();void recordingCleanup.catch(()=>{});}recordingOwner=who;},{flush:'sync'});
+ const stopPcmIdentity=watch(actor,(who,previous)=>{if(who!==previous)void pcmRecorder.invalidate().catch(()=>{});},{flush:'sync',immediate:session.current.value!==null});
+ const stopRecordingIdentity=watch(actor,who=>{if(!who){void recorder.invalidate();return;}if(recordingOwner&&recordingOwner!==who){recordingCleanup=recorder.logout();void recordingCleanup.catch(()=>{});}recordingOwner=who;},{flush:'sync',immediate:session.current.value!==null});
  const stopLogout=session.onLogout(()=>{if(pendingImportActor)pendingImports.clearActor(pendingImportActor);operationsCommands.logout();if(!recordingImportJournal.clear())recordingImportScopeError.value='录音转写恢复记录暂未清理，请保留页面重试。';infoSuggestionJournal.clear();if(!deletionCommands.logout())deletionScopeError.value='删除恢复记录暂未清理，请保留页面重试。';if(!governanceCommands.logout())governanceScopeError.value='治理恢复记录暂未清理，请保留页面重试。';if(!minutesExportCommands.logout())minutesExportScopeError.value='导出恢复记录暂未清理，请保留页面重试。';recordingCleanup=recorder.logout();void recordingCleanup.catch(()=>{});const a=minutesEditorJournal.clear(),b=minutesActionsJournal.clear();const c=publicationJournal.clear(),d=publicationDestinationJournal.clear();const sensitive=minutesSensitiveJournal.clear();minutesScopeReady.value=a&&b&&c&&d&&sensitive;create.logout();if(!personalTemplateCommands.logout())personalTemplateScopeError.value='模板恢复记录暂未清理，请保留页面重试。';topicCommands.logout();feedbackActions.logout();feedbackJournal.clear();infoScopeReady.value=infoJournal.clear();uploadQueue.logout();generationScopeReady.value=generationJournal.clear();const transcriptEditsClear=transcriptJournal.clear(),transcriptOperationsClear=transcriptOperationsJournal.clear();const speechCorrectionsClear=speechCorrectionJournal.clear();transcriptScopeReady.value=transcriptEditsClear&&transcriptOperationsClear&&speechCorrectionsClear;});
- return {preloadMinutesEntry,clearMinutesEntry,claimMinutesEntry:directContent.claim,claimNavigation:directNavigation.claim,claimInformation:directInformation.claim,loadTopics,currentUser,pendingImports,operationsCommands,operationsScopeError:shallowReadonly(operationsScopeError),deletions,deletionCommands,deletionScopeError:shallowReadonly(deletionScopeError),governance,governanceCommands,governanceScopeError:shallowReadonly(governanceScopeError),minutesExports,minutesExportCommands,minutesExportScopeError:shallowReadonly(minutesExportScopeError),personalTemplates,personalTemplateCommands,personalTemplateScopeError:shallowReadonly(personalTemplateScopeError),meetingLibrary,feedbackActions,feedbackScopeError:shallowReadonly(feedbackScopeError),topicCommands,topicScopeError:shallowReadonly(topicScopeError),transcriptCorrections,transcriptOperations,importDrafts,materials,topics,feedback,recorder,pcmRecorder,recordingApi,subtitleApi,recordingTranscriptionApi,recordingImportScopeError:shallowReadonly(recordingImportScopeError),recordingStore,publications,minutesSaved,minutesInspection,minutesScopeReady:shallowReadonly(minutesScopeReady),minutesGeneration,generationScopeReady:shallowReadonly(generationScopeReady),transcripts,transcriptScopeReady:shallowReadonly(transcriptScopeReady),session,meetings,info,infoSuggestions,create,discovery,createDiscovery,list,workspace,tasks,options,journals,uploads,intake,uploadQueue,setMeetingScope,meetingScope:shallowReadonly(meetingScope),infoScopeReady:shallowReadonly(infoScopeReady),dispose(){currentUser.dispose();stopPendingImportIdentity();stopOperationsIdentity();operationsCommands.dispose();stopRecordingImportIdentity();stopInfoSuggestionScope();stopDeletionList();stopDeletionIdentity();deletionCommands.dispose();stopGovernanceScope();governanceCommands.dispose();stopExportScope();minutesExportCommands.dispose();stopPersonalTemplateIdentity();personalTemplateCommands.dispose();stopFeedbackActionsIdentity();feedbackActions.dispose();stopTopicIdentity();topicCommands.dispose();stopFeedbackIdentity();stopPcmIdentity();void pcmRecorder.dispose().catch(()=>{});stopRecordingIdentity();recorder.dispose();recordingStore.close();stopMinutesIdentity();stopGenerationIdentity();stopTranscriptIdentity();uploadQueue.dispose();createDiscovery.dispose();stop();stopLogout();stopInfoIdentity();list.dispose();session.invalidate();create.dispose();}};
+ return {...entry,loadTopics,currentUser,pendingImports,operationsCommands,operationsScopeError:shallowReadonly(operationsScopeError),deletions,deletionCommands,deletionScopeError:shallowReadonly(deletionScopeError),governance,governanceCommands,governanceScopeError:shallowReadonly(governanceScopeError),minutesExports,minutesExportCommands,minutesExportScopeError:shallowReadonly(minutesExportScopeError),personalTemplates,personalTemplateCommands,personalTemplateScopeError:shallowReadonly(personalTemplateScopeError),meetingLibrary,feedbackActions,feedbackScopeError:shallowReadonly(feedbackScopeError),topicCommands,topicScopeError:shallowReadonly(topicScopeError),transcriptCorrections,transcriptOperations,importDrafts,materials,topics,feedback,recorder,pcmRecorder,recordingApi,subtitleApi,recordingTranscriptionApi,recordingImportScopeError:shallowReadonly(recordingImportScopeError),recordingStore,publications,minutesSaved,minutesInspection,minutesScopeReady:shallowReadonly(minutesScopeReady),minutesGeneration,generationScopeReady:shallowReadonly(generationScopeReady),transcripts,transcriptScopeReady:shallowReadonly(transcriptScopeReady),session,meetings,info,infoSuggestions,create,discovery,createDiscovery,list,workspace,tasks,options,journals,uploads,intake,uploadQueue,setMeetingScope,meetingScope:shallowReadonly(meetingScope),infoScopeReady:shallowReadonly(infoScopeReady),dispose(){currentUser.dispose();stopPendingImportIdentity();stopOperationsIdentity();operationsCommands.dispose();stopRecordingImportIdentity();stopInfoSuggestionScope();stopDeletionList();stopDeletionIdentity();deletionCommands.dispose();stopGovernanceScope();governanceCommands.dispose();stopExportScope();minutesExportCommands.dispose();stopPersonalTemplateIdentity();personalTemplateCommands.dispose();stopFeedbackActionsIdentity();feedbackActions.dispose();stopTopicIdentity();topicCommands.dispose();stopFeedbackIdentity();stopPcmIdentity();void pcmRecorder.dispose().catch(()=>{});stopRecordingIdentity();recorder.dispose();recordingStore.close();stopMinutesIdentity();stopGenerationIdentity();stopTranscriptIdentity();uploadQueue.dispose();createDiscovery.dispose();stop();stopLogout();stopInfoIdentity();list.dispose();session.invalidate();create.dispose();}};
 }
 export const applicationKey:InjectionKey<ReturnType<typeof createApplication>>=Symbol.for('ama-application');
 export function useApplication(){const app=inject(applicationKey);if(!app)throw new Error('Application context missing');return app;}

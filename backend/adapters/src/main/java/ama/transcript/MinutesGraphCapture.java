@@ -124,7 +124,14 @@ final class MinutesGraphCapture {
    for(var row:expected.tables().getOrDefault(name,List.of()))auxiliaryTransfers.computeIfAbsent(name,k->new ArrayList<>()).add(read.deferRead(control,String.join(" AND ",control.keys().stream().map(k->k+"=?").toList()),String.join(",",control.keys()),1,false,control.keys().stream().map(row::get).toArray()));
   }
   auxiliary.put("publication",read.read(metadata("publication","id","id meeting_id confirmation_id state revision#"),"meeting_id=?","id",1,false,expected.meeting()));
-  if(expected.pending()!=null){require(auxiliary.get("publication").equals(expected.pending().rows().get("publication")),PROVENANCE_UNAVAILABLE);if(replacementPublication!=null){var existing=auxiliary.get("publication");require(existing.size()==1&&replacementPublication.equals(existing.getFirst().get("id"))&&"FAILED".equals(existing.getFirst().get("state")),CAPABILITY_UNAVAILABLE);}else if(!expected.kind().equals("READINESS")&&expected.publicationWrite()==null)require(auxiliary.get("publication").isEmpty(),CAPABILITY_UNAVAILABLE);}
+  if(expected.pending()!=null){
+   if(!auxiliary.get("publication").equals(expected.pending().rows().get("publication"))){
+    // The publisher may have advanced between discovery and either readiness
+    // capture. Its read-only caller can rediscover under the original request budget.
+    if("READINESS".equals(expected.kind())&&publicationControls!=null)throw new PublicationGraph.ObservationChanged();
+    throw fail(PROVENANCE_UNAVAILABLE);
+   }
+   if(replacementPublication!=null){var existing=auxiliary.get("publication");require(existing.size()==1&&replacementPublication.equals(existing.getFirst().get("id"))&&"FAILED".equals(existing.getFirst().get("state")),CAPABILITY_UNAVAILABLE);}else if(!expected.kind().equals("READINESS")&&expected.publicationWrite()==null)require(auxiliary.get("publication").isEmpty(),CAPABILITY_UNAVAILABLE);}
   // Task observation records facts even when the complete publication guard fences output.
   var finalIds=new TreeSet<String>();if(expected.root().get("final_confirmation_id") instanceof String id)finalIds.add(id);for(var row:expected.tables().getOrDefault("final_confirmation",List.of()))finalIds.add((String)row.get("id"));
   MinutesGraphDiscovery.lockAndCompare(authority.dataSource(),expected,"final_confirmation",budget);

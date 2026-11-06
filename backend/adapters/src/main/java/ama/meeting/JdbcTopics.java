@@ -72,7 +72,18 @@ public final class JdbcTopics {
     }
     public List<Map<String,Object>> memberships(Actor actor,List<String> meetings){
         if(meetings==null)throw new IllegalArgumentException("Meetings required");var targets=targets(meetings.stream().map(id->new MembershipTarget(id,0)).toList());
-        for(var target:targets)access.prepareExternalRead(actor,target.meetingId());
+        if(targets.isEmpty())return List.of();
+        var ids=targets.stream().map(MembershipTarget::meetingId).toList();
+        // Only external-dependent meetings need network preparation. The ordered, locked
+        // owner checks below still apply to every requested meeting before returning metadata.
+        var external=j.queryForList("SELECT m.id FROM meeting m WHERE m.id IN ("+String.join(",",Collections.nCopies(ids.size(),"?"))+") AND "+MeetingQueryRelation.SPECIAL,String.class,ids.toArray());
+        for(int attempt=0;;attempt++){
+            WorkspaceReadPreparation.run(external,new WorkspaceReadBudget(),id->access.prepareExternalRead(actor,id));
+            try{return membershipRows(actor,meetings,targets);}
+            catch(MeetingAccess.AuthorityUnavailableException expired){if(attempt>0)throw expired;external=ids;}
+        }
+    }
+    private List<Map<String,Object>> membershipRows(Actor actor,List<String> meetings,List<MembershipTarget> targets){
         return tx.required(()->{lockMeetings(actor,targets);var result=new ArrayList<Map<String,Object>>();for(String meeting:meetings){var current=currentTopics(actor,meeting);if(current.size()>1)throw new IllegalStateException("Meeting has multiple legacy topics");var row=new LinkedHashMap<String,Object>();row.put("meetingId",meeting);row.put("topicId",current.isEmpty()?null:current.getFirst());result.add(row);}return List.copyOf(result);});
     }
     /** Full current count, not the number of rows on the owner's current meeting page. */

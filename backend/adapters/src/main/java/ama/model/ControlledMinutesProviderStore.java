@@ -42,7 +42,15 @@ public final class ControlledMinutesProviderStore implements AutoCloseable {
   var receipt=journal.entries().stream().filter(r->id.equals(r.resultId())).findFirst().orElseThrow(()->new FileNotFoundException("Controlled result unavailable"));validated(receipt);return journal.result(id);
  }
  synchronized List<String> pending()throws IOException {
-  var ids=new ArrayList<String>();for(var r:journal.entries()){validated(r);if(r.state().equals("UNKNOWN"))ids.add(r.executionId());}return List.copyOf(ids);
+  // The exclusively owned journal already records terminal executions. Reopen only
+  // outstanding envelopes on a recovery tick. Startup and direct reads verify their own records.
+  var ids=new ArrayList<String>();
+  for(var receipt:journal.entries()){
+   if(!receipt.state().equals("UNKNOWN"))continue;
+   validated(receipt);
+   ids.add(receipt.executionId());
+  }
+  return List.copyOf(ids);
  }
  synchronized ControlledMinutesProtocol.VerifiedRequest request(String execution)throws IOException {
   var receipt=journal.lookup(execution);if(receipt==null)throw new IllegalArgumentException("Unknown controlled execution");return validated(receipt);

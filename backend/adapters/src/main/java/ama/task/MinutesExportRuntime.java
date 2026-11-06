@@ -70,9 +70,18 @@ public final class MinutesExportRuntime {
    if("SUCCEEDED".equals(row.get("state"))&&"MINUTES_EXPORT".equals(row.get("output_kind"))){var files=queue.jdbc.queryForList("SELECT a.file_id FROM minutes_export_artifact a JOIN generated_file_origin g ON g.file_id=a.file_id AND g.origin_id=a.id AND g.task_id=a.task_id JOIN meeting m ON m.id=? WHERE a.id=? AND a.input_id=? AND a.task_id=? AND a.state='REGISTERED' AND m.revision=? AND m.access_revision=? AND m.cancel_epoch=? AND m.minutes_revision_id=? AND m.governance_state='ACTIVE' AND m.lifecycle='ACTIVE'",String.class,in.meeting(),row.get("output_id"),in.id(),row.get("id"),in.revision(),in.access(),in.epoch(),in.revisionId());if(files.size()==1)file=files.getFirst();}
    return new Status((String)row.get("id"),(String)row.get("state"),in.revisionId(),in.format(),file,(String)row.get("last_error"));
   }
+  private <T>T currentAccessTransaction(Actor actor,String meeting,java.util.concurrent.Callable<T> work){
+   try{return queue.tx.required(work);}
+   catch(MeetingAccess.AuthorityUnavailableException expired){
+    // A long source verification can outlive a signed grant. The failed transaction
+    // has rolled back; obtain a current proof before retrying the same idempotent operation.
+    d.access().prepareExternalRead(actor,meeting);
+    return queue.tx.required(work);
+   }
+  }
   Status status(Actor actor,String task){
    ama.contract.MinutesContracts.uuid(task);var ids=queue.jdbc.queryForList("SELECT input_id FROM durable_task WHERE id=? AND task_type=? AND input_kind=?",String.class,task,TYPE,KIND);if(ids.size()!=1)throw new Failure(404,"EXPORT_NOT_FOUND");var in=input(ids.getFirst(),false);
-   return queue.tx.required(()->{d.access().require(d.access().lock(actor,in.meeting()),MeetingAccess.Action.READ);if(!in.actor().equals(actor.enterpriseId()))throw new MeetingAccess.AccessDeniedException();return projection(in);});
+   return currentAccessTransaction(actor,in.meeting(),()->{d.access().require(d.access().lock(actor,in.meeting()),MeetingAccess.Action.READ);if(!in.actor().equals(actor.enterpriseId()))throw new MeetingAccess.AccessDeniedException();return projection(in);});
   }
   Status replay(Actor actor,String meeting,String key,String request){
    var ids=queue.jdbc.queryForList("SELECT id FROM minutes_export_input WHERE meeting_id=? AND requested_by=? AND request_key_hash=?",String.class,meeting,actor.enterpriseId(),key);if(ids.isEmpty())return null;if(ids.size()!=1)throw conflict();var in=input(ids.getFirst(),false);if(!in.requestHash().equals(request))throw conflict();return projection(in);
@@ -81,9 +90,9 @@ public final class MinutesExportRuntime {
    JdbcTaskQueue.independent();ama.contract.MinutesContracts.uuid(meeting);ama.contract.MinutesContracts.uuid(revision);
    if(key==null||!key.matches("[\\x21-\\x7e]{1,128}")||!Set.of("md","pdf","docx").contains(format==null?"":format))throw new Failure(400,"INVALID_EXPORT_REQUEST");
    String keyHash=hash("ama.minutes-export.key.v1",key),request=hash("ama.minutes-export.request.v1",revision,format);
-   var old=queue.tx.required(()->{d.access().require(d.access().lock(actor,meeting),MeetingAccess.Action.READ);return replay(actor,meeting,keyHash,request);});if(old!=null)return old;
+   var old=currentAccessTransaction(actor,meeting,()->{d.access().require(d.access().lock(actor,meeting),MeetingAccess.Action.READ);return replay(actor,meeting,keyHash,request);});if(old!=null)return old;
    var prepared=d.saved().prepare(actor,meeting,revision);var backend=d.backends().defaultWrite();
-   return queue.tx.required(()->{
+   return currentAccessTransaction(actor,meeting,()->{
     var gate=d.saved().lockRoot(prepared,actor,meeting);var again=replay(actor,meeting,keyHash,request);if(again!=null)return again;
     String id=UUID.randomUUID().toString();var draft=new Input(id,meeting,actor.enterpriseId(),keyHash,request,revision,prepared.sourceHash(),format,prepared.meetingRevision(),prepared.accessRevision(),prepared.cancelEpoch(),prepared.finalConfirmation(),backend.id(),null,null);
     String fingerprint=fingerprint(draft),producer=hash("ama.minutes-export.producer.v1",id,fingerprint);var in=new Input(id,meeting,actor.enterpriseId(),keyHash,request,revision,prepared.sourceHash(),format,prepared.meetingRevision(),prepared.accessRevision(),prepared.cancelEpoch(),prepared.finalConfirmation(),backend.id(),fingerprint,producer);

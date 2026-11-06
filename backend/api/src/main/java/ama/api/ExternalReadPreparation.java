@@ -25,6 +25,10 @@ class ExternalReadPreparation implements WebMvcConfigurer,HandlerInterceptor {
   // invokes the original external preparation whenever retained sources require it.
   if(request.getMethod().equals("GET") && handler instanceof org.springframework.web.method.HandlerMethod method
       && method.getBeanType()==WorkspaceNavigationController.class && method.getMethod().getName().equals("access"))return true;
+  // The saved projection prepares dependencies before capturing the graph and verifies
+  // them again under its final READ gate, including on an immutable-proof cache hit.
+  if(request.getMethod().equals("GET") && handler instanceof org.springframework.web.method.HandlerMethod method
+      && method.getBeanType()==MinutesSavedController.class && method.getMethod().getName().equals("current"))return true;
   // The formal snapshot has its own current library grant and terminal-state capture.
   // Keep all meeting/source reads on the existing meeting READ preparation.
   if(handler instanceof org.springframework.web.method.HandlerMethod method && method.getBeanType()==PublicationDocumentController.class && method.getMethod().getName().equals("document"))return true;

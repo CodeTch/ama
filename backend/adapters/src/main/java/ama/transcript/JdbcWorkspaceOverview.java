@@ -73,6 +73,11 @@ public final class JdbcWorkspaceOverview {
   budget.reserve(1,24,2048,2048,2048,4,true);var result=new LinkedHashMap<String,Object>();result.put("meetingId",meeting);result.put("revisionToken",status.revisionToken());result.put("accessRevisionToken",status.accessRevisionToken());result.put("stage",status.stage());result.put("relation",status.owner()?"OWNER":"MEMBER");result.put("navigationState",!status.owner()?"MEMBER_READ_ONLY":status.published()?"PUBLISHED_READ_ONLY":"CHECK_PRODUCER");result.put("contentEligibility","RECHECK_REQUIRED");result.put("lifecycle",status.lifecycle());result.put("governanceState",status.governance());
   result.put("saved",new JdbcWorkspaceNavigationReader.SavedReferences(status.infoId(),status.rosterId(),transcript,confirmation,body,set));
   if(status.owner()){
+   boolean activeGeneration=taskPage.stream().anyMatch(row->"MINUTES_GENERATE_V1".equals(row.spec().type())&&Set.of("READY","RUNNING","RECONCILING").contains(row.state()));
+   if(!activeGeneration&&taskPage.size()>20){
+    activeGeneration=!metadata("SELECT id FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? AND task_type='MINUTES_GENERATE_V1' AND state IN ('READY','RUNNING','RECONCILING') LIMIT 1",1,36,budget,meeting).isEmpty();
+   }
+   result.put("activeMinutesGeneration",activeGeneration);
    result.put("temporaryTitle",MeetingDisplayTitle.temporary(jdbc,meeting));
    if(origin!=null){
     result.put("processingSource",taskItem(origin,parents));
