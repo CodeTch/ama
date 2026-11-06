@@ -15,6 +15,21 @@ class MinutesMetadataPagesIT {
  @Test void changedMetadataCannotPassEvenWithIdenticalKeysAndCount(){fixture((s,d)->{new JdbcTemplate(s).update("UPDATE minutes_element SET support_state='SUPPORTED' WHERE id=?",id(25));assertThrows(Failure.class,()->MinutesGraphDiscovery.lockAndCompare(s,d,"minutes_element",budget()));});}
  @Test void exactComparisonDoesNotReacquireFiftyRowsOfMetadata(){fixture((s,d)->{var ledger=budget();MinutesGraphDiscovery.lockAndCompare(s,d,"minutes_element",ledger);assertTrue(ledger.usage()[0]<1000,Arrays.toString(ledger.usage()));});}
  @Test void binaryComparisonRejectsCaseAccentAndTrailingSpaceChanges(){for(String changed:List.of("discussion","DÍSCUSSION","DISCUSSION "))fixture((s,d)->{new JdbcTemplate(s).update("UPDATE minutes_element SET category=? WHERE id=?",changed,id(25));assertThrows(Failure.class,()->MinutesGraphDiscovery.lockAndCompare(s,d,"minutes_element",budget()));});}
+ @Test void effectiveSmallSelectorRejectsAddedReplacedAndChangedRows(){
+  fixture((source,full)->{
+   var jdbc=new JdbcTemplate(source);jdbc.update("DELETE FROM minutes_element WHERE ordinal>2");
+   var rows=full.tables().get("minutes_element").subList(0,2);
+   var small=new MinutesGraphDiscovery.Discovery(full.meeting(),"SAVED_EFFECTIVE",null,Map.of(),Map.of("minutes_element",rows),Map.of(),Set.of(),full.selectors());
+   MinutesGraphDiscovery.lockAndCompare(source,small,"minutes_element",budget());
+   jdbc.update("UPDATE minutes_element SET category='discussion' WHERE ordinal=2");
+   assertThrows(Failure.class,()->MinutesGraphDiscovery.lockAndCompare(source,small,"minutes_element",budget()));
+   jdbc.update("UPDATE minutes_element SET category='DISCUSSION'");
+   jdbc.update("INSERT INTO minutes_element VALUES(?,?,'DISCUSSION',3,'added','NOT_EXTRACTED')",id(3),id(100));
+   assertThrows(Failure.class,()->MinutesGraphDiscovery.lockAndCompare(source,small,"minutes_element",budget()));
+   jdbc.update("DELETE FROM minutes_element WHERE ordinal=1");
+   assertThrows(Failure.class,()->MinutesGraphDiscovery.lockAndCompare(source,small,"minutes_element",budget()));
+  });
+ }
  @Test void typedMicrosecondTimestampNumbersAndNullableUnicodeRemainExact(){
   var source=MysqlTestDatabase.dataSource();new TransactionRunner(source).required(()->{var j=new JdbcTemplate(source);j.execute("CREATE TEMPORARY TABLE template_revision(id VARCHAR(36) PRIMARY KEY,template_id VARCHAR(36),revision BIGINT,owner_id VARCHAR(255),theme_count BIGINT,created_at DATETIME(6)) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci");try{
    j.update("INSERT INTO template_revision VALUES(?,?,?,NULL,8,'2026-11-05 08:31:02.123456')",id(1),id(2),9007199254740993L);

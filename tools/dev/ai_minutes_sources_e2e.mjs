@@ -28,12 +28,15 @@ async function verifyAudio(p,actor){
  const chip=p.getByRole('button',{name:/^查看来源：\d+:\d+/}).first();await expect(chip).toBeVisible();await chip.click();
  const drawer=p.getByRole('dialog',{name:'来源与审阅',exact:true}),play=drawer.getByRole('button',{name:/^从 \d+:\d+ 播放$/});
  await expect(drawer.locator('.source-original-title')).toContainText('.wav');await expect(play).toBeEnabled();await play.click();await expect(drawer.getByRole('button',{name:'暂停播放',exact:true})).toBeVisible();
- assert.equal(await drawer.locator('audio').evaluate(e=>e.paused),false);assert.equal(await drawer.getByRole('alert').count(),0);await p.keyboard.press('Escape');await expect(drawer).not.toBeVisible();assert.equal(await p.locator('audio').count(),0);check(actor+'-native-exact-audio-preview-playback-and-close-release');
+ const original=await drawer.locator('audio').elementHandle();assert(original);assert.equal(await original.evaluate(e=>e.paused),false);assert.equal(await drawer.getByRole('alert').count(),0);await p.keyboard.press('Escape');await expect(drawer).not.toBeVisible();await expect.poll(()=>original.evaluate(e=>e.paused&&!e.isConnected)).toBe(true);await original.dispose();check(actor+'-native-exact-audio-preview-playback-and-close-release');
 }
 
 let revokedLibrary=null;
 async function materialGrant(library,canRead){const r=await fetch('http://127.0.0.1:8792/admin/api/knowledge/material-grants/'+encodeURIComponent(memberId)+'/'+encodeURIComponent(library),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({canRead})});assert.equal(r.status,200);}
-async function roster(ids){let info=await call('GET',root());info=await call('PUT',root()+'/info',{expectedRevisionToken:info.revisionToken,name:'纪要多格式来源验证',category:'project',summary:'验证真实来源定位、知识库原件权限及参会人撤权',occurredOn:'2026-11-05',rosterDraftIds:ids,externalRosterNames:[]});await call('POST',root()+'/roster-confirmations',{expectedRevisionToken:info.revisionToken});}
+async function roster(ids){
+ const current=await call('GET',root());
+ if(current.confirmedRosterId&&!current.rosterDraftId&&current.confirmedRoster.length===ids.length&&current.confirmedRoster.every(person=>ids.includes(person.enterpriseId)))return;
+ const info=await call('PUT',root()+'/info',{expectedRevisionToken:current.revisionToken,name:'纪要多格式来源验证',category:'project',summary:'验证真实来源定位、知识库原件权限及参会人撤权',occurredOn:'2026-11-05',rosterDraftIds:ids,externalRosterNames:[]});await call('POST',root()+'/roster-confirmations',{expectedRevisionToken:info.revisionToken});}
 
 try{
  await login(page,ownerId);check('fixed-harness-cas-and-external-origins');
@@ -46,8 +49,28 @@ try{
   await dialog.getByRole('button',{name:'从知识库选择',exact:true}).click();const picker=page.getByRole('dialog',{name:'从知识库选择材料',exact:true});await expect(picker).toBeVisible();await picker.locator('.ac-library').filter({hasText:'合规制度示例库'}).click();const kbrow=picker.locator('.ac-kb-file').filter({hasText:'合规制度材料 01'});await kbrow.getByRole('checkbox').check();await picker.getByRole('button',{name:'添加所选文件',exact:true}).click();await expect.poll(async()=>(await get('materials')).items.filter(x=>x.state==='READY').length,{timeout:120000}).toBe(4);check('native-pdf-pptx-word-and-fixed-harness-knowledge-material-import');
   await expect(dialog.getByRole('button',{name:'开始处理',exact:true})).toBeEnabled();const intake=page.waitForResponse(r=>r.request().method()==='POST'&&new URL(r.url()).pathname===root()+'/transcript-imports');await dialog.getByRole('button',{name:'开始处理',exact:true}).click();const intakeResponse=await intake;report.requests.push({method:'POST',path:root()+'/transcript-imports',status:intakeResponse.status()});assert.equal(intakeResponse.status(),202,await intakeResponse.text().catch(()=>'<browser response body unavailable>'));
   await expect.poll(async()=> (await get('tasks?kind=TRANSCRIPT_IMPORT_V1&limit=20')).items[0]?.state,{timeout:120000,intervals:[1500,2500]}).toBe('SUCCEEDED');
-  const history=await get('transcript/history?limit=20'),raw=history.items.find(x=>x.kind==='RAW');assert(raw);const detail=await get('transcript/revisions/'+raw.id);await call('POST',root()+'/transcript/restorations',{expectedRevisionToken:detail.observation.revisionToken,sourceRevisionId:raw.id});
-  check('native-import-and-real-transcript-worker');await page.goto(base+'/meeting/'+report.meetingId+'/transcript');await page.getByRole('button',{name:'确认转写并生成纪要',exact:true}).click();const confirm=page.getByRole('dialog',{name:'确认转写并生成纪要',exact:true});await confirm.getByRole('button',{name:'确认并生成',exact:true}).click();
+  // Wait for automatic material processing and its saved transcript pointer, not just the import task.
+  await expect.poll(async()=>{const nav=await get('workspace');return nav.processingMaterialStage??'SUCCEEDED';},{timeout:120000}).toBe('SUCCEEDED');
+  await expect.poll(async()=>!!(await get('transcript')).saved?.id,{timeout:45000}).toBe(true);
+  check('native-import-and-real-transcript-worker');await page.goto(base+'/meeting/'+report.meetingId+'/transcript');await page.getByRole('button',{name:'确认转写并生成纪要',exact:true}).click();const confirm=page.getByRole('dialog',{name:'确认转写并生成纪要',exact:true});
+  const proposals=confirm.getByRole('button',{name:'载入建议',exact:true});
+  const pending=confirm.getByRole('button',{name:'定位待确认纠错'});
+  const submit=confirm.getByRole('button',{name:'确认并生成',exact:true});
+  await expect.poll(async()=>await proposals.isVisible()||await pending.isVisible()||await submit.isEnabled()).toBe(true);
+  if(await proposals.isVisible()){
+   await proposals.click();await expect(proposals).toHaveCount(0);
+  }
+  await expect.poll(async()=>await pending.isVisible()||await submit.isEnabled()).toBe(true);
+  if(await pending.isVisible()){
+   await pending.click();await page.getByRole('button',{name:'全部拒绝',exact:true}).click();
+   await page.getByRole('button',{name:'确认处理',exact:true}).click();
+   await expect(page.getByText(/^已处理 \d+ 条纠错建议。$/)).toBeVisible();
+   await expect(page.getByRole('button',{name:'全部拒绝',exact:true})).toBeDisabled();
+   await page.getByRole('button',{name:'关闭转写审阅',exact:true}).click();
+   await expect(page.getByRole('dialog',{name:'转写版本与语音审阅',exact:true})).not.toBeVisible();
+   await page.getByRole('button',{name:'确认转写并生成纪要',exact:true}).click();
+  }
+  await confirm.getByRole('button',{name:'确认并生成',exact:true}).click();
   await expect.poll(async()=> (await get('tasks?kind=MINUTES_GENERATE_V1&limit=20')).items.length,{timeout:120000,intervals:[1500,2500]}).toBe(1);
   // A real page reload must discover the same durable generation, without another POST.
   await page.goto(base+'/meeting/'+report.meetingId+'/minutes');await page.reload();

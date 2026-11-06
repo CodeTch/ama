@@ -23,6 +23,12 @@ final class ConfirmationGenerationDispatcher implements AutoCloseable {
   jdbc=new JdbcTemplate(source);jdbc.setQueryTimeout(3);this.runtime=runtime;
  }
  public void start(){executor.scheduleWithFixedDelay(this::poll,1,2,TimeUnit.SECONDS);}
+ private final java.util.concurrent.atomic.AtomicBoolean wakeQueued=new java.util.concurrent.atomic.AtomicBoolean();
+ void wake(){
+  if(executor.isShutdown()||!wakeQueued.compareAndSet(false,true))return;
+  try{executor.execute(()->{wakeQueued.set(false);poll();});}
+  catch(java.util.concurrent.RejectedExecutionException stopped){wakeQueued.set(false);}
+ }
  public void close(){executor.shutdownNow();}
  private record Intent(String confirmation,String meeting,String actor,String current,String owner,long revision,String template,boolean active){}
  private void poll(){
@@ -59,6 +65,7 @@ final class ConfirmationGenerationDispatcher implements AutoCloseable {
     .map(t->(String)t.get("revisionId")).findFirst().orElseThrow();
    runtime.initial().initialize(actor,intent.meeting,key,intent.revision,template,trace);
    jdbc.update("UPDATE transcript_generation_intent SET next_attempt_at=UTC_TIMESTAMP(6),last_submit_failed=FALSE WHERE confirmation_id=? AND state='WAITING'",intent.confirmation);
+   wake();
   }else runtime.generation().enqueueConfirmation(actor,intent.meeting,key,intent.revision,intent.confirmation,trace);
  }
 }

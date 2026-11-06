@@ -231,7 +231,17 @@ public final class JdbcSavedTranscripts {
   });
  }
  public Map<String,Object> readCorrections(Actor actor,String meeting,String sourceRevision){
-  independent();uuid(meeting);uuid(sourceRevision);requireSpeechReview();var budget=limits.ledger(authority.readBudget(),admission.canonical(),()->false);var selection=discover(meeting,sourceRevision,budget);
+  independent();uuid(meeting);uuid(sourceRevision);requireSpeechReview();
+  var budget=limits.ledger(authority.readBudget(),admission.canonical(),()->false);
+  // Confirmation can commit between the detached proposal plan and its locked final read.
+  // Retry only a changed meeting root and keep one ledger across all attempts.
+  return TranscriptReadRetry.read(()->{
+   budget.row(1);budget.capture(8,8,8,2);
+   return j.query("SELECT revision FROM meeting WHERE id=?",rs->rs.next()?Long.valueOf(rs.getLong(1)):null,meeting);
+  },()->readCorrectionsOnce(actor,meeting,sourceRevision,budget));
+ }
+ private Map<String,Object> readCorrectionsOnce(Actor actor,String meeting,String sourceRevision,TranscriptAcquisitionBudget.Ledger budget){
+  var selection=discover(meeting,sourceRevision,budget);
   var snapshot=acquire(actor,meeting,selection,JdbcTranscriptAuthority.SavedPurpose.OWNER_INSPECTION,budget,true);reviewSource(snapshot,sourceRevision,SavedTranscriptGraph.num(snapshot.root(),"revision"),false);
   var prepared=prepare(snapshot,budget);var model=speechReviews.plan(snapshot,prepared.speechEngine());
   return authority.transactionRunner().required(()->{

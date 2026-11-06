@@ -7,7 +7,26 @@ import ama.contract.IdentityContracts.*;import ama.transcript.*;import ama.acces
  @PostMapping("/editor-intents") ResponseEntity<byte[]> beginIntent(@PathVariable String meetingId,HttpServletRequest request)throws IOException{long expected=MinutesWire.intent(request);try{var replay=intents.lookup(actor(request),meetingId,key(request),expected);if(replay.isPresent())return json(200,replay.orElseThrow());runtime.requireCombined();return json(200,runtime.editor().editor().intent(actor(request),meetingId,key(request),expected));}catch(JdbcMinutesIntentReceipts.StaleIntent stale){return json(409,stale.response());}}
  @GetMapping("/templates") ResponseEntity<byte[]> templates(@PathVariable String meetingId,@RequestParam(defaultValue="20") int limit,@RequestParam(required=false) String cursor,HttpServletRequest request)throws IOException{return json(200,queries(request,meetingId).templates(actor(request),meetingId,limit,cursor));}
  @PostMapping("/initial-settings") ResponseEntity<byte[]> initial(@PathVariable String meetingId,HttpServletRequest request)throws IOException{var body=MinutesWire.command(request,true);var actor=actor(request);String key=key(request);var replay=settings.lookup(actor,meetingId,key,body.expected(),body.template());if(replay.isPresent())return json(200,replay.orElseThrow());runtime.requireNewInitial();return json(200,runtime.initial().initialize(actor,meetingId,key,body.expected(),body.template(),UUID.randomUUID().toString()));}
- @PostMapping("/generations") ResponseEntity<byte[]> generate(@PathVariable String meetingId,HttpServletRequest request)throws IOException{var body=MinutesWire.command(request,false);var actor=actor(request);String key=key(request);var replay=generations.lookup(actor,meetingId,key,body.expected(),body.region());if(replay.isPresent())return json(202,replay.orElseThrow());runtime.requireNewGeneration();return json(202,runtime.generation().enqueue(actor,meetingId,key,body.expected(),body.region(),UUID.randomUUID().toString()));}
+ // Coalesce submission preparation before JDBC. Every caller, including a queued duplicate,
+ // still obtains its own authorized and payload-bound durable receipt.
+ private final Object[] generationLanes=java.util.stream.IntStream.range(0,256).mapToObj(i->new Object()).toArray();
+ @PostMapping("/generations") ResponseEntity<byte[]> generate(@PathVariable String meetingId,HttpServletRequest request)throws IOException{
+  var body=MinutesWire.command(request,false);var actor=actor(request);String key=key(request);
+  var lane=generationLanes[Math.floorMod(Objects.hash(actor.enterpriseId(),meetingId,key),generationLanes.length)];
+  synchronized(lane){
+   var replay=generations.lookup(actor,meetingId,key,body.expected(),body.region());
+   if(replay.isPresent())return json(202,replay.orElseThrow());
+   runtime.requireNewGeneration();
+   try{return json(202,runtime.generation().enqueue(actor,meetingId,key,body.expected(),body.region(),UUID.randomUUID().toString()));}
+   catch(ama.contract.MinutesContracts.Failure changed){
+    if(changed.code()!=ama.contract.MinutesContracts.FailureCode.PROVENANCE_UNAVAILABLE)throw changed;
+    // Another API process can commit the exact same command while this one acquires its graph.
+    var committed=generations.lookup(actor,meetingId,key,body.expected(),body.region());
+    if(committed.isEmpty())throw changed;
+    return json(202,committed.orElseThrow());
+   }
+  }
+ }
  @GetMapping("/generation-inputs/current") ResponseEntity<byte[]> current(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return json(200,queries(request,meetingId).current(actor(request),meetingId));}
  @GetMapping("/generation-inputs/{inputId}") ResponseEntity<byte[]> input(@PathVariable String meetingId,@PathVariable String inputId,HttpServletRequest request)throws IOException{return json(200,queries(request,meetingId).input(actor(request),meetingId,inputId));}
  @GetMapping("/generation-tasks") ResponseEntity<byte[]> tasks(@PathVariable String meetingId,@RequestParam(defaultValue="20") int limit,@RequestParam(required=false) String cursor,HttpServletRequest request)throws IOException{return json(200,queries(request,meetingId).tasks(actor(request),meetingId,limit,cursor));}

@@ -15,6 +15,20 @@ public final class JdbcWorkspaceTasks {
   try{return authority.transactionRunner().required(()->{var gate=authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);var plan=captureHeld(actor,meeting,kind,limit,after,gate,budget);lockParents(plan);return finish(plan);});}
   catch(org.springframework.dao.DataAccessException|org.springframework.transaction.TransactionException failure){throw new WorkspaceReadBudget.Unavailable(failure);}
  }
+ /** One owner-authorized generation observation regardless of the number of historical pages. */
+ public Page currentGeneration(Actor actor,String meeting){
+  request(actor,meeting,"MINUTES_GENERATE_V1",1);
+  var budget=new WorkspaceReadBudget(limits,()->Thread.currentThread().isInterrupted());
+  gateBudget(budget);
+  return authority.transactionRunner().required(()->{
+   authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);
+   var ids=jdbc.queryForList("SELECT id FROM durable_task WHERE subject_kind='MEETING' AND subject_id=? AND task_type='MINUTES_GENERATE_V1' ORDER BY (state IN ('READY','RUNNING','RECONCILING')) DESC,created_at DESC,id DESC LIMIT 1",String.class,meeting);
+   var rows=ids.stream().map(id->scan.captureExact(meeting,id,budget)).toList();
+   var relations=new WorkspaceTaskRelations(jdbc,budget);relations.capture(rows);
+   var plan=new Plan(actor,meeting,"MINUTES_GENERATE_V1",1,budget,relations,rows);
+   lockParents(plan);return finish(plan);
+  });
+ }
  /** Composition exposes separate parent/task phases so an outer workspace never locks parents after tasks. */
  final class Plan {
   private final Object holder;private final Actor actor;private final String meeting,kind;private final int limit;private final WorkspaceReadBudget budget;private final WorkspaceTaskRelations relations;private final List<WorkspaceTaskScan.Metadata> rows;private int phase;

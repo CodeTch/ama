@@ -6537,6 +6537,7 @@ export interface components {
                 templateRevisionId: string | null;
                 exclusionRevisionId: string | null;
                 elementSetId: string | null;
+                materialSnapshotId?: string | null;
             };
             /** @constant */
             scope: "FULL";
@@ -6933,6 +6934,20 @@ export interface components {
                 selected: boolean;
                 applied: boolean;
             }[];
+            sourceLabels?: {
+                /** Format: uuid */
+                locatorId: string;
+                /** @enum {string} */
+                kind: "transcript" | "recording" | "material";
+                label: string;
+                excerpt?: string;
+            }[];
+            selectedExclusions?: {
+                /** @enum {string} */
+                category: "POLITICAL_SENSITIVE" | "INTERNAL_BUSINESS_DATA";
+                /** Format: uuid */
+                locatorId: string;
+            }[];
         };
         SavedCurrent: {
             body: components["schemas"]["SavedBody"] | null;
@@ -7230,6 +7245,7 @@ export interface components {
                 startMs: number | null;
                 endMs: number | null;
                 speakerLabel: string | null;
+                fileName?: string;
             };
         };
         SavedReviewRow: {
@@ -11364,6 +11380,8 @@ export interface operations {
             query?: {
                 kind?: "ALL" | "TRANSCRIPT_IMPORT_V1" | "MINUTES_GENERATE_V1" | "KNOWLEDGE_PUBLISH_V1" | "RECORDING_ARCHIVE_V1" | "MINUTES_EXPORT_V1";
                 limit?: number;
+                /** @description With kind MINUTES_GENERATE_V1, current returns one active task or the newest terminal task. Cannot be combined with cursor or limit. */
+                view?: "current";
                 cursor?: string;
             };
             header?: never;

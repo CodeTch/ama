@@ -43,7 +43,13 @@ export function createWorkspaceTasksApi(client:ReturnType<typeof createBusinessC
    if(!uuid(meeting)||!uuid(task))throw new TypeError('Invalid task');
    return client.json('/api/v1/meetings/'+meeting+'/processing-tasks/'+task+'/enhancement/'+action,{method:'POST',expectedStatus:200});
   },
-  async list(meeting:string,kind:WorkspaceTaskKind,next:string|null,signal:AbortSignal):Promise<WorkspaceTaskPage>{
+  async currentGeneration(meeting:string,signal:AbortSignal){
+  if(!uuid(meeting))throw new TypeError('Invalid meeting');
+  const result=await client.json<unknown>(`/api/v1/meetings/${meeting}/tasks?kind=MINUTES_GENERATE_V1&view=current`,{signal,expectedStatus:200,maxResponseBytes:8192});
+  if(!workspaceTaskPage(result,meeting,'MINUTES_GENERATE_V1')||result.items.length>1||result.hasMore)throw new ApiError('response',200,'当前任务状态无法核对');
+  return result;
+ },
+ async list(meeting:string,kind:WorkspaceTaskKind,next:string|null,signal:AbortSignal):Promise<WorkspaceTaskPage>{
   if(!uuid(meeting)||kind!=='ALL'&&!kinds.includes(kind)||next!==null&&!cursor(next))throw new TypeError('Invalid task query');const query=new URLSearchParams({kind,limit:'20'});if(next!==null)query.set('cursor',next);
   const result=await client.json<unknown>(`/api/v1/meetings/${meeting}/tasks?${query}`,{signal,expectedStatus:200,maxResponseBytes:131072});if(!workspaceTaskPage(result,meeting,kind))throw new ApiError('response',200,'任务列表响应暂无法确认，请重新加载。');
   result.items.forEach(Object.freeze);Object.freeze(result.items);return Object.freeze(result);

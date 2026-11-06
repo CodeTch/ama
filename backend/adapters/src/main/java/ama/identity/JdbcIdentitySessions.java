@@ -24,10 +24,15 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
     }
     @Override public Optional<Actor> resolveSession(String token) { return resolve(token).map(ResolvedSession::actor); }
 
-    @Override public Optional<ResolvedSession> resolve(String token) {return resolve(token,false);}
-    @Override public Optional<ResolvedSession> resolveForRead(String token) {
+    @Override public Optional<ResolvedSession> resolve(String token) {return queuedResolution(token,false);}
+    private final Object[] readLanes=java.util.stream.IntStream.range(0,32).mapToObj(i->new Object()).toArray();
+    @Override public Optional<ResolvedSession> resolveForRead(String token) {return queuedResolution(token,true);}
+    private Optional<ResolvedSession> queuedResolution(String token,boolean display) {
         // An enclosing repeatable-read transaction may already own an older snapshot.
-        return resolve(token,!org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive());
+        if(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive())return resolve(token,false);
+        if(token==null)return Optional.empty();
+        // Queue before borrowing a connection. Concurrent reads of one session share a clock row.
+        synchronized(readLanes[Math.floorMod(token.hashCode(),readLanes.length)]){return resolve(token,display);}
     }
     private Optional<ResolvedSession> resolve(String token,boolean display) {
         if (token == null || !token.matches("[A-Za-z0-9_-]{43}")) return Optional.empty();

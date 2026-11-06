@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import SendMinutesDialog from '../mail/SendMinutesDialog.vue';
-import {computed,onMounted,onUnmounted,ref,watch,nextTick} from 'vue';
+import {defineAsyncComponent,computed,onMounted,onUnmounted,ref,watch,nextTick} from 'vue';
 import {useRoute,useRouter,onBeforeRouteLeave,onBeforeRouteUpdate} from 'vue-router';
 import {useApplication} from '../../application';
 import {usePublicationReadLease} from '../minutes/usePublicationReadLease';
@@ -14,31 +14,51 @@ import TranscriptSpeakerSummary from '../transcript/TranscriptSpeakerSummary.vue
 import MeetingInfoEditor from './MeetingInfoEditor.vue';
 import MeetingInfoDrawer from './MeetingInfoDrawer.vue';
 import MinutesWorkspace from '../minutes/MinutesWorkspace.vue';
-import MinutesGenerationPanel from '../minutes/MinutesGenerationPanel.vue';
-import TranscriptEditor from '../transcript/TranscriptEditor.vue';
+const TranscriptEditor=defineAsyncComponent(()=>import('../transcript/TranscriptEditor.vue'));
 import TranscriptPlayer from '../transcript/TranscriptPlayer.vue';
 import UploadImportPanel from '../import/UploadImportPanel.vue';
-import LegacyRecordingFiles from '../recording/LegacyRecordingFiles.vue';
-import RecordingTranscription from '../recording/RecordingProcessing.vue';
+const LegacyRecordingFiles=defineAsyncComponent(()=>import('../recording/LegacyRecordingFiles.vue'));
+const RecordingTranscription=defineAsyncComponent(()=>import('../recording/RecordingProcessing.vue'));
 import MaterialOnlyDialog from '../import/MaterialOnlyDialog.vue';
 import SavedFilesPanel from '../import/SavedFilesPanel.vue';
 import FuturePanels from './FuturePanels.vue';
-import MeetingPrototypeStage from './MeetingPrototypeStage.vue';
+const MeetingPrototypeStage=defineAsyncComponent(()=>import('./MeetingPrototypeStage.vue'));
 import {DEMO_MEETING_ID} from './meeting-prototype-demo';
 import {useSavedMeeting} from './useSavedMeeting';
 import {ApiError} from '../../shared/api/client';
 import Icon from '../../shared/Icon.vue';
 import PublishedMaterialsDrawer from '../minutes/PublishedMaterialsDrawer.vue';
+import type {MinutesCurrent} from '../../shared/api/minutes-saved';
 const recordingTranscriptionRef=ref<InstanceType<typeof RecordingTranscription>>();
-const route=useRoute(),router=useRouter(),{session,info,workspace,options,infoScopeReady,transcriptScopeReady,generationScopeReady,minutesScopeReady,setMeetingScope,governanceCommands,deletionCommands}=useApplication();
+const route=useRoute(),router=useRouter(),{claimMinutesEntry,claimNavigation,claimInformation,session,info,workspace,options,minutesSaved,infoScopeReady,transcriptScopeReady,generationScopeReady,minutesScopeReady,setMeetingScope,governanceCommands,deletionCommands}=useApplication();
 const meeting=computed(()=>typeof route.params.id==='string'?route.params.id:'');
 const isDemoMeeting=computed(()=>meeting.value===DEMO_MEETING_ID);
-const state=useSavedMeeting(info.saved,()=>session.current.value?.actor.enterpriseId??null,()=>meeting.value);
+// The current-content endpoint has its own server READ gate. Overlap it with navigation
+// on a direct minutes entry, but display only the result matching the authoritative references.
+let entryRead:{id:string;actor:string;request:AbortController;result:Promise<MinutesCurrent|null>}|undefined;
+watch(()=>[meeting.value,session.current.value?.actor.enterpriseId,route.params.stage] as const,([id,actor,stage],old,cleanup)=>{
+ if(stage!=='minutes'||!actor||!id||isDemoMeeting.value||old?.[0]===id&&old[1]===actor)return;
+ const request=new AbortController();
+ const flight={id,actor,request,result:(claimMinutesEntry?.(id,request.signal)??minutesSaved.current(id,request.signal)).catch(()=>null)};entryRead=flight;
+ cleanup(()=>{request.abort();if(entryRead===flight)entryRead=undefined;});
+},{immediate:true});
+async function readEntry(id:string,signal:AbortSignal){
+ const flight=entryRead;entryRead=undefined;
+ if(flight&&flight.id===id&&flight.actor===session.current.value?.actor.enterpriseId){
+  const current=await flight.result;signal.throwIfAborted();
+  const nav=navigation.value.value;
+  if(current&&nav?.meetingId===id&&nav.accessRevisionToken===current.observation.accessRevisionToken&&
+   nav.revisionToken===current.observation.revisionToken&&nav.saved.minutesRevisionId===(current.body?.id??null)&&nav.saved.elementSetId===current.setId)return current;
+ }
+ return minutesSaved.current(id,signal);
+}
+const state=useSavedMeeting((id,signal)=>claimInformation?.(id,signal)??info.saved(id,signal),()=>session.current.value?.actor.enterpriseId??null,()=>meeting.value);
 const categoryLabels=ref<Record<string,string>>({});
 watch(()=>session.current.value?.actor.enterpriseId,(actor,_old,cleanup)=>{categoryLabels.value={};if(!actor||!options?.categories)return;const request=new AbortController();cleanup(()=>request.abort());void options.categories(null,request.signal).then(value=>{if(!request.signal.aborted&&session.current.value?.actor.enterpriseId===actor)categoryLabels.value=Object.fromEntries(value.items.map(c=>[c.id,c.label]));}).catch(()=>{});},{immediate:true});
 const mailDialog=ref<InstanceType<typeof SendMinutesDialog>>();
 const autoGenerate=ref(false),publishedObserved=ref(false),futurePanels=ref<InstanceType<typeof FuturePanels>>();
 const infoEditorRef=ref<InstanceType<typeof MeetingInfoEditor>>(),materialsOnly=ref<InstanceType<typeof MaterialOnlyDialog>>(),processingFiles=ref<InstanceType<typeof SavedFilesPanel>>();
+function closeAdvanced(){advanced.value=false;void nextTick(()=>meetingRoot.value?.querySelector<HTMLElement>('.meeting-status-control')?.focus());}
 function closeInfoDrawer(){if(infoEditorRef.value?.cancel?.()??true)infoDrawerOpen.value=false;}
 const infoDrawerOpen=ref(false),uploadDialog=ref<InstanceType<typeof UploadImportPanel>>(),advanced=ref(false);
 const materialsDrawer=ref<InstanceType<typeof PublishedMaterialsDrawer>>();
@@ -63,6 +83,7 @@ const stageLabel=computed(()=>{
  const workspace=navigation.value.value,serverStage=workspace?.stage,recordingState=recordingTranscriptionRef.value?.state;
  if(effectivePublished.value)return '已发布';
  if(activeStage.value==='transcript'&&workspace)return transcriptRef.value?.reviewStatus||(workspace.saved.transcriptConfirmationId?'已确认':workspace.saved.transcriptRevisionId?'校正中':'待校正');
+ if(serverStage==='MINUTES_FAILED')return '纪要生成失败';
  if(workspace?.privateSections?.finalConfirmationId)return '待发布';
  if(workspace?.saved.minutesRevisionId)return '纪要待处理';
  if(workspace?.saved.transcriptConfirmationId)return '待生成纪要';
@@ -71,7 +92,7 @@ const stageLabel=computed(()=>{
   if(serverStage==='TRANSCRIPT_PENDING'||recordingState&&recordingState!=='NOT_REQUESTED'||importTask.value)return '转写待处理';
  }
  return availableStages.value.transcript?'转写待处理':'会议采集';});
-const navigation=useWorkspaceNavigation(workspace.navigation,()=>session.current.value?.actor.enterpriseId??null,()=>meeting.value);
+const navigation=useWorkspaceNavigation((id,signal)=>claimNavigation?.(id,signal)??workspace.navigation(id,signal),()=>session.current.value?.actor.enterpriseId??null,()=>meeting.value);
 const effectivePublished=computed(()=>publishedObserved.value||state.saved.value?.stage==='PUBLISHED'||navigation.value.value?.stage==='PUBLISHED');
 const saved=state.saved,loading=computed(()=>state.loading.value||navigation.loading.value);
 // Initialize an editor on its first visit, then retain its draft across stage changes.
@@ -106,20 +127,21 @@ onUnmounted(()=>{publicationLease.dispose();stop();state.dispose();navigation.di
 <template><MeetingPrototypeStage v-if="isDemoMeeting" :stage="activeStage==='confirm'?'confirm':activeStage==='minutes'?'minutes':'transcript'" :meeting-id="meeting" @navigate="goStage"/><div v-else ref="meetingRoot" class="layout"><div class="main">
 
  <main class="content detail-page" :class="{'minutes-stage':activeStage==='minutes'}"><div :class="activeStage==='published'?'m19-published-page':'aci-detail ac-related'">
-  <div class="page-head aci-detail-head"><div class="ac-workspace-leading"><RouterLink to="/meetings" class="btn ac-workspace-back" aria-label="返回列表" title="返回列表"><Icon name="arrowL" :size="18"/></RouterLink><div class="aci-heading-text"><div class="aci-title-row"><h1 class="page-title" :class="{'heading-pending':loading&&!saved&&!navigation.value.value?.temporaryTitle}">{{saved?.name||navigation.value.value?.temporaryTitle||'未命名会议'}}</h1><span v-if="activeStage==='published'" class="tag green m19-published-status">{{stageLabel}}</span><span v-else-if="navigation.value.value" :class="['tag meeting-status-control',navigation.value.value?.privateSections?.finalConfirmationId?'amber':'blue']" role="button" tabindex="0" aria-label="查看会议状态与处理记录" title="查看会议状态与处理记录" @click="advanced=!advanced" @keydown.enter.prevent="advanced=!advanced" @keydown.space.prevent="advanced=!advanced">{{stageLabel}}</span></div><div v-if="activeStage==='published'" class="m19-published-meta"><span><b>会议分类：</b>{{categoryLabels[saved?.category??'']??saved?.category??'其他'}}</span><span><b>参会人：</b>{{saved?.confirmedRoster.map(p=>p.displayName).join('、')||'--'}}</span><span><b>会议日期：</b>{{saved?.occurredOn??'--'}}</span></div><div v-else class="page-desc">{{meeting}} · {{navigation.value.value?.privateSections?.finalConfirmationId?'当前版本已最终确认':saved?.name?.trim()&&saved?.category?'会议信息已保存':'待补充会议信息'}}</div></div></div><button v-if="activeStage==='published'&&navigation.value.value?.relation==='OWNER'" class="btn" @click="mailDialog?.open(meeting)">发送纪要邮件</button><div v-if="activeStage!=='published'" class="flex ac-workspace-actions"><span class="small muted" :class="{'transcript-save-state':activeStage==='transcript'}" role="status">{{activeStage==='processing'?processingSaveMessage:activeStage==='minutes'?minutesRef?.saveMessage:activeStage==='confirm'?minutesRef?.informationSaveMessage:activeStage==='publish'?minutesRef?.publicationSaveMessage:activeStage==='transcript'?transcriptRef?.saveStatus:''}}</span><button v-if="navigation.value.value?.relation==='OWNER'&&!effectivePublished&&!['confirm','publish'].includes(activeStage)" class="btn" @click="infoDrawerOpen=true">编辑会议信息</button><button v-if="navigation.value.value?.relation==='OWNER'&&!effectivePublished" class="btn primary" :disabled="activeStage==='transcript'&&!transcriptRef?.canSave||activeStage==='confirm'&&!minutesRef?.canSaveInformation||activeStage==='publish'&&!minutesRef?.canSavePublicationConfiguration" @click="saveVisible">保存</button></div></div>
+  <div class="page-head aci-detail-head"><div class="ac-workspace-leading"><RouterLink to="/meetings" class="btn ac-workspace-back" aria-label="返回列表" title="返回列表"><Icon name="arrowL" :size="18"/></RouterLink><div class="aci-heading-text"><div class="aci-title-row"><h1 class="page-title" :class="{'heading-pending':loading&&!saved}">{{saved?.name||navigation.value.value?.temporaryTitle||'未命名会议'}}</h1><span v-if="activeStage==='published'" class="tag green m19-published-status">{{stageLabel}}</span><span v-else-if="navigation.value.value&&saved" :class="['tag meeting-status-control',navigation.value.value?.privateSections?.finalConfirmationId?'amber':'blue']" role="button" tabindex="0" aria-label="查看会议状态与处理记录" title="查看会议状态与处理记录" @click="advanced=!advanced" @keydown.enter.prevent="advanced=!advanced" @keydown.space.prevent="advanced=!advanced">{{stageLabel}}</span></div><div v-if="activeStage==='published'" class="m19-published-meta"><span><b>会议分类：</b>{{categoryLabels[saved?.category??'']??saved?.category??'其他'}}</span><span><b>参会人：</b>{{saved?.confirmedRoster.map(p=>p.displayName).join('、')||'--'}}</span><span><b>会议日期：</b>{{saved?.occurredOn??'--'}}</span></div><div v-else class="page-desc">{{meeting}} · {{navigation.value.value?.privateSections?.finalConfirmationId?'当前版本已最终确认':saved?.name?.trim()&&saved?.category?'会议信息已保存':'待补充会议信息'}}</div></div></div><button v-if="activeStage==='published'&&navigation.value.value?.relation==='OWNER'" class="btn" @click="mailDialog?.open(meeting)">发送纪要邮件</button><div v-if="activeStage!=='published'" class="flex ac-workspace-actions"><span class="small muted" :class="{'transcript-save-state':activeStage==='transcript'}" role="status">{{activeStage==='processing'?processingSaveMessage:activeStage==='minutes'?minutesRef?.saveMessage:activeStage==='confirm'?minutesRef?.informationSaveMessage:activeStage==='publish'?minutesRef?.publicationSaveMessage:activeStage==='transcript'?transcriptRef?.saveStatus:''}}</span><button v-if="navigation.value.value?.relation==='OWNER'&&!effectivePublished&&!['confirm','publish'].includes(activeStage)" class="btn" @click="infoDrawerOpen=true">编辑会议信息</button><button v-if="navigation.value.value?.relation==='OWNER'&&!effectivePublished" class="btn primary" :disabled="activeStage==='minutes'&&!minutesRef?.canSave||activeStage==='transcript'&&!transcriptRef?.canSave||activeStage==='confirm'&&!minutesRef?.canSaveInformation||activeStage==='publish'&&!minutesRef?.canSavePublicationConfiguration" @click="saveVisible">保存</button></div></div>
   <section v-if="!session.current.value" class="card empty"><h2>{{session.status.value==='LOADING'?'正在检查登录':'企业登录暂不可用'}}</h2><button class="btn" @click="refreshSession">重新检查登录</button></section>
   <section v-else-if="governanceBlocked" class="card card-p" role="status"><h2>会议内容当前不可访问</h2><p class="mt12">已提交删除、撤回或废止请求。可通过对应状态窗口查回原请求及处理进度。</p><RouterLink class="btn mt16" to="/meetings">返回会议列表</RouterLink></section>
   <section v-else-if="publicationReadError" class="card card-p" role="alert"><p>{{publicationReadError}}</p><button class="btn mt12" @click="reload">重新读取权限与内容</button></section>
   <div v-else-if="loading&&(!saved||!navigation.value.value)&&route.params.stage==='transcript'" class="transcript-initial" role="status" aria-label="正在读取转写工作台">
    <div class="card transcript-stage-placeholder" aria-hidden="true"></div><div class="wb3"><div class="card transcript-audio-placeholder" aria-hidden="true"></div><div class="card card-p">正在读取转写…</div></div>
   </div>
+  <section v-else-if="loading&&(!saved||!navigation.value.value)&&route.params.stage==='minutes'" class="minutes-initial" role="status"><div class="card transcript-stage-placeholder" aria-hidden="true"></div><div class="card card-p">正在读取已保存纪要…</div></section>
   <p v-else-if="loading&&(!saved||!navigation.value.value)" role="status" class="card card-p">正在加载会议信息…</p>
   <section v-else-if="state.error.value&&!saved" role="alert" class="card card-p"><p>{{message}}</p><button class="btn" @click="reload">重试</button></section>
   <template v-else-if="saved">
    <nav v-if="participantReview" class="flex mb12" aria-label="参会人回看"><button class="btn" :aria-pressed="activeStage==='transcript'" @click="goStage('transcript')">会议转写</button><button class="btn" :aria-pressed="activeStage==='minutes'" @click="goStage('minutes')">AI纪要</button></nav>
    <MeetingProgress v-if="!participantReview&&navigation.value.value&&activeStage!=='published'" :value="navigation.value.value" :published-observed="effectivePublished" :active="activeStage" :processing-complete="recordingTranscriptionRef?.complete" @select="goStage"/>
    <p v-if="route.params.stage==='confirm'&&!availableStages.confirm&&!loading" class="banner error" role="status">请先保存纪要并处理待生成任务与候选，再进入会议确认。会议信息可以在确认页补充。</p>
-   <p v-if="navigation.error.value" role="alert">{{navigationMessage}} <button class="btn" @click="navigation.reload">重新读取导航</button></p>
+   <p v-if="navigation.error.value" role="alert">{{navigationMessage}} <button class="btn" @click="navigation.refresh">重新读取导航</button></p>
    <section v-if="navigation.value.value?.relation==='OWNER'&&(!infoScopeReady||!transcriptScopeReady||!generationScopeReady||!minutesScopeReady)" class="banner error" role="alert">本地恢复记录暂无法读取或清理，已暂停编辑。<button class="btn" @click="setMeetingScope(meeting)">重新检查恢复记录</button></section>
    <template v-if="navigation.value.value?.relation==='OWNER'">
     <MeetingInfoDrawer v-if="!effectivePublished" :open="infoDrawerOpen" :prevent-close="infoEditorRef?.closeBlocked??false" @close="closeInfoDrawer"><MeetingInfoEditor ref="infoEditorRef" v-if="activeStage!=='confirm'&&infoScopeReady&&navigation.value.value.navigationState==='CHECK_PRODUCER'&&!effectivePublished" :key="'drawer-'+meeting" :meeting-id="meeting" :eligible="infoDrawerOpen" @saved="state.refresh" @close="infoDrawerOpen=false"/></MeetingInfoDrawer>
@@ -141,9 +163,9 @@ onUnmounted(()=>{publicationLease.dispose();stop();state.dispose();navigation.di
     <LegacyRecordingFiles v-if="activeStage==='processing'&&navigation.value.value?.relation==='OWNER'" :meeting-id="meeting"/>
    </section>
    <div :class="participantReview?'participant-review':'workspace-results'"><div v-show="participantReview||activeStage==='transcript'||activeStage==='published'" :class="activeStage==='published'?'published-transcript card card-p m19-published-left':'aci-transcript aci-inline-workbench'"><div class="wb3"><div class="col-sticky"><div v-if="activeStage==='published'" class="between mb12 m19-audio-heading"><b>原录音</b><button class="btn sm ghost" @click="materialsDrawer?.show()"><Icon name="file" :size="13"/> 背景材料</button></div><TranscriptPlayer :source-state="transcriptRef?.sourceState??'loading'" :published="activeStage==='published'" ref="mediaPlayer" @position="transcriptRef?.position($event)" :expect-recording="!!hasRecording" :scope="transcriptRef?.media??null" :active="participantReview||activeStage==='transcript'||activeStage==='published'"/><div v-if="activeStage==='published'" class="divider"></div><TranscriptSpeakerSummary v-if="activeStage!=='published'&&navigation.value.value?.relation==='OWNER'&&transcriptRef?.sourceState==='ready'" :items="transcriptRef?.speakerLabels??[]" :loading="transcriptRef?.speakersLoading??true" :disabled="navigation.value.value?.relation!=='OWNER'||effectivePublished||!transcriptRef?.canEditSpeakers||!!transcriptRef?.dirty" @edit="id=>transcriptRef?.openSpeakers('edit',id)" @merge="transcriptRef?.openSpeakers('merge')" @split="transcriptRef?.openSpeakers('split')" @undo="transcriptRef?.undoLatest()"/></div><div v-show="!participantReview||activeStage==='transcript'" :class="activeStage==='published'?'transcript-main':'transcript-main aci-inline-transcript-column'"><div v-if="activeStage==='published'" class="between mb12"><b>会议转写</b><span class="tag green">发布绑定版本</span></div><TranscriptEditor :workspace-revision="navigation.value.value?.revisionToken" :active="participantReview||activeStage==='transcript'||activeStage==='published'" :result-key="navigation.value.value?.privateSections?.tasks?.items.filter(t=>t.kind==='TRANSCRIPT_IMPORT_V1'&&t.state==='SUCCEEDED').map(t=>t.taskId).sort().join(',')??''" :published="activeStage==='published'" ref="transcriptRef" @seek="(fileId,startMs,play)=>mediaPlayer?.seek(fileId,startMs,play)" v-if="navigation.value.value&&transcriptInitialized" :key="[meeting,navigation.value.value.relation,navigation.value.value.accessRevisionToken].join('/')" :meeting-id="meeting" :show-footer="activeStage==='transcript'&&!effectivePublished&&navigation.value.value?.relation==='OWNER'" @changed="navigation.refresh" @confirmed="autoGenerate=true;goStage('minutes')"/></div></div></div>
-   <section v-show="['minutes','confirm','publish','published'].includes(activeStage)" class="minutes-stage-content"><div v-if="participantReview&&!navigation.value.value?.saved.minutesRevisionId" class="card empty" role="status">会议纪要尚未生成。</div><MinutesWorkspace v-else ref="minutesRef" :category-labels="categoryLabels" @process="processFinalCheck" v-if="navigation.value.value&&minutesInitialized" :key="'minutes-'+meeting" :meeting-id="meeting" :owner="navigation.value.value.relation==='OWNER'" :meeting-info="saved" :stage="activeStage" :auto-generate="autoGenerate" :can-enter-confirmation="availableStages.confirm" :pending-candidates="navigation.value.value?.privateSections?.candidates?.items??[]" @generation-started="autoGenerate=false" @edit-info="infoDrawerOpen=true" @changed="navigation.refresh" @published="published" @info-saved="state.refresh();navigation.refresh()" @navigate="goStage"/></section></div>
+   <section v-show="['minutes','confirm','publish','published'].includes(activeStage)" class="minutes-stage-content"><div v-if="participantReview&&!navigation.value.value?.saved.minutesRevisionId" class="card empty" role="status">会议纪要尚未生成。</div><MinutesWorkspace v-else ref="minutesRef" :category-labels="categoryLabels" @process="processFinalCheck" v-if="navigation.value.value&&minutesInitialized" :read-entry="readEntry" :navigation="navigation.value.value" :key="[meeting,navigation.value.value.relation,navigation.value.value.accessRevisionToken].join('/')" :meeting-id="meeting" :owner="navigation.value.value.relation==='OWNER'" :meeting-info="saved" :stage="activeStage" :auto-generate="autoGenerate" :can-enter-confirmation="availableStages.confirm" :pending-candidates="navigation.value.value?.privateSections?.candidates?.items??[]" @generation-started="autoGenerate=false" @edit-info="infoDrawerOpen=true" @changed="navigation.refresh" @published="published" @info-saved="state.refresh();navigation.refresh()" @navigate="goStage"/></section></div>
    <MaterialOnlyDialog v-if="navigation.value.value?.relation==='OWNER'&&!effectivePublished" ref="materialsOnly" :key="'materials-only-'+meeting" :meeting-id="meeting" :initial-recovery="!navigation.value.value?.saved.transcriptRevisionId" :processing="['TRANSCRIBING','ENHANCING','ADOPTING','COPYING','WAITING_ARCHIVE','RUNNING','READY'].includes(recordingTranscriptionRef?.state??navigation.value.value?.processingMaterialStage??importTask?.state??'')" :after-start="!!importTask||!!recordingTranscriptionRef?.state&&recordingTranscriptionRef.state!=='NOT_REQUESTED'" @closed="recordingTranscriptionRef?.reloadMaterials();processingFiles?.reloadMaterials();state.refresh();navigation.refresh()"/>
-   <PublishedMaterialsDrawer v-if="activeStage==='published'" ref="materialsDrawer" :meeting-id="meeting" @denied="loseContent"/><section v-if="advanced&&activeStage!=='published'" class="card card-p advanced-tools"><div class="between"><h2>会议状态与处理记录</h2><button class="btn" @click="reload">刷新</button></div><div v-if="activeStage==='minutes'" class="flex mt16"><button class="btn" @click="minutesRef?.reload()">刷新纪要</button><button v-if="navigation.value.value?.relation==='OWNER'" class="btn" @click="minutesRef?.openVersions()">候选与版本</button></div><div v-if="activeStage==='transcript'&&navigation.value.value?.relation==='OWNER'&&!effectivePublished" class="flex mt16"><button class="btn" :disabled="!transcriptRef?.canReview" @click="transcriptRef?.openReview()">转写版本与语音审阅</button></div><dl><dt>会议编号</dt><dd>{{saved.id}}</dd><dt>会议日期</dt><dd>{{saved.occurredOn??'未填写'}}</dd><dt>会议分类</dt><dd>{{saved.category??'未填写'}}</dd><dt>会议摘要</dt><dd>{{saved.summary??'未填写'}}</dd><dt>已确认名单</dt><dd>{{saved.confirmedRoster.map(p=>p.displayName).join('、')||'未确认'}}</dd></dl><WorkspaceOverview v-if="navigation.value.value" :value="navigation.value.value"/><WorkspaceTasks v-if="navigation.value.value?.relation==='OWNER'" :meeting-id="meeting"/></section>
+   <PublishedMaterialsDrawer v-if="activeStage==='published'" ref="materialsDrawer" :meeting-id="meeting" @denied="loseContent"/><section v-if="advanced&&activeStage!=='published'" class="card card-p advanced-tools" aria-label="会议状态与处理记录" @keydown.esc="closeAdvanced"><div class="between"><h2>会议状态与处理记录</h2><button class="btn sm" @click="closeAdvanced">关闭</button><button class="btn" @click="reload">刷新</button></div><div v-if="activeStage==='minutes'" class="flex mt16"><button class="btn" @click="minutesRef?.reload()">刷新纪要</button><button v-if="navigation.value.value?.relation==='OWNER'" class="btn" @click="minutesRef?.openVersions()">候选与版本</button></div><div v-if="activeStage==='transcript'&&navigation.value.value?.relation==='OWNER'&&!effectivePublished" class="flex mt16"><button class="btn" :disabled="!transcriptRef?.canReview" @click="transcriptRef?.openReview()">转写版本与语音审阅</button></div><dl><dt>会议编号</dt><dd>{{saved.id}}</dd><dt>会议日期</dt><dd>{{saved.occurredOn??'未填写'}}</dd><dt>会议分类</dt><dd>{{saved.category??'未填写'}}</dd><dt>会议摘要</dt><dd>{{saved.summary??'未填写'}}</dd><dt>已确认名单</dt><dd>{{saved.confirmedRoster.map(p=>p.displayName).join('、')||'未确认'}}</dd></dl><WorkspaceOverview v-if="navigation.value.value" :value="navigation.value.value"/><WorkspaceTasks v-if="navigation.value.value?.relation==='OWNER'" :meeting-id="meeting"/></section>
   </template>
  </div></main></div></div><FuturePanels ref="futurePanels"/><SendMinutesDialog ref="mailDialog"/>
 </template>
@@ -159,3 +181,8 @@ onUnmounted(()=>{publicationLease.dispose();stop();state.dispose();navigation.di
 </style>
 
 <style scoped>.workspace-results{display:contents}.participant-review{display:grid;grid-template-columns:minmax(240px,30%) minmax(0,1fr);gap:16px;align-items:start}.participant-review .aci-transcript,.participant-review .wb3{display:contents}.participant-review .minutes-stage-content{grid-column:2}.participant-review nav button[aria-pressed=true]{font-weight:700}@media(max-width:800px){.participant-review{display:block}.participant-review .col-sticky{position:static;margin-bottom:12px}}</style>
+
+<style scoped>
+.minutes-stage .advanced-tools{position:fixed;z-index:20;inset:64px 12px 80px auto;width:min(620px,calc(100vw - 24px));overflow:auto;overscroll-behavior:contain;box-shadow:var(--shadow);scrollbar-gutter:stable}
+.minutes-stage .advanced-tools>.between{position:sticky;top:-16px;background:white;padding-block:8px;gap:8px}.advanced-tools>.between h2{flex:1}
+</style>

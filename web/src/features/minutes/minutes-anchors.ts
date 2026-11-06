@@ -3,7 +3,21 @@ export type EvidenceAnchor={evidenceId:string;quote:string;startToken:string;end
 export async function captureEvidenceAnchors(text:string,evidence:readonly {id:string;target_anchor:string}[]):Promise<readonly EvidenceAnchor[]>{
  if(evidence.length>10000||new Set(evidence.map(e=>e.id)).size!==evidence.length)throw new Error('来源关联集合无效。');
  const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),x=>x.toString(16).padStart(2,'0')).join('');
- return Object.freeze(evidence.map(e=>{const a:unknown=JSON.parse(e.target_anchor);if(typeof a!=='object'||a===null||Array.isArray(a)||Object.keys(a).sort().join(',')!=='end,schemaVersion,start,targetTextSha256,unit')throw new Error('来源位置暂无法确认。');const v=a as Record<string,unknown>;if(v.schemaVersion!=='ama.anchor.v1'||v.unit!=='UNICODE_SCALAR'||v.targetTextSha256!==hash||!Number.isSafeInteger(v.start)||!Number.isSafeInteger(v.end)||Number(v.start)<0||Number(v.end)<=Number(v.start))throw new Error('来源位置与当前正文不一致。');const start=String(v.start),end=String(v.end);return Object.freeze({evidenceId:e.id,quote:text.slice(utf16Offset(text,start),utf16Offset(text,end)),startToken:start,endToken:end});}));
+ const offsets=new Map<number,number>();
+ const spans=evidence.map(e=>{const a:unknown=JSON.parse(e.target_anchor);if(typeof a!=='object'||a===null||Array.isArray(a)||Object.keys(a).sort().join(',')!=='end,schemaVersion,start,targetTextSha256,unit')throw new Error('来源位置暂无法确认。');const v=a as Record<string,unknown>;if(v.schemaVersion!=='ama.anchor.v1'||v.unit!=='UNICODE_SCALAR'||v.targetTextSha256!==hash||!Number.isSafeInteger(v.start)||!Number.isSafeInteger(v.end)||Number(v.start)<0||Number(v.end)<=Number(v.start))throw new Error('来源位置与当前正文不一致。');const start=Number(v.start),end=Number(v.end);offsets.set(start,-1);offsets.set(end,-1);return {evidenceId:e.id,start,end};});
+ // Resolve every anchor boundary in one Unicode traversal of this exact revision.
+ let count=0;
+ for(let index=0;index<text.length;count++){
+  if(offsets.has(count))offsets.set(count,index);
+  const point=text.codePointAt(index)!;
+  if(point>=0xd800&&point<=0xdfff)throw new TypeError('Unpaired surrogate');
+  index+=point>0xffff?2:1;
+ }
+ if(offsets.has(count))offsets.set(count,text.length);
+ return Object.freeze(spans.map(({evidenceId,start,end})=>{
+  if(end>count)throw new RangeError('来源范围超出正文。');
+  return Object.freeze({evidenceId,quote:text.slice(offsets.get(start),offsets.get(end)),startToken:String(start),endToken:String(end)});
+ }));
 }
 export function reanchorEvidence(text:string,evidence:readonly EvidenceAnchor[],manual:ReadonlyMap<string,{startToken:string;endToken:string}>=new Map(),originalText?:string){
  scalarOffset(text,text.length);

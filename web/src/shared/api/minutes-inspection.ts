@@ -8,6 +8,11 @@ export function createMinutesInspectionApi(client:ReturnType<typeof createBusine
  async function get<K extends keyof components['schemas']>(schema:K,path:string,signal:AbortSignal):Promise<components['schemas'][K]>{const v=await client.json<unknown>(path,{signal,expectedStatus:200,maxResponseBytes:8*1024*1024});if(!responseMatches('minutes.yaml#/'+schema,v))return invalid();return freeze(v as components['schemas'][K]);}
  const root=(m:string)=>`/api/v1/meetings/${id(m)}/minutes`;
  return {
+  async generationTask(meeting:string,task:string,signal:AbortSignal){
+   const result=await get('MinutesTask',root(meeting)+'/generation-tasks/'+id(task),signal);
+   if(result.task.taskId!==task)return invalid();
+   return result;
+  },
   async candidates(meeting:string,state:'PENDING'|'STALE'|'ADOPTED'|'REJECTED',next:string|null,signal:AbortSignal){if(!['PENDING','STALE','ADOPTED','REJECTED'].includes(state))throw new TypeError('Invalid candidate state');const v=await get('MinutesCandidates',root(meeting)+`/candidates?limit=20&state=${state}`+cursor(next),signal);if(v.items.length>20||new Set(v.items.map(x=>x.candidateId)).size!==v.items.length||v.items.some(x=>x.state!==state))return invalid();return v;},
   async candidate(meeting:string,selected:string,signal:AbortSignal){const v=await get('MinutesCandidate',root(meeting)+`/candidates/${id(selected)}`,signal),g=v.graph,c=v.candidate;if(c.candidateId!==selected||g.minutes_revision.filter(b=>b.id===c.minutesRevisionId&&b.meeting_id===meeting&&b.generation_input_id===c.inputId).length!==1||g.element_set.filter(s=>s.id===c.elementSetId&&s.meeting_id===meeting).length!==1||g.source_locator.some(x=>x.meeting_id!==meeting))return invalid();return v;},
   async history(meeting:string,kind:'BODY'|'SET',next:string|null,signal:AbortSignal){const v=await get('SavedHistory',root(meeting)+(kind==='BODY'?'/history':'/element-sets')+'?limit=20'+before(next),signal);if(v.items.length>20||new Set(v.items.map(x=>x.id)).size!==v.items.length||v.hasMore!==(v.nextBeforeRevisionToken!==null)||v.items.some((x,i)=>next!==null&&BigInt(x.revisionToken)>=BigInt(next)||i>0&&BigInt(x.revisionToken)>=BigInt(v.items[i-1]!.revisionToken))||v.hasMore&&v.nextBeforeRevisionToken!==v.items.at(-1)?.revisionToken)return invalid();return v;},

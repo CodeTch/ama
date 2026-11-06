@@ -27,7 +27,16 @@ final class PublicationController {
  private static String configurationVersion(com.fasterxml.jackson.databind.JsonNode body){if(!body.has("configurationVersionToken"))return null;var value=body.get("configurationVersionToken");if(!value.isTextual())throw new IllegalArgumentException("Invalid configuration version");JdbcPublicationService.configurationArguments(value.textValue());return value.textValue();}
  private static long retryCounter(com.fasterxml.jackson.databind.ObjectMapper mapper,com.fasterxml.jackson.databind.JsonNode body,String name){var value=mapper.createObjectNode();if(body.has(name))value.set("expectedRevision",body.get(name));if(body.has(name+"Token"))value.set("expectedRevisionToken",body.get(name+"Token"));return HttpRevisionTokens.expected(value);}
 
- @GetMapping("/current") ResponseEntity<byte[]> current(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return read(query().current(actor(request),meetingId));}
+ @GetMapping("/current") ResponseEntity<byte[]> current(@PathVariable String meetingId,HttpServletRequest request)throws IOException{
+  var reader=query();var actor=actor(request);
+  try{return read(reader.current(actor,meetingId));}
+  catch(MeetingAccess.AuthorityUnavailableException expired){
+   // Publication can complete after the interceptor checked the still-unpublished meeting.
+   // Renew outside the failed transaction and repeat the complete locked read exactly once.
+   access.prepareExternalRead(actor,meetingId);
+   return read(reader.current(actor,meetingId));
+  }
+ }
  @GetMapping("/{publicationId}") ResponseEntity<byte[]> detail(@PathVariable String meetingId,@PathVariable String publicationId,HttpServletRequest request)throws IOException{return read(query().detail(actor(request),meetingId,publicationId));}
  @GetMapping("/{publicationId}/submissions") ResponseEntity<byte[]> submissions(@PathVariable String meetingId,@PathVariable String publicationId,@RequestParam(defaultValue="20") int limit,@RequestParam(required=false) String cursor,HttpServletRequest request)throws IOException{return read(query().history(actor(request),meetingId,publicationId,true,limit,cursor));}
  @GetMapping("/{publicationId}/attempts") ResponseEntity<byte[]> attempts(@PathVariable String meetingId,@PathVariable String publicationId,@RequestParam(defaultValue="20") int limit,@RequestParam(required=false) String cursor,HttpServletRequest request)throws IOException{return read(query().history(actor(request),meetingId,publicationId,false,limit,cursor));}

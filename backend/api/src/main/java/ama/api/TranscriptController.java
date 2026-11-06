@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController @RequestMapping("/api/v1/meetings/{meetingId}/transcript") class TranscriptController {
  private final TranscriptConfiguration.Runtime runtime;private final JdbcSavedTranscriptReceipts receipts;private final SpeechReviewReceipts speechReceipts;private final FileRegistry files;private final TransactionRunner tx;private final MeetingAccess access;
  private VerifiedTranscriptPlayback playback;
+ @org.springframework.beans.factory.annotation.Autowired(required=false) private ConfirmationGenerationDispatcher generationDispatcher;
  @org.springframework.beans.factory.annotation.Autowired void verifiedPlayback(VerifiedTranscriptPlayback value){playback=value;}
  TranscriptController(TranscriptConfiguration.Runtime runtime,JdbcSavedTranscriptReceipts receipts,FileRegistry files,TransactionRunner tx,MeetingAccess access,SpeechReviewReceipts speechReceipts){this.speechReceipts=speechReceipts;this.runtime=runtime;this.receipts=receipts;this.files=files;this.tx=tx;this.access=access;}
  @GetMapping ResponseEntity<byte[]> current(@PathVariable String meetingId,HttpServletRequest request)throws IOException{var result=new LinkedHashMap<>(service(actor(request),meetingId,false).readCurrent(actor(request),meetingId));result.put("saved",result.remove("selected"));return json(result);}
@@ -39,7 +40,7 @@ import org.springframework.web.bind.annotation.*;
  @PostMapping("/operations/{operationId}/undo") ResponseEntity<byte[]> undo(@PathVariable String meetingId,@PathVariable String operationId,HttpServletRequest request)throws IOException{ama.contract.MinutesContracts.uuid(operationId);return mutation(meetingId,request,Operation.UNDO,operationId);}
  @PutMapping("/marks") ResponseEntity<byte[]> saveMarks(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return mutation(meetingId,request,Operation.MARKS);}
  @PostMapping("/restorations") ResponseEntity<byte[]> restore(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return mutation(meetingId,request,Operation.RESTORE);}
- @PostMapping("/confirmations") ResponseEntity<byte[]> confirm(@PathVariable String meetingId,HttpServletRequest request)throws IOException{return mutation(meetingId,request,Operation.CONFIRM);}
+ @PostMapping("/confirmations") ResponseEntity<byte[]> confirm(@PathVariable String meetingId,HttpServletRequest request)throws IOException{var response=mutation(meetingId,request,Operation.CONFIRM);if(generationDispatcher!=null)generationDispatcher.wake();return response;}
  private ResponseEntity<byte[]> mutation(String meeting,HttpServletRequest request,Operation operation)throws IOException {
   return mutation(meeting,request,operation,null);
  }

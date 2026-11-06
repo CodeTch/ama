@@ -23,9 +23,11 @@ public final class JdbcWorkspaceOverview {
   try{return authority.transactionRunner().required(()->held(actor,meeting,budget));}catch(org.springframework.dao.DataAccessException|org.springframework.transaction.TransactionException failure){throw new WorkspaceReadBudget.Unavailable(failure);}
  }
  private Map<String,Object> held(Actor actor,String meeting,WorkspaceReadBudget budget){
+  long started=System.nanoTime();
   var gate=authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.READ);var authentic=authority.fileRegistry().access(gate);var status=access.workspaceStatus(authentic,actor,meeting);budget.check();
   if(!Set.of("ENTRY","TRANSCRIPT_PENDING","TRANSCRIPT_FAILED","MINUTES_PENDING","MINUTES_FAILED","READY_TO_PUBLISH","PUBLISH_FAILED","PUBLISHED").contains(status.stage())||!status.revisionToken().matches("0|[1-9][0-9]{0,18}")||!status.accessRevisionToken().matches("0|[1-9][0-9]{0,18}")||Long.parseLong(status.revisionToken())==Long.MAX_VALUE||Long.parseLong(status.accessRevisionToken())==Long.MAX_VALUE)throw unavailable();
   if(status.owner())access.requirePrepared(authentic,actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);
+  long authorized=System.nanoTime();
   String columns="transcript_revision_id,transcript_confirmation_id,minutes_revision_id,element_set_id"+(status.owner()?",template_revision_id,exclusion_revision_id,final_confirmation_id":"");
   var roots=metadata("SELECT "+columns+" FROM meeting WHERE id=?",1,512,budget,meeting);if(roots.size()!=1||status.infoId()==null)throw unavailable();var root=roots.getFirst();for(String key:columns.split(","))nullableId(root.get(key));
   if(!status.owner()){
@@ -82,7 +84,10 @@ public final class JdbcWorkspaceOverview {
    var page=page(actor,meeting,taskPage,budget,parents);var items=new ArrayList<Candidate>();for(var row:candidates.subList(0,Math.min(20,candidates.size()))){budget.reserve(1,5,256,256,256,4,true);items.add(new Candidate(id(row.get("id")),id(row.get("input_id")),id(row.get("task_id")),"PENDING"));}
    result.put("privateSectionsState","AVAILABLE");result.put("privateSections",new PrivateSections(processing,generation,(String)root.get("template_revision_id"),(String)root.get("exclusion_revision_id"),(String)root.get("final_confirmation_id"),publicationId,publicationState,page,new CandidatePage(items,candidates.size()>20,"/api/v1/meetings/"+meeting+"/minutes/candidates"),"PERSISTED_REFERENCES_RECHECK_PRODUCER"));
   }
-  budget.check();return Collections.unmodifiableMap(result);
+  budget.check();long finished=System.nanoTime();
+  if(finished-started>250_000_000L)System.getLogger(getClass().getName()).log(System.Logger.Level.INFO,
+   "Workspace navigation ms: authorization={0}, saved references and tasks={1}",(authorized-started)/1000000,(finished-authorized)/1000000);
+  return Collections.unmodifiableMap(result);
  }
  private JdbcWorkspaceTasks.Item taskItem(WorkspaceTaskScan.Metadata row,WorkspaceTaskRelations parents){return new JdbcWorkspaceTasks.Item(row.id(),row.spec().type(),row.state(),Long.toString(row.attempt()),Long.toString(row.spec().businessVersion()),row.spec().input().id(),parents.detailPath(row));}
  private JdbcWorkspaceTasks.Page page(Actor actor,String meeting,List<WorkspaceTaskScan.Metadata> rows,WorkspaceReadBudget budget,WorkspaceTaskRelations parents){

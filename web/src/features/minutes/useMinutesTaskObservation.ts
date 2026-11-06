@@ -1,7 +1,7 @@
 import {shallowRef,shallowReadonly,computed,watch} from 'vue';
 import type {WorkspaceTaskPage} from '../../shared/api/workspace-tasks';
 type Task=WorkspaceTaskPage['items'][number];
-type Api={list:(meeting:string,kind:'MINUTES_GENERATE_V1',cursor:string|null,signal:AbortSignal)=>Promise<WorkspaceTaskPage>};
+type Api={currentGeneration?:(meeting:string,signal:AbortSignal)=>Promise<WorkspaceTaskPage>;list:(meeting:string,kind:'MINUTES_GENERATE_V1',cursor:string|null,signal:AbortSignal)=>Promise<WorkspaceTaskPage>};
 export function useMinutesTaskObservation(api:Api,actor:()=>string|null,meeting:()=>string,enabled:()=>boolean,completed:()=>void,schedule:(fn:()=>void)=>ReturnType<typeof setTimeout>=fn=>setTimeout(fn,2000)){
  const latest=shallowRef<Task|null>(null),error=shallowRef(''),loading=shallowRef(false),observed=shallowRef(false);
  const running=computed(()=>!!latest.value&&['READY','RUNNING','RECONCILING'].includes(latest.value.state));
@@ -15,7 +15,7 @@ export function useMinutesTaskObservation(api:Api,actor:()=>string|null,meeting:
   const deadline=setTimeout(()=>request.abort(),20000);loading.value=true;error.value='';
   try{
    let next:string|null=null,selected:Task|null=null;const cursors=new Set<string>();
-   do{const page=await api.list(id,'MINUTES_GENERATE_V1',next,request.signal);if(!active())return;
+   do{const page:WorkspaceTaskPage=api.currentGeneration?await api.currentGeneration(id,request.signal):await api.list(id,'MINUTES_GENERATE_V1',next,request.signal);if(!active())return;
     selected??=page.items[0]??null;const runningTask=page.items.find(t=>['READY','RUNNING','RECONCILING'].includes(t.state));
     if(runningTask){selected=runningTask;break;}next=page.nextCursor;
     if(next&&(cursors.has(next)||cursors.size>=50))throw Error('任务记录暂无法完整核对，请重新读取。');if(next)cursors.add(next);

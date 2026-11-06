@@ -515,6 +515,18 @@
                 "type": "null"
               }
             ]
+          },
+          "materialSnapshotId": {
+            "oneOf": [
+              {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       },
@@ -530,7 +542,13 @@
         ]
       },
       "confirmationGeneration": {
-        "enum": ["NONE", "WAITING", "RETRYING", "SUBMITTED", "SUPERSEDED"]
+        "enum": [
+          "NONE",
+          "WAITING",
+          "RETRYING",
+          "SUBMITTED",
+          "SUPERSEDED"
+        ]
       },
       "activeTaskIds": {
         "type": "array",
@@ -6147,6 +6165,9 @@
                 "type": "null"
               }
             ]
+          },
+          "fileName": {
+            "type": "string"
           }
         }
       }
@@ -12306,6 +12327,67 @@
             },
             "applied": {
               "type": "boolean"
+            }
+          }
+        }
+      },
+      "sourceLabels": {
+        "type": "array",
+        "maxItems": 2048,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "locatorId",
+            "kind",
+            "label"
+          ],
+          "properties": {
+            "locatorId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+            },
+            "kind": {
+              "type": "string",
+              "enum": [
+                "transcript",
+                "recording",
+                "material"
+              ]
+            },
+            "label": {
+              "type": "string"
+            },
+            "excerpt": {
+              "type": "string",
+              "maxLength": 240
+            }
+          }
+        }
+      },
+      "selectedExclusions": {
+        "type": "array",
+        "maxItems": 2048,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "category",
+            "locatorId"
+          ],
+          "properties": {
+            "category": {
+              "type": "string",
+              "enum": [
+                "POLITICAL_SENSITIVE",
+                "INTERNAL_BUSINESS_DATA"
+              ]
+            },
+            "locatorId": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
             }
           }
         }

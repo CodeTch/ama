@@ -4,13 +4,13 @@ import type {TranscriptSource} from '../../shared/api/transcripts';
 import type {MaterialListing} from '../../shared/api/materials';
 import {ApiError} from '../../shared/api/client';
 import {useSourceMedia,type MediaScope,type SourceReader} from '../transcript/useSourceMedia';
-type Ports={source:SourceReader;materials?:(meeting:string,signal:AbortSignal)=>Promise<MaterialListing>};
+type Ports={source:SourceReader;playback?:(meeting:string,file:TranscriptSource,signal:AbortSignal)=>Promise<string|null>;materials?:(meeting:string,signal:AbortSignal)=>Promise<MaterialListing>};
 const forbidden=(cause:unknown)=>cause instanceof ApiError&&[401,403].includes(cause.status??0);
 /** Resolve only the immutable segment/file declared by this source. Byte validation stays in the existing transcript reader. */
 export function useMinutesSourceMedia(ports:Ports,actor:()=>string|null,meeting:()=>string,active:()=>boolean,source:()=>Source|null,denied:(cause:unknown)=>void,urls:Pick<typeof URL,'createObjectURL'|'revokeObjectURL'>=URL){
  const mediaScope=shallowRef<MediaScope|null>(null),plainName=shallowRef<string|null>(null),startMs=shallowRef<number|null>(null),error=shallowRef<unknown>(null),loading=shallowRef(false);let epoch=0,controller:AbortController|null=null;
  function clear(){epoch++;controller?.abort();controller=null;mediaScope.value=null;plainName.value=null;startMs.value=null;error.value=null;loading.value=false;}
- const media=useSourceMedia(async(id,file,signal)=>{const who=actor();try{return await ports.source(id,file,signal);}catch(cause){if(!signal.aborted&&active()&&who===actor()&&id===meeting()&&forbidden(cause)){clear();denied(cause);}throw cause;}},actor,()=>mediaScope.value,urls);
+ const media=useSourceMedia(async(id,file,signal)=>{const who=actor();try{return await ports.source(id,file,signal);}catch(cause){if(!signal.aborted&&active()&&who===actor()&&id===meeting()&&forbidden(cause)){clear();denied(cause);}throw cause;}},actor,()=>mediaScope.value,urls,active,ports.playback);
  function identity(){const s=source();return JSON.stringify([actor(),meeting(),active(),s?[s.locator.id,s.locator.kind,s.sourceVersion,s.locator.transcript_revision_id,s.locator.segment_id,s.locator.file_id,s.locator.material_revision_id,s.originalBytes.route,s.observation.revisionToken,s.observation.accessRevisionToken]:null]);}
  async function reload(){
   clear();const who=actor(),id=meeting(),saved=source();if(!who||!active()||!saved)return;
@@ -31,9 +31,9 @@ export function useMinutesSourceMedia(ports:Ports,actor:()=>string|null,meeting:
    const size=Number(segment.sizeBytesToken),ordinal=Number(segment.ordinalToken);
    if(saved.originalBytes.route!==expectedRoute||!Number.isSafeInteger(size)||size<0||!Number.isSafeInteger(ordinal)||ordinal<0)throw Error('来源原件当前不可读取。');
    const original:TranscriptSource={fileId:segment.fileId,sha256:segment.sha256,sizeBytes:size,revisionId:saved.historical?version:null,recordingWav:segment.parserVersion==='ama.recording-wav.v1'};
-   if(segment.startMs===null){const result=await ports.source(id,original,c.signal);if(accept())plainName.value=result.name;return;}
+   if(segment.startMs===null){if(segment.fileName){plainName.value=segment.fileName;return;}const result=await ports.source(id,original,c.signal);if(accept())plainName.value=result.name;return;}
    if(!Number.isSafeInteger(segment.startMs)||segment.startMs<0||segment.endMs===null||segment.endMs<segment.startMs)throw Error('来源时间无法核实。');
-   startMs.value=segment.startMs;mediaScope.value={meeting:id,revisionId:version,accessRevisionToken:saved.observation.accessRevisionToken,sources:[{...original,ordinal}]};
+   startMs.value=segment.startMs;mediaScope.value={meeting:id,revisionId:version,accessRevisionToken:saved.observation.accessRevisionToken,sources:[{...original,ordinal,name:segment.fileName}]};
   }catch(cause){if(accept()){if(forbidden(cause)){clear();denied(cause);}else error.value=cause;}}finally{if(accept())loading.value=false;}
  }
  const stop=watch(identity,()=>{void reload();},{immediate:true,flush:'sync'});

@@ -243,6 +243,24 @@ final class MinutesGraphDiscovery {
   // A per-cell 255-scalar estimate wrongly rejects ordinary edited transcripts whose keys are UUIDs.
   // The measurement and raw SELECT share the actual holder and original operation ledger.
   budget.admitCapture(256,256,256,2);budget.row(4);
+  var columns=new HashSet<>(definition.columns());
+  boolean canCompareCells=compareOnly&&rows.stream().allMatch(row->row.keySet().equals(columns));
+  if(canCompareCells&&expected.kind().equals("SAVED_EFFECTIVE")&&rows.size()<=8){
+   // LIMIT is inside the locked selector union. Count the entire membership, including unexpected
+   // rows, and count exact tuples separately. Only the two aggregate counters cross JDBC.
+   var values=new ArrayList<Object>();
+   var predicates=exactRowPredicates(table,definition,rows,values);
+   String matched=predicates.isEmpty()?"0":"COALESCE(SUM(CASE WHEN "+String.join(" OR ",predicates)+" THEN 1 ELSE 0 END),0)";
+   values.addAll(arguments);
+   boolean identical=Boolean.TRUE.equals(j.query("SELECT COUNT(*) AS total,"+matched+" AS matched FROM (SELECT "+
+     String.join(",",definition.columns())+" FROM "+from+") pinned",rs->{
+      require(rs.next(),PROVENANCE_UNAVAILABLE);
+      return measurement(rs,"total")==rows.size()&&measurement(rs,"matched")==rows.size();
+     },values.toArray()));
+   budget.capture(128,128,128,2);
+   require(identical,PROVENANCE_UNAVAILABLE);
+   return new Comparison(List.copyOf(rows),List.copyOf(rows));
+  }
   String byteExpression=sumLengths(definition.columns(),"OCTET_LENGTH(%s)"),pointExpression=sumLengths(definition.columns(),"CHAR_LENGTH(%s)"),unitExpression=sumLengths(definition.columns(),"OCTET_LENGTH(CONVERT(%s USING utf16))/2");
   var sizes=j.query("SELECT COUNT(*) AS row_count,COALESCE(SUM("+byteExpression+"),0) AS utf8_bytes,COALESCE(SUM("+pointExpression+"),0) AS scalar_count,COALESCE(SUM("+unitExpression+"),0) AS utf16_units FROM (SELECT "+String.join(",",definition.columns())+" FROM "+from+") ama_metadata_capture",rs->{require(rs.next(),PROVENANCE_UNAVAILABLE);long[] result={measurement(rs,"row_count"),measurement(rs,"utf8_bytes"),measurement(rs,"scalar_count"),measurement(rs,"utf16_units")};require(!rs.next(),PROVENANCE_UNAVAILABLE);return result;},arguments.toArray());
   budget.capture(128,128,128,2);require(sizes[0]==rows.size(),PROVENANCE_UNAVAILABLE);
@@ -250,21 +268,10 @@ final class MinutesGraphDiscovery {
   // MySQL under the same complete-union locks instead of acquiring another Java copy.
   // Binary equality preserves case, Unicode and trailing spaces; typed dates/numbers
   // preserve their original value semantics. Explicit source/task renewal comparisons still read raw rows.
-  if(compareOnly&&rows.stream().allMatch(row->row.keySet().equals(new HashSet<>(definition.columns())))){
+  if(canCompareCells){
    for(int offset=0;offset<rows.size();offset+=8){
     budget.check();var page=rows.subList(offset,Math.min(rows.size(),offset+8));var matches=new ArrayList<String>();var values=new ArrayList<Object>(arguments.subList(0,arguments.size()-1));
-    for(var row:page){require(row.keySet().equals(new HashSet<>(definition.columns())),PROVENANCE_UNAVAILABLE);var cells=new ArrayList<String>();
-     // Ordinary key equality permits an index range. The comparisons below
-     // still check all key fields byte for byte, plus every remaining column.
-     for(String key:definition.keys()){cells.add(key+"=?");values.add(row.get(key));}
-     for(String column:definition.columns()){
-      Object value=row.get(column);if(value==null){cells.add(column+" IS NULL");continue;}
-      if(timestampColumn(table,column)){cells.add(column+" <=> CAST(? AS DATETIME(6))");values.add(value.toString().replace('T',' '));}
-      else if(value instanceof Number){cells.add(column+" <=> ?");values.add(value);}
-      else {cells.add("CAST("+column+" AS BINARY) <=> CAST(? AS BINARY)");values.add(value.toString());}
-     }
-     matches.add("("+String.join(" AND ",cells)+")");
-    }
+    matches.addAll(exactRowPredicates(table,definition,page,values));
     // Membership count above rejects added rows; exact complete-key tuples here reject
     // removed/replaced rows and any changed cell, including equal-collation text.
     budget.admitCapture(64,64,64,2);budget.row(1);values.add(page.size()+1);
@@ -296,6 +303,23 @@ final class MinutesGraphDiscovery {
   return new Comparison(List.copyOf(rows),List.copyOf(actual));
  }
 
+ private static List<String> exactRowPredicates(String table,Definition definition,List<Map<String,Object>> rows,List<Object> values){
+  var matches=new ArrayList<String>();
+  for(var row:rows){
+   var cells=new ArrayList<String>();
+   // Preserve ordinary indexed key lookups and byte-exact checks of every key and value.
+   for(String key:definition.keys()){cells.add(key+"=?");values.add(row.get(key));}
+   for(String column:definition.columns()){
+    Object value=row.get(column);
+    if(value==null){cells.add(column+" IS NULL");continue;}
+    if(timestampColumn(table,column)){cells.add(column+" <=> CAST(? AS DATETIME(6))");values.add(value.toString().replace('T',' '));}
+    else if(value instanceof Number){cells.add(column+" <=> ?");values.add(value);}
+    else {cells.add("CAST("+column+" AS BINARY) <=> CAST(? AS BINARY)");values.add(value.toString());}
+   }
+   matches.add("("+String.join(" AND ",cells)+")");
+  }
+  return matches;
+ }
  static boolean timestampColumn(String table,String column){
   var source=MinutesSourceRows.SHAPES.get(table);if(source!=null)return source.timestamps().contains(column);
   for(Table value:Table.values())if(value.sqlName().equals(table))return value.columns().stream().anyMatch(c->c.name().equals(column)&&c.kind()==CellKind.TIMESTAMP);

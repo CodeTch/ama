@@ -37,6 +37,14 @@ public final class JdbcWebMeetingProjectionReader {
   if(filter.topic()!=null&&!scope.equals("owned"))throw new IllegalArgumentException("Personal topics require owned scope");
   var budget=new WorkspaceReadBudget(limits,()->Thread.currentThread().isInterrupted());String cursorScope="meeting-list-v3/"+scope+"/"+filter.cursorKey();
   budget.reserve(2,4,4096,2048,2048,4,true);String decoded=cursor==null?null:cursors.decode(actor.enterpriseId(),cursorScope,cursor);var after=decoded==null?null:MeetingListScan.Position.parse(decoded);
+  // A signed proof may expire between preparation and the final locked projection.
+  // Reacquire once under the same request ledger. Never return an expired or partial page.
+  try{return observedPage(actor,scope,limit,filter,budget,cursorScope,after);}
+  catch(MeetingAccess.AuthorityUnavailableException expired){
+   budget.check();return observedPage(actor,scope,limit,filter,budget,cursorScope,after);
+  }
+ }
+ private MeetingPage observedPage(Actor actor,String scope,int limit,MeetingListFilter filter,WorkspaceReadBudget budget,String cursorScope,MeetingListScan.Position after){
   try {
    record Preliminary(List<MeetingQueryRelation.Special> specials,List<String> refresh){}
    var preliminary=tx.required(()->{

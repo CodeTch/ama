@@ -30,6 +30,53 @@ public final class JdbcMinutesFactsReader {
  }
  /** Authorized structural reuse selection; it never changes the current saved graph or adopts a candidate. */
  public Snapshot readReuseSources(Actor actor,String meeting,String candidate,String exclusion){uuid(candidate);uuid(exclusion);return readOwner(actor,meeting,"REUSE_SOURCES",candidate+"/"+exclusion);}
+ private record DisplayKey(Actor actor,String meeting){}
+ private record DisplayProof(Snapshot snapshot,long expires){}
+ private final Map<DisplayKey,DisplayProof> recentDisplay=new LinkedHashMap<>(16,0.75f,true);
+ /** Only the deterministic preparation of an identical graph may be reused.
+  * Reopen the pinned archives and reacquire READ, file/source eligibility, selector membership
+  * and every full cell before transferring anything, including on a cache hit. */
+ Snapshot readDisplay(Actor actor,String meeting,Runnable sealReaders){
+  independent();uuid(meeting);
+  var key=new DisplayKey(actor,meeting);
+  DisplayProof proof;
+  synchronized(recentDisplay){
+   long now=System.nanoTime();recentDisplay.values().removeIf(p->now-p.expires()>=0);
+   proof=recentDisplay.get(key);
+  }
+  var budget=limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->false);
+  if(proof!=null){
+   var prior=proof.snapshot();var plan=prior.graph.discovery();
+   var jdbc=new org.springframework.jdbc.core.JdbcTemplate(authority.dataSource());jdbc.setQueryTimeout(2);
+   record DisplayRoot(long revision,boolean localOnly){}
+   var root=jdbc.query("SELECT m.revision,m.ever_published=0 AND NOT EXISTS(SELECT 1 FROM material_reference mr WHERE mr.meeting_id=m.id AND mr.kind='KNOWLEDGE') FROM meeting m WHERE m.id=?",
+    r->r.next()?new DisplayRoot(r.getLong(1),r.getBoolean(2)):null,meeting);
+   if(root!=null&&Objects.equals(root.revision(),prior.observation().get("revision"))){
+    try{
+     var config=archives.get();require(indexSha.equals(config.indexSha256()),PROFILE_UNAVAILABLE);
+     for(var raw:config.loadClosure(prior.roots,authority.readBudget(),0,()->false)){
+      var bytes=raw.bytes();budget.capture(bytes.length,bytes.length,bytes.length,2);
+     }
+     sealReaders.run();
+     return captureRead(actor,meeting,plan,true,budget,root.localOnly(),gate->{
+      var scope=authority.minutesReadScope(gate,actor,meeting);
+      var checked=MinutesGraphCapture.compareCaptured(authority,scope,gate,actor,plan,budget,prior.graph,true);
+      require(checked.equals(prior.graph),PROVENANCE_UNAVAILABLE);
+      return new Snapshot(checked,prior.facts,prior.roots,prior.generationManifests,budget);
+     });
+    }catch(Failure changed){if(changed.code()!=PROVENANCE_UNAVAILABLE)throw changed;}
+   }
+   synchronized(recentDisplay){recentDisplay.remove(key,proof);}
+  }
+  var verified=read(actor,meeting,"SAVED_EFFECTIVE",null,true,budget,sealReaders);
+  if(verified.observation().get("minutes_revision_id")!=null&&budget.usage()[3]<=8*1024*1024L){
+   synchronized(recentDisplay){
+    recentDisplay.put(key,new DisplayProof(verified,System.nanoTime()+java.util.concurrent.TimeUnit.SECONDS.toNanos(90)));
+    while(recentDisplay.size()>8)recentDisplay.remove(recentDisplay.keySet().iterator().next());
+   }
+  }
+  return verified;
+ }
  public Snapshot readCurrent(Actor actor,String meeting){return read(actor,meeting,"SAVED_EFFECTIVE",null,true);}
  Snapshot readEffectiveFinal(Actor actor,String meeting,String selected){return read(actor,meeting,"FINAL",selected,true);}
  static void requireEffectiveFinal(Map<String,Object> root,Map<String,Object> frozen){
@@ -40,36 +87,53 @@ public final class JdbcMinutesFactsReader {
  Snapshot readOwner(Actor actor,String meeting,String selector,String selected,TranscriptAcquisitionBudget.Ledger budget){return read(actor,meeting,selector,selected,false,budget);}
  private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member){return read(actor,meeting,selector,selected,member,limits.ledger(authority.readBudget(),authority.canonicalBudget(),()->false));}
  private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget){
+  return read(actor,meeting,selector,selected,member,budget,()->{});
+ }
+ private Snapshot read(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget,Runnable sealReaders){
   independent();uuid(meeting);Objects.requireNonNull(budget);
   var jdbc=new org.springframework.jdbc.core.JdbcTemplate(authority.dataSource());jdbc.setQueryTimeout(2);
   var retry=selector.equals("STORED_INPUT_READ")?new StoredReadAttempt():null;
   java.util.function.Supplier<Object> version=()->MinutesReadVersion.capture(jdbc,meeting,selector,selected,(rows,bytes)->{budget.row(rows);budget.capture(bytes,bytes,bytes,2);});
   return TranscriptReadRetry.read(()->{var current=version.get();if(retry!=null)retry.version=current;return current;},
-      ()->readOnce(actor,meeting,selector,selected,member,budget,retry,version));
+      ()->readOnce(actor,meeting,selector,selected,member,budget,retry,version,sealReaders));
  }
  private static final class StoredReadAttempt {Object version;MinutesGraphCapture.Graph previous;}
- private Snapshot readOnce(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget,StoredReadAttempt retry,java.util.function.Supplier<Object> version){
+ private Snapshot readOnce(Actor actor,String meeting,String selector,String selected,boolean member,TranscriptAcquisitionBudget.Ledger budget,StoredReadAttempt retry,java.util.function.Supplier<Object> version,Runnable sealReaders){
   independent();uuid(meeting);require(Set.of("INITIAL_SETTINGS","CURRENT_GENERATION","STORED_INPUT","STORED_INPUT_READ","CANDIDATE","SAVED_EFFECTIVE","OWNER_REVISION","WORKSPACE_READ","REVIEW_BODY","REVIEW_ELEMENT","FINAL","REUSE_SOURCES","OWNER_SET","REVIEW_ID","READINESS","SETTINGS_READ").contains(selector),INVALID_ARGUMENT);
   Objects.requireNonNull(budget);authority.savedAccess().prepareExternalRead(actor,meeting);
+  long readStart=System.nanoTime();
   MinutesGraphDiscovery.Discovery discovered=null;RuntimeException discoveryError=null;
-  try{discovered=MinutesGraphDiscovery.discover(authority.dataSource(),meeting,selector,selected,limits,authority.readBudget());if(selector.equals("READINESS"))discovered=MinutesGraphDiscovery.withPending(authority.dataSource(),discovered,limits.tasks(),budget);charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}
+  try{discovered=authority.transactionRunner().required(()->MinutesGraphDiscovery.discover(authority.dataSource(),meeting,selector,selected,limits,authority.readBudget()));if(selector.equals("READINESS"))discovered=MinutesGraphDiscovery.withPending(authority.dataSource(),discovered,limits.tasks(),budget);charge(discovered,budget);}catch(RuntimeException failure){cancellation(failure);discoveryError=failure;}
+  long discoveredAt=System.nanoTime();
   final var plan=discovered;final var failedDiscovery=discoveryError;
   var captured=captureRead(actor,meeting,plan,member,budget,gate->{if(failedDiscovery!=null)throw failedDiscovery;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);if(retry!=null){
    require(Objects.equals(retry.version,version.get()),PROVENANCE_UNAVAILABLE);
    if(retry.previous!=null)return MinutesGraphCapture.reacquireStoredRead(authority,scope,gate,actor,plan,budget,retry.previous);
   }
   var graph=member&&!selector.equals("FINAL")||selector.equals("READINESS")?MinutesGraphCapture.captureCurrent(authority,scope,gate,actor,plan,budget):MinutesGraphCapture.capture(authority,scope,gate,actor,plan,budget);if(member&&selector.equals("FINAL"))requireEffectiveFinal(plan.root(),JdbcMinutesSavedQueries.project(one(graph,Table.FINAL_CONFIRMATION,selected)));return graph;});
+  long capturedAt=System.nanoTime();
   if(retry!=null)retry.previous=captured;
   Snapshot prepared=null;RuntimeException preparationError=null;
   try{prepared=prepare(captured,budget);}catch(RuntimeException failure){cancellation(failure);preparationError=failure;}
   final var result=prepared;final var failed=preparationError;
-  return captureRead(actor,meeting,plan,member,budget,gate->{if(failed!=null)throw failed;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);var fresh=MinutesGraphCapture.compareCaptured(authority,scope,gate,actor,plan,budget,captured,member&&!selector.equals("FINAL")||selector.equals("READINESS"));if(member&&selector.equals("FINAL"))requireEffectiveFinal(fresh.discovery().root(),JdbcMinutesSavedQueries.project(one(fresh,Table.FINAL_CONFIRMATION,selected)));require(captured.equals(fresh),PROVENANCE_UNAVAILABLE);return result;});
+  long preparedAt=System.nanoTime();
+  sealReaders.run();
+  var checked=captureRead(actor,meeting,plan,member,budget,gate->{if(failed!=null)throw failed;var scope=member?authority.minutesReadScope(gate,actor,meeting):authority.minutesScope(gate,actor,meeting);var fresh=MinutesGraphCapture.compareCaptured(authority,scope,gate,actor,plan,budget,captured,member&&!selector.equals("FINAL")||selector.equals("READINESS"));if(member&&selector.equals("FINAL"))requireEffectiveFinal(fresh.discovery().root(),JdbcMinutesSavedQueries.project(one(fresh,Table.FINAL_CONFIRMATION,selected)));require(captured.equals(fresh),PROVENANCE_UNAVAILABLE);return result;});
+  long completedAt=System.nanoTime();
+  if(completedAt-readStart>250_000_000L)System.getLogger(getClass().getName()).log(System.Logger.Level.INFO,
+    "Minutes read {0} ms: discovery={1}, capture={2}, preparation={3}, verification={4}",selector,(discoveredAt-readStart)/1000000,(capturedAt-discoveredAt)/1000000,(preparedAt-capturedAt)/1000000,(completedAt-preparedAt)/1000000);
+  return checked;
  }
  /** A proof can expire while waiting for another reader's root lock. Retry only before
   * content acquisition, after rollback and a new external proof, using the same ledger. */
  private <T>T captureRead(Actor actor,String meeting,MinutesGraphDiscovery.Discovery plan,boolean member,TranscriptAcquisitionBudget.Ledger budget,java.util.function.Function<ama.storage.FileRegistry.LockedMeeting,T> capture){
+  return captureRead(actor,meeting,plan,member,budget,false,capture);
+ }
+ private <T>T captureRead(Actor actor,String meeting,MinutesGraphDiscovery.Discovery plan,boolean member,TranscriptAcquisitionBudget.Ledger budget,boolean localOnly,java.util.function.Function<ama.storage.FileRegistry.LockedMeeting,T> capture){
   for(int attempt=0;attempt<3;attempt++){
-   budget.check();authority.savedAccess().prepareExternalRead(actor,meeting);boolean[] admitted={false};
+   // The hint skips only external *preparation*. The actual locked READ still checks all
+   // current dependencies. A newly introduced dependency can require a fresh preparation.
+   budget.check();if(!localOnly||attempt>0)authority.savedAccess().prepareExternalRead(actor,meeting);boolean[] admitted={false};
    try{return authority.transactionRunner().required(()->{var gate=lockGraph(authority,actor,meeting,plan,member?MeetingAccess.Action.READ:MeetingAccess.Action.EDIT);admitted[0]=true;return capture.apply(gate);});}
    catch(MeetingAccess.AuthorityUnavailableException unavailable){if(admitted[0]||attempt==2)throw unavailable;}
   }

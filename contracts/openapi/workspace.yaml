@@ -253,6 +253,10 @@ tasks:
       - name: limit
         in: query
         schema: {type: integer, minimum: 1, maximum: 50, default: 20}
+      - name: view
+        in: query
+        description: With kind MINUTES_GENERATE_V1, current returns one active task or the newest terminal task. Cannot be combined with cursor or limit.
+        schema: {type: string, enum: [current]}
       - name: cursor
         in: query
         schema: {type: string, minLength: 1, maxLength: 1536}

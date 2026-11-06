@@ -6,7 +6,7 @@ import type {Source} from '../../shared/api/minutes-inspection';
 import type {MinutesSourceLabel} from './useMinutesSourceLabels';
 import {useMinutesSourceMedia} from './useMinutesSourceMedia';
 const props=defineProps<{meetingId:string;source:Source;active:boolean;label?:MinutesSourceLabel}>(),emit=defineEmits<{denied:[cause:unknown]}>(),app=useApplication();
-const state=useMinutesSourceMedia({source:(...args)=>app.transcripts.source(...args),materials:(...args)=>app.materials.list(...args)},()=>app.session.current.value?.actor.enterpriseId??null,()=>props.meetingId,()=>props.active,()=>props.source,cause=>emit('denied',cause));
+const state=useMinutesSourceMedia({source:(...args)=>app.transcripts.source(...args),playback:(...args)=>app.transcripts.playback(...args),materials:(...args)=>app.materials.list(...args)},()=>app.session.current.value?.actor.enterpriseId??null,()=>props.meetingId,()=>props.active,()=>props.source,cause=>emit('denied',cause));
 const element=ref<HTMLMediaElement>(),playing=ref(false),ready=ref(false),playError=ref('');
 const video=computed(()=>state.media.type.value.startsWith('video/'));
 function clock(ms:number){const seconds=Math.floor(ms/1000);return String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0');}

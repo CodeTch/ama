@@ -16,6 +16,20 @@ test('sensitive full replacement preserves saved-only tuples/reasons until expli
  h.s.chosen.value=h.s.chosen.value.filter((key:string)=>key!==h.s.choices.value.find((x:any)=>x.locatorId===A).key);assert.deepEqual(h.s.prepare().items,[{locatorId:B,category:'POLITICAL_SENSITIVE',reason:'keep B reason'}]);h.s.chosen.value=[];assert.deepEqual(h.s.prepare().items,[]);
  }finally{await h.close();}
 });
+test('projected exclusions defer settings until edit and preserve existing reasons when changing one item',async()=>{
+ let h:any,reads=0;const submitted:any[]=[];
+ const projected={...current(),presentation:{selectedExclusions:[{category:'INTERNAL_BUSINESS_DATA',locatorId:B}]}};
+ h=await harness('/src/features/minutes/MinutesSensitive.vue',{current:projected,saveSelection:async(fields:any)=>{
+  submitted.push(fields);h.setSettings(settings(fields.items.map((i:any)=>member(i.locatorId,i.category,i.reason))));return exclusion;
+ }});
+ try{
+  assert.equal(h.s.settings.value,null);assert.equal(h.s.chosen.value.length,1);
+  h.setSettings(settings([member(B)]));const previous=h.app.minutesInspection.settings;
+  h.app.minutesInspection.settings=async(...args:any[])=>{reads++;return previous(...args);};
+  await h.s.changeSelection(h.s.choices.value.find((i:any)=>i.locatorId===A).key,true);
+  assert(reads>0);assert.equal(submitted.length,1);assert.equal(submitted[0].items.find((i:any)=>i.locatorId===B).reason,'saved reason');
+ }finally{await h.close();}
+});
 test('sensitive draft survives root refresh, detects exclusion conflict, and discards only explicitly',async()=>{
  const h=await harness('/src/features/minutes/MinutesSensitive.vue');try{h.s.toggleAll(true);assert.equal(h.s.dirty.value,true);await h.refresh();assert.equal(h.s.chosen.value.length,2);assert.equal(h.s.dirty.value,true);
  h.setSettings(settings([member(B)],candidateId));await h.refresh();assert.equal(h.s.chosen.value.length,2);assert.ok(h.s.conflict.value);assert.equal(h.s.prepare(),null);h.s.discard();assert.equal(h.s.dirty.value,false);assert.equal(h.s.chosen.value.length,1);assert.equal(h.s.prepare().sourceExclusionRevisionId,candidateId);

@@ -57,7 +57,8 @@ final class SessionSecurityFilter extends OncePerRequestFilter {
         }
         ResolvedSession session;
         boolean readProbe=(request.getMethod().equals("GET")||request.getMethod().equals("HEAD"))
-                &&uri.matches("/api/v1/meetings/[^/]+/(workspace/access|transcript/(revisions/[^/]+/)?sources/[^/]+)");
+                &&(uri.equals("/api/v1/session")||uri.matches("/api/v1/meetings/[0-9a-fA-F-]{36}")
+                ||uri.matches("/api/v1/meetings/[^/]+/(minutes|workspace|workspace/access|transcript/(revisions/[^/]+/)?sources/[^/]+)"));
         try { session = (readProbe?sessions.resolveForRead(token):sessions.resolve(token)).orElse(null); }
         catch (DataAccessException unavailable) { BusinessErrors.write(response, 503, "IDENTITY_UNAVAILABLE", "Identity service unavailable"); return; }
         if (session == null) { BusinessErrors.write(response, 401, "UNAUTHENTICATED", "Authentication required"); return; }

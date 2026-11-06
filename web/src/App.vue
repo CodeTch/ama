@@ -13,7 +13,7 @@ import {ApiError} from './shared/api/client';
 import Icon from './shared/Icon.vue';
 import MeetingDateRange from './features/meetings/MeetingDateRange.vue';
 import {fitSelectedTags,positionSelectedPopover} from './features/meetings/selected-filter-tags';
-const {session,list,create,createDiscovery,options:useApplicationOptions,setMeetingScope,topicCommands,pendingImports}=useApplication(),router=useRouter(),createOpen=ref(false),importAfterCreate=ref(false);
+const {session,list,create,createDiscovery,options:useApplicationOptions,setMeetingScope,topicCommands,loadTopics,pendingImports}=useApplication(),router=useRouter(),createOpen=ref(false),importAfterCreate=ref(false);
 const sessionChecking=ref(!session.current.value);
 const resolvingSession=computed(()=>!session.current.value&&(sessionChecking.value||session.status.value==='LOADING'));
 const importMeeting=ref<string|null>(null),importOpen=ref(false),importPanel=ref<InstanceType<typeof UploadImportPanel>>();
@@ -47,6 +47,7 @@ const page=list.page,loading=list.loading;
 const homeLoading=computed(()=>sessionChecking.value||session.status.value==='LOADING'||!!session.current.value&&loading.value&&!page.value);
 const keyword=ref(''),stageFilters=ref<string[]>([]),categoryFilters=ref<string[]>([]),fromDate=ref(''),toDate=ref(''),groupView=ref(false),topicFilter=ref('');
 const selectedMeetingIds=ref<string[]>([]);watch(()=>[session.current.value?.actor.enterpriseId,scope.value,page.value],()=>{selectedMeetingIds.value=[];});
+watch(()=>session.current.value?.actor.enterpriseId,who=>{if(who)void loadTopics();},{immediate:true});
 const topicWorkspace=ref<InstanceType<typeof TopicWorkspace>>(),topicMemberships=topicCommands.memberships,topicMembershipLoading=ref(false),topicMembershipError=ref<string|null>(null);let topicTurn=0,topicRequest:AbortController|null=null;
 async function readTopicMemberships(){
  const turn=++topicTurn,who=session.current.value?.actor.enterpriseId??null,ids=page.value?.items.map(item=>item.id)??[];

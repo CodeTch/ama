@@ -3,22 +3,22 @@ import GovernanceNotice from './features/minutes/GovernanceNotice.vue';
 import { createApp, h, Fragment } from 'vue';
 import { createRouter, createWebHistory, RouterLink } from 'vue-router';
 import WorkspaceShell from './shared/WorkspaceShell.vue';
-import App from './App.vue';
-import MeetingDetail from './features/meetings/MeetingDetail.vue';
+const App=()=>import('./App.vue');
+const MeetingDetail=()=>import('./features/meetings/MeetingDetail.vue');
 import {createTabJournalContext} from './shared/composables/tab-journal';
 import {applicationKey,createApplication} from './application';
 import './shared/styles/tokens.css';
 import './shared/styles/prototype.css';
 import './shared/styles/parity.css';
-import MeetingLibraryPage from './features/meetings/MeetingLibraryPage.vue';
-import FeedbackPage from './features/meetings/FeedbackPage.vue';
-import OperationsPage from './features/governance/OperationsPage.vue';
-import GovernanceVoices from './features/governance/GovernanceVoices.vue';
-import RecordingPage from './features/meetings/RecordingPage.vue';
+const MeetingLibraryPage=()=>import('./features/meetings/MeetingLibraryPage.vue');
+const FeedbackPage=()=>import('./features/meetings/FeedbackPage.vue');
+const OperationsPage=()=>import('./features/governance/OperationsPage.vue');
+const GovernanceVoices=()=>import('./features/governance/GovernanceVoices.vue');
+const RecordingPage=()=>import('./features/meetings/RecordingPage.vue');
 import RecordingIndicator from './features/recording/RecordingIndicator.vue';
-import LoginPage from './features/auth/LoginPage.vue';
-import TranscriptCorrectionDemoPage from './features/transcript/TranscriptCorrectionDemoPage.vue';
-import KnowledgePublishDemoPage from './features/minutes/KnowledgePublishDemoPage.vue';
+const LoginPage=()=>import('./features/auth/LoginPage.vue');
+const TranscriptCorrectionDemoPage=()=>import('./features/transcript/TranscriptCorrectionDemoPage.vue');
+const KnowledgePublishDemoPage=()=>import('./features/minutes/KnowledgePublishDemoPage.vue');
 import {DEMO_MEETING_ID} from './features/meetings/meeting-prototype-demo';
 import {syncNavigationScope} from './shared/navigation-scope';
 const router=createRouter({history:createWebHistory(),routes:[
@@ -42,13 +42,18 @@ const router=createRouter({history:createWebHistory(),routes:[
 const navigation=performance.getEntriesByType('navigation')[0];
 const journalContext=createTabJournalContext(()=>window.sessionStorage,navigation instanceof PerformanceNavigationTiming?navigation.type:'navigate');
 const application=createApplication(window.location.origin,journalContext);
-router.beforeEach(async to=>{
+router.beforeEach(async (to,from)=>{
+ application.clearMinutesEntry();
+ const directMinutes=!from.matched.length&&to.name==='meeting-detail'&&to.params.stage==='minutes'&&typeof to.params.id==='string'&&to.params.id!==DEMO_MEETING_ID;
+ if(directMinutes)void MeetingDetail().catch(()=>{}); // Static route code can load during the session check.
  // Keep the shell, deferred recording page, and unknown-route boundary
  // renderable while anonymous. They contain no protected data and can show
  // the login/disabled state without creating a session or touching a device.
  // Protected API-backed pages still refresh the session before entering.
- if(to.path==='/login'||to.path==='/meetings'||to.name==='recording'||to.path==='/transcript-correction-demo'||to.path==='/knowledge-publish-demo'||to.name==='meeting-detail'&&to.params.id===DEMO_MEETING_ID||to.matched.some(record=>record.path==='/:pathMatch(.*)*')||application.session.current.value)return true;
- try{await application.session.refresh();return true;}catch{return {path:'/login'};}
+ if(to.path==='/login'||to.path==='/meetings'||to.name==='recording'||to.path==='/transcript-correction-demo'||to.path==='/knowledge-publish-demo'||to.name==='meeting-detail'&&to.params.id===DEMO_MEETING_ID||to.matched.some(record=>record.path==='/:pathMatch(.*)*') )return true;
+ try{if(!application.session.current.value)await application.session.refresh();}catch{return {path:'/login'};}
+ if(directMinutes)application.preloadMinutesEntry(String(to.params.id));
+ return true;
 });
 router.afterEach((to,_from,failure)=>{if(to.name==='meeting-detail'&&to.params.id===DEMO_MEETING_ID)return;syncNavigationScope(to,failure,application.setMeetingScope);});
 createApp({render:()=>h(Fragment,null,[h(WorkspaceShell),h(RecordingIndicator),h(GovernanceNotice),h(DeletionNotice)])}).provide(applicationKey,application).use(router).mount('#app');

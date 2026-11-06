@@ -319,7 +319,7 @@ public final class JdbcTranscriptAuthority {
  /** A prepared intent is issuer-owned data; only its actual held gate can consume the write. */
  private final class IntentPlan {
   final Actor actor;final String meeting;final long expected;final TranscriptAcquisitionBudget.Ledger budget;final Map<String,List<Map<String,Object>>> controls;final PublicationWriteGuard.Prepared publication;
-  IntentPlan(Actor actor,String meeting,long expected){this.actor=actor;this.meeting=meeting;this.expected=expected;budget=publicationBudget();controls=MinutesIntentControl.read(j,meeting,false,budget);publication=publicationWrites.prepare(actor,meeting,budget);}
+  IntentPlan(Actor actor,String meeting,long expected,TranscriptAcquisitionBudget.Ledger budget){this.actor=actor;this.meeting=meeting;this.expected=expected;this.budget=budget;controls=MinutesIntentControl.read(j,meeting,false,budget);publication=publicationWrites.prepare(actor,meeting,budget);}
   JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
  }
  private enum EditorPurpose { EDIT_INTENT }
@@ -328,7 +328,8 @@ public final class JdbcTranscriptAuthority {
   IntentScope(FileRegistry.LockedMeeting gate,IntentPlan plan,Long before,PublicationWriteGuard.Held publication){this.gate=gate;this.plan=plan;this.before=before;this.publication=publication;}
   JdbcTranscriptAuthority issuer(){return JdbcTranscriptAuthority.this;}
  }
- Object prepareMinutesIntent(Actor actor,String meeting,long expected){independent();return new IntentPlan(actor,meeting,expected);}
+ Object prepareMinutesIntent(Actor actor,String meeting,long expected){return prepareMinutesIntent(actor,meeting,expected,publicationBudget());}
+ Object prepareMinutesIntent(Actor actor,String meeting,long expected,TranscriptAcquisitionBudget.Ledger budget){independent();return new IntentPlan(actor,meeting,expected,budget);}
  Object captureMinutesIntent(Object prepared,FileRegistry.LockedMeeting gate,Actor actor,String meeting,long expected){
   if(!(prepared instanceof JdbcTranscriptAuthority.IntentPlan plan)||plan.issuer()!=this||!plan.actor.equals(actor)||!plan.meeting.equals(meeting)||plan.expected!=expected)throw new IllegalArgumentException("Foreign intent plan");
   access.requirePrepared(registry.access(gate),actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);
