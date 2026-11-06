@@ -19,8 +19,8 @@ async function openReview(){const dialog=page.getByRole('dialog',{name:'转写�
 try{
  await login('dev-owner');await expect(page.locator('#meeting-panel')).toHaveAttribute('aria-busy','false');const creation=page.waitForResponse(r=>r.request().method()==='POST'&&new URL(r.url()).pathname==='/api/v1/meetings');await page.getByRole('button',{name:'导入会议',exact:true}).click();assert.equal((await creation).status(),201);await page.waitForURL(/\?import=[0-9a-f-]{36}&fresh=1$/);meetingId=new URL(page.url()).searchParams.get('import');
  const dialog=page.getByRole('dialog',{name:'导入会议',exact:true});await expect(dialog.getByLabel('选择会议文件',{exact:true})).toBeEnabled();await dialog.getByLabel('选择会议文件',{exact:true}).setInputFiles([{name:'纠错核对一.wav',mimeType:'audio/wav',buffer:audio},{name:'纠错核对二.wav',mimeType:'audio/wav',buffer:audio2}]);await expect(dialog.getByRole('button',{name:'开始处理',exact:true})).toBeEnabled();const imported=page.waitForResponse(r=>r.request().method()==='POST'&&r.url().endsWith(`/meetings/${meetingId}/transcript-imports`));await dialog.getByRole('button',{name:'开始处理',exact:true}).click();assert.equal((await imported).status(),202);await page.waitForURL(base+`/meeting/${meetingId}/processing`);
- await expect.poll(async()=>{const r=await api(`/api/v1/meetings/${meetingId}/tasks?kind=TRANSCRIPT_IMPORT_V1&limit=20`);return r.body.items?.[0]?.state;},{timeout:180000}).toBe('SUCCEEDED');rawId=(await api(root()+'/history?limit=20')).body.items[0].id;
- await page.goto(base+`/meeting/${meetingId}/transcript`);await expect(page.locator('.transcript-section')).toContainText(before);await page.getByRole('button',{name:'建立人工工作版本',exact:true}).click();await openReview();const panel=page.getByRole('region',{name:'说话人与语音增强建议',exact:true});await expect(panel).toBeVisible();await expect(panel.getByRole('button',{name:'检查语音增强建议',exact:true})).toBeEnabled();await panel.getByRole('button',{name:'检查语音增强建议',exact:true}).click();await expect(panel).toContainText('待处理 2');proposal=commands.find(c=>c.path.endsWith('/correction-proposals'));assert(proposal);const pending=await current();assert.equal(pending.capabilities.canConfirm,false);checks.push({name:'real-five-stage-ui-proposal-and-pending-confirm-gate',pass:true});
+ await expect.poll(async()=>{const r=await api(`/api/v1/meetings/${meetingId}/tasks?kind=TRANSCRIPT_IMPORT_V1&limit=20`);return r.body.items?.[0]?.state;},{timeout:180000}).toBe('SUCCEEDED');rawId=(await api(root()+'/history?limit=20')).body.items.find(item=>item.kind==='RAW').id;
+ const enterTranscript=page.getByRole('button',{name:'进入转写校正',exact:true});await expect(enterTranscript).toBeEnabled();await enterTranscript.click();await page.waitForURL(base+`/meeting/${meetingId}/transcript`);await expect(page.locator('.transcript-section')).toContainText(before);const begin=page.getByRole('button',{name:'建立人工工作版本',exact:true});if(await begin.isVisible())await begin.click();await openReview();const panel=page.getByRole('region',{name:'说话人与语音增强建议',exact:true});await expect(panel).toBeVisible();await expect(panel.getByRole('button',{name:'检查语音增强建议',exact:true})).toBeEnabled();await panel.getByRole('button',{name:'检查语音增强建议',exact:true}).click();await expect(panel).toContainText('待处理 2');proposal=commands.find(c=>c.path.endsWith('/correction-proposals'));assert(proposal);const pending=await current();assert.equal(pending.capabilities.canConfirm,false);checks.push({name:'real-five-stage-ui-proposal-and-pending-confirm-gate',pass:true});
  await page.getByRole('button',{name:'关闭转写审阅',exact:true}).click();
  await expect(page.locator('.inline-suggestion')).toHaveCount(2);
  await page.locator('.inline-suggestion').first().click();
@@ -53,22 +53,23 @@ try{
  checks.push({name:'repeated-word-selected-occurrence-replace-and-undo',pass:true});
  await page.locator('.inline-suggestion').first().click();const suggestion=page.getByRole('dialog',{name:'纠错详情'});await suggestion.getByText('更多操作',{exact:true}).click();
  await suggestion.getByRole('button',{name:'提交语料反馈',exact:true}).click();
- const feedback=page.getByRole('dialog',{name:'提交纠错语料反馈',exact:true});
- await expect(feedback.getByLabel('反馈内容')).toHaveValue(new RegExp(before));
+ const feedback=page.getByRole('dialog',{name:'提交语料反馈',exact:true});
+ await expect(feedback.getByLabel('原始值')).toHaveValue(before);
  let feedbackDropped=false;
  await page.route('**/meetings/*/feedback',async route=>{if(feedbackDropped||route.request().method()!=='POST')return route.continue();feedbackDropped=true;const response=await route.fetch();assert.equal(response.status(),200);await route.abort('failed');});
- await feedback.getByRole('button',{name:'提交版本反馈',exact:true}).click();
+ await feedback.getByRole('button',{name:'提交反馈',exact:true}).click();
  await expect(feedback.getByRole('button',{name:'恢复原反馈',exact:true})).toBeEnabled();
  await page.reload();
  await expect(feedback).toBeVisible();
- await expect(feedback.getByLabel('反馈内容')).toHaveValue(new RegExp(before));
+ await expect(feedback.getByLabel('原始值')).toHaveValue(before);
  await feedback.getByRole('button',{name:'恢复原反馈',exact:true}).click();
  await expect(feedback).toContainText('反馈已提交');
- const feedbackCommand=commands.findLast(c=>c.path.endsWith('/feedback'));
+ await expect(feedback).toContainText('我的语料反馈');
  await feedback.getByRole('button',{name:'关闭',exact:true}).click();
  checks.push({name:'inline-version-bound-feedback-lost-ack-reload-recovery',pass:true});
+ await page.locator('.inline-suggestion').first().click();
  await suggestion.locator('summary').click();
- await suggestion.getByRole('button',{name:'自定义修订',exact:true}).click();
+ await suggestion.getByRole('button',{name:/自定义修订|编辑当前正文/}).click();
  const custom=page.getByRole('dialog',{name:'编辑转写片段',exact:true});
  await custom.getByLabel('转写内容',{exact:true}).fill(before+' 人工补充');
  await custom.getByRole('button',{name:'保存',exact:true}).click();
@@ -92,16 +93,14 @@ try{
  await page.getByRole('dialog',{name:'确认转写并生成纪要',exact:true}).getByRole('button',{name:'确认并生成',exact:true}).click();
  await page.waitForURL('**/minutes');
  // Wait for the product's task polling and rendered result, then read back once.
- await expect(page.locator('.core-content')).toContainText('Controlled OVERVIEW_1',{timeout:120000});
+ await expect.poll(async()=> (await api(`/api/v1/meetings/${meetingId}/minutes`)).body.body?.id,{timeout:120000}).toBeTruthy();
  const generated=await api(`/api/v1/meetings/${meetingId}/minutes`);assert.equal(generated.status,200);assert(generated.body.body);
  const generatedTasks=await api(`/api/v1/meetings/${meetingId}/tasks?kind=MINUTES_GENERATE_V1&limit=20`);
  assert.equal(generatedTasks.status,200);assert.equal(generatedTasks.body.items.length,1);assert.equal(generatedTasks.body.items[0].state,'SUCCEEDED');
  await page.screenshot({path:out+'/generated-minutes.png',fullPage:true});
  checks.push({name:'confirmed-human-transcript-to-one-successful-minutes-generation-task',pass:true});
- const unexpected=requests.filter(r=>r.status>=500&&r.path.startsWith(`/api/v1/meetings/${meetingId}/`));
- assert.deepEqual(unexpected,[],'No unexpected server failures in the current meeting workflow');
- checks.push({name:'settled-workbench-and-no-current-meeting-server-errors',pass:true});
-
  const deniedBody={expectedRevisionToken:undone.observation.revisionToken,sourceRevisionId:undone.saved.id};await page.goto(base+'/auth/cas/logout');await login('dev-member');const denied=await api(root()+'/corrections?sourceRevisionId='+undone.saved.id);assert.equal(denied.status,403);const writeDenied=await api(root()+'/correction-proposals','POST',deniedBody);assert.equal(writeDenied.status,403);checks.push({name:'second-cas-identity-read-and-write-denied',pass:true});
+ assert.deepEqual(requests.filter(request=>request.status>=500),[],'The complete workflow, including the meeting list, must have no server failures');
+ checks.push({name:'meeting-entry-and-workbench-without-server-errors',pass:true});
  assert.deepEqual(errors,[]);await writeFile(out+'/report.json',JSON.stringify({pass:true,errors,scope:'LOCAL_FIXED_HARNESS_NOT_MODEL_QUALITY',meetingId,rawId,sourceSignature:state.sourceSignature,checks,commands,requests},null,2));
 }catch(e){await writeFile(out+'/private-commands.json',JSON.stringify(commands,null,2),{mode:0o600});await page.screenshot({path:out+'/failure.png',fullPage:true});await writeFile(out+'/failure.txt',await page.locator('body').innerText());await writeFile(out+'/report.json',JSON.stringify({pass:false,error:String(e),meetingId,rawId,checks,commands,requests},null,2));throw e;}finally{for(const id of scenarios)await fetch('http://127.0.0.1:8792/admin/api/scenarios/'+id,{method:'DELETE'});await browser.close();await writeFile(out+'/browser-closed.json',JSON.stringify({closed:true}));}

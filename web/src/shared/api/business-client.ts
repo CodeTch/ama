@@ -6,6 +6,18 @@ export type Session=components['schemas']['Session'];
 export function createBusinessClient(origin:string,session:()=>Session|null,onUnauthorized:()=>void) {
  const base=new URL(origin);if(!['https:','http:'].includes(base.protocol)||base.username||base.password||base.pathname!=='/'||base.search||base.hash)throw new TypeError('Invalid application origin');
  return {
+  async playback(path:string,sha:string,size:number,signal:AbortSignal):Promise<string|null>{
+   const target=new URL(path,base);
+   if(target.origin!==base.origin||!/^\/api\/v1\/meetings\/[a-f0-9-]{36}\/transcript\/(?:revisions\/[a-f0-9-]{36}\/)?sources\/[a-f0-9-]{36}$/.test(target.pathname)||target.search||target.hash||!/^[a-f0-9]{64}$/.test(sha))throw new TypeError('Expected authorized transcript file');
+   target.searchParams.set('playbackSha256',sha);
+   const who=session()?.actor.enterpriseId;if(!who)throw new DOMException('Source actor unavailable','AbortError');
+   const response=await fetch(target,{method:'HEAD',headers:{Range:'bytes=0-43'},credentials:'same-origin',cache:'no-store',redirect:'error',signal});
+   if(signal.aborted||session()?.actor.enterpriseId!==who)throw new DOMException('Source scope changed','AbortError');
+   if(response.status===422)return null;
+   if(response.status===401)onUnauthorized();
+   if(response.status!==206||response.headers.get('Content-Type')?.split(';')[0]!=='audio/wav'||response.headers.get('ETag')!=='"'+sha+'"'||response.headers.get('Content-Range')!==`bytes 0-43/${size}`||response.headers.get('Content-Length')!=='44')throw Error('原录音分段读取暂不可用，请重试。');
+   return target.href;
+  },
   async bytes(path:string,options:{signal:AbortSignal;size:number;recordingWav?:boolean}):Promise<{bytes:ArrayBuffer;name:string|null}>{
    if(!path.startsWith('/api/v1/')||path.includes('\\')||path.includes('#')||!Number.isSafeInteger(options.size)||options.size<0||options.size>(options.recordingWav===true?230400044:32*1024*1024))throw new TypeError('Bounded product source required');
    const target=new URL(path,base);if(target.origin!==base.origin||!target.pathname.startsWith('/api/v1/'))throw new TypeError('Same-origin product source required');

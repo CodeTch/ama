@@ -454,6 +454,7 @@ public final class JdbcTranscriptAuthority {
  private static CanonicalValue wire(Ref ref){Objects.requireNonNull(ref);return obj("artifactType",ref.artifactType().name(),"version",ref.version(),"sha256",ref.sha256());}
  private enum ReadPhase { DOMAIN, SOURCES_VALIDATED, TASKS_HELD, FINALIZED }
  private final class PreparedRead implements CompleteReadPolicy.ReadPreparation {
+  String revision;
   final Actor actor;final String meeting;final FileRegistry.ReadRequest request;final TranscriptReadGraph graph;
   private ReadScope scope;
   PreparedRead(Actor actor,String meeting,FileRegistry.ReadRequest request,TranscriptReadGraph graph){this.actor=actor;this.meeting=meeting;this.request=request;this.graph=graph;}
@@ -474,8 +475,9 @@ public final class JdbcTranscriptAuthority {
   if(request instanceof FileRegistry.CurrentReadRequest current){
    require(REFERENCE.equals(current.referenceKind()),INPUT_INVALID);file=current.fileId();
    var reader=new BoundedTranscriptMetadata(j,budget);var root=reader.one("meeting",BoundedTranscriptMetadata.ROOT,meeting);
-   if(root.get("transcript_revision_id")==null)throw new ama.contract.FileContracts.NotFound();
-   revision=(String)root.get("transcript_revision_id");Map<String,Object> row;
+   revision=actor.enterpriseId().equals(root.get("owner_id"))?(String)root.get("transcript_revision_id"):ParticipantTranscript.select(j,meeting).revision();
+   if(revision==null)throw new ama.contract.FileContracts.NotFound();
+   Map<String,Object> row;
    try{row=reader.one("transcript_revision",BoundedTranscriptMetadata.REVISION,revision);}
    catch(ama.contract.FileContracts.NotFound dangling){throw fail(PROVENANCE_UNAVAILABLE);}
    if(!"WORKING".equals(row.get("kind")))throw new ama.contract.FileContracts.NotFound();
@@ -486,9 +488,9 @@ public final class JdbcTranscriptAuthority {
   try {
    var graph=TranscriptReadGraph.discover(j,budget,canonical,meeting,revision,input,task,file,
     row->producer(meeting,TranscriptReadGraph.text(row,"id"),TranscriptReadGraph.text(row,"input_fingerprint"),number(row,"base_revision"),number(row,"cancel_epoch"),()->false));
-   if(request instanceof FileRegistry.CurrentReadRequest&&(!Objects.equals(revision,graph.root.get("transcript_revision_id"))))throw fail(PROVENANCE_UNAVAILABLE);
+   if(request instanceof FileRegistry.CurrentReadRequest&&actor.enterpriseId().equals(graph.root.get("owner_id"))&&!Objects.equals(revision,graph.root.get("transcript_revision_id")))throw fail(PROVENANCE_UNAVAILABLE);
    if(request instanceof ProcessingSourceReader.WorkerRequest worker)require(worker.lease().spec().equals(graph.expected),PROVENANCE_UNAVAILABLE);
-   return new PreparedRead(actor,meeting,request,graph);
+   var prepared=new PreparedRead(actor,meeting,request,graph);prepared.revision=revision;return prepared;
   }catch(Failure failure){if(failure.code()==SOURCE_NOT_IN_INPUT&&request instanceof FileRegistry.CurrentReadRequest)throw new ama.contract.FileContracts.NotFound();throw failure;}catch(ama.contract.FileContracts.NotFound absent){throw fail(PROVENANCE_UNAVAILABLE);}
  }
  void authorizeRead(FileRegistry.LockedMeeting gate,String meeting,FileRegistry.ReadRequest request){
@@ -507,6 +509,7 @@ public final class JdbcTranscriptAuthority {
    throw new CompleteReadPolicy.ReadSnapshotChanged();
   }
   if(p.request instanceof ProcessingSourceReader.WorkerRequest){writable(graph.root);require(number(graph.root,"revision")==graph.expected.businessVersion()&&number(graph.root,"cancel_epoch")==graph.expected.cancelEpoch(),PROVENANCE_UNAVAILABLE);}
+  if(p.request instanceof FileRegistry.CurrentReadRequest&&!p.actor.enterpriseId().equals(graph.root.get("owner_id"))&&!Objects.equals(p.revision,ParticipantTranscript.select(j,p.meeting).revision()))throw new CompleteReadPolicy.ReadSnapshotChanged();
   // Acquire the complete parent closure by UUID before any input, even if parent order differs.
   for(String id:graph.revisions.keySet())lockId("transcript_revision",id);
   for(var entry:graph.revisions.entrySet())require(reader.one("transcript_revision",BoundedTranscriptMetadata.REVISION,entry.getKey()).equals(entry.getValue()),PROVENANCE_UNAVAILABLE);

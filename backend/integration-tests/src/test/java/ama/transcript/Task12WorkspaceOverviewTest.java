@@ -6,6 +6,7 @@ class Task12WorkspaceOverviewTest extends Task12WorkspaceTasksTest {
  @Override List<Map<String,Object>> rows(String q,Map<Integer,Object> args){
   if(q.stripLeading().startsWith("SELECT COALESCE("))return List.of(row("suggestion","会议主文件.txt"));
   if(q.contains(" FROM offline_material_processing "))return List.of();
+  if(q.contains(" FROM transcript_confirmation c JOIN transcript_revision r ")||q.contains(" FROM material_enhancement_candidate e JOIN transcript_revision raw "))return List.of();
   if(q.startsWith("SELECT id FROM durable_task WHERE subject_kind"))return taskRows.stream().filter(r->r.get("task_type").equals(args.get(2))).findFirst().map(r->List.of(row("id",r.get("id")))).orElse(List.of());
   if(q.contains(" FORCE INDEX (task_subject_history)")&&taskRows.size()>21)return taskRows.subList(0,21);
   if(q.contains(" FROM meeting ")){var root=new LinkedHashMap<>(super.rows(q,args).getFirst());root.put("info_revision_id",C);root.put("roster_revision_id",member?B:null);for(String key:List.of("transcript_revision_id","transcript_confirmation_id","minutes_revision_id","element_set_id","template_revision_id","exclusion_revision_id","final_confirmation_id"))root.put(key,null);return List.of(root);}

@@ -123,6 +123,9 @@ final class MeetingDeletionRows {
  static final Set<String> KEEP=Set.of("meeting_deletion","meeting_deletion_item","meeting","task_subject","idempotency_record","audit_event");
  static void verifyCoverage(JdbcTemplate j){
   var known=new HashSet<>(KEEP);ORDER.forEach(p->known.add(p.table));
+  // Both children are removed by immutable parent FKs with ON DELETE CASCADE.
+  // Keep numeric purge cursors valid for jobs accepted before these tables existed.
+  known.add("transcript_generation_intent");known.add("transcript_speaker_department");
   var direct=j.queryForList("SELECT c.table_name FROM information_schema.columns c JOIN information_schema.tables t ON t.table_schema=c.table_schema AND t.table_name=c.table_name WHERE c.table_schema=DATABASE() AND t.table_type='BASE TABLE' AND c.column_name='meeting_id'",String.class);
   if(!known.containsAll(direct))throw new IllegalStateException("Unreviewed meeting deletion schema");
   var edges=j.queryForList("SELECT table_name,referenced_table_name FROM information_schema.key_column_usage WHERE table_schema=DATABASE() AND referenced_table_name IS NOT NULL");

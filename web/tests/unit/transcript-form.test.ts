@@ -24,7 +24,7 @@ test('published transcript presents the frozen readback without editing or disab
   assert.match(html,/发布绑定确认转写/);
   assert.match(html,/Frozen published speech/);
   assert.match(html,/00:30/);
-  assert.doesNotMatch(html,/搜索转写|批量替换|全部接受|全部拒绝|编辑转写片段|建立人工工作版本/);
+  assert.match(html,/搜索转写/);assert.doesNotMatch(html,/批量替换|全部接受|全部拒绝|编辑转写片段|建立人工工作版本/);
  }finally{await server.close();}
 });
 

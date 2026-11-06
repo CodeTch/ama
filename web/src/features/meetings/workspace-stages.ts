@@ -12,11 +12,13 @@ export function workspaceStages(value:WorkspaceNavigation|null|undefined,publish
  const candidates=!!details?.candidates?.items.length||!!details?.candidates?.hasMore;
  const generation=details?.tasks?.items.some(task=>task.kind.startsWith('MINUTES_')&&!['SUCCEEDED','FAILED','CANCELLED'].includes(task.state));
  const final=published||!!details?.finalConfirmationId;
+ if(value?.relation==='MEMBER'&&!published)return {available:{processing:false,transcript:true,minutes:true,confirm:false,publish:false,published:false},complete:[transcript,minutes,savedMinutes,final,published]};
  return {available:{processing:true,transcript,minutes,confirm:savedMinutes&&(value?.relation==='MEMBER'||!!details?.tasks&&!!details?.candidates&&!details.tasks.hasMore&&!candidates&&!generation),publish:final,published},complete:[!published&&imported&&!recorded?(!value?.processingMaterialsChanged&&(value?.processingMaterialStage??imported.state)==='SUCCEEDED'):transcript,minutes,savedMinutes,final,published]};
 }
 
 export function resolveMeetingStage(requested:unknown,available:ReturnType<typeof workspaceStages>['available']){
  if(available.published)return 'published';
  if(typeof requested==='string'&&available[requested as keyof typeof available])return requested;
+ if(!available.processing&&available.transcript)return 'transcript';
  return available.minutes?'minutes':available.transcript?'transcript':'processing';
 }

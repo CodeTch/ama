@@ -529,6 +529,9 @@
           "PENDING"
         ]
       },
+      "confirmationGeneration": {
+        "enum": ["NONE", "WAITING", "RETRYING", "SUBMITTED", "SUPERSEDED"]
+      },
       "activeTaskIds": {
         "type": "array",
         "maxItems": 256,

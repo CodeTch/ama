@@ -24,9 +24,10 @@ final class SessionSecurityFilter extends OncePerRequestFilter {
     /** Issued only by the actual filter; a cached Actor/session request attribute is insufficient. */
     private final class ReadIdentity implements java.util.function.Supplier<ama.contract.IdentityContracts.Actor> {
         private final String token, actor;
-        private ReadIdentity(String token,String actor){this.token=token;this.actor=actor;}
+        private final boolean readProbe;
+        private ReadIdentity(String token,String actor,boolean readProbe){this.token=token;this.actor=actor;this.readProbe=readProbe;}
         @Override public ama.contract.IdentityContracts.Actor get(){
-            var fresh=sessions.resolve(token).orElseThrow(ama.access.MeetingAccess.AccessDeniedException::new);
+            var fresh=(readProbe?sessions.resolveForRead(token):sessions.resolve(token)).orElseThrow(ama.access.MeetingAccess.AccessDeniedException::new);
             if(!actor.equals(fresh.actor().enterpriseId())||fresh.actor().status()!=ama.contract.IdentityContracts.Status.ACTIVE||!fresh.expiresAt().isAfter(java.time.Instant.now()))throw new ama.access.MeetingAccess.AccessDeniedException();
             return fresh.actor();
         }
@@ -55,7 +56,9 @@ final class SessionSecurityFilter extends OncePerRequestFilter {
             }
         }
         ResolvedSession session;
-        try { session = sessions.resolve(token).orElse(null); }
+        boolean readProbe=(request.getMethod().equals("GET")||request.getMethod().equals("HEAD"))
+                &&uri.matches("/api/v1/meetings/[^/]+/(workspace/access|transcript/(revisions/[^/]+/)?sources/[^/]+)");
+        try { session = (readProbe?sessions.resolveForRead(token):sessions.resolve(token)).orElse(null); }
         catch (DataAccessException unavailable) { BusinessErrors.write(response, 503, "IDENTITY_UNAVAILABLE", "Identity service unavailable"); return; }
         if (session == null) { BusinessErrors.write(response, 401, "UNAUTHENTICATED", "Authentication required"); return; }
         response.setHeader("Cache-Control", "no-store");
@@ -73,7 +76,7 @@ final class SessionSecurityFilter extends OncePerRequestFilter {
         context.setAuthentication(UsernamePasswordAuthenticationToken.authenticated(session.actor(), null, List.of()));
         SecurityContextHolder.setContext(context);
         request.setAttribute(SESSION, session); request.setAttribute(TOKEN, token);
-        request.setAttribute(READ_IDENTITY,new ReadIdentity(token,session.actor().enterpriseId()));
+        request.setAttribute(READ_IDENTITY,new ReadIdentity(token,session.actor().enterpriseId(),readProbe));
         try { chain.doFilter(request, response); }
         finally { SecurityContextHolder.clearContext(); }
     }

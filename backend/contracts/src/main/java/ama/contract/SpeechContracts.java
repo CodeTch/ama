@@ -15,8 +15,11 @@ public final class SpeechContracts {
     }
 
     /** Offline llm_correct.py item; the current request contains exactly segment 0. */
-    public record TextCorrection(int segment, String original, String replacement, String reason) {
+    public record TextCorrection(int segment, String original, String replacement, String reason,String entityType,Double confidence) {
+        public TextCorrection(int segment,String original,String replacement,String reason){this(segment,original,replacement,reason,null,null);}
         public TextCorrection {
+            if(entityType!=null)boundedText(entityType,64,false);
+            if(confidence!=null&&(!Double.isFinite(confidence)||confidence<0||confidence>1))throw new IllegalArgumentException("Invalid correction confidence");
             if (segment != 0) throw new IllegalArgumentException("Correction segment outside request");
             boundedText(original, 128, false); boundedText(replacement, 128, true); boundedText(reason, 512, false);
             if (original.equals(replacement)) throw new IllegalArgumentException("Correction must change text");

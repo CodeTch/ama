@@ -38,6 +38,9 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     private final class AuthorizationIdentities extends IdentityCapture {
         private AuthorizationIdentities(String actor,Map<String,IdentityStatus> statuses){super(actor,statuses);}
     }
+    private final class ReadIdentity extends IdentityCapture {
+        private ReadIdentity(IdentityStatus identity){super(identity.id(),Map.of(identity.id(),identity));}
+    }
     final class Identities extends IdentityCapture {
         final Map<String,Person> people;
         private Identities(String actor,Map<String,Person> people,Map<String,IdentityStatus> statuses){super(actor,statuses);this.people=Map.copyOf(people);}
@@ -55,11 +58,25 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     public void installExternalPreparation(java.util.function.BiConsumer<Actor,String> preparation){externalPreparation=Objects.requireNonNull(preparation);}
     @Override public void prepareExternalRead(Actor actor,String id){
         if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("External preparation must precede caller transaction");
-        tx.required(()->{requireLocalRead(lock(actor,id));return null;});
+        tx.required(()->{requireLocalForPreparation(actor,id);return null;});
         externalPreparation.accept(actor,id);
     }
     /** Metadata preparation only. This check does not authorize content or skip a later full require. */
     public void requireLocalRead(Locked locked){local(locked,Action.READ);}
+    /** Only protects local metadata used to obtain external proofs. No content or write capability leaves this method. */
+    public void requireLocalForPreparation(Actor actor,String id){
+        requireLocalRead(lockPrepared(lockReadIdentity(actor),id,false).orElseThrow(AccessDeniedException::new));
+    }
+    LockedIdentities lockReadIdentity(Actor actor){
+        Object holder=transaction();
+        if(rootsStarted.containsKey(holder))throw new IllegalStateException("Identity prelock cannot follow a meeting root lock");
+        identitiesStarted.put(holder,true);
+        // Parallel proof reads on different meetings may share the actor lock. Disabling the identity still waits for readers.
+        var identities=j.query("SELECT enterprise_id,status FROM enterprise_identity WHERE enterprise_id=? FOR SHARE",
+                (row,n)->new IdentityStatus(row.getString(1),row.getString(2)),actor.enterpriseId());
+        if(identities.isEmpty()||!"ACTIVE".equals(identities.getFirst().status()))throw new AccessDeniedException();
+        return new ReadIdentity(identities.getFirst());
+    }
     @Override public void require(Actor actor,String id,Action action){
         if(TransactionSynchronizationManager.isActualTransactionActive())throw new IllegalStateException("Use the prelocked access capability inside caller transactions");
         tx.required(()->{require(lock(actor,id),action);return null;});
@@ -202,7 +219,9 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     }
     private Root local(Locked locked,Action action){
         if(!(locked instanceof JdbcMeetingAccess.Held held)||held.issuer()!=this)throw new IllegalArgumentException("Foreign meeting capability");
-        check(held.identities);Objects.requireNonNull(action);var root=root(held.root.id());
+        check(held.identities);Objects.requireNonNull(action);
+        if(held.identities instanceof ReadIdentity&&action!=Action.READ)throw new AccessDeniedException();
+        var root=root(held.root.id());
         if(!"ACTIVE".equals(j.queryForObject("SELECT status FROM enterprise_identity WHERE enterprise_id=?",String.class,held.identities.actor)))throw new AccessDeniedException();
         if(!root.lifecycle().equals("ACTIVE")||!root.governance().equals("ACTIVE"))throw new AccessDeniedException();
         if(root.owner().equals(held.identities.actor))return root;

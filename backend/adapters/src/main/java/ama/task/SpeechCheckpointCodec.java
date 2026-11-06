@@ -23,6 +23,12 @@ public final class SpeechCheckpointCodec {
   if(stage==null||bytes==null||bytes.length<1||bytes.length>MAX_BYTES)throw invalid();
   try{var root=JSON.readTree(bytes);var names=new HashSet<String>();if(root!=null)root.fieldNames().forEachRemaining(names::add);
    if(root==null||!root.isObject()||!names.equals(Set.of("schema","stage","value"))||!root.path("schema").asText().equals("ama.speech-checkpoint.v1")||!root.path("stage").asText().equals(stage.name())||!root.path("value").isObject())throw invalid();
+   // Version-one checkpoints written before entity metadata have the original four required fields.
+   if(stage==SpeechPipeline.Stage.CORRECTION)for(var edit:root.path("value").path("result").path("corrections"))
+    if(edit instanceof com.fasterxml.jackson.databind.node.ObjectNode object){
+     if(!object.has("entityType"))object.putNull("entityType");
+     if(!object.has("confidence"))object.putNull("confidence");
+    }
    return JSON.treeToValue(root.get("value"),type(stage));
   }catch(java.io.IOException|RuntimeException failure){throw invalid();}
  }

@@ -2799,7 +2799,10 @@ export interface paths {
     };
     "/api/v1/meetings/{meetingId}/transcript/sources/{fileId}": {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Pinned source digest for part-verified PCM playback. A 422 response permits a full verified download for older files. */
+                playbackSha256?: string;
+            };
             header?: never;
             path: {
                 meetingId: components["parameters"]["meetingId"];
@@ -2813,13 +2816,17 @@ export interface paths {
         post?: never;
         delete?: never;
         options?: never;
-        head?: never;
+        /** @description Negotiate sealed PCM playback before a native media GET. With playbackSha256 and Range bytes=0-43, validates current access, part manifest and WAV format without transferring any audio. GET verifies each released part. */
+        head: operations["probeTranscriptPlayback"];
         patch?: never;
         trace?: never;
     };
     "/api/v1/meetings/{meetingId}/transcript/revisions/{revisionId}/sources/{fileId}": {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Pinned source digest for part-verified PCM playback. A 422 response permits a full verified download for older files. */
+                playbackSha256?: string;
+            };
             header?: never;
             path: {
                 meetingId: components["parameters"]["meetingId"];
@@ -2834,7 +2841,8 @@ export interface paths {
         post?: never;
         delete?: never;
         options?: never;
-        head?: never;
+        /** @description Negotiate sealed PCM playback before a native media GET. With playbackSha256 and Range bytes=0-43, validates current access, part manifest and WAV format without transferring any audio. GET verifies each released part. */
+        head: operations["probeVersionedTranscriptPlayback"];
         patch?: never;
         trace?: never;
     };
@@ -5935,6 +5943,7 @@ export interface components {
             /** @constant */
             source: "HUMAN";
             segmentIds: string[];
+            department?: string;
         };
         SpeechSpeakers: {
             /** Format: uuid */
@@ -6181,6 +6190,17 @@ export interface components {
                 original: string;
                 replacement: string;
             };
+            punctuationAlternative?: string;
+            modelVersion?: string;
+            reason?: string;
+            materialSnapshotId?: string;
+            canReopen?: boolean;
+            entities?: {
+                original: string;
+                replacement: string;
+                type?: string;
+                confidence?: number;
+            }[];
         };
         SpeechCorrections: {
             /** Format: uuid */
@@ -6257,7 +6277,7 @@ export interface components {
             /** Format: uuid */
             candidateId: string;
             /** @enum {unknown} */
-            decision: "ACCEPT" | "REJECT";
+            decision: "ACCEPT" | "REJECT" | "ACCEPT_PUNCTUATION" | "REOPEN";
             /** @description Additional pending candidates decided atomically with candidateId in one immutable revision. No duplicates, including candidateId. */
             additionalCandidateIds?: string[];
         };
@@ -6522,6 +6542,8 @@ export interface components {
             scope: "FULL";
             /** @enum {string} */
             materials: "EMPTY" | "PINNED" | "PENDING";
+            /** @enum {unknown} */
+            confirmationGeneration?: "NONE" | "WAITING" | "RETRYING" | "SUBMITTED" | "SUPERSEDED";
             activeTaskIds: string[];
             eligible: boolean;
             reasons: string[];
@@ -16069,7 +16091,10 @@ export interface operations {
     };
     readCurrentTranscriptSource: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Pinned source digest for part-verified PCM playback. A 422 response permits a full verified download for older files. */
+                playbackSha256?: string;
+            };
             header?: {
                 Range?: string;
             };
@@ -16091,10 +16116,13 @@ export interface operations {
                     "Content-Disposition"?: string;
                     "Content-Range"?: string;
                     "X-Content-Type-Options"?: "nosniff";
+                    /** @description Quoted file digest when playbackSha256 is selected. */
+                    ETag?: string;
                     [name: string]: unknown;
                 };
                 content: {
                     "application/octet-stream": string;
+                    "audio/wav": string;
                 };
             };
             /** @description Original bytes after complete Task3/B04 protocol and commit. No stored-inspection grant is reusable for bytes. */
@@ -16107,10 +16135,13 @@ export interface operations {
                     "Content-Disposition"?: string;
                     "Content-Range"?: string;
                     "X-Content-Type-Options"?: "nosniff";
+                    /** @description Quoted file digest when playbackSha256 is selected. */
+                    ETag?: string;
                     [name: string]: unknown;
                 };
                 content: {
                     "application/octet-stream": string;
+                    "audio/wav": string;
                 };
             };
             /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
@@ -16215,9 +16246,117 @@ export interface operations {
             };
         };
     };
+    probeTranscriptPlayback: {
+        parameters: {
+            query?: {
+                /** @description Pinned source digest for part-verified PCM playback. A 422 response permits a full verified download for older files. */
+                playbackSha256?: string;
+            };
+            header?: {
+                Range?: string;
+            };
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+                fileId: components["parameters"]["fileId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Original bytes after complete Task3/B04 protocol and commit. No stored-inspection grant is reusable for bytes. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Original bytes after complete Task3/B04 protocol and commit. No stored-inspection grant is reusable for bytes. */
+            206: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    "Content-Length"?: number;
+                    "Accept-Ranges"?: "bytes";
+                    "Content-Disposition"?: string;
+                    "Content-Range"?: string;
+                    "X-Content-Type-Options"?: "nosniff";
+                    /** @description Quoted file digest when playbackSha256 is selected. */
+                    ETag?: string;
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or revoked session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Fresh meeting permission denied. Admin role grants no implicit content access. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact same-meeting selected entity missing after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Stable request transport envelope exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Range unavailable. */
+            416: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unsupported, blank or incomplete segment/mark input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     readTranscriptHistorySource: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Pinned source digest for part-verified PCM playback. A 422 response permits a full verified download for older files. */
+                playbackSha256?: string;
+            };
             header?: {
                 Range?: string;
             };
@@ -16240,10 +16379,13 @@ export interface operations {
                     "Content-Disposition"?: string;
                     "Content-Range"?: string;
                     "X-Content-Type-Options"?: "nosniff";
+                    /** @description Quoted file digest when playbackSha256 is selected. */
+                    ETag?: string;
                     [name: string]: unknown;
                 };
                 content: {
                     "application/octet-stream": string;
+                    "audio/wav": string;
                 };
             };
             /** @description Original bytes after complete Task3/B04 protocol and commit. No stored-inspection grant is reusable for bytes. */
@@ -16256,10 +16398,13 @@ export interface operations {
                     "Content-Disposition"?: string;
                     "Content-Range"?: string;
                     "X-Content-Type-Options"?: "nosniff";
+                    /** @description Quoted file digest when playbackSha256 is selected. */
+                    ETag?: string;
                     [name: string]: unknown;
                 };
                 content: {
                     "application/octet-stream": string;
+                    "audio/wav": string;
                 };
             };
             /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
@@ -16361,6 +16506,112 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["BusinessError"];
                 };
+            };
+        };
+    };
+    probeVersionedTranscriptPlayback: {
+        parameters: {
+            query?: {
+                /** @description Pinned source digest for part-verified PCM playback. A 422 response permits a full verified download for older files. */
+                playbackSha256?: string;
+            };
+            header?: {
+                Range?: string;
+            };
+            path: {
+                meetingId: components["parameters"]["meetingId"];
+                revisionId: components["parameters"]["revisionId"];
+                fileId: components["parameters"]["fileId"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Original bytes after complete Task3/B04 protocol and commit. No stored-inspection grant is reusable for bytes. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Original bytes after complete Task3/B04 protocol and commit. No stored-inspection grant is reusable for bytes. */
+            206: {
+                headers: {
+                    /** @description All success and error paths, including authentication failures. */
+                    "Cache-Control"?: "private, no-store";
+                    "Content-Length"?: number;
+                    "Accept-Ranges"?: "bytes";
+                    "Content-Disposition"?: string;
+                    "Content-Range"?: string;
+                    "X-Content-Type-Options"?: "nosniff";
+                    /** @description Quoted file digest when playbackSha256 is selected. */
+                    ETag?: string;
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Malformed request, UUID, revision token, unequal dual representation or query. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Missing or revoked session. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Fresh meeting permission denied. Admin role grants no implicit content access. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Exact same-meeting selected entity missing after authorization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description CAS/current-source or idempotency digest conflict; preserve key and original body. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Stable request transport envelope exceeded. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Range unavailable. */
+            416: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unsupported, blank or incomplete segment/mark input. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance. */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

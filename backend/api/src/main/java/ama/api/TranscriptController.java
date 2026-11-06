@@ -12,6 +12,8 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 @RestController @RequestMapping("/api/v1/meetings/{meetingId}/transcript") class TranscriptController {
  private final TranscriptConfiguration.Runtime runtime;private final JdbcSavedTranscriptReceipts receipts;private final SpeechReviewReceipts speechReceipts;private final FileRegistry files;private final TransactionRunner tx;private final MeetingAccess access;
+ private VerifiedTranscriptPlayback playback;
+ @org.springframework.beans.factory.annotation.Autowired void verifiedPlayback(VerifiedTranscriptPlayback value){playback=value;}
  TranscriptController(TranscriptConfiguration.Runtime runtime,JdbcSavedTranscriptReceipts receipts,FileRegistry files,TransactionRunner tx,MeetingAccess access,SpeechReviewReceipts speechReceipts){this.speechReceipts=speechReceipts;this.runtime=runtime;this.receipts=receipts;this.files=files;this.tx=tx;this.access=access;}
  @GetMapping ResponseEntity<byte[]> current(@PathVariable String meetingId,HttpServletRequest request)throws IOException{var result=new LinkedHashMap<>(service(actor(request),meetingId,false).readCurrent(actor(request),meetingId));result.put("saved",result.remove("selected"));return json(result);}
  @GetMapping("/history") ResponseEntity<byte[]> history(@PathVariable String meetingId,@RequestParam(defaultValue="20") int limit,@RequestParam(required=false) String beforeRevisionToken,HttpServletRequest request)throws IOException {
@@ -55,6 +57,11 @@ import org.springframework.web.bind.annotation.*;
  private void download(String meeting,FileRegistry.ReadRequest selector,HttpServletRequest request,HttpServletResponse response)throws IOException {
   ama.contract.MinutesContracts.uuid(meeting);ama.contract.MinutesContracts.uuid(selector instanceof FileRegistry.CurrentReadRequest c?c.fileId():((ProcessingSourceReader.HistoryRequest)selector).fileId());var ranges=Collections.list(request.getHeaders("Range"));if(ranges.size()>1)throw new IllegalArgumentException("One range required");String range=ranges.isEmpty()?null:ranges.getFirst();
   var identity=SessionSecurityFilter.readIdentity(request);
+  String sha=request.getParameter("playbackSha256");
+  if(sha!=null){
+   if(playback==null)throw new Failure(422,"PLAYBACK_MANIFEST_UNAVAILABLE");
+   playback.serve(files,meeting,selector,identity,range,sha,"HEAD".equals(request.getMethod()),response);return;
+  }
   try(var download=AuthorizedDownloads.guard(files.read(actor(request),meeting,selector,range),identity,(current,probe)->files.read(current,meeting,selector,probe))){response.setStatus(range==null?200:206);response.setContentType("application/octet-stream");response.setHeader("Cache-Control","private, no-store");response.setHeader("Accept-Ranges","bytes");response.setHeader("X-Content-Type-Options","nosniff");response.setHeader("Content-Disposition",FileController.contentDisposition(download.file().displayName()));response.setContentLengthLong(download.length());if(range!=null)response.setHeader("Content-Range","bytes "+download.offset()+"-"+(download.offset()+download.length()-1)+"/"+download.file().size());download.body().transferTo(response.getOutputStream());}
  }
  private ResponseEntity<byte[]> json(Object body)throws IOException {long maximum=runtime.qualification().get("responseBytes") instanceof Number n?n.longValue():33554432;return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).header("Cache-Control","private, no-store").body(TranscriptWire.response(body,maximum));}

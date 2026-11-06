@@ -24,14 +24,20 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
     }
     @Override public Optional<Actor> resolveSession(String token) { return resolve(token).map(ResolvedSession::actor); }
 
-    @Override public Optional<ResolvedSession> resolve(String token) {
+    @Override public Optional<ResolvedSession> resolve(String token) {return resolve(token,false);}
+    @Override public Optional<ResolvedSession> resolveForRead(String token) {
+        // An enclosing repeatable-read transaction may already own an older snapshot.
+        return resolve(token,!org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive());
+    }
+    private Optional<ResolvedSession> resolve(String token,boolean display) {
         if (token == null || !token.matches("[A-Za-z0-9_-]{43}")) return Optional.empty();
         String tokenHash=hash(token);
         var identities=jdbc.queryForList("SELECT enterprise_id FROM identity_session WHERE token_hash=?",String.class,tokenHash);
         if(identities.isEmpty())return Optional.empty();
         return transactions.required(()->{
-            lockIdentity(identities.getFirst());
-            Instant now=advanceClock(identities.getFirst());
+            String actor=identities.getFirst();
+            if(!display)lockIdentity(actor);
+            Instant now=advanceClock(actor);
             return jdbc.query("""
                 SELECT i.enterprise_id,i.status,r.role,s.csrf_token,s.expires_at
                 FROM identity_session s JOIN enterprise_identity i ON i.enterprise_id=s.enterprise_id
@@ -39,8 +45,7 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
                 WHERE s.token_hash=? AND i.enterprise_id=? AND s.revoked_at IS NULL AND s.expires_at>?
                   AND s.issued_at<=? AND i.status='ACTIVE'
                   AND s.session_generation=i.session_generation
-                FOR SHARE
-                """, result -> {
+                """+(display?"":" FOR SHARE"), result -> {
             if (!result.next()) return Optional.empty();
             String id = result.getString("enterprise_id"), csrf = result.getString("csrf_token");
             Instant expires = result.getObject("expires_at", LocalDateTime.class).toInstant(ZoneOffset.UTC);
@@ -142,10 +147,14 @@ public final class JdbcIdentitySessions implements SessionPort, IdentityLifecycl
         if (rows.isEmpty()) throw new IllegalArgumentException("Unknown identity");
         return rows.getFirst();
     }
-    /** Identity is already locked. Advancing on every observation prevents expiry resurrection. */
+    /** A shared monotonic floor prevents expiry resurrection, including across different tokens for the same person. */
     private Instant advanceClock(String id){
-        jdbc.update("UPDATE enterprise_identity SET session_time_floor=GREATEST(COALESCE(session_time_floor,UTC_TIMESTAMP(6)),UTC_TIMESTAMP(6)) WHERE enterprise_id=?",id);
-        return jdbc.queryForObject("SELECT session_time_floor FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE",LocalDateTime.class,id).toInstant(ZoneOffset.UTC);
+        jdbc.update("UPDATE identity_session_read_clock SET observed_at=GREATEST(observed_at,UTC_TIMESTAMP(6)) WHERE enterprise_id=?",id);
+        var clock=jdbc.queryForList("SELECT observed_at FROM identity_session_read_clock WHERE enterprise_id=? FOR UPDATE",LocalDateTime.class,id);
+        if(!clock.isEmpty())return clock.getFirst().toInstant(ZoneOffset.UTC);
+        // New identities first acquire a clock when their first session is issued.
+        jdbc.update("INSERT INTO identity_session_read_clock(enterprise_id,observed_at) SELECT enterprise_id,GREATEST(COALESCE(session_time_floor,UTC_TIMESTAMP(6)),UTC_TIMESTAMP(6)) FROM enterprise_identity WHERE enterprise_id=?",id);
+        return jdbc.queryForObject("SELECT observed_at FROM identity_session_read_clock WHERE enterprise_id=? FOR UPDATE",LocalDateTime.class,id).toInstant(ZoneOffset.UTC);
     }
     private void append(String id, String action, long revision, String traceId, Instant time) {
         audit.append(new AuditEvent(id, action, id, revision, "SUCCESS", traceId, time.truncatedTo(ChronoUnit.MICROS)));

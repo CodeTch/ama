@@ -46,9 +46,13 @@ class SpeechReviewIT {
   try(var heartbeat=java.util.concurrent.Executors.newSingleThreadScheduledExecutor()){
    var lease=f.claim(f.queue);
    // This fixture runs the real speech pipeline without WorkerLoop. Renew the same lease while preparing its clips.
-   var renewal=heartbeat.scheduleWithFixedDelay(()->f.queue.renew(lease),5,5,java.util.concurrent.TimeUnit.SECONDS);
+   var dispatch=new Object();
+   boolean[] dispatched={false};
+   var renewal=heartbeat.scheduleWithFixedDelay(()->{synchronized(dispatch){if(!dispatched[0])f.queue.renew(lease);}},5,5,java.util.concurrent.TimeUnit.SECONDS);
    try{
     var carrier=TranscriptImportRuntime.prepare(f.queue,lease,f.settings,NEVER);
+    // Match WorkerLoop.dispatch: drain an in-flight renewal before the completion transaction.
+    synchronized(dispatch){dispatched[0]=true;renewal.cancel(false);}
     assertTrue(f.queue.completeWithEffects(lease,carrier));
     return f;
    }finally{renewal.cancel(false);}

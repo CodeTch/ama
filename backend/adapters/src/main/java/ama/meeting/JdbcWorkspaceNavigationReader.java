@@ -83,6 +83,10 @@ public final class JdbcWorkspaceNavigationReader {
   budget.reserve(1,4,144,144,144,4,false);
   var pointers=jdbc.query("SELECT transcript_revision_id,transcript_confirmation_id,minutes_revision_id,element_set_id FROM meeting WHERE id=?",(r,n)->new Pointers(r.getString("transcript_revision_id"),r.getString("transcript_confirmation_id"),r.getString("minutes_revision_id"),r.getString("element_set_id")),meeting);
   budget.check();if(pointers.size()!=1||root.infoId()==null)throw unavailable();var current=pointers.getFirst();
+  if(!root.owner().equals(actor.enterpriseId())){
+   var view=ama.transcript.ParticipantTranscript.select(jdbc,meeting);
+   current=new Pointers(view.revision(),view.confirmation(),current.body(),current.elements());
+  }
   for(String id:Arrays.asList(root.infoId(),root.rosterId(),current.transcript(),current.confirmation(),current.body(),current.elements()))if(id!=null)storedId(id);
   // Same control/domain order as deployed saved producers. PK parents remain locked through commit.
   parent("meeting_info_revision",root.infoId(),meeting,root.revision(),null,budget);

@@ -29,3 +29,20 @@ test('meeting template catalog accepts bounded personal themes while preserving 
  item={templateId:id,revisionId:id,name:'内置模板',themes:['OVERVIEW','DISCUSSION','CONCLUSION','ACTION','RISK','OPEN_QUESTION','DISAGREEMENT'],themeCount:7,selectable:true,default:true};
  assert.equal((await api.templates(meeting,null,new AbortController().signal)).items[0]?.default,true);
 });
+
+test('confirmed generation state survives strict decoding on current and historical responses',async t=>{
+ const saved={elementSetId:null,exclusionRevisionId:null,templateRevisionId:null,transcriptConfirmationId:id};
+ const header={activeTaskIds:[],eligible:true,materials:'EMPTY',observation,reasons:[],saved,scope:'FULL'};
+ let wire:unknown=header;
+ t.mock.method(globalThis,'fetch',async()=>Response.json(wire));
+ const api=createMinutesGenerationApi(createBusinessClient('https://ama.test',()=>session,()=>{}),()=>'owner');
+ const read=()=>api.current(meeting,new AbortController().signal);
+ assert.equal((await read()).confirmationGeneration,undefined);
+ for(const state of ['NONE','WAITING','RETRYING','SUBMITTED','SUPERSEDED']){
+  wire={...header,confirmationGeneration:state};assert.equal((await read()).confirmationGeneration,state);
+ }
+ for(const invalid of ['QUEUED',null,42]){
+  wire={...header,confirmationGeneration:invalid};await assert.rejects(read);
+ }
+ wire={...header,confirmationGeneration:'WAITING',extra:true};await assert.rejects(read);
+});

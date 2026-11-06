@@ -40,23 +40,36 @@ public final class JdbcWebMeetingProjectionReader {
   try {
    record Preliminary(List<MeetingQueryRelation.Special> specials,List<String> refresh){}
    var preliminary=tx.required(()->{
-    budget.check();var identities=access.tryLockIdentities(actor,List.of(),false).orElseThrow(MeetingAccess.AccessDeniedException::new);topicOwner(actor,filter);
+    budget.check();var identities=access.lockReadIdentity(actor);topicOwner(actor,filter);
     var specials=new MeetingQueryRelation(jdbc,actor,scope,filter,List.of(),budget).special();var refresh=new ArrayList<String>();
     // One ordered lock acquisition avoids a separate identity/root transaction for every
     // already valid proof. No external work runs while these locks are held.
     for(var candidate:specials){budget.check();try{var gate=(JdbcMeetingAccess.Held)access.lockPrepared(identities,candidate.id(),false).orElseThrow(MeetingAccess.AccessDeniedException::new);access.require(gate,MeetingAccess.Action.READ);if(gate.authorityDeadline!=null&&!gate.authorityDeadline.isAfter(java.time.Instant.now().plusSeconds(3)))refresh.add(candidate.id());}catch(MeetingAccess.AuthorityUnavailableException|MeetingAccess.AccessDeniedException unavailable){refresh.add(candidate.id());}}
     return new Preliminary(specials,List.copyOf(refresh));
    });
-   var specials=preliminary.specials();var denied=java.util.concurrent.ConcurrentHashMap.<String>newKeySet();
-   WorkspaceReadPreparation.run(preliminary.refresh(),budget,meeting->{try{access.prepareExternalRead(actor,meeting);access.require(actor,meeting,MeetingAccess.Action.READ);}catch(MeetingAccess.AccessDeniedException noAccess){denied.add(meeting);}});
+   var specials=preliminary.specials();var refused=java.util.concurrent.ConcurrentHashMap.<String>newKeySet();
+   WorkspaceReadPreparation.run(preliminary.refresh(),budget,meeting->{try{access.prepareExternalRead(actor,meeting);}catch(MeetingAccess.AccessDeniedException noAccess){refused.add(meeting);}});
    return tx.required(()->{
-    var identities=access.tryLockIdentities(actor,List.of(),false).orElseThrow(MeetingAccess.AccessDeniedException::new);topicOwner(actor,filter);
-    var relation=new MeetingQueryRelation(jdbc,actor,scope,filter,denied,budget);if(!specials.equals(relation.special()))throw new WorkspaceReadBudget.Unavailable();relation.requireCurrentProjection();
-    var candidates=relation.page(limit,after);int size=Math.min(limit,candidates.size());var roots=new TreeSet<String>();specials.forEach(special->roots.add(special.id()));for(int n=0;n<size;n++)roots.add(candidates.get(n).position().id());
-    var held=new HashMap<String,JdbcMeetingAccess.Held>();for(String id:roots){budget.check();held.put(id,(JdbcMeetingAccess.Held)access.lockPrepared(identities,id,false).orElseThrow(MeetingAccess.AccessDeniedException::new));}
-    for(var special:specials){boolean allowed=true;try{access.require(held.get(special.id()),MeetingAccess.Action.READ);}catch(MeetingAccess.AccessDeniedException unavailable){allowed=false;}if(allowed==denied.contains(special.id()))throw new WorkspaceReadBudget.Unavailable();}
+    var identities=access.lockReadIdentity(actor);topicOwner(actor,filter);
+    var specialIds=new TreeSet<String>();specials.forEach(special->specialIds.add(special.id()));
+    var ordinary=new MeetingQueryRelation(jdbc,actor,scope,filter,specialIds,budget);
+    if(!specials.equals(ordinary.special()))throw new WorkspaceReadBudget.Unavailable();ordinary.requireCurrentProjection();
+    // Any authorized page is drawn from these special roots plus at most the first limit ordinary rows.
+    // Acquire the entire union in one lock order. Check each external proof once in this transaction.
+    var ordinaryPage=ordinary.page(limit,after);var roots=new TreeSet<>(specialIds);
+    ordinaryPage.stream().limit(limit).forEach(candidate->roots.add(candidate.position().id()));
+    var held=new HashMap<String,JdbcMeetingAccess.Held>();var denied=new TreeSet<String>();
     var reads=new HashMap<String,LockedRead>();
-    for(String id:roots)if(!denied.contains(id))reads.put(id,new LockedRead(source,access,held.get(id),actor,id));
+    for(String id:roots){
+     budget.check();held.put(id,(JdbcMeetingAccess.Held)access.lockPrepared(identities,id,false).orElseThrow(MeetingAccess.AccessDeniedException::new));
+    }
+    for(String id:roots){
+     try{reads.put(id,new LockedRead(source,access,held.get(id),actor,id));}
+     catch(MeetingAccess.AccessDeniedException noAccess){if(!specialIds.contains(id))throw noAccess;denied.add(id);continue;}
+     if(refused.contains(id))throw new WorkspaceReadBudget.Unavailable();
+    }
+    var relation=specials.isEmpty()?ordinary:new MeetingQueryRelation(jdbc,actor,scope,filter,denied,budget);
+    var candidates=specials.isEmpty()?ordinaryPage:relation.page(limit,after);int size=Math.min(limit,candidates.size());
     var items=new ArrayList<MeetingItem>();for(int n=0;n<size;n++){var candidate=candidates.get(n);var item=row(actor,scope,candidate,budget,held.get(candidate.position().id()),reads.get(candidate.position().id()));if(item==null)throw new WorkspaceReadBudget.Unavailable();items.add(item);}
     var counts=relation.counts(actor,scope);
     for(var read:reads.values())read.check();

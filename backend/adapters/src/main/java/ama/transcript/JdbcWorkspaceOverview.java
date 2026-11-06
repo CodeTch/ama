@@ -28,6 +28,10 @@ public final class JdbcWorkspaceOverview {
   if(status.owner())access.requirePrepared(authentic,actor,meeting,List.of(actor.enterpriseId()),MeetingAccess.Action.EDIT);
   String columns="transcript_revision_id,transcript_confirmation_id,minutes_revision_id,element_set_id"+(status.owner()?",template_revision_id,exclusion_revision_id,final_confirmation_id":"");
   var roots=metadata("SELECT "+columns+" FROM meeting WHERE id=?",1,512,budget,meeting);if(roots.size()!=1||status.infoId()==null)throw unavailable();var root=roots.getFirst();for(String key:columns.split(","))nullableId(root.get(key));
+  if(!status.owner()){
+   var visible=ParticipantTranscript.select(jdbc,meeting);root=new LinkedHashMap<>(root);
+   root.put("transcript_revision_id",visible.revision());root.put("transcript_confirmation_id",visible.confirmation());
+  }
   String transcript=(String)root.get("transcript_revision_id"),confirmation=(String)root.get("transcript_confirmation_id"),body=(String)root.get("minutes_revision_id"),set=(String)root.get("element_set_id");
   var taskPage=status.owner()?scan.discover(meeting,20,null,budget):List.<WorkspaceTaskScan.Metadata>of();var allTasks=new TreeMap<String,WorkspaceTaskScan.Metadata>();for(var row:taskPage)allTasks.put(row.id(),row);
   WorkspaceTaskScan.Metadata origin=null;

@@ -16,11 +16,22 @@ public final class JdbcMinutesGenerationCommands {
  void verifyCurrentReadiness(Actor actor,String meeting,long expected,TranscriptAcquisitionBudget.Ledger budget){preparation.prepare(actor,meeting,expected,budget);}
  public Map<String,Object> enqueue(Actor actor,String meeting,String key,long expected,String trace){return enqueue(actor,meeting,key,expected,null,trace);}
  public Map<String,Object> enqueue(Actor actor,String meeting,String key,long expected,RegionRequest region,String trace){
+  return enqueue(actor,meeting,key,expected,region,null,trace);
+ }
+ public Map<String,Object> enqueueConfirmation(Actor actor,String meeting,String key,long expected,String confirmation,String trace){
+  uuid(confirmation);return enqueue(actor,meeting,key,expected,null,confirmation,trace);
+ }
+ private Map<String,Object> enqueue(Actor actor,String meeting,String key,long expected,RegionRequest region,String confirmation,String trace){
   JdbcMinutesFactsReader.independent();uuid(trace);var id=JdbcMinutesGenerationReceipts.identity(actor,meeting,key,expected,region);var replay=receipts.lookup(actor,meeting,id,expected,region);if(replay.isPresent())return replay.orElseThrow();JdbcMinutesGenerationPreparation.Prepared prepared;
   try{prepared=preparation.prepareForCommand(actor,meeting,expected,region);}catch(RuntimeException failure){if(Thread.currentThread().isInterrupted()||!ordinary(failure))throw failure;var winner=receipts.lookup(actor,meeting,id,expected,region);if(winner.isPresent())return winner.orElseThrow();throw failure;}
   return authority.transactionRunner().required(()->{
    var stored=receipts.claim(actor,meeting,id);var proof=stored.task()==null?null:receipts.observe(meeting,stored,expected,region);var gate=stored.task()==null?preparation.lockPrepared(actor,meeting,prepared):authority.fileRegistry().lock(actor,meeting,MeetingAccess.Action.EDIT);JdbcMinutesGenerationReceipts.match(stored);if(stored.task()!=null)return receipts.restore(meeting,stored,proof,true);
-   var held=preparation.insert(actor,gate,prepared);String task=queue.enqueue(prepared.spec(),held);receipts.accepted(id,task);var response=receipts.written(meeting,task,prepared.spec(),region);
+   var jdbc=new org.springframework.jdbc.core.JdbcTemplate(authority.dataSource());
+   if(confirmation!=null&&!jdbc.queryForList("SELECT i.state FROM transcript_generation_intent i JOIN meeting m ON m.transcript_confirmation_id=i.confirmation_id WHERE m.id=? AND i.confirmation_id=? FOR UPDATE",String.class,meeting,confirmation).equals(List.of("WAITING")))
+    throw new ama.contract.TranscriptContracts.Failure(409,"REVISION_CONFLICT");
+   var held=preparation.insert(actor,gate,prepared);String task=queue.enqueue(prepared.spec(),held);receipts.accepted(id,task);
+   if(region==null)jdbc.update("UPDATE transcript_generation_intent i JOIN generation_input g ON g.transcript_confirmation_id=i.confirmation_id SET i.state='SUBMITTED',i.task_id=? WHERE g.meeting_id=? AND g.id=? AND i.state='WAITING'",task,meeting,prepared.spec().input().id());
+   var response=receipts.written(meeting,task,prepared.spec(),region);
    audit.append(new ama.contract.AuditContracts.AuditEvent(actor.enterpriseId(),"MINUTES_GENERATION_ACCEPTED",meeting,expected,"SUCCEEDED",trace,java.time.Instant.now()));outbox.append(new ama.contract.OutboxContracts.EventDraft("MINUTES_GENERATION_ACCEPTED",task,prepared.spec().subject(),expected,new ama.contract.OutboxContracts.Reference("GENERATION_INPUT",prepared.spec().input().id())));outbox.flush();return response;
   });
  }

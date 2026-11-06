@@ -109,7 +109,12 @@ const speakerUndo=useSpeakerUndo({revision:transcripts.revision},{actor,meeting:
 const canEditSpeakers=computed(()=>canReview.value&&!props.published&&!!(editor.saved.value?.capabilities.canSave||raw.value?.capabilities.canRestore)&&!speakerUndo.checking.value&&!historyBusy.value&&!bulkBusy.value&&!editor.busy.value&&!tools.pending.value&&!corrections.pending.value);
 function openReview(){if(!actor()||!eligible()||!canReview.value)return;reviewOpen.value=true;if(!reviewDialog.value?.open)reviewDialog.value?.showModal();}
 async function showEnhancement(){reviewDialog.value?.close();await nextTick();enhancementPanel.value?.show();}
-function closeReview(event?:Event){if(!actor()||!eligible()){speakerUndo.cancel();reviewDialog.value?.close();return;}if(bulkBusy.value||editor.busy.value||tools.busy.value||corrections.busy.value){event?.preventDefault();return;}speakerUndo.cancel();reviewDialog.value?.close();}
+function closeReview(event?:Event){
+ if(!actor()||!eligible()){speakerUndo.cancel();reviewDialog.value?.close();return;}
+ const recovering=['UNCERTAIN','ACKNOWLEDGED'].includes(corrections.command.state.value);
+ if(bulkBusy.value||editor.busy.value||tools.busy.value||corrections.busy.value||recovering){event?.preventDefault();return;}
+ speakerUndo.cancel();reviewDialog.value?.close();
+}
 async function undoLatest(){localError.value=null;await speakerUndo.run();if(canReview.value&&tools.pending.value)toolsOpen.value=true;}
 watch(()=>[corrections.pending.value,corrections.busy.value,correctionInFlight.value,canReview.value,actor(),eligible()],()=>{if(corrections.pending.value&&!corrections.busy.value&&!correctionInFlight.value&&canReview.value&&!namingTarget.value&&!assignmentMode.value)void nextTick().then(()=>{if(corrections.pending.value&&!corrections.busy.value&&!correctionInFlight.value&&!namingTarget.value&&!assignmentMode.value)openReview();});},{flush:'post'});
 const stopTools=watch(()=>[actor(),props.meetingId,eligible()],()=>{speakerUndo.cancel();reviewDialog.value?.close();toolsOpen.value=false;toolsError.value=null;try{tools.synchronize();if(tools.pending.value)toolsOpen.value=true;}catch(cause){toolsError.value=cause instanceof Error?cause.message:'修订恢复记录暂不可用。';}},{immediate:true,flush:'sync'});
@@ -148,14 +153,37 @@ const provenance=computed(()=>editor.saved.value?.saved?.segments??raw.value?.se
 const fileLabels=computed(()=>dialogueLabels(provenance.value));
 const speakersLoading=computed(()=>!sourceDetail.value&&(editor.loading.value||historyBusy.value)||!!sourceDetail.value&&!sourceDetail.value.speakerSnapshot&&!corrections.speakers.value&&provenance.value.some(s=>s.speakerId!==null));
 const activeSpeakers=computed(()=>sourceDetail.value?.speakerSnapshot?.items??corrections.speakers.value?.items??[]);
+const voiceScope=computed(()=>!props.published&&eligible()&&editor.saved.value?.capabilities.canReadHistory&&provenance.value.some(s=>s.startMs!==null)
+ ? [actor(),props.meetingId,sourceDetail.value?.observation.accessRevisionToken,editor.saved.value?.saved?.id??raw.value?.selected.id].join('/') : '');
+const voiceGroups=shallowRef<SpeakerCandidates|null>(null);
+const voiceLoadError=ref(false);
+let voiceRead:Promise<SpeakerCandidates>|undefined;
+watch(voiceScope,(scope,_,cleanup)=>{
+ voiceGroups.value=null;voiceLoadError.value=false;voiceRead=undefined;
+ if(!scope)return;
+ let active=true;cleanup(()=>{active=false;});
+ voiceRead=operationsCommands.read<SpeakerCandidates>(`/api/v1/meetings/${props.meetingId}/speaker-candidates`);
+ void voiceRead.then(result=>{if(active)voiceGroups.value=result;},()=>{if(active)voiceLoadError.value=true;});
+},{immediate:true,flush:'sync'});
+const voiceSegments=computed(()=>new Map(provenance.value.map(s=>[s.segmentId,s.startMs===null?null:s.sourceFileId+'/'+(BigInt(s.startMs)*16n)])));
+function indexVoices(value:SpeakerCandidates){
+ const groups=new Map<string,typeof value.groups[number]|null>();
+ for(const group of value.groups){const key=group.fileId+'/'+group.startSample;groups.set(key,groups.has(key)?null:group);}
+ return groups;
+}
+const indexedVoices=computed(()=>voiceGroups.value?indexVoices(voiceGroups.value):null);
+function groupCandidates(ids:readonly string[],groups:ReturnType<typeof indexVoices>){
+ const matches=ids.map(id=>groups.get(voiceSegments.value.get(id)??''));
+ return (matches[0]?.candidates??[]).filter(c=>matches.every(group=>group?.candidates.some(v=>v.voiceprintId===c.voiceprintId)));
+}
 const speakerGroups=computed(()=>[
  ...(activeSpeakers.value.map(item=>({
-  id:item.id,label:item.label,enterpriseId:item.enterpriseId,
+  id:item.id,label:item.label,enterpriseId:item.enterpriseId,department:item.department,
   segments:item.segmentIds.length,segmentIds:item.segmentIds
  }))??[]),
  ...fileLabels.value.items,
  ...unassignedSpeakerGroups(provenance.value,fileLabels.value.labels,activeSpeakers.value.length+fileLabels.value.items.length)
-]);
+].map(group=>({...group,voiceHint:indexedVoices.value?((count)=>count?`有 ${count} 个声纹候选待核对`:'未找到匹配声纹')(groupCandidates(group.segmentIds,indexedVoices.value).length):voiceLoadError.value?'声纹候选暂不可用':undefined})));
 const speakerColors=computed(()=>Object.fromEntries(speakerGroups.value.flatMap(group=>
  group.segmentIds.map(segmentId=>[segmentId,group.segmentIds[0]??group.id])
 )));
@@ -296,10 +324,9 @@ async function openSpeakers(mode:'edit'|'merge'|'split'='edit',id?:string){
   namingNotice.value='';namingError.value=null;
   namingTarget.value={group,actor:who,meeting:props.meetingId,revision:revision.id,token:current.observation.revisionToken,originalLabel:originalSpeakerLabel(group,provenance.value)};
   voiceCandidates.value=[];candidateError.value='';const target=namingTarget.value;
-  try{const value=await operationsCommands.read<SpeakerCandidates>(`/api/v1/meetings/${props.meetingId}/speaker-candidates`);if(!namingContext(target))return;
-   const segments=provenance.value.filter(s=>group.segmentIds.includes(s.segmentId)),matching=value.groups.filter(g=>segments.some(s=>s.sourceFileId===g.fileId&&s.startMs!==null&&BigInt(g.startSample)===BigInt(s.startMs)*16n));
-   const unambiguous=matching.filter(g=>matching.filter(other=>other.fileId===g.fileId&&other.startSample===g.startSample).length===1);
-   const unique=new Map(unambiguous.flatMap(g=>g.candidates).map(c=>[c.voiceprintId,c]));voiceCandidates.value=[...unique.values()].filter(c=>segments.length>0&&segments.every(s=>unambiguous.some(g=>g.fileId===s.sourceFileId&&s.startMs!==null&&BigInt(g.startSample)===BigInt(s.startMs)*16n&&g.candidates.some(v=>v.voiceprintId===c.voiceprintId))));
+  try{const value=await (voiceGroups.value??(!voiceLoadError.value&&voiceRead?voiceRead:operationsCommands.read<SpeakerCandidates>(`/api/v1/meetings/${props.meetingId}/speaker-candidates`)));if(!namingContext(target))return;
+   voiceCandidates.value=groupCandidates(group.segmentIds,indexedVoices.value??indexVoices(value));
+
   }catch{if(namingContext(target))candidateError.value='候选暂不可用，可继续手动核对人员或保留匿名。';}
   return;
  }
@@ -363,7 +390,7 @@ onUnmounted(()=>{stopActivation();leaveDecision?.(false);leaveDecision=null;stop
 </script>
 <template><div v-if="voicePending" class="banner info" role="status">原声纹申请已保留。<button v-if="['PREPARED','UNCERTAIN','ACKNOWLEDGED'].includes(operationsCommands.command.state.value)" class="btn" @click="recoverVoice">恢复原声纹申请</button><button v-if="['CONFLICT','REJECTED'].includes(operationsCommands.command.state.value)" class="btn" @click="operationsCommands.discardRejected">放弃已拒绝声纹申请</button></div>
  <TranscriptForm :available-proposals="availableProposals" @propose="correctionAction(corrections.propose)" :owner="!!editor.saved.value?.capabilities.canReadHistory" :corrections-required="!!requiresCorrections" :simulated-speech="sourceDetail?.sources.some(source=>source.recognitionOrigin==='LOCAL_HARNESS')??false" :file-labels="segmentLabels" :speaker-color-keys="speakerColors" :corrections-ready="!!corrections.view.value" :correction-count="corrections.view.value?.pendingCount??0" :pending-correction-segments="pendingSegments" @accept-all="prepareBatch('ACCEPT')" @reject-all="prepareBatch('REJECT')" :corrections="corrections.view.value?.items" :can-decide="canUseTools()&&!corrections.pending.value&&!tools.pending.value" @decide="(id,decision)=>correctionAction(()=>corrections.decide(id,decision))" @feedback="openFeedback" @undo-correction="id=>correctionAction(()=>corrections.undo(id))" :published="published" @tools="openTools" @review="openReview()" :can-review="canReview" ref="form" :pending-save="editor.pendingOperation()==='TRANSCRIPT_SAVE'&&!['CONFLICT','REJECTED'].includes(editor.command.state.value)" :revision-token="editor.saved.value?.observation.revisionToken" :commit="commit" :provenance="provenance" :playable-files="playableFiles" @seek="(fileId,startMs)=>emit('seek',fileId,startMs)" :show-footer="showFooter" @begin="begin" v-if="editor.draft.value||editor.saved.value?.saved||raw" :value="editor.draft.value?.value.value??readonlyContent" :editable="!!editor.draft.value&&!!editor.saved.value?.capabilities.canSave" :busy="bulkBusy||editor.busy.value||tools.busy.value||corrections.busy.value" :dirty="editor.draft.value?.dirty.value??false" :conflict="editor.draft.value?.conflict.value?.value??null" :conflict-token="editor.draft.value?.conflict.value?.token??null" :state="editor.command.state.value" :blocked="enhancementPending||editor.recoveryBlocked.value||tools.pending.value||corrections.pending.value" :blocked-reason="enhancementPending?'请先恢复原材料增强操作。':corrections.pending.value?'请先恢复或处理原纠错操作。':tools.pending.value?'请先恢复或处理原修订请求。':undefined" :storage-status="editor.storageStatus.value" :error="message??correctionError" :confirmed="!!editor.saved.value?.confirmation?.isCurrent" :can-confirm="!!editor.saved.value?.capabilities.canConfirm" @edit="edit" @save="save" @confirm="confirmDialog?.showModal()" @retry="editor.retry" @reload="editor.reload" @discard="resolve('discard')" @reapply="resolve('reapply')"/>
- <section v-else class="card transcript-feedback"><h2>转写正文</h2><p v-if="editor.loading.value||historyBusy" role="status">正在读取转写…</p><p v-else-if="message" role="alert">{{message}}</p><p v-else>尚无已保存转写。导入任务完成后重新读取。</p><button class="btn" :disabled="editor.loading.value" @click="editor.reload">重新读取转写</button></section>
+ <section v-else class="card transcript-feedback"><h2>转写正文</h2><p v-if="editor.loading.value||historyBusy" role="status">正在读取转写…</p><p v-else-if="message" role="alert">{{message}}</p><p v-else>{{editor.saved.value?.capabilities.canReadHistory?'尚无已保存转写。导入任务完成后重新读取。':'等待可供参会人阅读的增强转写。'}}</p><button class="btn" :disabled="editor.loading.value" @click="editor.reload">重新读取转写</button></section>
  <MaterialEnhancementPanel ref="enhancementPanel" v-if="!published&&editor.saved.value?.saved?.kind==='WORKING'&&editor.saved.value?.capabilities.canReadHistory" :meeting-id="meetingId" :active="active" :allowed="canUseTools()&&!tools.pending.value&&!corrections.pending.value" @pending="enhancementPending=$event" @adopted="editor.reload"/>
  <p v-if="batchStatus&&!published" class="small muted" role="status">{{batchStatus}}</p>
  <dialog v-if="!published" ref="bulkDialog" class="notice-dialog" aria-labelledby="correction-batch-title">

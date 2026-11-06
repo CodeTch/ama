@@ -18,7 +18,8 @@ public final class JdbcMaterialAuthority implements AutoCloseable {
   this.authority=Objects.requireNonNull(authority);this.client=Objects.requireNonNull(client);this.governance=governance;
   if(!(authority.savedAccess() instanceof JdbcMeetingAccess real))throw new IllegalArgumentException("Genuine local ACL required");access=real;
   j=new JdbcTemplate(authority.dataSource());j.setQueryTimeout(3);pins=ControlledKnowledgeClient.digest(ControlledKnowledgeClient.canonical(client.identities()));
-  authority.installMaterialAuthority(this);access.installMaterialValidity(pins);access.installExternalPreparation(this::prepare);
+  authority.installMaterialAuthority(this);access.installMaterialValidity(pins);
+  access.installExternalPreparation((actor,meeting)->afterLocalRead(actor,meeting,true));
  }
  static final class Request {
   private final JdbcMaterialAuthority issuer;final Actor actor;final String meeting,lease;final MaterialAuthorityDependencies.Snapshot snapshot;final List<Map<String,String>> items;final String hash;final TranscriptAcquisitionBudget.Ledger budget;
@@ -28,13 +29,25 @@ public final class JdbcMaterialAuthority implements AutoCloseable {
   }
   void require(ControlledKnowledgeClient client){if(issuer.client!=client||issuer.closed||items.isEmpty()||items.size()>64)throw new IllegalArgumentException("Foreign material authority request");budget.check();}
  }
- private MaterialAuthorityDependencies.Snapshot local(Actor actor,String meeting){access.requireLocalRead(access.lock(actor,meeting));return MaterialAuthorityDependencies.capture(j,meeting);}
+ private MaterialAuthorityDependencies.Snapshot local(Actor actor,String meeting){access.requireLocalForPreparation(actor,meeting);return MaterialAuthorityDependencies.capture(j,meeting);}
  public void prepare(Actor actor,String meeting){refresh(actor,meeting,true);}
  private void refresh(Actor actor,String meeting,boolean demand){
   JdbcMinutesFactsReader.independent();if(closed)throw new AuthorityUnavailableException();ama.contract.MinutesContracts.uuid(meeting);
   // Check the ACL before any network traffic, including publication observation.
-  authority.transactionRunner().required(()->{access.requireLocalRead(access.lock(actor,meeting));return null;});
-  if(governance!=null)governance.ensureFresh(meeting);
+  authority.transactionRunner().required(()->{access.requireLocalForPreparation(actor,meeting);return null;});
+  afterLocalRead(actor,meeting,demand);
+ }
+ private record Dependencies(boolean published,boolean knowledge){}
+ private void afterLocalRead(Actor actor,String meeting,boolean demand){
+  JdbcMinutesFactsReader.independent();if(closed)throw new AuthorityUnavailableException();
+  // This hint only schedules external work. The content read still verifies the current
+  // root and all of its permission dependencies inside its own transaction.
+  var rows=j.query("SELECT m.ever_published,EXISTS(SELECT 1 FROM material_reference r WHERE r.meeting_id=m.id AND r.kind='KNOWLEDGE') FROM meeting m WHERE m.id=?",
+    (row,n)->new Dependencies(row.getBoolean(1),row.getBoolean(2)),meeting);
+  if(rows.isEmpty())throw new AccessDeniedException();
+  var dependencies=rows.getFirst();
+  if(governance!=null&&dependencies.published())governance.ensureFresh(meeting);
+  if(!dependencies.knowledge())return;
   Request request=claim(actor,meeting,demand);
   if(request==null)return;
   try{
@@ -81,7 +94,7 @@ public final class JdbcMaterialAuthority implements AutoCloseable {
   private PreparedChange(JdbcMaterialAuthority issuer,Request request,ControlledKnowledgeClient.MaterialProof proof){this.issuer=issuer;this.request=request;this.proof=proof;}
  }
  PreparedChange prepareChange(Actor actor,String meeting,Collection<MaterialAuthorityDependencies.Item> added)throws java.io.IOException {
-  JdbcMinutesFactsReader.independent();var snapshot=authority.transactionRunner().required(()->{access.requireLocalRead(access.lock(actor,meeting));return MaterialAuthorityDependencies.captureAdditional(j,meeting,added);});
+  JdbcMinutesFactsReader.independent();var snapshot=authority.transactionRunner().required(()->{access.requireLocalForPreparation(actor,meeting);return MaterialAuthorityDependencies.captureAdditional(j,meeting,added);});
   if(snapshot.items().isEmpty())return null;var request=new Request(this,actor,meeting,null,snapshot);return new PreparedChange(this,request,client.materialAuthority(request));
  }
  void installChange(PreparedChange change,Actor actor,String meeting,ama.access.MeetingAccess.Locked gate){

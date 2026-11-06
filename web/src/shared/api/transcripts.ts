@@ -10,7 +10,7 @@ export type TranscriptDetail=components['schemas']['OwnerDetail'];
 export type TranscriptReceipt=components['schemas']['Receipt'];
 export type TranscriptSegment=components['schemas']['Segment'];
 export type TranscriptHistory=components['schemas']['History'];
-export type TranscriptSource={fileId:string;sha256:string;sizeBytes:number;revisionId:string|null;recordingWav?:boolean};
+export type TranscriptSource={fileId:string;sha256:string;sizeBytes:number;revisionId:string|null;recordingWav?:boolean;name?:string};
 const object=(v:unknown):v is Record<string,unknown>=>typeof v==='object'&&v!==null&&!Array.isArray(v);
 const exact=(v:Record<string,unknown>,keys:string)=>Object.keys(v).sort().join(',')===keys;
 const shape=(v:unknown,keys:string):v is Record<string,unknown>=>object(v)&&exact(v,keys);
@@ -63,6 +63,15 @@ function receipt(v:unknown,meeting:string,confirm:boolean):v is TranscriptReceip
 function freeze<T>(v:T):T{if(v!==null&&typeof v==='object'){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
 function invalid():never{throw new ApiError('response',200,'转写响应暂无法确认，请保留草稿并重新读取。');}
 export function createTranscriptsApi(client:ReturnType<typeof createBusinessClient>,actor:()=>string|null){return {
+ async playback(meeting:string,source:TranscriptSource,signal:AbortSignal){
+  if(!(source.recordingWav||source.name?.toLowerCase().endsWith('.wav'))||source.sizeBytes<=8*1024*1024)return null;
+  if(!uuid(meeting)||!uuid(source.fileId)||source.revisionId!==null&&!uuid(source.revisionId)||!hash(source.sha256)||!Number.isSafeInteger(source.sizeBytes)||source.sizeBytes>230400044)throw new TypeError('Expected sealed recording');
+  const who=actor();if(!who)throw new DOMException('Source actor unavailable','AbortError');
+  const path=`/api/v1/meetings/${meeting}/transcript${source.revisionId===null?'':`/revisions/${source.revisionId}`}/sources/${source.fileId}`;
+  const url=await client.playback(path,source.sha256,source.sizeBytes,signal);
+  if(signal.aborted||actor()!==who)throw new DOMException('Source scope changed','AbortError');
+  return url;
+ },
  async source(meeting:string,source:TranscriptSource,signal:AbortSignal):Promise<{blob:Blob;name:string|null}>{
   if(!uuid(meeting)||!uuid(source.fileId)||source.revisionId!==null&&!uuid(source.revisionId)||!hash(source.sha256)||!Number.isSafeInteger(source.sizeBytes)||source.sizeBytes<0||source.sizeBytes>(source.recordingWav===true?230400044:32*1024*1024))throw new TypeError('Exact original source required');
   const who=actor();if(!who)throw new DOMException('Source actor unavailable','AbortError');const path=`/api/v1/meetings/${meeting}/transcript${source.revisionId===null?'':`/revisions/${source.revisionId}`}/sources/${source.fileId}`;

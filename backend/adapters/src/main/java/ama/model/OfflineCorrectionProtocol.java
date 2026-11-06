@@ -19,6 +19,7 @@ final class OfflineCorrectionProtocol {
                 """ + (entities.isEmpty()?"本次没有提供已确认的实体词典。\n":"下面这些是本次会议确认过的专有名词，转写里发音接近但写法不同的，应该纠正过来：\n"+String.join("、",entities)+"\n\n") + """
                 只输出 JSON 数组，每项格式：
                 {"seg": 句子编号, "old": "原文片段", "new": "改成什么", "why": "一句话理由"}
+                如有可核实的类型，可附 entityType；模型提供的置信度可附 confidence（0 到 1），缺失请省略。
                 本次只有编号 0；old 必须原样出现在该句中；不得返回相互重叠的修改。
                 没有需要改的就输出 []。
 
@@ -45,8 +46,9 @@ final class OfflineCorrectionProtocol {
             var corrections = new ArrayList<TextCorrection>();
             for (var item : items) {
                 var keys = new HashSet<String>(); item.fieldNames().forEachRemaining(keys::add);
-                if (!item.isObject() || !keys.equals(Set.of("seg", "old", "new", "why")) || !item.path("seg").isIntegralNumber() || !item.path("seg").canConvertToInt()) throw invalid();
-                corrections.add(new TextCorrection(item.path("seg").intValue(), string(item, "old"), string(item, "new"), string(item, "why")));
+                if (!item.isObject() || !keys.containsAll(Set.of("seg", "old", "new", "why")) || !Set.of("seg","old","new","why","entityType","confidence").containsAll(keys) || !item.path("seg").isIntegralNumber() || !item.path("seg").canConvertToInt()) throw invalid();
+                if(item.has("confidence")&&!item.get("confidence").isNumber())throw invalid();
+                corrections.add(new TextCorrection(item.path("seg").intValue(), string(item, "old"), string(item, "new"), string(item, "why"),item.has("entityType")?string(item,"entityType"):null,item.has("confidence")?item.get("confidence").doubleValue():null));
             }
             return new CorrectionResult(model, source, corrections);
         } catch (java.io.IOException | IllegalArgumentException failure) { throw invalid(); }

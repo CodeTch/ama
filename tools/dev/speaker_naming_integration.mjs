@@ -35,6 +35,10 @@ try {
   const processButton = importer.getByRole('button', { name: '开始处理', exact: true });
   await expect(processButton).toBeEnabled({ timeout: 30000 });
   await processButton.click();
+  const enterTranscript = page.getByRole('button', { name: '进入转写校正', exact: true });
+  await expect(enterTranscript).toBeEnabled({ timeout: 90000 });
+  await enterTranscript.click();
+  await page.waitForURL(base + '/meeting/' + meeting + '/transcript');
   const speaker = page.getByRole('region', { name: '当前说话人' });
   const edit = speaker.locator('div.flex.mb12').filter({ hasText: '林晨' }).getByRole('button', { name: '编辑', exact: true });
   await expect(edit).toBeEnabled({ timeout: 90000 });
@@ -126,7 +130,7 @@ try {
   await naming.getByRole('radio', { name: /提交声纹库审核/ }).check();
   await naming.getByRole('button', { name: '确认命名' }).click();
   await review.getByRole('button', { name: '确认提交审核' }).click();
-  await expect(page.getByText('说话人已命名，本次会议无可用原录音，未提交声纹审核。', { exact: true }))
+  await expect(page.getByText('说话人已命名 · 本次声纹核对；缺少可核实的人员授权身份，未提交声纹审核。', { exact: true }))
     .toBeVisible({ timeout: 30000 });
   await expect(speaker.locator('div.flex.mb12').filter({ hasText: '本次声纹核对' })).toBeVisible({ timeout: 30000 });
   await speaker.locator('div.flex.mb12').filter({ hasText: '本次声纹核对' }).getByRole('button', { name: '编辑', exact: true }).click();
@@ -162,9 +166,8 @@ try {
   assert.equal(newGroup.segmentIds.length, 1);
   await speaker.getByRole('button', { name: '合并说话人', exact: true }).click();
   const merge = page.getByRole('dialog', { name: '合并说话人', exact: true });
-  await merge.getByRole('button', { name: '合并', exact: true }).click();
-  await expect(merge.getByRole('alert')).toHaveText('来源与目标不能相同');
   await merge.getByLabel('来源说话人').selectOption(newGroup.id);
+  await expect(merge.getByLabel('目标说话人').locator('option[value="' + newGroup.id + '"]')).toHaveCount(0);
   await merge.getByLabel('目标说话人').selectOption(linked.id);
   await merge.getByRole('button', { name: '合并', exact: true }).click();
   await expect(merge).not.toBeVisible({ timeout: 30000 });
@@ -181,7 +184,7 @@ try {
   assert.equal((await read(reader, root)).status, 403);
   await reader.close();
   assert.deepEqual(errors, []);
-  console.log('PASS', format, 'RAW cancel, blank name, voice cancel and no-audio failure, external rename, directory identity, reload, split, merge and undo');
+  console.log('PASS', format, 'RAW cancel, blank name, voice cancel and missing subject authorization, external rename, directory identity, reload, split, merge and undo');
 } catch (error) {
   console.error('Visible alerts:', await page.getByRole('alert').allTextContents());
   throw error;

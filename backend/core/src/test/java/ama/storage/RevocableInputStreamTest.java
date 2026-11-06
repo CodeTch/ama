@@ -41,6 +41,17 @@ class RevocableInputStreamTest {
    var read=executor.submit(()->stream.read(new byte[20]));assertTrue(source.started.await(1,TimeUnit.SECONDS));denied.set(true);assertTrue(source.closed.await(1,TimeUnit.SECONDS));assertThrows(ExecutionException.class,()->read.get(1,TimeUnit.SECONDS));
   }finally{source.close();executor.shutdownNow();}
  }
+ @Test void verifiedBufferStopsBetweenWritesIfItsOriginalAuthorityCloses()throws Exception{
+  byte[] bytes=new byte[20000];var streamed=new ByteArrayOutputStream();
+  try(var stream=new RevocableInputStream(new ByteArrayInputStream(bytes),()->{})){
+   var output=new OutputStream(){
+    public void write(int b){throw new AssertionError();}
+    public void write(byte[] buffer,int offset,int length)throws IOException{streamed.write(buffer,offset,length);stream.close();}
+   };
+   assertThrows(IOException.class,()->stream.writeVerified(output,bytes,0,bytes.length));
+   assertEquals(8192,streamed.size());
+  }
+ }
  private static final class Blocked extends InputStream {
   final CountDownLatch started=new CountDownLatch(1),closed=new CountDownLatch(1);
   public int read()throws IOException{started.countDown();try{if(!closed.await(2,TimeUnit.SECONDS))throw new IOException("Test timeout");}catch(InterruptedException interrupted){Thread.currentThread().interrupt();throw new IOException(interrupted);}return 42;}

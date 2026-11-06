@@ -48,6 +48,15 @@ public final class RevocableInputStream extends InputStream {
  private void check()throws IOException{if(!closed.get()&&!revoked&&System.nanoTime()-deadline>=0)revoke();if(closed.get()||revoked)throw new IOException("Download authorization expired or stream closed");}
  @Override public int read()throws IOException{check();int value=source.read();check();return value;}
  @Override public int read(byte[] bytes,int offset,int length)throws IOException{Objects.checkFromIndexSize(offset,length,bytes.length);check();int value=source.read(bytes,offset,length);check();return value;}
+ /** Release a verified buffer under this stream's still-live authorization, even after slow hashing or a blocked write. */
+ public void writeVerified(OutputStream output,byte[] bytes,int offset,int length)throws IOException{
+  Objects.checkFromIndexSize(offset,length,bytes.length);
+  int end=offset+length;
+  while(offset<end){
+   check();int count=Math.min(8192,end-offset);output.write(bytes,offset,count);offset+=count;
+  }
+  check();
+ }
  @Override public int available()throws IOException{check();int count=source.available();check();return count;}
  @Override public long transferTo(OutputStream output)throws IOException{Objects.requireNonNull(output);byte[] bytes=new byte[8192];long total=0;for(int size;(size=read(bytes))!=-1;){check();output.write(bytes,0,size);total=Math.addExact(total,size);}return total;}
  private void closeSource()throws IOException{if(sourceClosed.compareAndSet(false,true))source.close();}

@@ -15,9 +15,10 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 /** Fixed private collaborator of the saved-transcript service. Detached rows cannot grant a write. */
 final class SpeechReviewRepository {
  record Proposal(String id,String segment,String file,String clip,String engine,String recognitionSha,String enhancementSha,String before,String after) {}
+ record Evidence(String punctuation,String reason,String model,List<ama.contract.SpeechContracts.TextCorrection> entities) {}
  static final class Plan {
-  final SpeechReviewRepository issuer;final SavedTranscriptGraph graph;final List<Proposal> proposals;final boolean available;
-  private Plan(SpeechReviewRepository issuer,SavedTranscriptGraph graph,List<Proposal> proposals,boolean available){this.issuer=issuer;this.graph=graph;this.proposals=List.copyOf(proposals);this.available=available;}
+  final SpeechReviewRepository issuer;final SavedTranscriptGraph graph;final List<Proposal> proposals;final boolean available;final Map<String,Evidence> evidence;
+  private Plan(SpeechReviewRepository issuer,SavedTranscriptGraph graph,List<Proposal> proposals,boolean available,Map<String,Evidence> evidence){this.evidence=Map.copyOf(evidence);this.issuer=issuer;this.graph=graph;this.proposals=List.copyOf(proposals);this.available=available;}
  }
  private final JdbcTranscriptAuthority authority;private final JdbcTemplate j;
  SpeechReviewRepository(JdbcTranscriptAuthority authority){this.authority=Objects.requireNonNull(authority);j=new JdbcTemplate(authority.dataSource());j.setQueryTimeout(5);}
@@ -73,7 +74,7 @@ final class SpeechReviewRepository {
   var facts=graph.review();require(facts.modelsCaptured(),PROVENANCE_UNAVAILABLE);var raw=raw(graph);var rawSegments=graph.segments(raw.string("id"));var current=graph.segments(graph.selected());
   var stages=new HashMap<String,SpeechReviewFacts.Stage>();for(var stage:facts.stages())require(stages.put(text(stage.metadata(),"clip_key")+":"+text(stage.metadata(),"stage"),stage)==null,PROVENANCE_UNAVAILABLE);
   var members=new HashMap<String,String>();for(var member:graph.rows())if(member.table()==Table.INPUT_BATCH_FILE)require(members.put(member.string("file_id"),member.string("sha256"))==null,PROVENANCE_UNAVAILABLE);
-  var proposals=new ArrayList<Proposal>();var clips=new HashSet<String>();int expectedStages=0;
+  var evidence=new HashMap<String,Evidence>();var proposals=new ArrayList<Proposal>();var clips=new HashSet<String>();int expectedStages=0;
   for(var audio:facts.audio()){
    String clip=text(audio,"clip_key"),file=text(audio,"file_id");long start=number(audio,"start_sample"),samples=number(audio,"sample_count"),sourceSamples=number(audio,"source_samples");
    require(clips.add(clip)&&graph.meeting().equals(audio.get("meeting_id"))&&graph.input().string("id").equals(audio.get("input_id"))&&Objects.equals(graph.task().get("id"),audio.get("task_id"))&&Objects.equals(engine,audio.get("engine_sha256"))&&Objects.equals(members.get(file),audio.get("source_sha256"))&&"READY".equals(audio.get("state")),PROVENANCE_UNAVAILABLE);
@@ -81,10 +82,12 @@ final class SpeechReviewRepository {
    var recognized=stage(stages,audio,"ASR");var enhanced=stage(stages,audio,"ENHANCEMENT");
    var recognition=(SpeechPipeline.Recognition)SpeechCheckpointCodec.decode(SpeechPipeline.Stage.ASR,recognized.bytes());var enhancement=(SpeechPipeline.Enhancement)SpeechCheckpointCodec.decode(SpeechPipeline.Stage.ENHANCEMENT,enhanced.bytes());
    String before=recognition.result().text(),after=enhancement.text();scalars(before);scalars(after);require(before.length()<=65536&&after.length()<=65536,PROVENANCE_UNAVAILABLE);
+   String reason=null, model=null;List<ama.contract.SpeechContracts.TextCorrection> entities=List.of();
    expectedStages+=2;
    if(stages.containsKey(clip+":CORRECTION")){
     var corrected=stage(stages,audio,"CORRECTION");var correction=(SpeechPipeline.Correction)SpeechCheckpointCodec.decode(SpeechPipeline.Stage.CORRECTION,corrected.bytes());
     require(correction.result().sourceText().equals(enhancement.text())&&correction.result().modelVersion().equals(ControlledSpeechProfile.CORRECTION_MODEL),PROVENANCE_UNAVAILABLE);
+    entities=correction.result().corrections();model=correction.result().modelVersion();reason=correction.result().corrections().stream().map(c->c.reason()).distinct().limit(3).collect(java.util.stream.Collectors.joining("；"));
     after=correction.result().correctedText();enhanced=corrected;expectedStages++;
    }
    var originals=rawSegments.stream().filter(s->file.equals(s.string("source_file_id"))&&s.number("source_paragraph")==start/1920000+1).toList();
@@ -92,6 +95,8 @@ final class SpeechReviewRepository {
    require(originals.size()==1,PROVENANCE_UNAVAILABLE);var original=originals.getFirst();String segment=original.string("segment_id");
    require(before.equals(original.string("body"))&&Objects.equals(original.nullableNumber("start_ms"),start/16)&&Objects.equals(original.nullableNumber("end_ms"),(start+samples+15)/16),PROVENANCE_UNAVAILABLE);
    var saved=current.stream().filter(s->segment.equals(s.string("segment_id"))).toList();require(saved.size()==1,PROVENANCE_UNAVAILABLE);
+   String punctuation=enhancement.text();
+   evidence.put(segment,new Evidence(punctuation.equals(before)||punctuation.equals(after)||punctuation.isBlank()?null:punctuation,reason,model,entities));
    var existing=facts.candidates().stream().filter(c->segment.equals(c.get("segment_id"))).toList();require(existing.size()<=1,PROVENANCE_UNAVAILABLE);
    if(!existing.isEmpty()){
     var candidate=existing.getFirst();require(Objects.equals(candidate.get("engine_sha256"),engine)&&Objects.equals(candidate.get("clip_key"),clip)&&Objects.equals(candidate.get("file_id"),file)&&Objects.equals(candidate.get("before_text"),before)&&Objects.equals(candidate.get("after_text"),after)&&Objects.equals(candidate.get("recognition_sha256"),recognized.metadata().get("payload_sha256"))&&Objects.equals(candidate.get("enhancement_sha256"),enhanced.metadata().get("payload_sha256")),PROVENANCE_UNAVAILABLE);continue;
@@ -99,7 +104,7 @@ final class SpeechReviewRepository {
    if(before.equals(saved.getFirst().string("body"))&&!before.equals(after))proposals.add(new Proposal(UUID.randomUUID().toString(),segment,file,clip,engine,text(recognized.metadata(),"payload_sha256"),text(enhanced.metadata(),"payload_sha256"),before,after));
   }
   require(facts.stages().size()==expectedStages&&(facts.candidates().isEmpty()||!facts.audio().isEmpty()),PROVENANCE_UNAVAILABLE);
-  return new Plan(this,graph,proposals,!facts.audio().isEmpty());
+  return new Plan(this,graph,proposals,!facts.audio().isEmpty(),evidence);
  }
  private static SpeechReviewFacts.Stage stage(Map<String,SpeechReviewFacts.Stage> stages,Map<String,Object> audio,String kind){
   var stage=stages.get(text(audio,"clip_key")+":"+kind);require(stage!=null,PROVENANCE_UNAVAILABLE);var row=stage.metadata();
@@ -118,26 +123,61 @@ final class SpeechReviewRepository {
   }
  }
  int pending(SavedTranscriptGraph graph){return Math.toIntExact(graph.review().candidates().stream().filter(c->"PENDING".equals(c.get("state"))).count()+graph.review().otherPending().size());}
+ private boolean canReopen(SavedTranscriptGraph graph,Map<String,Object> row){
+  String state=text(row,"state");
+  if(!Set.of("ACCEPTED","REJECTED","UNDONE").contains(state))return false;
+  String anchor=text(row,state.equals("UNDONE")?"undo_revision_id":"decision_revision_id");
+  String segment=text(row,"segment_id"),revision=graph.selected(),body=null;
+  var history=new HashMap<String,FullRow>();
+  var bodies=new HashMap<String,String>();
+  for(var fact:graph.rows()){
+   if(fact.table()==Table.TRANSCRIPT_REVISION)history.put(fact.string("id"),fact);
+   if(fact.table()==Table.TRANSCRIPT_SEGMENT&&segment.equals(fact.string("segment_id")))bodies.put(fact.string("revision_id"),fact.string("body"));
+  }
+  for(int i=0;revision!=null&&i<history.size();i++){
+   String current=bodies.get(revision);
+   if(current==null||body!=null&&!body.equals(current))return false;
+   if(anchor.equals(revision))return state.equals("ACCEPTED")||current.equals(row.get("before_text"));
+   body=current;var previous=history.get(revision);revision=previous==null?null:previous.nullableString("parent_id");
+  }
+  return false;
+ }
  List<Map<String,Object>> decisions(SavedTranscriptGraph graph,ama.contract.TranscriptContracts.Command command){
-  if(command.correction()!=null&&command.correction().decision()==ama.contract.TranscriptContracts.CorrectionDecision.ACCEPT&&!new ama.governance.JdbcGovernanceRuntime(j.getDataSource()).corpusCurrent(graph.input().string("id")))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_STALE");
+  if(command.correction()!=null&&command.correction().decision().name().startsWith("ACCEPT")&&!new ama.governance.JdbcGovernanceRuntime(j.getDataSource()).corpusCurrent(graph.input().string("id")))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_STALE");
   var correction=command.correction();if(correction==null)throw new IllegalArgumentException("Original correction decision required");
   var result=new ArrayList<Map<String,Object>>();
   for(String candidateId:correction.candidateIds()){
   var rows=graph.review().candidates().stream().filter(c->candidateId.equals(c.get("id"))).toList();if(rows.size()!=1)throw new ama.contract.TranscriptContracts.Failure(404,"CORRECTION_NOT_FOUND");var row=rows.getFirst();
-  if(!"PENDING".equals(row.get("state")))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_ALREADY_HANDLED");
+  if(correction.decision()==ama.contract.TranscriptContracts.CorrectionDecision.REOPEN){
+   if(!canReopen(graph,row))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_STALE");
+  }else if(!"PENDING".equals(row.get("state")))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_ALREADY_HANDLED");
   var segments=graph.segments(graph.selected()).stream().filter(s->s.string("segment_id").equals(row.get("segment_id"))).toList();require(segments.size()==1,PROVENANCE_UNAVAILABLE);
-  if(correction.decision()==ama.contract.TranscriptContracts.CorrectionDecision.ACCEPT&&!segments.getFirst().string("body").equals(row.get("before_text")))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_STALE");
+  if(correction.decision().name().startsWith("ACCEPT")&&!segments.getFirst().string("body").equals(row.get("before_text")))throw new ama.contract.TranscriptContracts.Failure(409,"CORRECTION_STALE");
   result.add(row);
   }
   return List.copyOf(result);
  }
- List<Map<String,Object>> items(SavedTranscriptGraph graph,boolean writable){
+ List<Map<String,Object>> items(SavedTranscriptGraph graph,boolean writable,Plan plan){
   var current=new HashMap<String,FullRow>();for(var s:graph.segments(graph.selected()))current.put(s.string("segment_id"),s);var result=new ArrayList<Map<String,Object>>();
   Boolean corpusCurrent=null;
   for(var row:graph.review().candidates()){
    var segment=current.get(text(row,"segment_id"));require(segment!=null,PROVENANCE_UNAVAILABLE);boolean pending="PENDING".equals(row.get("state"));var item=new LinkedHashMap<String,Object>();
    item.put("id",row.get("id"));item.put("segmentId",row.get("segment_id"));item.put("source",row.get("before_text"));item.put("replacement",row.get("after_text"));item.put("status",row.get("state"));item.put("operationId",row.get("decision_revision_id"));
    item.put("range",TranscriptCorrectionRange.between(text(row,"before_text"),text(row,"after_text")));item.put("createdSourceRevisionId",row.get("created_source_revision_id"));item.put("kind","SPEECH_ENHANCEMENT");
+   var evidence=plan.evidence.get(segment.string("segment_id"));
+   if(evidence!=null){
+    if(!evidence.entities().isEmpty())item.put("entities",evidence.entities().stream().map(change->{
+     var entity=new LinkedHashMap<String,Object>();entity.put("original",change.original());entity.put("replacement",change.replacement());
+     if(change.entityType()!=null)entity.put("type",change.entityType());if(change.confidence()!=null)entity.put("confidence",change.confidence());
+     return entity;
+    }).toList());
+    if(evidence.punctuation()!=null)item.put("punctuationAlternative",evidence.punctuation());
+    if(evidence.model()!=null)item.put("modelVersion",evidence.model());
+    if(evidence.reason()!=null&&!evidence.reason().isEmpty())item.put("reason",evidence.reason());
+   }
+   String material=graph.input().nullableString("material_snapshot_id");
+   if(material!=null)item.put("materialSnapshotId",material);
+   item.put("canReopen",writable&&canReopen(graph,row));
    boolean applicable=writable&&pending&&segment.string("body").equals(row.get("before_text"));
    if(applicable&&corpusCurrent==null)corpusCurrent=new ama.governance.JdbcGovernanceRuntime(j.getDataSource()).corpusCurrent(graph.input().string("id"));
    item.put("canAccept",applicable&&Boolean.TRUE.equals(corpusCurrent));item.put("canReject",writable&&pending);item.put("canUndo",writable&&"ACCEPTED".equals(row.get("state"))&&graph.selected().equals(row.get("decision_revision_id")));result.add(Collections.unmodifiableMap(item));
@@ -157,7 +197,10 @@ final class SpeechReviewRepository {
   authority.requireSpeechReviewWrite(held,gate,actor,graph);var bodies=new HashMap<String,String>();for(var row:written)if(row.table()==Table.TRANSCRIPT_SEGMENT){require(result.equals(row.string("revision_id"))&&bodies.put(row.string("segment_id"),row.string("body"))==null,PROVENANCE_UNAVAILABLE);}
   require(bodies.size()==graph.segments(graph.selected()).size(),PROVENANCE_UNAVAILABLE);var decided=new HashSet<String>();
   if(command.operation()==ama.contract.TranscriptContracts.Operation.CORRECTION){
-   for(var row:decisions(graph,command)){String candidateId=text(row,"id");decided.add(candidateId);String state=command.correction().decision()==ama.contract.TranscriptContracts.CorrectionDecision.ACCEPT?"ACCEPTED":"REJECTED";
+   for(var row:decisions(graph,command)){String candidateId=text(row,"id");decided.add(candidateId);if(command.correction().decision()==ama.contract.TranscriptContracts.CorrectionDecision.REOPEN){
+    require(j.update("UPDATE speech_review_candidate SET state='PENDING',decision_revision_id=NULL,undo_revision_id=NULL,decided_at=NULL WHERE id=? AND meeting_id=? AND state=?",candidateId,graph.meeting(),row.get("state"))==1,PROVENANCE_UNAVAILABLE);continue;
+   }
+   String state=command.correction().decision().name().startsWith("ACCEPT")?"ACCEPTED":"REJECTED";
    require(j.update("UPDATE speech_review_candidate SET state=?,decision_revision_id=?,decided_at=UTC_TIMESTAMP(6) WHERE id=? AND meeting_id=? AND state='PENDING'",state,result,candidateId,graph.meeting())==1,PROVENANCE_UNAVAILABLE);
    }
   }

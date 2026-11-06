@@ -67,6 +67,25 @@ class MaterialAuthorityGateIT {
   cache(owner.enterpriseId(),pins,"DENIED",-1);var denied=reader.list(owner,"owned",10,null);assertEquals(0,denied.total());assertTrue(denied.items().isEmpty());assertTrue(denied.topicGroups().isEmpty());assertTrue(denied.stageCounts().values().stream().allMatch(n->n==0));
  }
 
+ @Test void concurrentReadPreparationsCanShareAnIdentityButCannotEdit()throws Exception{
+  var held=new java.util.concurrent.CountDownLatch(1);
+  var release=new java.util.concurrent.CountDownLatch(1);
+  try(var executor=java.util.concurrent.Executors.newSingleThreadExecutor()){
+   var reader=executor.submit(()->tx.required(()->{
+    access.lockReadIdentity(owner);held.countDown();assertTrue(release.await(10,java.util.concurrent.TimeUnit.SECONDS));return null;
+   }));
+   try{
+    assertTrue(held.await(5,java.util.concurrent.TimeUnit.SECONDS));
+    assertTimeoutPreemptively(java.time.Duration.ofSeconds(2),()->tx.required(()->{
+     var gate=access.lockPrepared(access.lockReadIdentity(owner),meeting,false).orElseThrow();
+     access.require(gate,Action.READ);assertThrows(AccessDeniedException.class,()->access.require(gate,Action.EDIT));return null;
+    }));
+   }finally{release.countDown();reader.get(5,java.util.concurrent.TimeUnit.SECONDS);}
+  }
+  j.update("UPDATE enterprise_identity SET status='DISABLED' WHERE enterprise_id=?",owner.enterpriseId());
+  assertThrows(AccessDeniedException.class,()->access.prepareExternalRead(owner,meeting));
+ }
+
  @Test void displayRenewalDoesNotWaitBehindAnUnrelatedContentWriterButStillRejectsCommittedRevocation()throws Exception{
   var reader=new JdbcWorkspaceNavigationReader(j.getDataSource(),tx,access,WorkspaceReadBudget.DEFAULT);
   var held=new java.util.concurrent.CountDownLatch(1);var release=new java.util.concurrent.CountDownLatch(1);

@@ -5,7 +5,7 @@ import static ama.contract.MinutesContracts.*;
 public final class TranscriptContracts {
  private TranscriptContracts(){}
  public enum Operation { SAVE, MARKS, RESTORE, CONFIRM, REPLACE, UNDO, CORRECTION, SPEAKERS }
- public enum CorrectionDecision { ACCEPT, REJECT }
+ public enum CorrectionDecision { ACCEPT, REJECT, ACCEPT_PUNCTUATION, REOPEN }
  public record SpeakerEdit(List<String> segmentIds,String label,String enterpriseId,String voiceprintId){
   public SpeakerEdit(List<String> segmentIds,String label,String enterpriseId){this(segmentIds,label,enterpriseId,null);}
   public SpeakerEdit{if(voiceprintId!=null){ama.contract.MinutesContracts.uuid(voiceprintId);if(enterpriseId==null)throw new IllegalArgumentException("Candidate requires enterprise subject");}if(segmentIds==null||segmentIds.isEmpty()||segmentIds.size()>4096||new HashSet<>(segmentIds).size()!=segmentIds.size())throw new IllegalArgumentException("Explicit speaker segments required");segmentIds=List.copyOf(segmentIds);segmentIds.forEach(ama.contract.MinutesContracts::uuid);scalars(label);if(label.isBlank()||label.length()>256||!label.equals(label.strip()))throw new IllegalArgumentException("Bounded human speaker label required");if(enterpriseId!=null){scalars(enterpriseId);if(enterpriseId.isBlank()||enterpriseId.length()>255)throw new IllegalArgumentException("Invalid speaker identity");}}

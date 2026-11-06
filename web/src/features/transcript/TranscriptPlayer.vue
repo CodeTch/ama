@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import StableLabel from '../../shared/StableLabel.vue';
 import {computed,ref,watch,onUnmounted,nextTick} from 'vue';import {useApplication} from '../../application';import Icon from '../../shared/Icon.vue';import {useSourceMedia,type MediaScope} from './useSourceMedia';
-const props=defineProps<{scope:MediaScope|null;active:boolean;published?:boolean;expectRecording?:boolean;sourceState?:'loading'|'error'|'ready'|'empty'}>();const {session,transcripts}=useApplication();const state=useSourceMedia((...args)=>transcripts.source(...args),()=>session.current.value?.actor.enterpriseId??null,()=>props.scope,URL,()=>props.active);
+const props=defineProps<{scope:MediaScope|null;active:boolean;published?:boolean;expectRecording?:boolean;sourceState?:'loading'|'error'|'ready'|'empty'}>();const {session,transcripts}=useApplication();const state=useSourceMedia((...args)=>transcripts.source(...args),()=>session.current.value?.actor.enterpriseId??null,()=>props.scope,URL,()=>props.active,(...args)=>transcripts.playback(...args));
 const emit=defineEmits<{position:[position:{fileId:string;ms:number;playing:boolean}|null]}>();
 const element=ref<HTMLMediaElement>(),current=ref(0),duration=ref(0),playing=ref(false),speed=ref(1),localError=ref<string|null>(null);const selectedSource=computed(()=>state.sources.value.find(source=>source.fileId===state.selected.value));
 const video=computed(()=>state.type.value.startsWith('video/'));
@@ -17,7 +17,7 @@ let waveGeneration=0;
 async function loadWaveform(){
  const url=state.url.value, generation=++waveGeneration;
  const source=selectedSource.value;
- if(!url||!source||source.sizeBytes>32*1024*1024||!duration.value||duration.value>2700||typeof AudioContext==='undefined')return;
+ if(!url||!url.startsWith('blob:')||!source||source.sizeBytes>32*1024*1024||!duration.value||duration.value>2700||typeof AudioContext==='undefined')return;
  let context:AudioContext|null=null;
  try{
   context=new AudioContext({sampleRate:8000});

@@ -36,7 +36,10 @@ record SavedTranscriptGraph(String meeting,String selected,Map<String,Object> ro
  static SavedTranscriptGraph acquire(JdbcTranscriptAuthority authority,JdbcTemplate j,FileRegistry.LockedMeeting gate,Object scope,Actor actor,String meeting,JdbcTranscriptAuthority.SavedPurpose purpose,Discovery discovered,TranscriptAcquisitionBudget limits,TranscriptAcquisitionBudget.Ledger budget){return acquire(authority,j,gate,scope,actor,meeting,purpose,discovered,limits,budget,null);}
  static SavedTranscriptGraph acquire(JdbcTranscriptAuthority authority,JdbcTemplate j,FileRegistry.LockedMeeting gate,Object scope,Actor actor,String meeting,JdbcTranscriptAuthority.SavedPurpose purpose,Discovery discovered,TranscriptAcquisitionBudget limits,TranscriptAcquisitionBudget.Ledger budget,JdbcTranscriptAuthority.HeldMinutesTransition transition){
   authority.requireSavedScope(scope,gate,actor,meeting,purpose);var read=new SavedTranscriptRows(j,budget,authority.readBudget().maxManifestBytes());var root=read.one(ROOT,meeting);
-  if(purpose==JdbcTranscriptAuthority.SavedPurpose.CURRENT)require(Objects.equals(root.get("transcript_revision_id"),discovered.selected),PROVENANCE_UNAVAILABLE);
+  if(purpose==JdbcTranscriptAuthority.SavedPurpose.CURRENT){
+   String visible=actor.enterpriseId().equals(root.get("owner_id"))?(String)root.get("transcript_revision_id"):ParticipantTranscript.select(j,meeting).revision();
+   require(Objects.equals(visible,discovered.selected),PROVENANCE_UNAVAILABLE);
+  }
   if(discovered.selected==null){
    if(purpose==JdbcTranscriptAuthority.SavedPurpose.CURRENT&&root.get("transcript_confirmation_id")!=null){
     read.rows(Table.TRANSCRIPT_CONFIRMATION,"id=?","id",1,true,root.get("transcript_confirmation_id"));

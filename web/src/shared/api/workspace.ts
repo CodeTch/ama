@@ -69,7 +69,7 @@ export function createWorkspaceApi(client:ReturnType<typeof createBusinessClient
  return {
  async access(meeting:string,signal:AbortSignal):Promise<void>{
   if(!uuid(meeting))throw new TypeError('Invalid workspace meeting');
-  const value=await client.json<unknown>(`/api/v1/meetings/${meeting}/workspace/access`,{signal,expectedStatus:200,maxResponseBytes:4096});
+  const value=await client.json<unknown>(`/api/v1/meetings/${meeting}/workspace/access`,{signal,priority:'high',expectedStatus:200,maxResponseBytes:4096});
   if(!shape(value,'allowed,meetingId')||value.meetingId!==meeting||value.allowed!==true)throw new ApiError('response',200,'会议内容的访问状态暂无法核实，请重新读取。');
  },
  async navigation(meeting:string,signal:AbortSignal):Promise<WorkspaceNavigation>{

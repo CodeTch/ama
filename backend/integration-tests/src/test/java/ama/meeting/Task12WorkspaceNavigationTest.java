@@ -19,6 +19,8 @@ class Task12WorkspaceNavigationTest {
   if(q.contains(" FROM roster_member "))return List.of(row("member_id",I));
   if(q.contains(" FROM generation_candidate "))return candidate&&q.contains(candidateColumn)?List.of(row("id",I)):List.of();
   if(missing)return List.of();
+  if(q.contains(" FROM transcript_confirmation c JOIN transcript_revision r "))return root.get("transcript_confirmation_id")==null?List.of():List.of(row("revision_id",T,"confirmation_id",I));
+  if(q.contains(" FROM material_enhancement_candidate e JOIN transcript_revision raw "))return List.of(row("id",T));
   if(q.contains(" FROM meeting_info_revision "))return List.of(row("id",I,"meeting_id",parentMeeting,"revision",1L));
   if(q.startsWith("SELECT id FROM roster_revision"))return List.of(row("id",R));
   if(q.contains(" FROM roster_revision "))return List.of(row("id",R,"meeting_id",parentMeeting,"revision",2L,"state","CONFIRMED"));

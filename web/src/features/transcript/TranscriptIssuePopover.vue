@@ -4,8 +4,8 @@ import Icon from '../../shared/Icon.vue';
 import type {SpeechCorrectionItem} from '../../shared/api/transcript-corrections';
 import {correctionRange} from './correction-range';
 
-const props=defineProps<{item:SpeechCorrectionItem;body:string;anchor:HTMLElement;pinned:boolean;disabled:boolean}>();
-const emit=defineEmits<{close:[focus:boolean];enter:[];leave:[];decide:[decision:'ACCEPT'|'REJECT'];undo:[];edit:[text:string];feedback:[]}>();
+const props=defineProps<{item:SpeechCorrectionItem;body:string;location?:{label:string;playable:boolean}|null;anchor:HTMLElement;pinned:boolean;disabled:boolean}>();
+const emit=defineEmits<{close:[focus:boolean];enter:[];leave:[];seek:[];decide:[decision:'ACCEPT'|'REJECT'|'REOPEN'|'ACCEPT_PUNCTUATION'];undo:[];edit:[text:string];feedback:[]}>();
 const panel=ref<HTMLElement>(),left=ref(0),top=ref(0);
 const change=computed(()=>props.item.range??correctionRange(props.item.source,props.item.replacement));
 const status={PENDING:'待确认',ACCEPTED:'已接受',REJECTED:'已拒绝',STALE:'上下文已变化',UNDONE:'已撤销'};
@@ -45,11 +45,13 @@ onUnmounted(()=>{
   <div class="aci-correction-pop-head"><b>纠错建议</b><span class="small muted">{{status[item.status]}}</span>
    <button type="button" aria-label="关闭纠错详情" @click="emit('close',true)"><Icon name="x" :size="14"/></button></div>
   <div class="aci-correction-values"><del>{{change.original||'（插入）'}}</del> → <ins>{{(item.range?.replacement??('suggestion' in change?change.suggestion:''))||'（删除）'}}</ins></div>
-  <div class="aci-correction-source">来源：本段语音增强</div>
+  <div class="aci-correction-source">来源：本段语音增强<span v-if="item.modelVersion"> · {{item.modelVersion}}</span><div v-if="location">{{location.label}} <button v-if="location.playable" type="button" class="btn sm ghost" @click="emit('seek')">定位原录音</button></div><div v-for="(entity,i) in item.entities" :key="i">{{entity.original}} → {{entity.replacement}} · {{entity.type??'类型未提供'}} · 置信度 {{entity.confidence==null?'未提供':Math.round(entity.confidence*100)+'%'}}</div><p v-if="!item.entities?.length">语音增强 · 置信度未提供</p><p v-if="item.reason">{{item.reason}}</p><p v-if="item.materialSnapshotId">处理所用材料版本 {{item.materialSnapshotId}}</p></div>
   <p v-if="item.status==='STALE'||item.status==='PENDING'&&!applicable" class="small ac-error">正文已变化，请核对当前片段。</p>
   <div class="aci-correction-actions">
    <template v-if="item.status==='PENDING'"><button class="btn sm primary" :disabled="disabled||!applicable||!item.canAccept" @click="emit('decide','ACCEPT')">接受本段建议</button>
    <button class="btn sm" :disabled="disabled||!item.canReject" @click="emit('decide','REJECT')">拒绝本段建议</button></template>
+   <button v-if="item.status==='PENDING'&&item.punctuationAlternative" class="btn sm" :disabled="disabled||!item.canAccept" @click="emit('decide','ACCEPT_PUNCTUATION')">采用断句版本 · {{item.punctuationAlternative}}</button>
+   <button v-if="item.canReopen" class="btn sm" :disabled="disabled" @click="emit('decide','REOPEN')">恢复为待确认</button>
    <button v-if="item.canUndo" class="btn sm" :disabled="disabled" @click="emit('undo')">撤销接受</button>
   </div>
   <details class="aci-correction-more"><summary>更多操作</summary>

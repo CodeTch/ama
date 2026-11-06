@@ -3536,6 +3536,16 @@
       },
       {
         "$ref": "#/fileId"
+      },
+      {
+        "name": "playbackSha256",
+        "in": "query",
+        "required": false,
+        "description": "Pinned source digest for part-verified PCM playback. A 422 response permits a full verified download for older files.",
+        "schema": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
       }
     ],
     "get": {
@@ -3745,10 +3755,22 @@
                 "type": "string",
                 "const": "nosniff"
               }
+            },
+            "ETag": {
+              "description": "Quoted file digest when playbackSha256 is selected.",
+              "schema": {
+                "type": "string"
+              }
             }
           },
           "content": {
             "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "audio/wav": {
               "schema": {
                 "type": "string",
                 "format": "binary"
@@ -3793,10 +3815,22 @@
                 "type": "string",
                 "const": "nosniff"
               }
+            },
+            "ETag": {
+              "description": "Quoted file digest when playbackSha256 is selected.",
+              "schema": {
+                "type": "string"
+              }
             }
           },
           "content": {
             "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "audio/wav": {
               "schema": {
                 "type": "string",
                 "format": "binary"
@@ -3829,6 +3863,102 @@
           }
         }
       }
+    },
+    "head": {
+      "operationId": "probeTranscriptPlayback",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Negotiate sealed PCM playback before a native media GET. With playbackSha256 and Range bytes=0-43, validates current access, part manifest and WAV format without transferring any audio. GET verifies each released part.",
+      "parameters": [
+        {
+          "name": "Range",
+          "in": "header",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Malformed request, UUID, revision token, unequal dual representation or query."
+        },
+        "401": {
+          "description": "Missing or revoked session."
+        },
+        "403": {
+          "description": "Fresh meeting permission denied. Admin role grants no implicit content access."
+        },
+        "404": {
+          "description": "Exact same-meeting selected entity missing after authorization."
+        },
+        "409": {
+          "description": "CAS/current-source or idempotency digest conflict; preserve key and original body."
+        },
+        "413": {
+          "description": "Stable request transport envelope exceeded."
+        },
+        "422": {
+          "description": "Unsupported, blank or incomplete segment/mark input."
+        },
+        "503": {
+          "description": "Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance."
+        },
+        "200": {
+          "description": "Original bytes after complete Task3/B04 protocol and commit. No stored-inspection grant is reusable for bytes."
+        },
+        "206": {
+          "description": "Original bytes after complete Task3/B04 protocol and commit. No stored-inspection grant is reusable for bytes.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            },
+            "Content-Length": {
+              "schema": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "Accept-Ranges": {
+              "schema": {
+                "type": "string",
+                "const": "bytes"
+              }
+            },
+            "Content-Disposition": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "Content-Range": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "X-Content-Type-Options": {
+              "schema": {
+                "type": "string",
+                "const": "nosniff"
+              }
+            },
+            "ETag": {
+              "description": "Quoted file digest when playbackSha256 is selected.",
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "416": {
+          "description": "Range unavailable."
+        }
+      }
     }
   },
   "revisionSource": {
@@ -3846,6 +3976,16 @@
       },
       {
         "$ref": "#/fileId"
+      },
+      {
+        "name": "playbackSha256",
+        "in": "query",
+        "required": false,
+        "description": "Pinned source digest for part-verified PCM playback. A 422 response permits a full verified download for older files.",
+        "schema": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
       }
     ],
     "get": {
@@ -4055,10 +4195,22 @@
                 "type": "string",
                 "const": "nosniff"
               }
+            },
+            "ETag": {
+              "description": "Quoted file digest when playbackSha256 is selected.",
+              "schema": {
+                "type": "string"
+              }
             }
           },
           "content": {
             "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "audio/wav": {
               "schema": {
                 "type": "string",
                 "format": "binary"
@@ -4103,10 +4255,22 @@
                 "type": "string",
                 "const": "nosniff"
               }
+            },
+            "ETag": {
+              "description": "Quoted file digest when playbackSha256 is selected.",
+              "schema": {
+                "type": "string"
+              }
             }
           },
           "content": {
             "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "audio/wav": {
               "schema": {
                 "type": "string",
                 "format": "binary"
@@ -4137,6 +4301,102 @@
               }
             }
           }
+        }
+      }
+    },
+    "head": {
+      "operationId": "probeVersionedTranscriptPlayback",
+      "security": [
+        {
+          "enterpriseSession": []
+        }
+      ],
+      "description": "Negotiate sealed PCM playback before a native media GET. With playbackSha256 and Range bytes=0-43, validates current access, part manifest and WAV format without transferring any audio. GET verifies each released part.",
+      "parameters": [
+        {
+          "name": "Range",
+          "in": "header",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "400": {
+          "description": "Malformed request, UUID, revision token, unequal dual representation or query."
+        },
+        "401": {
+          "description": "Missing or revoked session."
+        },
+        "403": {
+          "description": "Fresh meeting permission denied. Admin role grants no implicit content access."
+        },
+        "404": {
+          "description": "Exact same-meeting selected entity missing after authorization."
+        },
+        "409": {
+          "description": "CAS/current-source or idempotency digest conflict; preserve key and original body."
+        },
+        "413": {
+          "description": "Stable request transport envelope exceeded."
+        },
+        "422": {
+          "description": "Unsupported, blank or incomplete segment/mark input."
+        },
+        "503": {
+          "description": "Unavailable/corrupt original provenance, archives, correction installation or operational budget; no partial response or speculative acceptance."
+        },
+        "200": {
+          "description": "Original bytes after complete Task3/B04 protocol and commit. No stored-inspection grant is reusable for bytes."
+        },
+        "206": {
+          "description": "Original bytes after complete Task3/B04 protocol and commit. No stored-inspection grant is reusable for bytes.",
+          "headers": {
+            "Cache-Control": {
+              "schema": {
+                "type": "string",
+                "const": "private, no-store"
+              },
+              "description": "All success and error paths, including authentication failures."
+            },
+            "Content-Length": {
+              "schema": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "Accept-Ranges": {
+              "schema": {
+                "type": "string",
+                "const": "bytes"
+              }
+            },
+            "Content-Disposition": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "Content-Range": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "X-Content-Type-Options": {
+              "schema": {
+                "type": "string",
+                "const": "nosniff"
+              }
+            },
+            "ETag": {
+              "description": "Quoted file digest when playbackSha256 is selected.",
+              "schema": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "416": {
+          "description": "Range unavailable."
         }
       }
     }
@@ -5162,7 +5422,9 @@
       "decision": {
         "enum": [
           "ACCEPT",
-          "REJECT"
+          "REJECT",
+          "ACCEPT_PUNCTUATION",
+          "REOPEN"
         ]
       },
       "additionalCandidateIds": {
@@ -5279,6 +5541,56 @@
           "replacement": {
             "type": "string",
             "maxLength": 65536
+          }
+        }
+      },
+      "punctuationAlternative": {
+        "type": "string",
+        "maxLength": 65536
+      },
+      "modelVersion": {
+        "type": "string",
+        "maxLength": 128
+      },
+      "reason": {
+        "type": "string",
+        "maxLength": 1600
+      },
+      "materialSnapshotId": {
+        "type": "string",
+        "maxLength": 36
+      },
+      "canReopen": {
+        "type": "boolean"
+      },
+      "entities": {
+        "type": "array",
+        "maxItems": 128,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "original",
+            "replacement"
+          ],
+          "properties": {
+            "original": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "replacement": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "type": {
+              "type": "string",
+              "maxLength": 64
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
           }
         }
       }
@@ -6130,6 +6442,10 @@
           "format": "uuid",
           "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
         }
+      },
+      "department": {
+        "type": "string",
+        "maxLength": 255
       }
     }
   },

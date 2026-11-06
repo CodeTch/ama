@@ -52,4 +52,20 @@ class IdentitySessionClockIT {
    });
   }
  }
+ @Test void displayRenewalReadsCommittedIdentityDuringAnEditAndHonorsClockAndRevocation()throws Exception{
+  var sessions=new JdbcIdentitySessions(source);String actor="display-clock-"+UUID.randomUUID();
+  sessions.ensureCasIdentity(actor,"display fixture","test");var issued=sessions.issueForVerifiedIdentity(actor,Duration.ofMinutes(3));
+  try(var edit=source.getConnection();var pool=java.util.concurrent.Executors.newSingleThreadExecutor()){
+   edit.setAutoCommit(false);
+   try(var lock=edit.prepareStatement("SELECT enterprise_id FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE")){
+    lock.setString(1,actor);try(var rows=lock.executeQuery()){assertTrue(rows.next());}
+    assertEquals(actor,pool.submit(()->sessions.resolveForRead(issued.token()).orElseThrow().actor().enterpriseId()).get(2,java.util.concurrent.TimeUnit.SECONDS));
+   }finally{edit.rollback();}
+  }
+  var future=new JdbcIdentitySessions(at(issued.expiresAt().plusSeconds(1)));
+  assertTrue(future.resolveForRead(issued.token()).isEmpty());
+  assertTrue(sessions.resolve(issued.token()).isEmpty());
+  var next=sessions.issueForVerifiedIdentity(actor,Duration.ofMinutes(5));sessions.revoke(next.token(),"DISPLAY_REVOKE");
+  assertTrue(sessions.resolveForRead(next.token()).isEmpty());
+ }
 }
