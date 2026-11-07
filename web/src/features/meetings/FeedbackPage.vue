@@ -6,6 +6,7 @@ import {computed,nextTick,onUnmounted,ref,watch} from 'vue';
 import {useRoute,useRouter,onBeforeRouteLeave,onBeforeRouteUpdate} from 'vue-router';
 import {useApplication} from '../../application';import Icon from '../../shared/Icon.vue';
 import FeedbackTableView from './FeedbackTableView.vue';import {useFeedbackSubmission} from './useFeedbackSubmission';
+import {ApiError} from '../../shared/api/client';
 import type {Feedback,FeedbackOverview} from '../../shared/api/feedback';
 const app=useApplication(),actions=app.feedbackActions,route=useRoute(),router=useRouter();
 const actor=()=>app.session.current.value?.actor.enterpriseId??null,admin=computed(()=>app.session.current.value?.actor.roles.includes('PLATFORM_ADMIN')??false);
@@ -13,7 +14,7 @@ const emptyCounts=()=>({ALL:0,PENDING:0,ACCEPTED:0,REJECTED:0,NEEDS_MORE:0});
 const overview=ref<FeedbackOverview>({items:[],nextCursor:null,counts:emptyCounts()}),selected=ref<Feedback['state']|null>(null),reviewing=ref(false),loading=ref(false),error=ref<string|null>(null);
 const localDevelopment=import.meta.env.DEV&&import.meta.env.VITE_LOCAL_DEV_LOGIN==='1';
 let identityEpoch=0,epoch=0,request:AbortController|null=null,cursors:(string|null)[]=[null];
-async function load(cursor:string|null=cursors.at(-1)??null){const who=actor(),turn=++epoch;request?.abort();const controller=new AbortController();request=controller;loading.value=true;error.value=null;try{const value=await app.feedback.summaries(cursor,selected.value,reviewing.value,controller.signal);if(turn===epoch&&actor()===who&&!controller.signal.aborted)overview.value=value;}catch(cause){if(turn===epoch&&actor()===who&&!controller.signal.aborted){overview.value={items:[],nextCursor:null,counts:emptyCounts()};error.value=cause instanceof Error?cause.message:'反馈列表暂不可用。';}}finally{if(turn===epoch)loading.value=false;}}
+async function load(cursor:string|null=cursors.at(-1)??null){const who=actor(),turn=++epoch;request?.abort();const controller=new AbortController();request=controller;loading.value=true;error.value=null;try{const value=await app.feedback.summaries(cursor,selected.value,reviewing.value,controller.signal);if(turn===epoch&&actor()===who&&!controller.signal.aborted)overview.value=value;}catch(cause){if(turn===epoch&&actor()===who&&!controller.signal.aborted){if(cause instanceof ApiError&&[401,403,404,410].includes(cause.status??0))overview.value={items:[],nextCursor:null,counts:emptyCounts()};error.value=cause instanceof Error?cause.message:'反馈列表暂不可用。';}}finally{if(turn===epoch)loading.value=false;}}
 function first(){cursors=[null];return load(null);}
 function filter(state:Feedback['state']|null){selected.value=state;void first();}
 

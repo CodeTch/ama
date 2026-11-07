@@ -114,6 +114,18 @@ MeetingPage:
       type: object
       description: Current owner's topic IDs and __none, using exactly the same relation. Empty for joined scope.
       additionalProperties: {type: integer, minimum: 0, maximum: 9007199254740991}
+    topicMemberships:
+      type: array
+      maxItems: 50
+      description: Topic labels for exactly the current owned page, from the same authorized read snapshot. Empty for joined scope.
+      items:
+        type: object
+        additionalProperties: false
+        required: [meetingId, topicId, topicName]
+        properties:
+          meetingId: {type: string, format: uuid}
+          topicId: {type: [string, 'null'], format: uuid}
+          topicName: {type: [string, 'null'], maxLength: 255}
 
 CommandAssociation:
   type: object

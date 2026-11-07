@@ -14,8 +14,10 @@ public final class WorkspaceContracts {
   public MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken,List<String> participants,String updatedAt){this(id,name,category,occurredOn,stage,lifecycle,relation,writeState,revisionToken,accessRevisionToken,participants,updatedAt,stage);}
   public MeetingItem(String id,String name,String category,java.time.LocalDate occurredOn,String stage,String lifecycle,String relation,String writeState,String revisionToken,String accessRevisionToken){this(id,name,category,occurredOn,stage,lifecycle,relation,writeState,revisionToken,accessRevisionToken,List.of(),null);}
  }
- public record MeetingPage(List<MeetingItem> items,String nextCursor,boolean hasMore,long total,java.util.Map<String,Long> stageCounts,java.util.Map<String,Long> topicGroups) {
-  public MeetingPage {items=List.copyOf(items);stageCounts=java.util.Map.copyOf(stageCounts);topicGroups=java.util.Map.copyOf(topicGroups);if(total<0||total>9007199254740991L)throw new IllegalArgumentException("Invalid total");}
+ public record MeetingTopic(String meetingId,String topicId,String topicName){}
+ public record MeetingPage(List<MeetingItem> items,String nextCursor,boolean hasMore,long total,java.util.Map<String,Long> stageCounts,java.util.Map<String,Long> topicGroups,List<MeetingTopic> topicMemberships) {
+  public MeetingPage {items=List.copyOf(items);stageCounts=java.util.Map.copyOf(stageCounts);topicGroups=java.util.Map.copyOf(topicGroups);topicMemberships=List.copyOf(topicMemberships);if(total<0||total>9007199254740991L)throw new IllegalArgumentException("Invalid total");}
+  public MeetingPage(List<MeetingItem> items,String nextCursor,boolean hasMore,long total,java.util.Map<String,Long> stageCounts,java.util.Map<String,Long> topicGroups){this(items,nextCursor,hasMore,total,stageCounts,topicGroups,List.of());}
  }
 
  public record CommandAssociation(String operation,String meetingId,String resultKind,String resultId,String acceptedRevisionToken,int originalHttpStatus){}

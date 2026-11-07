@@ -10,6 +10,6 @@ class CategoryErrors {
  @ExceptionHandler(ama.access.MeetingAccess.AccessDeniedException.class) void denied(HttpServletResponse r)throws IOException{write(r,403,"MEETING_FORBIDDEN","Meeting access denied");}
  @ExceptionHandler(IllegalArgumentException.class) void invalid(HttpServletResponse r)throws IOException{write(r,400,"INVALID_ARGUMENT","Invalid request; restart pagination if cursor expired");}
  @ExceptionHandler(ama.contract.MeetingContracts.CategoryUnavailable.class) void absent(HttpServletResponse r)throws IOException{write(r,503,"CATEGORY_DICTIONARY_UNAVAILABLE","Approved category dictionary unavailable");}
- @ExceptionHandler(Exception.class) void unavailable(HttpServletResponse r)throws IOException{write(r,503,"MEETING_UNAVAILABLE","Meeting data unavailable");}
+ @ExceptionHandler(Exception.class) void unavailable(Exception failure,HttpServletResponse r)throws IOException{System.getLogger(CategoryErrors.class.getName()).log(System.Logger.Level.WARNING,"Category read unavailable",failure);write(r,503,"MEETING_UNAVAILABLE","Meeting data unavailable");}
  private static void write(HttpServletResponse r,int status,String code,String message)throws IOException{BusinessErrors.write(r,status,code,message);r.setHeader("Cache-Control","private, no-store");}
 }

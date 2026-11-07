@@ -2,6 +2,7 @@ import type {components} from './generated';
 import type {createBusinessClient} from './business-client';
 import {ApiError} from './client';
 import {fitsUtf8} from '../bounded-text';
+import {sharedRead} from './shared-read';
 export type Person=components['schemas']['Person'];
 export type Department=components['schemas']['Department'];
 export type Category=components['schemas']['CategoryItem'];
@@ -13,7 +14,7 @@ const person=(v:unknown):v is Person=>(shape(v,'active,department,displayName,st
 const department=(v:unknown):v is Department=>shape(v,'active,id,name,parentId')&&identity(v.id)&&text(v.name)&&v.name.trim().length>0&&(v.parentId===null||identity(v.parentId))&&v.parentId!==v.id&&typeof v.active==='boolean';
 const category=(v:unknown):v is Category=>shape(v,'id,label')&&identity(v.id)&&text(v.label);
 function freeze<T>(value:T):T{if(typeof value==='object'&&value!==null){Object.values(value).forEach(freeze);Object.freeze(value);}return value;}
-export function createMeetingOptionsApi(client:ReturnType<typeof createBusinessClient>){return {
+export function createMeetingOptionsApi(client:ReturnType<typeof createBusinessClient>,scope:()=>unknown=()=>null){const cache=sharedRead(scope);const api={
  async people(query:string,next:string|null,signal:AbortSignal,departmentId:string|null=null):Promise<components['schemas']['PeoplePage']>{
   if(!text(query)||!cursor(next)||departmentId!==null&&!identity(departmentId))throw new TypeError('Invalid directory query');const params=new URLSearchParams({query,limit:'20'});if(next!==null)params.set('cursor',next);if(departmentId!==null)params.set('departmentId',departmentId);
   const value=await client.json<unknown>('/api/v1/directory/people?'+params,{signal,expectedStatus:200,maxResponseBytes:1024*1024});
@@ -31,4 +32,8 @@ export function createMeetingOptionsApi(client:ReturnType<typeof createBusinessC
   if(!shape(value,'hasMore,items,nextCursor')||!Array.isArray(value.items)||value.items.length>50||!value.items.every(category)||new Set(value.items.map(x=>x.id)).size!==value.items.length||!cursor(value.nextCursor)||value.hasMore!==(value.nextCursor!==null))throw new ApiError('response',200,'会议分类响应不可用。');
   return freeze({items:value.items,nextCursor:value.nextCursor,hasMore:value.nextCursor!==null});
  }
+};return {...api,clear:cache.clear,
+ categories:(next:string|null,signal:AbortSignal)=>cache.read('categories/'+(next??''),signal,read=>api.categories(next,read)),
+ departments:(signal:AbortSignal)=>cache.read('departments',signal,api.departments),
+ people:(query:string,next:string|null,signal:AbortSignal,departmentId:string|null=null)=>cache.read(JSON.stringify(['people',query,next,departmentId]),signal,read=>api.people(query,next,read,departmentId),10000)
 };}

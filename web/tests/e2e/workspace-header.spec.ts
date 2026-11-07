@@ -76,3 +76,11 @@ test('the shared header scrolls with the page and login keeps its own layout',as
  await navigate(page,'/login');
  await expect(page.locator('.topbar')).toHaveCount(0);
 });
+
+
+test('choosing a profile destination closes its menu across navigation and return',async({page})=>{
+ await prepare(page);await page.goto('/meetings');await expect(page.locator('.home-profile .rc-name')).toHaveText('测试账号1');
+ await page.getByLabel('当前用户',{exact:true}).click();await expect(page.locator('.home-profile')).toHaveAttribute('open','');
+ await page.getByRole('link',{name:'会议库',exact:true}).click();await expect(page).toHaveURL(/\/meeting-library$/);await expect(page.locator('.home-profile')).not.toHaveAttribute('open');
+ await page.getByRole('link',{name:/智会助手/}).click();await page.getByLabel('当前用户',{exact:true}).click();await expect(page.getByRole('link',{name:'我的声纹',exact:true})).toBeVisible();
+});

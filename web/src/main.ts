@@ -3,25 +3,27 @@ import GovernanceNotice from './features/minutes/GovernanceNotice.vue';
 import { createApp, h, Fragment } from 'vue';
 import { createRouter, createWebHistory, RouterLink } from 'vue-router';
 import WorkspaceShell from './shared/WorkspaceShell.vue';
-const App=()=>import('./App.vue');
-const MeetingDetail=()=>import('./features/meetings/MeetingDetail.vue');
+import {workspaceRoutes,installRoutePreloading} from './shared/route-preload';
+const App=workspaceRoutes.home;
+const MeetingDetail=workspaceRoutes.meeting;
 import {createTabJournalContext} from './shared/composables/tab-journal';
 import {applicationKey,createApplication} from './application';
 import {startupSession,startupEntry,directMeeting,initialSession} from './minutes-startup';
 import './shared/styles/tokens.css';
 import './shared/styles/prototype.css';
 import './shared/styles/parity.css';
-const MeetingLibraryPage=()=>import('./features/meetings/MeetingLibraryPage.vue');
-const FeedbackPage=()=>import('./features/meetings/FeedbackPage.vue');
+const MeetingLibraryPage=workspaceRoutes.library;
+const FeedbackPage=workspaceRoutes.feedback;
 const OperationsPage=()=>import('./features/governance/OperationsPage.vue');
-const GovernanceVoices=()=>import('./features/governance/GovernanceVoices.vue');
-const RecordingPage=()=>import('./features/meetings/RecordingPage.vue');
+const GovernanceVoices=workspaceRoutes.voices;
+const RecordingPage=workspaceRoutes.recording;
 import RecordingIndicator from './features/recording/RecordingIndicator.vue';
 const LoginPage=()=>import('./features/auth/LoginPage.vue');
 const TranscriptCorrectionDemoPage=()=>import('./features/transcript/TranscriptCorrectionDemoPage.vue');
 const KnowledgePublishDemoPage=()=>import('./features/minutes/KnowledgePublishDemoPage.vue');
 import {DEMO_MEETING_ID} from './features/meetings/meeting-prototype-demo';
 import {syncNavigationScope} from './shared/navigation-scope';
+import {installDialogStability} from './shared/dialog-stability';
 const router=createRouter({history:createWebHistory(),routes:[
  {path:'/',redirect:'/login'},
  {path:'/login',component:LoginPage,meta:{workspaceHeader:false}},
@@ -36,8 +38,8 @@ const router=createRouter({history:createWebHistory(),routes:[
  {path:'/meeting-library/:id?',component:MeetingLibraryPage,meta:{pageName:'会议库'}},
  {path:'/recording/:id?',name:'recording',component:RecordingPage,meta:{pageName:'在线录音'}},
  {path:'/meeting/:id/:stage?',name:'meeting-detail',component:MeetingDetail,meta:{pageName:'会议详情'}},
- {path:'/transcript-correction-demo',name:'transcript-correction-demo',component:TranscriptCorrectionDemoPage,meta:{pageName:'转写校正'}},
- {path:'/knowledge-publish-demo',name:'knowledge-publish-demo',component:KnowledgePublishDemoPage,meta:{pageName:'知识库发布'}},
+ ...((import.meta.env.DEV&&import.meta.env.MODE==='development')?[{path:'/transcript-correction-demo',name:'transcript-correction-demo',component:TranscriptCorrectionDemoPage,meta:{pageName:'转写校正'}},
+ {path:'/knowledge-publish-demo',name:'knowledge-publish-demo',component:KnowledgePublishDemoPage,meta:{pageName:'知识库发布'}}]:[]),
  {path:'/:pathMatch(.*)*',meta:{pageName:'页面暂不可用'},component:{render:()=>h('main',{class:'content'},[h('h1','页面暂不可用'),h(RouterLink,{to:'/meetings'},()=> '返回我的会议')])}}
 ]});
 const navigation=performance.getEntriesByType('navigation')[0];
@@ -51,10 +53,13 @@ router.beforeEach(async (to,from)=>{
  // renderable while anonymous. They contain no protected data and can show
  // the login/disabled state without creating a session or touching a device.
  // Protected API-backed pages still refresh the session before entering.
- if(to.path==='/login'||to.path==='/meetings'||to.name==='recording'||to.path==='/transcript-correction-demo'||to.path==='/knowledge-publish-demo'||to.name==='meeting-detail'&&to.params.id===DEMO_MEETING_ID||to.matched.some(record=>record.path==='/:pathMatch(.*)*') )return true;
- try{if(directMinutes&&to.params.id===directMeeting&&initialSession){if(!await initialSession||!application.session.current.value)return {path:'/login'};}else if(!application.session.current.value)await application.session.refresh();}catch{return {path:'/login'};}
+ if(to.path==='/login'||to.path==='/meetings'||to.name==='recording'||(import.meta.env.DEV&&import.meta.env.MODE==='development')&&(to.path==='/transcript-correction-demo'||to.path==='/knowledge-publish-demo'||to.name==='meeting-detail'&&to.params.id===DEMO_MEETING_ID)||to.matched.some(record=>record.path==='/:pathMatch(.*)*') )return true;
+ try{if(!from.matched.length&&initialSession){if(!await initialSession||!application.session.current.value)return {path:'/login'};}else if(!application.session.current.value)await application.session.refresh();}catch{return {path:'/login'};}
  if(directMinutes)application.preloadMinutesEntry(String(to.params.id));
+ else if(to.name==='meeting-detail'&&to.params.id!==from.params.id)application.preloadMeetingEntry(String(to.params.id));
  return true;
 });
 router.afterEach((to,_from,failure)=>{if(to.name==='meeting-detail'&&to.params.id===DEMO_MEETING_ID)return;syncNavigationScope(to,failure,application.setMeetingScope);});
 createApp({render:()=>h(Fragment,null,[h(WorkspaceShell),h(RecordingIndicator),h(GovernanceNotice),h(DeletionNotice)])}).provide(applicationKey,application).use(router).mount('#app');
+installRoutePreloading();
+installDialogStability();

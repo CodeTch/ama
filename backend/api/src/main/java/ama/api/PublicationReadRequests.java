@@ -7,16 +7,17 @@ import java.util.concurrent.*;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.context.request.async.WebAsyncTask;
 
-/** Two admitted reads per API process, no queue; each request owns its socket cancellation. */
+/** Bounded concurrent reads and a short bounded queue; each request owns its socket cancellation. */
 @org.springframework.stereotype.Component
 final class PublicationReadRequests implements AutoCloseable,org.springframework.beans.factory.DisposableBean {
  private final Set<Cancellation> active=new HashSet<>();private boolean closed;
+ private static final int CONCURRENCY=4,WAITING=16;
  private final ThreadPoolTaskExecutor executor=new ThreadPoolTaskExecutor();
- PublicationReadRequests(){executor.setCorePoolSize(2);executor.setMaxPoolSize(2);executor.setQueueCapacity(0);executor.setThreadNamePrefix("publication-read-");executor.initialize();}
+ PublicationReadRequests(){executor.setCorePoolSize(CONCURRENCY);executor.setMaxPoolSize(CONCURRENCY);executor.setQueueCapacity(WAITING);executor.setThreadNamePrefix("publication-read-");executor.initialize();}
  @FunctionalInterface interface Read<T>{T run(PreparationCancellation cancellation)throws Exception;}
  <T> WebAsyncTask<T> start(Read<T> work) {
   var cancellation=new Cancellation();
-  synchronized(active){if(closed||active.size()>=2||executor.getActiveCount()>=2)throw unavailable();active.add(cancellation);}
+  synchronized(active){if(closed||active.size()>=CONCURRENCY+WAITING)throw unavailable();active.add(cancellation);}
   var task=new WebAsyncTask<T>(30000L,executor,()->{
    synchronized(active){if(closed)throw unavailable();}
    try{cancellation.check();T value=work.run(cancellation);cancellation.check();return value;}

@@ -5,11 +5,12 @@ const props=defineProps<{checks:FinalCheck[];busy:boolean}>();
 const emit=defineEmits<{process:[target:FinalCheckTarget];retry:[]}>();
 const pages=ref<Record<string,number>>({});
 const page=(check:FinalCheck)=>confirmationCheckPage(pages.value[check.id],check.actions.length);
-const failed=computed(()=>props.checks.filter(c=>c.status!=='passed').length);
+const failed=computed(()=>props.checks.filter(c=>c.status==='failed').length);
+const pending=computed(()=>props.checks.filter(c=>c.status==='unknown').length);
 </script>
 <template>
- <details class="card ac-confirm-check mt16" :open="failed>0" aria-label="最终确认检查">
-  <summary class="card-h"><span class="card-t">确认检查</span><span class="small muted">{{failed?failed+' 类条件待处理':'全部检查已通过'}}</span></summary>
+ <details class="card ac-confirm-check mt16" open aria-label="最终确认检查">
+  <summary class="card-h"><span class="card-t">确认检查</span><span class="small muted">{{failed?failed+' 类条件待处理':pending?pending+' 类条件待核实':'全部检查已通过'}}</span></summary>
   <div class="card-p"><div class="between mb12"><p class="small muted">按当前已保存版本核对，最终确认时将再次检查。</p><button class="btn sm" :disabled="busy" @click="emit('retry')">重新检查</button></div>
    <ul class="final-check-list"><li v-for="check in checks" :key="check.id" :data-check="check.id" :class="{failed:check.status==='failed'}"><div class="between"><strong>{{check.label}}</strong><span :class="['tag',check.status==='passed'?'green':check.status==='failed'?'orange':'']">{{check.status==='passed'?'通过':check.status==='failed'?'未通过':'待核实'}}</span></div><p class="small" :class="check.status==='passed'?'muted':''">{{check.reason}}</p>
     <ul v-if="check.actions.length"><li v-for="(action,index) in check.actions.slice(page(check)*20,(page(check)+1)*20)" :key="index" class="final-check-action"><span v-if="action.label!=='去处理'">{{action.label}}</span><button class="btn sm" :disabled="busy" :aria-label="'去处理：'+check.label+(action.label==='去处理'?'':' · '+action.label)" @click="emit('process',action.target)">去处理</button></li></ul>

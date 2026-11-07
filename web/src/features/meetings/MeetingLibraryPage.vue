@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import StableLabel from '../../shared/StableLabel.vue';
 import {computed,ref,watch,onUnmounted,nextTick} from 'vue';import {useRoute,useRouter} from 'vue-router';import {useApplication} from '../../application';import MeetingLibraryView from './MeetingLibraryView.vue';import {useMeetingLibrary,type LibraryRow} from './useMeetingLibrary';
-const app=useApplication(),route=useRoute(),router=useRouter(),actor=()=>app.session.current.value?.actor.enterpriseId??null,mode=ref<'read'|'manage'>('read'),library=useMeetingLibrary({library:app.meetingLibrary},actor,()=>mode.value),governanceError=ref('');
+const app=useApplication(),route=useRoute(),router=useRouter(),actor=()=>app.session.current.value?.actor.enterpriseId??null,mode=ref<'read'|'manage'>('read'),library=useMeetingLibrary({library:app.meetingLibrary},actor,()=>mode.value,()=>typeof route.params.id==='string'?route.params.id:null),governanceError=ref('');
 const libraryId=computed(()=>typeof route.params.id==='string'?route.params.id:null),visible=computed(()=>library.rows.value.filter(row=>!libraryId.value||row.context.libraryId===libraryId.value)),selected=computed(()=>visible.value[0]?.context??null),sourceInLibrary=computed(()=>visible.value.find(row=>row.meeting.id===route.query.meeting)??null);
 const groups=computed(()=>{const entries=new Map<string,LibraryRow[]>();for(const row of library.rows.value){const key=JSON.stringify([row.context.providerId,row.context.storeInstanceId,row.context.libraryId]);const group=entries.get(key)??[];group.push(row);entries.set(key,group);}return [...entries.values()].map(rows=>({key:JSON.stringify([rows[0]!.context.providerId,rows[0]!.context.storeInstanceId,rows[0]!.context.libraryId]),context:rows[0]!.context,rows}));});
 const stateLabels:Record<string,string>={ACTIVE:'已发布',UNKNOWN:'状态待核实',WITHDRAW_PENDING:'撤回处理中',OBSOLETE_PENDING:'废止处理中',WITHDRAWN:'已撤回',OBSOLETE:'已废止'};
 function open(row:LibraryRow){if(row.context.canRead)window.open(row.context.documentUrl,'_blank','noopener');}function home(){void router.push('/meetings');}function back(){if(sourceInLibrary.value)void router.push(`/meeting/${sourceInLibrary.value.meeting.id}/read`);}
 async function govern(row:LibraryRow){governanceError.value='';try{if(!row.context.canManage)return;app.setMeetingScope(row.meeting.id);await nextTick();app.governanceCommands.open(row.context.publicationId,row.context.meetingRevisionToken,row.context.state==='ACTIVE');}catch(cause){governanceError.value=cause instanceof Error?cause.message:'治理操作暂不可用，请重新查询。';}}
-const stopIdentity=watch(actor,()=>{governanceError.value='';library.invalidate();void library.refresh();},{immediate:true,flush:'sync'}),stopMode=watch(mode,()=>void library.refresh());
+const stopIdentity=watch(actor,()=>{governanceError.value='';library.invalidate();void library.refresh();},{immediate:true,flush:'sync'}),stopMode=watch(()=>[mode.value,libraryId.value],()=>void library.refresh());
 watch(()=>app.governanceCommands.job.value?.state,state=>{if(state==='SUCCEEDED'||state==='CONFLICT')void library.refresh();});
 onUnmounted(()=>{stopIdentity();stopMode();library.dispose();});
 </script>

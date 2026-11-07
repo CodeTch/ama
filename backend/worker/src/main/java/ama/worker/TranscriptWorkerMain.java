@@ -26,6 +26,9 @@ public final class TranscriptWorkerMain {
    pool.setMaximumPoolSize(env.getProperty("worker.database-pool-maximum",Integer.class,16));
    pool.setMinimumIdle(2);
    pool.setConnectionTimeout(5000);
+   // A single transient connect failure must not abort a healthy restart.
+   // Hikari retries initial connection creation within this finite boot bound.
+   pool.setInitializationFailTimeout(15000);
    boolean controlled=env.getProperty("minutes.enabled",Boolean.class,false);
    if(controlled)pool.setDataSourceProperties(ControlledMinutesDataSource.connectionProperties());
    javax.sql.DataSource source=controlled?new ControlledMinutesDataSource(pool):pool;

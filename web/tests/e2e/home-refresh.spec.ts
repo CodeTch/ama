@@ -20,7 +20,7 @@ async function home(page:Page){
  await expect(page.getByRole('button',{name:item.name,exact:true})).toBeVisible();
  return {
   session,profile,meetings,
-  denySession(){sessionStatus=401;},failMeetings(){meetingStatus=503;},restoreMeetings(){meetingStatus=200;},
+  pause(){paused=true;},denySession(){sessionStatus=401;},failMeetings(){meetingStatus=503;},restoreMeetings(){meetingStatus=200;},
   async reload(){paused=true;const requested=page.waitForRequest('**/api/v1/session');await page.reload();await requested;await page.getByLabel('当前用户').waitFor();},
   release(){session.release();profile.release();meetings.release();}
  };
@@ -49,6 +49,28 @@ test('browser refresh keeps the profile and feedback stable while the display na
   await expect(page.locator('.home-profile .rc-name')).toHaveText('测试账号1');
   expect(Math.abs((await positions(page)).feedback.x-before.feedback.x)).toBeLessThanOrEqual(1);
  }finally{data.release();}
+});
+
+test('a slow list refresh and a transient failure retain the exact displayed rows and selection',async({page})=>{
+ const data=await home(page);
+ try{
+  const table=page.getByRole('table',{name:'当前范围的会议'}),checkbox=page.getByRole('checkbox',{name:'选择会议 '+item.name,exact:true});
+  await checkbox.check();await table.evaluate(element=>{(window as any).originalTable=element;});
+  data.pause();const request=page.waitForRequest('**/api/v1/meetings?*');await page.getByRole('button',{name:'第 1 页',exact:true}).click();await request;
+  await expect(page.getByRole('tabpanel')).toHaveAttribute('aria-busy','true');
+  expect(await table.evaluate(element=>(window as any).originalTable===element)).toBe(true);await expect(checkbox).toBeChecked();
+  await expect(page.getByRole('button',{name:item.name,exact:true})).toBeVisible();
+  data.failMeetings();data.release();await expect(page.getByRole('button',{name:'重试当前页',exact:true})).toBeVisible();
+  expect(await table.evaluate(element=>(window as any).originalTable===element)).toBe(true);await expect(checkbox).toBeChecked();
+  data.restoreMeetings();await page.getByRole('button',{name:'重试当前页',exact:true}).click();await expect(page.getByRole('button',{name:'重试当前页',exact:true})).toHaveCount(0);
+ }finally{data.release();}
+});
+
+test('an explicit search submit leaves no delayed duplicate read to close the next filter menu',async({page})=>{
+ await home(page);const reads:string[]=[];page.on('request',request=>{const url=new URL(request.url());if(url.pathname==='/api/v1/meetings')reads.push(url.search);});
+ const search=page.getByRole('textbox',{name:'关键词',exact:true});await search.fill('已提交搜索');await search.press('Enter');await expect(page.getByRole('tabpanel')).toHaveAttribute('aria-busy','false');
+ const menu=page.locator('.m19-dropdown').filter({has:page.locator('summary[aria-label="会议状态"]')});await menu.locator('summary').click();await page.waitForTimeout(350);
+ await expect(menu).toHaveAttribute('open','');expect(reads).toHaveLength(1);
 });
 
 test('browser refresh preserves the meeting table frame through session and list reads',async({page})=>{

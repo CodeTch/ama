@@ -19,7 +19,7 @@ async function open(next:typeof mode.value,item:Topic|null=null,meetings:Target[
  if(next==='delete'){deleteCount.value=null;checkingDelete.value=true;}
  await display();
  try{
-  await manager.reload();if(turn!==deleteTurn||request.signal.aborted)return;
+  await manager.reload(next==='delete');if(turn!==deleteTurn||request.signal.aborted)return;
   if(next==='delete'&&item){
    const facts=await app.topics.summary(item.id,AbortSignal.any([request.signal,AbortSignal.timeout(8000)]));
    if(turn!==deleteTurn||request.signal.aborted)return;

@@ -19,19 +19,20 @@ export function validPublicationDestinationDraft(v:unknown,actor:string,meeting:
 export function usePublicationDestinations(api:Api,actor:()=>string|null,meeting:()=>string,eligible:()=>boolean,locked:()=>boolean,onDenied:(cause:unknown)=>void,journals?:TabJournalContext){
  const libraries=shallowRef<Libraries|null>(null),branches=shallowRef<Record<string,Branch>>({}),selection=shallowRef<DestinationSelection|null>(null),error=shallowRef<unknown>(null),busy=shallowRef(false),pending=shallowRef<Draft|null>(null),storageMessage=shallowRef('');
  const journal=journals?createScopedPrivateJournal(journals,'publication-destination',validPublicationDestinationDraft):null;
- let queryText='';let epoch=0,controller:AbortController|null=null,disposed=false,lastRetry:(()=>Promise<void>)|null=null;
+ let queryText='';let epoch=0,disposed=false,lastRetry:(()=>Promise<void>)|null=null;const requests=new Map<string,AbortController>();
+ const branchFlights=new Map<string,{cursor:string|null;flight:Promise<boolean>}>();
  const available=()=>!disposed&&!!actor()&&eligible()&&!locked();
- function clear(){epoch++;controller?.abort();controller=null;libraries.value=null;branches.value={};selection.value=null;pending.value=null;error.value=null;busy.value=false;storageMessage.value='';queryText='';lastRetry=null;journal?.synchronize(actor(),meeting());}
+ function clear(){epoch++;for(const request of requests.values())request.abort();requests.clear();branchFlights.clear();libraries.value=null;branches.value={};selection.value=null;pending.value=null;error.value=null;busy.value=false;storageMessage.value='';queryText='';lastRetry=null;journal?.synchronize(actor(),meeting());}
  const stop=watch(()=>[actor(),meeting(),eligible()],(current,previous)=>{if(!current[0]&&previous?.[0])journal?.clear();clear();},{flush:'sync'});
- async function read<T>(request:(signal:AbortSignal)=>Promise<T>,accept:(value:T)=>void):Promise<boolean>{
-  if(!available())return false;const turn=++epoch,who=actor(),id=meeting();controller?.abort();const c=new AbortController();controller=c;busy.value=true;error.value=null;
-  const active=()=>!disposed&&turn===epoch&&who===actor()&&id===meeting()&&eligible()&&!c.signal.aborted;
-  try{const value=await request(c.signal);if(!active())return false;accept(value);return true;}catch(cause){if(active()){if(cause instanceof ApiError&&[401,403].includes(cause.status)){clear();onDenied(cause);}else error.value=cause;}return false;}finally{if(active())busy.value=false;}
+ async function read<T>(request:(signal:AbortSignal)=>Promise<T>,accept:(value:T)=>void,key='libraries'):Promise<boolean>{
+  if(!available())return false;const turn=epoch,who=actor(),id=meeting();requests.get(key)?.abort();const c=new AbortController();requests.set(key,c);busy.value=true;error.value=null;
+  const active=()=>!disposed&&turn===epoch&&requests.get(key)===c&&who===actor()&&id===meeting()&&eligible()&&!c.signal.aborted;
+  try{const value=await request(c.signal);if(!active())return false;accept(value);return true;}catch(cause){if(active()){if(cause instanceof ApiError&&[401,403].includes(cause.status)){clear();onDenied(cause);}else error.value=cause;}return false;}finally{if(requests.get(key)===c){requests.delete(key);busy.value=requests.size>0;}}
  }
  function persist(){const s=selection.value,who=actor();if(!s||!who)return;pending.value=null;storageMessage.value='';if(journal&&journal.save(who,meeting(),{actor:who,meeting:meeting(),providerId:s.providerId,libraryId:s.libraryId,pathIds:s.path.map(f=>f.id)})!=='SAVED')storageMessage.value='当前选择未能在此标签页保存；刷新后请重新选择。';}
  async function loadLibraries(cursor:string|null=null,query=queryText){
   if(!available())return;const searching=query!==queryText;queryText=query;lastRetry=()=>loadLibraries(cursor,query);
-  if(cursor===null){libraries.value=null;if(!searching){selection.value=null;branches.value={};}const who=actor();if(!searching&&who&&journal){const saved=journal.load(who,meeting());pending.value=saved.kind==='RESTORED'?saved.value:null;if(['INVALID','UNAVAILABLE'].includes(saved.kind))storageMessage.value='上次位置暂不可恢复，请重新选择。';}}
+  if(cursor===null){const who=actor();if(!selection.value&&!searching&&who&&journal){const saved=journal.load(who,meeting());pending.value=saved.kind==='RESTORED'?saved.value:null;if(['INVALID','UNAVAILABLE'].includes(saved.kind))storageMessage.value='上次位置暂不可恢复，请重新选择。';}}
   const accepted=await read(s=>api.libraries(meeting(),cursor,s,query),page=>{
    const previous=cursor?libraries.value:null;if(previous&&previous.providerId!==page.providerId)throw new Error('知识库服务已变化，请重新读取目录。');
    const items=[...(previous?.items??[]),...page.items];if(new Set(items.map(x=>x.id)).size!==items.length)throw new Error('目录分页重复，请重新读取目录。');libraries.value={...page,items};
@@ -44,17 +45,21 @@ export function usePublicationDestinations(api:Api,actor:()=>string|null,meeting
  async function loadBranch(lib:Library,parent:string,cursor:string|null=null){
   if(!available()||!libraries.value?.items.some(x=>x.id===lib.id&&x.rootFolderId===lib.rootFolderId))return false;
   lastRetry=()=>loadBranch(lib,parent,cursor).then(()=>{});const key=branchKey(lib.id,parent);
-  return read(s=>api.folders(meeting(),lib.id,parent,cursor,s),page=>{
+  const existing=branchFlights.get(key);if(existing?.cursor===cursor)return existing.flight;
+  const flight=read(s=>api.folders(meeting(),lib.id,parent,cursor,s),page=>{
    if(page.providerId!==libraries.value?.providerId)throw new Error('目录服务已变化，请重新读取知识库。');
    const previous=cursor?branches.value[key]?.page:null,items=[...(previous?.items??[]),...page.items];if(new Set(items.map(x=>x.id)).size!==items.length)throw new Error('文件夹分页重复，请重新读取目录。');
    branches.value={...branches.value,[key]:{page:{...page,items},expanded:true}};
-  });
+  },key);
+  const entry={cursor,flight};branchFlights.set(key,entry);try{return await flight;}finally{if(branchFlights.get(key)===entry)branchFlights.delete(key);}
  }
  async function restore(){
   const draft=pending.value,lib=libraries.value?.items.find(x=>x.id===draft?.libraryId);if(!draft||!lib||draft.providerId!==libraries.value?.providerId)return;if(lib.canPublish===false){storageMessage.value=lib.unavailableReason||'当前知识库没有发布权限，请重新选择。';pending.value=null;return;}
   const path:Folder[]=[];let parent=lib.rootFolderId,requestsLeft=50;
+  if(draft.pathIds.length>50){storageMessage.value='已保存的目录层级过深，请重新选择。';return;}
+  const loaded=await Promise.all(draft.pathIds.map((_id,index)=>loadBranch(lib,index?draft.pathIds[index-1]!:lib.rootFolderId)));if(loaded.some(ok=>!ok))return;
   for(const id of draft.pathIds){
-   if(--requestsLeft<0||!await loadBranch(lib,parent))return;let page=branches.value[branchKey(lib.id,parent)]?.page,item=page?.items.find(f=>f.id===id);const cursors=new Set<string>();
+   if(--requestsLeft<0)return;let page=branches.value[branchKey(lib.id,parent)]?.page,item=page?.items.find(f=>f.id===id);const cursors=new Set<string>();
    while(!item&&page?.hasMore&&page.nextCursor){
     if(--requestsLeft<0||cursors.has(page.nextCursor)){storageMessage.value='已保存的位置尚未核实，请展开目录重新选择。';return;}
     cursors.add(page.nextCursor);if(!await loadBranch(lib,parent,page.nextCursor))return;page=branches.value[branchKey(lib.id,parent)]?.page;item=page?.items.find(f=>f.id===id);
@@ -67,7 +72,9 @@ export function usePublicationDestinations(api:Api,actor:()=>string|null,meeting
  }
  async function selectLibrary(lib:Library){
   if(!available()||lib.canPublish===false||!libraries.value?.items.some(x=>x.id===lib.id&&x.rootFolderId===lib.rootFolderId))return;
-  epoch++;controller?.abort();busy.value=false;error.value=null;branches.value={};selection.value={providerId:libraries.value.providerId,libraryId:lib.id,libraryName:lib.name,visibility:lib.visibility,description:lib.description,folderId:lib.rootFolderId,folderName:'根目录',path:[]};persist();await loadBranch(lib,lib.rootFolderId);
+  const reselecting=selection.value?.libraryId===lib.id;
+  branchFlights.clear();
+  for(const [key,request] of requests)if(key!=='libraries'){request.abort();requests.delete(key);}busy.value=requests.size>0;error.value=null;selection.value={providerId:libraries.value.providerId,libraryId:lib.id,libraryName:lib.name,visibility:lib.visibility,description:lib.description,folderId:lib.rootFolderId,folderName:'根目录',path:[]};persist();if(reselecting||!branches.value[branchKey(lib.id,lib.rootFolderId)])await loadBranch(lib,lib.rootFolderId);
  }
  function selectFolder(lib:Library,item:Folder,path:Folder[]){
   if(!available()||selection.value?.libraryId!==lib.id)return;const parent=path.at(-1)?.id??lib.rootFolderId;
@@ -84,10 +91,10 @@ export function usePublicationDestinations(api:Api,actor:()=>string|null,meeting
   walk(lib.rootFolderId,[]);return rows;
  }
  async function restoreSaved(value:{providerId:string;libraryId:string;pathIds:string[]}){
-  if(!actor()||!available())return;await loadLibraries(null,'');pending.value={actor:actor()!,meeting:meeting(),...value};let remaining=50;
+  if(!actor()||!available())return;const turn=epoch,who=actor(),id=meeting();if(!libraries.value||queryText)await loadLibraries(null,'');if(turn!==epoch||who!==actor()||id!==meeting()||selection.value)return;pending.value??={actor:who!,meeting:id,...value};let remaining=50;
   while(pending.value&&!libraries.value?.items.some(x=>x.id===value.libraryId)&&libraries.value?.hasMore&&libraries.value.nextCursor&&remaining-->0)await loadLibraries(libraries.value.nextCursor,'');
   if(pending.value)await restore();if(pending.value){storageMessage.value='已保存的位置当前不可用，请重新选择；其他配置已保留。';selection.value=null;}
  }
  const canSubmit=computed(()=>available()&&!!selection.value&&!busy.value&&!error.value);
- return{restoreSaved,libraries,branches,selection,error,busy,pending,storageMessage,canSubmit,loadLibraries,loadBranch,selectLibrary,selectFolder,toggle,rows,saveSelection(){if(!canSubmit.value)return false;persist();return !storageMessage.value;},branch:(lib:Library,parent:string)=>branches.value[branchKey(lib.id,parent)],retry:()=>lastRetry?.()??Promise.resolve(),clear,dispose(){disposed=true;stop();clear();}};
+ return{restoreSaved,libraries,branches,selection,error,busy,pending,storageMessage,canSubmit,loadLibraries,loadBranch,selectLibrary,selectFolder,toggle,rows,discardDraft(){journal?.clear();pending.value=null;selection.value=null;},saveSelection(){if(!canSubmit.value)return false;persist();return !storageMessage.value;},branch:(lib:Library,parent:string)=>branches.value[branchKey(lib.id,parent)],retry:()=>lastRetry?.()??Promise.resolve(),clear,dispose(){disposed=true;stop();clear();}};
 }

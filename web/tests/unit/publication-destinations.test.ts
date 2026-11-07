@@ -6,6 +6,10 @@ const libs=(items:any[],nextCursor:string|null=null)=>({providerId:'kb',items,ne
 const folders=(items:any[],nextCursor:string|null=null)=>({providerId:'kb',items,nextCursor,hasMore:nextCursor!==null});
 const f=(id:string,parentFolderId:string,libraryId='a')=>({id,libraryId,parentFolderId,isRoot:false,name:'同名文件夹'});
 const deferred=()=>{let resolve!:(value:any)=>void;const promise=new Promise<any>(r=>resolve=r);return{promise,resolve};};
+test('a slow search keeps the current directory visible and a local selection wins over older saved configuration',async()=>{
+ const gate=deferred();let slow=false;const d=usePublicationDestinations({libraries:async()=>slow?gate.promise:libs([a,b]),folders:async()=>folders([])},()=> 'owner',()=>meeting,()=>true,()=>false,()=>{});
+ await d.loadLibraries();await d.selectLibrary(b);await d.restoreSaved({providerId:'kb',libraryId:'a',pathIds:[]});assert.equal(d.selection.value?.libraryId,'b');slow=true;const pending=d.loadLibraries(null,'搜索');assert.deepEqual(d.libraries.value?.items.map(x=>x.id),['a','b']);assert.equal(d.selection.value?.libraryId,'b');gate.resolve(libs([]));await pending;assert.equal(d.selection.value?.libraryId,'b');d.dispose();
+});
 test('readable library without publish permission stays visible but cannot become a target',async()=>{
  const disabled={...a,canPublish:false,description:'仅供查询',visibility:'项目成员',unavailableReason:'没有发布权限'};let folderReads=0;
  const d=usePublicationDestinations({libraries:async()=>libs([disabled]),folders:async()=>{folderReads++;return folders([]);}},()=> 'owner',()=>meeting,()=>true,()=>false,()=>{});
@@ -15,10 +19,10 @@ test('provider search includes later pages and keeps the selected path while bro
  const searches:string[]=[];const d=usePublicationDestinations({libraries:async(_m,_c,_s,search='')=>{searches.push(search);return libs(search?[]:[a]);},folders:async()=>folders([])},()=> 'owner',()=>meeting,()=>true,()=>false,()=>{});
  await d.loadLibraries();await d.selectLibrary(a);await d.loadLibraries(null,'说明关键词');assert.equal(searches.at(-1),'说明关键词');assert.equal(d.libraries.value?.items.length,0);assert.equal(d.selection.value?.libraryId,'a');assert.equal(d.canSubmit.value,true);d.dispose();
 });
-test('a debounced search finishing after library selection resumes the cancelled root-folder read',async()=>{
+test('a debounced search shares an in-flight folder read without cancelling the selected tree',async()=>{
  const slow=deferred(),top=f('top','ar');let calls=0;
  const d=usePublicationDestinations({libraries:async()=>libs([a]),folders:async()=>++calls===1?slow.promise:folders([top])},()=> 'owner',()=>meeting,()=>true,()=>false,()=>{});
- await d.loadLibraries();const selected=d.selectLibrary(a);await d.loadLibraries(null,'同名');slow.resolve(folders([]));await selected;
+ await d.loadLibraries();const selected=d.selectLibrary(a);const searched=d.loadLibraries(null,'同名');slow.resolve(folders([top]));await Promise.all([selected,searched]);
  assert.equal(d.selection.value?.folderId,'ar');assert.deepEqual(d.rows(a).map(x=>x.folder.id),['top']);assert.equal(d.canSubmit.value,true);d.dispose();
 });
 test('directory paging appends genuine stable IDs and a library switch clears the old folder before loading',async()=>{

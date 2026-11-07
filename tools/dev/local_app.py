@@ -566,6 +566,7 @@ def main():
     parser.add_argument('--web-port', type=int)
     parser.add_argument('--api-port', type=int)
     parser.add_argument('--management-port', type=int)
+    parser.add_argument('--bundled-frontend', action='store_true', help='Serve the compiled local frontend for stable browser use and performance acceptance')
     args = parser.parse_args()
     RUNTIME.mkdir(parents=True, exist_ok=True, mode=0o700)
     RUNTIME.chmod(0o700)
@@ -587,7 +588,7 @@ def main():
         configure_ports(state, args.web_port, args.api_port, args.management_port)
         save(statefile, state)
         if args.action == 'start':
-            start(state)
+            start(state, bundled_frontend=args.bundled_frontend)
         elif args.action == 'start-worker':
             start_worker(state)
         elif args.action == 'stop-worker':

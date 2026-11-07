@@ -57,10 +57,13 @@ final class SessionSecurityFilter extends OncePerRequestFilter {
         }
         ResolvedSession session;
         boolean readProbe=(request.getMethod().equals("GET")||request.getMethod().equals("HEAD"))
-                &&(uri.equals("/api/v1/session")||uri.equals("/api/v1/meetings")||uri.matches("/api/v1/exports/[0-9a-fA-F-]{36}")||uri.matches("/api/v1/meetings/[0-9a-fA-F-]{36}")
+                &&(uri.equals("/api/v1/session")||uri.equals("/api/v1/meetings")||uri.equals("/api/v1/meetings/categories")||uri.matches("/api/v1/exports/[0-9a-fA-F-]{36}")||uri.matches("/api/v1/meetings/[0-9a-fA-F-]{36}")
                 ||uri.matches("/api/v1/meetings/[^/]+/(minutes|workspace|workspace/access|transcript/(revisions/[^/]+/)?sources/[^/]+)"));
         try { session = (readProbe?sessions.resolveForRead(token):sessions.resolve(token)).orElse(null); }
-        catch (DataAccessException | org.springframework.transaction.TransactionException unavailable) { BusinessErrors.write(response, 503, "IDENTITY_UNAVAILABLE", "Identity service unavailable"); return; }
+        catch (DataAccessException | org.springframework.transaction.TransactionException unavailable) {
+            System.getLogger(SessionSecurityFilter.class.getName()).log(System.Logger.Level.WARNING,"Session resolution unavailable: "+request.getMethod()+" "+uri,unavailable);
+            BusinessErrors.write(response, 503, "IDENTITY_UNAVAILABLE", "Identity service unavailable"); return;
+        }
         if (session == null) { BusinessErrors.write(response, 401, "UNAUTHENTICATED", "Authentication required"); return; }
         response.setHeader("Cache-Control", "no-store");
         if (!List.of("GET", "HEAD", "OPTIONS").contains(request.getMethod())) {

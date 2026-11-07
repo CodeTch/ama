@@ -3,6 +3,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 class Task11PublicationReadCancellationTest {
+ @Test void ordinaryParallelDirectoryReadsAreAdmittedButTheQueueStaysBounded()throws Exception {try(var reads=new PublicationReadRequests()){for(int i=0;i<20;i++)assertNotNull(reads.start(c->1));assertThrows(ama.contract.TranscriptContracts.Failure.class,()->reads.start(c->1));}}
  @Test void cancellationAbortsOwnedResourcesExactlyOnceAndLateRegistrationImmediately()throws Exception {var c=new PublicationReadRequests.Cancellation();var aborted=new AtomicInteger();c.register(aborted::incrementAndGet);c.cancel();c.cancel();assertEquals(1,aborted.get());c.register(aborted::incrementAndGet);assertEquals(2,aborted.get());assertTrue(c.cancelled());assertThrows(ama.contract.TranscriptContracts.Failure.class,c::check);}
  @Test void detachedResourcesAreNeverAborted()throws Exception {var c=new PublicationReadRequests.Cancellation();var aborted=new AtomicInteger();var registration=c.register(aborted::incrementAndGet);registration.close();registration.close();c.cancel();assertEquals(0,aborted.get());}
  @Test void shutdownCancelsAdmittedRequestBeforeJoiningExecutor()throws Exception {var reads=new PublicationReadRequests();var aborted=new AtomicInteger();var task=reads.start(c->{c.register(aborted::incrementAndGet);return 1;});assertEquals(1,task.getCallable().call());reads.close();assertEquals(1,aborted.get());}

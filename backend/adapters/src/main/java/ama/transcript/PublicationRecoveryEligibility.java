@@ -19,7 +19,7 @@ final class PublicationRecoveryEligibility {
    try{
     var operation=rows.get("external_operation").stream().filter(o->publication.get("business_key").equals(o.get("business_key"))).findFirst().orElseThrow();
     var selected=JdbcPublicationReplacement.exactSelection(plan,publication,((Number)operation.get("current_execution_no")).longValue());
-    if(Objects.equals(root.get("final_confirmation_id"),publication.get("confirmation_id"))&&Objects.equals(root.get("revision"),selected.task().get("business_version")))result.add("RETRY_ZERO_EFFECT");
+    if(Objects.equals(root.get("final_confirmation_id"),publication.get("confirmation_id"))&&new java.math.BigDecimal(root.get("revision").toString()).longValueExact()==((Number)selected.task().get("business_version")).longValue())result.add("RETRY_ZERO_EFFECT");
    }catch(RuntimeException unavailable){/* Reconfiguration may remain available; exact input is not proven. */}
   }
   return List.copyOf(result);

@@ -23,7 +23,7 @@ function application(){
  } as any;
 }
 
-test('meeting confirmation view keeps the prototype card structure and empty preview state',async()=>{
+test('meeting confirmation view keeps the prototype cards and labels an unread preview as loading',async()=>{
  const server=await createServer({root:new URL('../../',import.meta.url).pathname,server:{middlewareMode:true,hmr:false},appType:'custom'});
  try{
   const {applicationKey}=await server.ssrLoadModule('/src/application.ts');
@@ -34,7 +34,8 @@ test('meeting confirmation view keeps the prototype card structure and empty pre
   assert.match(html,/会议信息/);
   assert.match(html,/纪要预览/);
   assert.doesNotMatch(html,/最终确认并继续发布/);
-  assert.match(html,/尚无已保存纪要/);
+  assert.match(html,/正在读取已保存纪要/);
+  assert.doesNotMatch(html,/尚无已保存纪要/);
   assert.doesNotMatch(html,/undefined/);
  }finally{await server.close();}
 });

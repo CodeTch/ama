@@ -7,9 +7,10 @@ export function useMinutesTaskObservation(api:Api,actor:()=>string|null,meeting:
  const running=computed(()=>!!latest.value&&['READY','RUNNING','RECONCILING'].includes(latest.value.state));
  let epoch=0,disposed=false,controller:AbortController|null=null,timer:ReturnType<typeof setTimeout>|null=null;
  const delivered=new Set<string>();let seen=false,previous:Task|null=null;
+ const foreground=()=>typeof document==='undefined'||document.visibilityState!=='hidden';
  function clear(resetHistory=true){epoch++;controller?.abort();if(timer)clearTimeout(timer);timer=null;latest.value=null;error.value='';loading.value=false;observed.value=false;if(resetHistory){delivered.clear();seen=false;previous=null;}}
  async function refresh(){
-  if(disposed||!actor()||!enabled())return;
+  if(disposed||!actor()||!enabled()||!foreground())return;
   if(timer)clearTimeout(timer);timer=null;controller?.abort();const request=new AbortController();controller=request;
   const turn=++epoch,who=actor(),id=meeting(),active=()=>!disposed&&turn===epoch&&who===actor()&&id===meeting()&&enabled();
   const deadline=setTimeout(()=>request.abort(),20000);loading.value=true;error.value='';
@@ -30,5 +31,7 @@ export function useMinutesTaskObservation(api:Api,actor:()=>string|null,meeting:
   finally{clearTimeout(deadline);if(active()){loading.value=false;if(running.value||error.value)timer=schedule(()=>{void refresh();});}}
  }
  const stop=watch(()=>[actor(),meeting(),enabled()],(value,old)=>{clear(value[0]!==old[0]||value[1]!==old[1]);if(actor()&&enabled())void refresh();},{flush:'sync'});
- return {observed:shallowReadonly(observed),latest:shallowReadonly(latest),error:shallowReadonly(error),loading:shallowReadonly(loading),running,refresh,dispose(){disposed=true;stop();clear();}};
+ function visibility(){if(foreground()){void refresh();}else{epoch++;controller?.abort();controller=null;if(timer)clearTimeout(timer);timer=null;loading.value=false;}}
+ if(typeof document!=='undefined')document.addEventListener('visibilitychange',visibility);
+ return {observed:shallowReadonly(observed),latest:shallowReadonly(latest),error:shallowReadonly(error),loading:shallowReadonly(loading),running,refresh,dispose(){disposed=true;stop();clear();if(typeof document!=='undefined')document.removeEventListener('visibilitychange',visibility);}};
 }

@@ -55,8 +55,10 @@ final class PublicationGovernanceBinding {
  }
  static <T>T invokeWork(Supplier<T> work){try{return work.get();}catch(PublicationGraph.ObservationChanged changed){throw fail(PROVENANCE_UNAVAILABLE);}}
  private org.springframework.jdbc.core.JdbcTemplate j(){var value=new org.springframework.jdbc.core.JdbcTemplate(authority.dataSource());value.setQueryTimeout(2);return value;}
+  /** Only a rolled-back metadata acquisition may restart. Caller work is outside this boundary. */
+  static <T>T captureMetadata(Supplier<T> capture){try{return capture.get();}catch(org.springframework.dao.CannotAcquireLockException contention){throw new PublicationGraph.ObservationChanged();}}
  private PublicationDocumentRead.Snapshot capture(String meeting,String publication,String owner,PublicationGraph.Plan plan){
-  return authority.transactionRunner().required(()->{
+   return captureMetadata(()->authority.transactionRunner().required(()->{
    var access=(JdbcMeetingAccess)authority.meetingAccess();var actor=new Actor(owner,Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
    // Actor is an identifier here: actual ACTIVE/DISABLED status comes from locked fact rows.
    // No authorizeFactRoot/READ/EDIT conversion is performed for technical reconciliation.
@@ -69,7 +71,7 @@ final class PublicationGovernanceBinding {
    var originals=j().queryForList("SELECT request_manifest FROM publication_submission WHERE task_id=? AND publication_id=? AND OCTET_LENGTH(request_manifest)=? AND CHAR_LENGTH(request_manifest)=? AND OCTET_LENGTH(CONVERT(request_manifest USING utf16))/2=?",submission.get("task_id"),publication,bytes,points,units);require(originals.size()==1&&originals.getFirst().get("request_manifest") instanceof String,PROVENANCE_UNAVAILABLE);String manifest=(String)originals.getFirst().get("request_manifest");
    var stored=PublicationExecutionRead.read(j(),budget,authority.readBudget().maxManifestBytes(),(String)submission.get("task_id"),(String)selected.operation().get("id"),(String)selected.execution().get("id"),n(selected.execution(),"execution_no"));require(manifest.equals(stored.manifest()),PROVENANCE_UNAVAILABLE);
    return new PublicationDocumentRead.Snapshot(root,pub,confirmation,selected.mapping(),submission,selected.task(),selected.operation(),selected.execution(),selected.attempt(),manifest,null);
-  });
+   }));
  }
  private Map<String,Object> one(PublicationGraph.Plan plan,String sql,Object...args){
   var budget=plan.budget();budget.check();budget.admitCapture(65536,16384,32768,2);var rows=j().queryForList(sql,args);require(rows.size()==1,PROVENANCE_UNAVAILABLE);budget.row(rows.getFirst().size());var result=new LinkedHashMap<String,Object>();

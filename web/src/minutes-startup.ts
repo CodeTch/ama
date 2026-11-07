@@ -7,7 +7,9 @@ const match=/^\/meeting\/([a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12})\/minutes\
 export const directMeeting=match?.[1]!==DEMO_MEETING_ID?match?.[1]:undefined;
 export const startupSession=useSession(location.origin);
 export const startupEntry=createMinutesEntry(startupSession);
-export const initialSession=directMeeting?startupSession.refresh().then(()=>{
- startupEntry.preloadMinutesEntry(directMeeting);
+const entryMeeting=/^\/meeting\/([a-f0-9-]{36})(?:\/[a-z]+)?\/?$/.exec(location.pathname);
+const protectedEntry=location.pathname==='/meetings'||!!entryMeeting&&entryMeeting[1]!==DEMO_MEETING_ID;
+export const initialSession=directMeeting||protectedEntry?startupSession.refresh().then(()=>{
+ if(directMeeting)startupEntry.preloadMinutesEntry(directMeeting);
  return true;
 },()=>false):undefined;

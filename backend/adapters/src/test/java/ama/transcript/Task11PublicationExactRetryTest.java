@@ -2,6 +2,8 @@ package ama.transcript;
 import java.util.*;import java.lang.reflect.*;import ama.contract.TaskContracts.*;import org.junit.jupiter.api.Test;import static org.junit.jupiter.api.Assertions.*;
 /** Pure metadata/fixed-input checks used by the private assembler; these rows mint no capability. */
 class Task11PublicationExactRetryTest {
+ @Test void knownNonFailedStatesRejectRecoveryAsConflictBeforeAcquiringThePublicationGraph(){for(String state:List.of("SUCCEEDED","RUNNING","READY","RECONCILING")){var failure=assertThrows(ama.contract.TranscriptContracts.Failure.class,()->JdbcPublicationReplacement.requireReplaceable(Map.of("state",state)));assertEquals(409,failure.status());assertEquals("PUBLICATION_NOT_RETRYABLE",failure.code());}assertDoesNotThrow(()->JdbcPublicationReplacement.requireReplaceable(Map.of("state","FAILED")));}
+
  static final String PUB="12345678-1234-4234-8234-123456789abc",FINAL="12345678-1234-4234-8234-123456789abd",TASK="12345678-1234-4234-8234-123456789abe",OP="12345678-1234-4234-8234-123456789abf",EXEC="12345678-1234-4234-8234-123456789ac0",MEETING="12345678-1234-4234-8234-123456789ac1";
  Map<String,Object> row(Object... values){var m=new HashMap<String,Object>();for(int i=0;i<values.length;i+=2)m.put((String)values[i],values[i+1]);return m;}
  TaskSpec spec(){return new TaskSpec("KNOWLEDGE_PUBLISH_V1","KNOWLEDGE_PUBLISH",new SubjectRef("MEETING",MEETING),"c".repeat(64),new TypedRef("PUBLICATION",PUB),"a".repeat(64),13,0,0,3);}

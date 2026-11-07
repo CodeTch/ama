@@ -27,5 +27,8 @@ class Task12CategoryWireTest {
   }
   verifyNoInteractions(catalog);when(catalog.read(session.actor(),20,null)).thenThrow(new ama.contract.MeetingContracts.CategoryUnavailable());
   var response=mvc.perform(get("/api/v1/meetings/categories").requestAttr(SessionSecurityFilter.SESSION,session)).andReturn().getResponse();assertEquals(503,response.getStatus());assertTrue(response.getContentAsString().contains("CATEGORY_DICTIONARY_UNAVAILABLE"));assertEquals("private, no-store",response.getHeader("Cache-Control"));
+  doThrow(new org.springframework.dao.DataAccessResourceFailureException("private database detail")).when(catalog).read(session.actor(),20,null);
+  var unavailable=mvc.perform(get("/api/v1/meetings/categories").requestAttr(SessionSecurityFilter.SESSION,session)).andReturn().getResponse();
+  assertEquals(503,unavailable.getStatus());assertTrue(unavailable.getContentAsString().contains("MEETING_UNAVAILABLE"));assertFalse(unavailable.getContentAsString().contains("private database detail"));assertEquals("private, no-store",unavailable.getHeader("Cache-Control"));
  }
 }

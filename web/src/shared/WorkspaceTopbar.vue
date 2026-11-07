@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed} from 'vue';
+import {computed,ref,watch} from 'vue';
 import {RouterLink,useRoute,useRouter} from 'vue-router';
 import {useApplication} from '../application';
 import Icon from './Icon.vue';
@@ -7,11 +7,13 @@ const props=withDefaults(defineProps<{breadcrumb?:string;sessionChecking?:boolea
 const {session,currentUser}=useApplication(),router=useRouter(),route=useRoute();
 const profilePending=computed(()=>props.sessionChecking||session.status.value==='LOADING'||currentUser.loading.value);
 const profileName=currentUser.name;
+const profileMenu=ref<HTMLDetailsElement>();
+watch(()=>route.fullPath,()=>{if(profileMenu.value)profileMenu.value.open=false;},{flush:'post'});
 </script>
 <template>
   <header class="topbar"><nav class="topbar-heading" aria-label="主导航"><RouterLink to="/meetings" class="topbar-home" :aria-current="route.path==='/meetings'?'page':undefined"><template v-if="route.name==='recording'"><Icon name="list" :size="16"/> 我的会议</template><template v-else><img class="topbar-logo" src="/cmf-login-logo.png" alt="招商基金" width="28" height="28"/> 智会助手</template></RouterLink><span v-if="breadcrumb||route.name==='recording'" class="topbar-crumb">/ {{route.name==='recording'?'会议详情':breadcrumb}}</span></nav><div v-if="route.name!=='recording'" class="topbar-right">
-   <button class="btn sm ghost" @click="router.push('/feedback')"><Icon name="message" :size="15"/> 我的语料反馈</button>
-   <details class="home-profile"><summary class="role-chip" aria-label="当前用户" :aria-busy="profilePending" :title="profilePending?undefined:profileName"><div class="avatar o" :class="{'home-avatar-placeholder':profilePending}" aria-hidden="true">{{profilePending?'':Array.from(profileName)[0]}}</div><div class="rc-name"><span v-if="profilePending" class="home-name-placeholder" aria-hidden="true"></span><template v-else>{{profileName}}</template></div></summary><div class="home-profile-menu"><RouterLink to="/meeting-library" class="btn sm ghost">会议库</RouterLink><RouterLink v-if="session.current.value" to="/my/voiceprints" class="btn sm ghost">我的声纹</RouterLink><RouterLink v-if="session.current.value?.actor.roles.includes('PLATFORM_ADMIN')" to="/operations" class="btn sm ghost">运营治理</RouterLink><a v-if="session.current.value" class="btn sm ghost" href="/auth/cas/logout">退出登录</a><RouterLink v-else class="btn sm ghost" to="/login">企业登录</RouterLink></div></details>
+   <button class="btn sm ghost" data-prefetch="/feedback" @click="router.push('/feedback')"><Icon name="message" :size="15"/> 我的语料反馈</button>
+   <details ref="profileMenu" class="home-profile"><summary class="role-chip" aria-label="当前用户" :aria-busy="profilePending" :title="profilePending?undefined:profileName"><div class="avatar o" :class="{'home-avatar-placeholder':profilePending}" aria-hidden="true">{{profilePending?'':Array.from(profileName)[0]}}</div><div class="rc-name"><span v-if="profilePending" class="home-name-placeholder" aria-hidden="true"></span><template v-else>{{profileName}}</template></div></summary><div class="home-profile-menu"><RouterLink to="/meeting-library" class="btn sm ghost">会议库</RouterLink><RouterLink v-if="session.current.value" to="/my/voiceprints" class="btn sm ghost">我的声纹</RouterLink><RouterLink v-if="session.current.value?.actor.roles.includes('PLATFORM_ADMIN')" to="/operations" class="btn sm ghost">运营治理</RouterLink><a v-if="session.current.value" class="btn sm ghost" href="/auth/cas/logout">退出登录</a><RouterLink v-else class="btn sm ghost" to="/login">企业登录</RouterLink></div></details>
   </div></header>
 </template>
 <style scoped>

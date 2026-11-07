@@ -64,12 +64,12 @@ export function createApplication(origin:string,journals:TabJournalContext={tab:
  const minutesSensitiveJournal=createSensitiveJournal(journals),minutesEditorJournal=createMinutesEditorJournal(journals),minutesActionsJournal=createScopedPrivateJournal(journals,'minutes-actions',validMinutesCommand),minutesScopeReady=shallowRef(true);
  function syncMinutes(actor:string|null,id?:string|null){const editor=minutesEditorJournal.synchronize(actor,id),actions=minutesActionsJournal.synchronize(actor,id);const publication=publicationJournal.synchronize(actor,id);const destination=publicationDestinationJournal.synchronize(actor,id);const sensitive=minutesSensitiveJournal.synchronize(actor,id);minutesScopeReady.value=editor&&actions&&publication&&destination&&sensitive;}
  const stopMinutesIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)syncMinutes(actor);},{flush:'sync',immediate:session.current.value!==null});
- const stop=session.onInvalidate(()=>{clearMinutesEntry();list.invalidate();});
+ const stop=session.onInvalidate(()=>{clearMinutesEntry();list.invalidate();options.clear();});
  const infoSuggestions=createInfoSuggestionsApi(session.client,()=>session.current.value?.actor.enterpriseId??null),infoSuggestionJournal=createScopedPrivateJournal(journals,'info-suggestions',validInfoSuggestionCommand);
  const create=useMeetingCreate(info.send,()=>session.current.value?.actor.enterpriseId??null,journals.storage,journals.tab,journals.recovery);
  const discovery=createCommandDiscoveryApi(session.client,()=>session.current.value?.actor.enterpriseId??null);
  const createDiscovery=useCommandDiscovery(discovery.lookup,()=>session.current.value?.actor.enterpriseId??null,()=>create.command.snapshot.value);
- const options=createMeetingOptionsApi(session.client),infoJournal=createInfoJournal(journals);
+ const options=createMeetingOptionsApi(session.client,()=>session.current.value),infoJournal=createInfoJournal(journals);
  const currentUser=createCurrentUserProfile(()=>session.current.value?.actor.enterpriseId??null,options.people);
  const generationJournal=createScopedPrivateJournal(journals,'minutes-generation',validGenerationCommand),generationScopeReady=shallowRef(true),minutesGeneration=createMinutesGenerationApi(session.client,()=>session.current.value?.actor.enterpriseId??null);
  const stopGenerationIdentity=watch(()=>session.current.value?.actor.enterpriseId??null,actor=>{if(actor!==null)generationScopeReady.value=generationJournal.synchronize(actor);},{flush:'sync',immediate:session.current.value!==null});
@@ -104,7 +104,7 @@ export function createApplication(origin:string,journals:TabJournalContext={tab:
  const stopPersonalTemplateIdentity=watch(actor,()=>{personalTemplateScopeError.value=null;try{personalTemplateCommands.synchronize();}catch(cause){personalTemplateScopeError.value=cause instanceof Error?cause.message:'模板恢复记录暂不可用。';}},{flush:'sync',immediate:true});
  const topicCommands=useTopicCommands(topics,actor,journals),topicScopeError=shallowRef<string|null>(null);
  async function loadTopics(){const who=actor();if(!who||!topicCommands.available.value)return;
-  try{await topicCommands.reload();}catch{if(actor()===who)topicScopeError.value='专题暂无法读取，请重试。';}
+  try{await topicCommands.reload(false);topicScopeError.value=null;}catch{if(actor()===who)topicScopeError.value='专题暂无法读取，请重试。';}
  }
  const stopTopicIdentity=watch(actor,who=>{topicScopeError.value=null;try{topicCommands.synchronize();}catch(cause){topicScopeError.value=cause instanceof Error?cause.message:'专题恢复记录暂不可用。';}},{flush:'sync',immediate:session.current.value!==null});
  const feedbackActions=useFeedbackActions(feedback,actor,journals),feedbackScopeError=shallowRef<string|null>(null);

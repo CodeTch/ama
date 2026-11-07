@@ -12,13 +12,15 @@ function parseSession(value:unknown):Session {
 /** App-owned single instance; consumers subscribe to invalidation to clear sensitive state and stop polling. */
 export function useSession(origin:string) {
  const current=shallowRef<Session|null>(null),status=shallowRef<'UNAVAILABLE'|'LOADING'|'ACTIVE'>('UNAVAILABLE'),error=shallowRef<unknown>(null);
- const listeners=new Set<()=>void>(),logoutListeners=new Set<()=>void>();let epoch=0,controller:AbortController|null=null;
- function invalidate(){epoch++;controller?.abort();controller=null;const had=current.value!==null;current.value=null;status.value='UNAVAILABLE';if(had)for(const listener of listeners)listener();}
+ const listeners=new Set<()=>void>(),logoutListeners=new Set<()=>void>();let epoch=0,controller:AbortController|null=null,flight:Promise<Session>|null=null;
+ function invalidate(){epoch++;controller?.abort();controller=null;flight=null;const had=current.value!==null;current.value=null;status.value='UNAVAILABLE';if(had)for(const listener of listeners)listener();}
  const client=createBusinessClient(origin,()=>current.value,invalidate);
- async function refresh(){invalidate();const generation=epoch;controller=new AbortController();const timeout=globalThis.setTimeout(()=>controller?.abort(),2500);status.value='LOADING';error.value=null;
+ function refresh():Promise<Session>{if(flight&&status.value==='LOADING')return flight;invalidate();const generation=epoch;controller=new AbortController();const request=controller,timeout=globalThis.setTimeout(()=>request.abort(),2500);status.value='LOADING';error.value=null;
+  flight=(async()=>{
   try{const value=await client.json<unknown>('/api/v1/session',{signal:controller.signal,maxResponseBytes:16384});if(generation!==epoch)throw new DOMException('Session load superseded','AbortError');current.value=parseSession(value);status.value='ACTIVE';return current.value;}
   catch(cause){if(generation!==epoch)throw new DOMException('Session load superseded','AbortError');current.value=null;status.value='UNAVAILABLE';error.value=cause;throw cause;}
-  finally{globalThis.clearTimeout(timeout);if(generation===epoch)controller=null;}
+  finally{globalThis.clearTimeout(timeout);if(generation===epoch){controller=null;flight=null;}}
+  })();return flight;
  }
  async function logout(){const previous=current.value;invalidate();for(const listener of logoutListeners)listener();if(!previous)return;await request<void>(new URL('/api/v1/session/logout',origin).href,{method:'POST',headers:{'X-CSRF-Token':previous.csrfToken},maxResponseBytes:16384});}
  function onInvalidate(listener:()=>void){listeners.add(listener);return ()=>listeners.delete(listener);}

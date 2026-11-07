@@ -6882,6 +6882,17 @@
             "type": "string",
             "pattern": "^doc-[0-9a-f]{32}$"
           }
+        },
+        {
+          "name": "libraryId",
+          "in": "query",
+          "required": false,
+          "description": "Only return records within this provider-authorized library. Applied before pagination.",
+          "schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          }
         }
       ],
       "responses": {

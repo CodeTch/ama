@@ -35,5 +35,6 @@ export function createMinutesEntry(session:ReturnType<typeof useSession>){
  const content=entryReader(minutesSaved.current),navigation=entryReader(workspace.navigation),information=entryReader(info.saved);
  function clearMinutesEntry(){content.clear();navigation.clear();information.clear();}
  function preloadMinutesEntry(meeting:string){content.start(meeting);navigation.start(meeting);information.start(meeting);}
- return {info,workspace,minutesSaved,preloadMinutesEntry,clearMinutesEntry,claimMinutesEntry:content.claim,claimNavigation:navigation.claim,claimInformation:information.claim};
+ function preloadMeetingEntry(meeting:string){navigation.start(meeting);information.start(meeting);}
+ return {info,workspace,minutesSaved,preloadMinutesEntry,preloadMeetingEntry,clearMinutesEntry,claimMinutesEntry:content.claim,claimNavigation:navigation.claim,claimInformation:information.claim};
 }

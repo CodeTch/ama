@@ -5426,6 +5426,14 @@ export interface components {
             topicGroups: {
                 [key: string]: number;
             };
+            /** @description Topic labels for exactly the current owned page, from the same authorized read snapshot. Empty for joined scope. */
+            topicMemberships?: {
+                /** Format: uuid */
+                meetingId: string;
+                /** Format: uuid */
+                topicId: string | null;
+                topicName: string | null;
+            }[];
         };
         Member: {
             /** Format: uuid */
@@ -9100,6 +9108,8 @@ export interface operations {
             query?: {
                 view?: "read" | "manage";
                 cursor?: string;
+                /** @description Only return records within this provider-authorized library. Applied before pagination. */
+                libraryId?: string;
             };
             header?: never;
             path?: never;

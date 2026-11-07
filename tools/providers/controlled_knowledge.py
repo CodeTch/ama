@@ -330,11 +330,13 @@ COMMIT;""")
    can_manage=self.manager(actor,row['library']);can_read=bool(self.db.execute('SELECT 1 FROM grant_record WHERE actor=? AND library=? AND folder=? AND can_read=1',(actor,row['library'],row['folder'])).fetchone())
    if not can_manage and not can_read:raise Denied()
    return dict(**identity,documentId=document,publicationId=row['publication'],libraryId=row['library'],canManage=can_manage)
-  if set(query)-{'view','cursor','limit'} or any(len(v)!=1 for v in query.values()) or query.get('view',[''])[0] not in ('read','manage'):raise Denied(400)
+  if set(query)-{'view','cursor','limit','libraryId'} or any(len(v)!=1 for v in query.values()) or query.get('view',[''])[0] not in ('read','manage'):raise Denied(400)
   view=query['view'][0];cursor=query.get('cursor',[''])[0];limit=query.get('limit',['20'])[0]
   if not re.fullmatch('(?:[1-9]|[1-4][0-9]|50)',limit) or cursor and not re.fullmatch('doc-[0-9a-f]{32}',cursor):raise Denied(400)
+  library=query.get('libraryId',[None])[0]
+  if library is not None and (not isinstance(library,str) or not library or len(library)>255 or library in ('.','..') or any(ord(c)<32 or 127<=ord(c)<=159 or c in '/\\' for c in library) or re.search(r'%(?:2f|5c)',library,re.I)):raise Denied(400)
   limit=int(limit)
-  rows=self.db.execute("SELECT d.id,d.publication,d.library,d.folder,d.payload_hash,substr(json_extract(CAST(d.payload AS TEXT),'$.title'),1,512) title,substr(json_extract(CAST(d.payload AS TEXT),'$.meeting.name'),1,512) meeting_name,COALESCE(g.state,'ACTIVE') state,COALESCE(r.can_read,0) can_read,COALESCE(a.can_manage,0) can_manage FROM document d LEFT JOIN document_governance g ON g.document=d.id LEFT JOIN grant_record r ON r.actor=? AND r.library=d.library AND r.folder=d.folder LEFT JOIN governance_grant a ON a.actor=? AND a.library=d.library WHERE d.client=? AND d.id>? AND ((?='manage' AND a.can_manage=1) OR (?='read' AND r.can_read=1 AND COALESCE(g.state,'ACTIVE')='ACTIVE')) ORDER BY d.id LIMIT ?",(actor,actor,self.ids['clientId'],cursor,view,view,limit+1)).fetchall()
+  rows=self.db.execute("SELECT d.id,d.publication,d.library,d.folder,d.payload_hash,substr(json_extract(CAST(d.payload AS TEXT),'$.title'),1,512) title,substr(json_extract(CAST(d.payload AS TEXT),'$.meeting.name'),1,512) meeting_name,COALESCE(g.state,'ACTIVE') state,COALESCE(r.can_read,0) can_read,COALESCE(a.can_manage,0) can_manage FROM document d LEFT JOIN document_governance g ON g.document=d.id LEFT JOIN grant_record r ON r.actor=? AND r.library=d.library AND r.folder=d.folder LEFT JOIN governance_grant a ON a.actor=? AND a.library=d.library WHERE d.client=? AND d.id>? AND (? IS NULL OR d.library=?) AND ((?='manage' AND a.can_manage=1) OR (?='read' AND r.can_read=1 AND COALESCE(g.state,'ACTIVE')='ACTIVE')) ORDER BY d.id LIMIT ?",(actor,actor,self.ids['clientId'],cursor,library,library,view,view,limit+1)).fetchall()
   items=[]
   for row in rows[:limit]:
    library=self.db.execute("SELECT l.name,COALESCE(p.description,'') description FROM library l LEFT JOIN library_profile p ON p.library=l.id WHERE l.id=?",(row['library'],)).fetchone();chain=[];seen=set();current=row['folder']

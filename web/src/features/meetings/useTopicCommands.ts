@@ -9,13 +9,13 @@ export function useTopicCommands(api:Pick<ReturnType<typeof createTopicsApi>,'se
  const journal=createScopedPrivateJournal(context,'topics',validTopicCommand),topics=shallowRef<readonly Topic[]>([]),available=shallowRef(false),reading=shallowRef(false),concealed=shallowRef(false);
  // Keep the last verified page in memory across routes, scoped to this actor.
  const memberships=shallowRef<Record<string,string|null>>({});
- let owner:string|null=null,epoch=0,read:AbortController|null=null,membershipVersion=0;
+ let owner:string|null=null,epoch=0,read:AbortController|null=null,membershipVersion=0,lastRead=0,readFlight:Promise<void>|null=null;
  const command=useCommand<Topic|null>(async c=>{if(owner!==actor()||!owner||!validTopicCommand(c,owner,TOPIC_WORKSPACE))throw new DOMException('Topic actor changed','AbortError');return api.send(c);},32768);
  const pending=computed(()=>command.snapshot.value!==null),busy=computed(()=>reading.value||command.state.value==='SENDING'),original=computed<Record<string,unknown>|null>(()=>!concealed.value&&command.snapshot.value?JSON.parse(command.snapshot.value.body):null);
  function active(turn:number){return turn===epoch&&!!owner&&owner===actor();}
- function dispose(){epoch++;read?.abort();read=null;owner=null;available.value=false;reading.value=false;topics.value=[];memberships.value={};command.invalidate();}
+ function dispose(){epoch++;read?.abort();read=null;readFlight=null;lastRead=0;owner=null;available.value=false;reading.value=false;topics.value=[];memberships.value={};command.invalidate();}
  function synchronize(){dispose();const who=actor();if(!who)return;owner=who;concealed.value=false;const found=journal.load(who,TOPIC_WORKSPACE);if(found.kind==='INVALID'||found.kind==='UNAVAILABLE')throw Error('专题恢复记录暂不可用，请保留页面重试。');available.value=true;if(found.kind==='RESTORED')command.restore(found.value);}
- async function reload(){const turn=epoch;if(!active(turn))return;read?.abort();const request=new AbortController();read=request;const rows=await api.list(request.signal);if(active(turn)&&!request.signal.aborted)topics.value=rows;}
+ function reload(force=true):Promise<void>{const turn=epoch;if(!active(turn)||!force&&lastRead&&Date.now()-lastRead<30000)return Promise.resolve();if(readFlight)return readFlight;read?.abort();const request=new AbortController();read=request;const pending=api.list(request.signal).then(rows=>{if(active(turn)&&!request.signal.aborted){topics.value=rows;lastRead=Date.now();}}).finally(()=>{if(readFlight===pending)readFlight=null;});readFlight=pending;return pending;}
  async function refreshMemberships(ids:readonly string[],signal:AbortSignal){
   const turn=epoch,version=membershipVersion;
   const current=()=>active(turn)&&!signal.aborted&&version===membershipVersion;
@@ -41,7 +41,7 @@ export function useTopicCommands(api:Pick<ReturnType<typeof createTopicsApi>,'se
     :['TOPIC_ASSIGN','TOPIC_UNASSIGN'].includes(snapshot.operation)?[snapshot.resource]:[];
    const verified=ids.length?await api.memberships(ids,request.signal):[];
    if(!active(turn)||request.signal.aborted)throw new DOMException('Topic scope changed','AbortError');
-   topics.value=rows;
+   topics.value=rows;lastRead=Date.now();
    if(!journal.clear())throw Error('专题已受理，恢复记录尚未清理，请重新核实。');
    if(verified.length){
     membershipVersion++;

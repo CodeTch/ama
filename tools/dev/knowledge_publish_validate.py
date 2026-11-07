@@ -28,13 +28,14 @@ if __name__ == '__main__':
         if state.get('owner') != local_app.OWNER:
             raise SystemExit('Local state belongs to another checkout')
         evidence = Path(sys.argv[2]).resolve()
+        evidence.mkdir(parents=True, exist_ok=True)
         resume = evidence / 'resume-validation'
         restart = True
         while True:
             try:
                 if restart:
                     state = json.loads((local_app.RUNTIME / 'state.json').read_text())
-                    local_app.start(state)
+                    local_app.start(state, bundled_frontend=True)
                 code = subprocess.run(['node', str(script), str(evidence)], cwd=root).returncode
             except Exception:
                 traceback.print_exc()

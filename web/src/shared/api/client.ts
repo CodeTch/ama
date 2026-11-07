@@ -60,7 +60,7 @@ export async function request<T>(path:string, init:RequestOptions={}):Promise<T>
  if(errorContract&&!intentMeeting&&!transcriptCommand&&!enhancementCommand&&!publicationCommand)throw new TypeError('Error contract requires the matching product command');
  if(!Number.isSafeInteger(maxResponseBytes)||maxResponseBytes<1||maxResponseBytes>8*1024*1024)throw new TypeError('Invalid response limit');
  if(expectedStatus!==undefined&&(!Number.isInteger(expectedStatus)||expectedStatus<200||expectedStatus>299))throw new TypeError('Invalid expected status');
- const readDeadline=method==='GET'&&/\/(minutes|workspace|final-confirmations|publications|info-suggestions)(?:[/?]|$)/.test(path)?AbortSignal.timeout(20000):null;
+ const readDeadline=method==='GET'?AbortSignal.timeout(/\/(minutes|workspace|final-confirmations|publications|info-suggestions)(?:[/?]|$)/.test(path)?20000:8000):null;
  const originalSignal=options.signal;if(readDeadline)options.signal=originalSignal?AbortSignal.any([originalSignal,readDeadline]):readDeadline;
  const checkReadDeadline=()=>{if(readDeadline?.aborted&&!originalSignal?.aborted)throw new ApiError('network',0,'读取会议内容超时，请重新读取。');options.signal?.throwIfAborted();};
  const headers=new Headers(options.headers);if(!headers.has('Accept'))headers.set('Accept','application/json');

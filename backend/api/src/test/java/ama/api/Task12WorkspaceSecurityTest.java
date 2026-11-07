@@ -1,6 +1,19 @@
 package ama.api;
 import ama.identity.SessionPort;import java.util.*;import org.junit.jupiter.api.Test;import org.springframework.mock.web.*;import org.springframework.mock.env.MockEnvironment;import static org.mockito.Mockito.*;import static org.junit.jupiter.api.Assertions.*;
 class Task12WorkspaceSecurityTest {
+ @Test void categoryMetadataUsesFreshReadResolutionAndRechecksRevocation()throws Exception {
+  var token="C".repeat(43);
+  var actor=new ama.contract.IdentityContracts.Actor("owner",ama.contract.IdentityContracts.Status.ACTIVE,Set.of(ama.contract.IdentityContracts.Role.USER));
+  var session=new ama.contract.IdentityContracts.ResolvedSession(actor,"T".repeat(43),java.time.Instant.now().plusSeconds(60));
+  var sessions=mock(SessionPort.class);
+  when(sessions.resolveForRead(token)).thenReturn(Optional.of(session),Optional.empty());
+  var filter=new SessionSecurityFilter(sessions,new MockEnvironment().withProperty("local.server.port","8080"));
+  var request=new MockHttpServletRequest("GET","/api/v1/meetings/categories");request.setLocalPort(8080);request.setCookies(new jakarta.servlet.http.Cookie(SessionCookies.NAME,token));
+  var response=new MockHttpServletResponse();var chain=new MockFilterChain();filter.doFilter(request,response,chain);
+  assertNotNull(chain.getRequest());assertEquals("private, no-store",response.getHeader("Cache-Control"));
+  assertThrows(ama.access.MeetingAccess.AccessDeniedException.class,()->SessionSecurityFilter.readIdentity(request).get());
+  verify(sessions,times(2)).resolveForRead(token);verify(sessions,never()).resolve(any());
+ }
  @Test void workspaceAuthenticationAndProviderDenialsArePrivateNoStore()throws Exception {
   for(String path:List.of("/api/v1/meetings","/api/v1/meetings/categories","/api/v1/meetings/command-discovery","/api/v1/meetings/00000000-0000-4000-8000-000000000001/tasks","/api/v1/meetings/00000000-0000-4000-8000-000000000001/workspace"))for(boolean unavailable:List.of(false,true)){
    var sessions=mock(SessionPort.class);when(sessions.resolveForRead(null)).thenCallRealMethod();if(unavailable)when(sessions.resolve(null)).thenThrow(new org.springframework.dao.DataAccessResourceFailureException("private"));else when(sessions.resolve(null)).thenReturn(Optional.empty());

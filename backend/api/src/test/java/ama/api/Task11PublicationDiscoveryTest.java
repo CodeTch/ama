@@ -50,11 +50,22 @@ class Task11PublicationDiscoveryTest {
    verifyNoInteractions(service);
   }
  }
- @Test void executorAdmitsTwoReadsAndRejectsThirdWithoutProviderWork()throws Exception {
-  var service=mock(JdbcPublicationService.class);var entered=new java.util.concurrent.CountDownLatch(2);var release=new java.util.concurrent.CountDownLatch(1);
+ @Test void executorRunsFourReadsQueuesSixteenAndRejectsExcessWithoutProviderWork()throws Exception {
+  var service=mock(JdbcPublicationService.class);var entered=new java.util.concurrent.CountDownLatch(4);var release=new java.util.concurrent.CountDownLatch(1);
   when(service.destinations(any(),anyString(),nullable(String.class),anyMap(),any())).thenAnswer(i->{entered.countDown();assertTrue(release.await(5,java.util.concurrent.TimeUnit.SECONDS));return Map.of("items",List.of(),"hasMore",false);});
-  try(var reads=new PublicationReadRequests()) {var runtime=new MinutesConfiguration.Runtime(null,null,null,null,null,null,service,null,65536);var mvc=MockMvcBuilders.standaloneSetup(new PublicationDiscoveryController(runtime,null,null,reads)).setControllerAdvice(new PublicationErrors()).build();
-   var first=mvc.perform(get(BASE).requestAttr(SessionSecurityFilter.SESSION,session)).andReturn();var second=mvc.perform(get(BASE).requestAttr(SessionSecurityFilter.SESSION,session)).andReturn();try{assertTrue(entered.await(2,java.util.concurrent.TimeUnit.SECONDS));var rejected=mvc.perform(get(BASE).requestAttr(SessionSecurityFilter.SESSION,session)).andReturn();if(rejected.getRequest().isAsyncStarted()){assertInstanceOf(org.springframework.core.task.TaskRejectedException.class,rejected.getAsyncResult(3000));rejected=mvc.perform(asyncDispatch(rejected)).andReturn();}assertEquals(503,rejected.getResponse().getStatus());assertEquals("private, no-store",rejected.getResponse().getHeader("Cache-Control"));verify(service,times(2)).destinations(any(),anyString(),nullable(String.class),anyMap(),any());}finally{release.countDown();}for(var request:List.of(first,second)){request.getAsyncResult(3000);assertEquals(200,mvc.perform(asyncDispatch(request)).andReturn().getResponse().getStatus());}
+  try(var reads=new PublicationReadRequests()) {
+   var runtime=new MinutesConfiguration.Runtime(null,null,null,null,null,null,service,null,65536);
+   var mvc=MockMvcBuilders.standaloneSetup(new PublicationDiscoveryController(runtime,null,null,reads)).setControllerAdvice(new PublicationErrors()).build();
+   var pending=new java.util.ArrayList<org.springframework.test.web.servlet.MvcResult>();
+   try{
+    for(int n=0;n<20;n++)pending.add(mvc.perform(get(BASE).requestAttr(SessionSecurityFilter.SESSION,session)).andReturn());
+    assertTrue(entered.await(2,java.util.concurrent.TimeUnit.SECONDS));
+    var rejected=mvc.perform(get(BASE).requestAttr(SessionSecurityFilter.SESSION,session)).andReturn();
+    assertFalse(rejected.getRequest().isAsyncStarted());assertEquals(503,rejected.getResponse().getStatus());assertEquals("private, no-store",rejected.getResponse().getHeader("Cache-Control"));
+    verify(service,times(4)).destinations(any(),anyString(),nullable(String.class),anyMap(),any());
+   }finally{release.countDown();}
+   for(var request:pending){request.getAsyncResult(3000);assertEquals(200,mvc.perform(asyncDispatch(request)).andReturn().getResponse().getStatus());}
+   verify(service,times(20)).destinations(any(),anyString(),nullable(String.class),anyMap(),any());
   }
  }
  @Test void servletTimeoutAndErrorAbortWorkBeforeSafeAsyncFailure()throws Exception {

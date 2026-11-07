@@ -13,5 +13,10 @@ class PublicationDocumentLayoutTest {
   for(String text:List.of("文档信息","历史版本","研发知识库 / 根目录 / 评审","研发成员可见","验收","确认人","2026-11-03T01:02:03Z","doc-one"))assertTrue(html.contains(text),text);
   assertFalse(html.contains("100%"));assertFalse(html.contains("截止日期：未填写"));assertTrue(html.contains("grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)"));
  }
+ @Test void documentInformationIncludesFrozenSummaryAndEscapesItAsText(){
+  var payload=PublicationConfigurationData.payload(payload(),metadata());var manifest=manifest(payload);manifest.put("publicationMetadata",metadata());
+  String html=new String(PublicationDocumentView.render(envelope(payload,manifest),manifest,finalRow(),"doc-one","result-one",Map.of("summary","最终确认摘要 <script>未修改</script>","categoryName","产品沟通"),new Task11AcceptanceBindingTest().budget(false),100000),StandardCharsets.UTF_8);
+  assertTrue(html.contains("会议摘要"));assertTrue(html.contains("最终确认摘要 &lt;script&gt;未修改&lt;/script&gt;"));assertTrue(html.contains("产品沟通"));assertFalse(html.contains("<script>"));
+ }
  @Test void payloadMetadataMustMatchTheSubmittedManifest(){var payload=PublicationConfigurationData.payload(payload(),metadata());var manifest=manifest(payload);var different=new LinkedHashMap<>(metadata());different.put("tags",List.of("other"));manifest.put("publicationMetadata",different);assertThrows(RuntimeException.class,()->new Task11DocumentViewTest().render(envelope(payload,manifest),manifest,100000));}
 }

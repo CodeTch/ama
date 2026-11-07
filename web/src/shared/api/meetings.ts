@@ -24,6 +24,13 @@ const stages=['ENTRY','TRANSCRIPT_PENDING','TRANSCRIPT_FAILED','MINUTES_PENDING'
 const count=(v:unknown):v is number=>typeof v==='number'&&Number.isSafeInteger(v)&&v>=0;
 function record(v:unknown):v is Record<string,unknown>{return typeof v==='object'&&v!==null&&!Array.isArray(v);}
 function page(value:unknown,scope:MeetingScope):value is MeetingPage {
+ if(record(value)&&'topicMemberships' in value){
+  const {topicMemberships,...core}=value;
+  if(!page(core,scope)||!Array.isArray(topicMemberships)||topicMemberships.length>50)return false;
+  if(scope==='joined')return topicMemberships.length===0;
+  const ids=new Set(core.items.map(item=>item.id));
+  return topicMemberships.length===ids.size&&new Set(topicMemberships.map(row=>row?.meetingId)).size===ids.size&&topicMemberships.every(row=>shape(row,'meetingId,topicId,topicName')&&ids.has(row.meetingId as string)&&(row.topicId===null?row.topicName===null:uuid(row.topicId)&&typeof row.topicName==='string'&&[...row.topicName].length<=255));
+ }
  if(!shape(value,'hasMore,items,nextCursor,stageCounts,topicGroups,total')||typeof value.hasMore!=='boolean'||!Array.isArray(value.items)||value.items.length>50||!value.items.every(item)||!count(value.total)||value.total<value.items.length||value.hasMore&&value.items.length===0)return false;
  if(!record(value.stageCounts)||Object.keys(value.stageCounts).sort().join(',')!==[...stages].sort().join(',')||!Object.values(value.stageCounts).every(count)||Object.values(value.stageCounts).reduce<number>((a,b)=>a+(b as number),0)!==value.total)return false;
  if(!record(value.topicGroups)||Object.keys(value.topicGroups).length>256||!Object.entries(value.topicGroups).every(([key,n])=>(key==='__none'||uuid(key))&&count(n)))return false;
@@ -35,6 +42,6 @@ export function createMeetingsApi(client:ReturnType<typeof createBusinessClient>
  return {async list(scope:MeetingScope,cursor:string|null,signal:AbortSignal,filters:MeetingFilters={}):Promise<MeetingPage>{
   if(!['owned','joined'].includes(scope))throw new TypeError('Invalid list scope');const query=new URLSearchParams({scope,limit:'10'});if(cursor!==null)query.set('cursor',cursor);if(filters.q?.trim())query.set('q',filters.q.trim());if(filters.stages?.length)query.set('stages',[...filters.stages].sort().join(','));if(filters.categories?.length)query.set('categories',[...filters.categories].sort().join(','));if(filters.from)query.set('from',filters.from);if(filters.to)query.set('to',filters.to);if(filters.topic){if(filters.topic!=='__none'&&!uuid(filters.topic))throw new TypeError('Invalid topic filter');query.set('topic',filters.topic);}
   const result=await client.json<unknown>('/api/v1/meetings?'+query,{signal});if(!page(result,scope))throw new ApiError('response',200,'会议列表响应不可用，请重新加载。');
-  Object.freeze(result.stageCounts);Object.freeze(result.topicGroups);result.items.forEach(row=>Object.freeze(row));Object.freeze(result.items);return Object.freeze(result);
+  Object.freeze(result.stageCounts);Object.freeze(result.topicGroups);result.topicMemberships?.forEach(row=>Object.freeze(row));if(result.topicMemberships)Object.freeze(result.topicMemberships);result.items.forEach(row=>Object.freeze(row));Object.freeze(result.items);return Object.freeze(result);
  }};
 }

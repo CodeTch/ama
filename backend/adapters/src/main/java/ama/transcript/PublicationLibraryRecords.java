@@ -8,16 +8,17 @@ import static ama.contract.MinutesContracts.FailureCode.*;
 
 /** Library-authorized formal records. No meeting READ, source bytes, or draft projection is acquired. */
 final class PublicationLibraryRecords {
- static Map<String,Object> read(JdbcPublicationService service,Actor actor,String view,String cursor,PreparationCancellation cancellation)throws java.io.IOException{
+ static Map<String,Object> read(JdbcPublicationService service,Actor actor,String view,String cursor,String library,PreparationCancellation cancellation)throws java.io.IOException{
   if(!Set.of("read","manage").contains(view)||cursor!=null&&!cursor.matches("doc-[0-9a-f]{32}"))throw new IllegalArgumentException("Invalid library records page");
+  if(library!=null)PublicationDestinationPage.id(library);
   var budget=service.limits.ledger(service.authority.readBudget(),service.authority.canonicalBudget(),cancellation::cancelled);service.activeKnowledgeActor(actor);
-  String path="/v1/knowledge/documents/index?view="+view+"&limit=20"+(cursor==null?"":"&cursor="+cursor);
+  String path="/v1/knowledge/documents/index?view="+view+"&limit=20"+(cursor==null?"":"&cursor="+cursor)+(library==null?"":"&libraryId="+PublicationDestinationPage.encode(library));
   var raw=service.client.exchange(service.client.authorized(service.knowledgeReader(actor,budget),"DOCUMENT_READ","GET",path,null),262144,cancellation);
   require(raw.keySet().equals(Set.of("providerId","storeInstanceId","items","cursor","hasManagedLibraries"))&&raw.get("items") instanceof List<?> && raw.get("hasManagedLibraries") instanceof Boolean,PROVENANCE_UNAVAILABLE);
   var remote=(List<?>)raw.get("items");require(remote.size()<=20,PROVENANCE_UNAVAILABLE);Object next=raw.get("cursor");require(next==null||next instanceof String s&&s.matches("doc-[0-9a-f]{32}")&&!s.equals(cursor),PROVENANCE_UNAVAILABLE);
   var items=new ArrayList<Map<String,Object>>();String previous=cursor==null?"":cursor;
   for(Object value:remote){
-   budget.check();var row=validate(value);String doc=(String)row.get("documentId");require(doc.compareTo(previous)>0,PROVENANCE_UNAVAILABLE);previous=doc;
+   budget.check();var row=validate(value);String doc=(String)row.get("documentId");require(library==null||library.equals(row.get("libraryId")),PROVENANCE_UNAVAILABLE);require(doc.compareTo(previous)>0,PROVENANCE_UNAVAILABLE);previous=doc;
    var local=service.j.queryForList("SELECT p.meeting_id,p.confirmation_id,p.published_at,m.revision,m.governance_state,m.owner_id FROM publication p JOIN external_document_mapping d ON d.publication_id=p.id JOIN meeting m ON m.id=p.meeting_id WHERE p.id=? AND p.library_id=? AND p.folder_id=? AND p.state='SUCCEEDED' AND d.external_document_id=? AND d.provider_id=? AND m.lifecycle='ACTIVE' LIMIT 2",row.get("publicationId"),row.get("libraryId"),row.get("folderId"),doc,service.client.identities().get("providerId"));
    if(local.size()!=1)continue;var saved=local.getFirst();String state=(String)saved.get("governance_state");if("ACTIVE".equals(state))state=(String)row.get("state");if(view.equals("read")&&(!state.equals("ACTIVE")||!Boolean.TRUE.equals(row.get("canRead"))))continue;
    require(!view.equals("manage")||Boolean.TRUE.equals(row.get("canManage")),PROVENANCE_UNAVAILABLE);

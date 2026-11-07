@@ -7,8 +7,9 @@ type Ports={current:(meeting:string,signal:AbortSignal)=>Promise<TranscriptCurre
 /** Explicit read into a local draft; never a save, identity provision or access grant. */
 export function useSpeakerRosterSource(ports:Ports,actor:()=>string|null,meeting:()=>string,active:()=>boolean,draft:()=>InfoFields|null,apply:(value:InfoFields)=>void){
  const busy=shallowRef(false),error=shallowRef<string|null>(null),message=shallowRef<string|null>(null);
+ const candidates=shallowRef<{source:string;label:string}[]>([]);
  let epoch=0,controller:AbortController|null=null;
- function clear(){epoch++;controller?.abort();controller=null;busy.value=false;error.value=null;message.value=null;}
+ function clear(){epoch++;controller?.abort();controller=null;busy.value=false;error.value=null;message.value=null;candidates.value=[];}
  async function load(){
   if(busy.value)return;clear();const who=actor(),id=meeting(),initial=draft();if(!who||!active()||!initial)return;
   const turn=epoch,original=JSON.stringify(initial);controller=new AbortController();const signal=controller.signal;busy.value=true;
@@ -17,10 +18,14 @@ export function useSpeakerRosterSource(ports:Ports,actor:()=>string|null,meeting
    const before=await ports.current(id,signal);if(!valid())return;
    if(!before.saved){message.value='当前没有已保存的转写，请先保存转写或手动添加参会人。';return;}
    const source=before.saved.id,snapshot=await ports.speakers(id,source,signal);if(!valid())return;
-   const ids=new Set<string>(),names=new Set<string>();let skipped=0;const lookups=new Map<string,Person|null>();
+   const ids=new Set<string>(),names=new Set<string>();let skipped=0;const lookups=new Map<string,Person|null>();const unverified=new Map<string,{source:string;label:string}>();
    if(snapshot.items.length>128)throw Error('说话人过多，请手动选择参会人。');
    for(const person of snapshot.items){
-    if(!valid())return;if(person.source!=='HUMAN'){skipped++;continue;}
+    if(!valid())return;if(person.source!=='HUMAN'){
+     const label=person.label.trim();if(label)unverified.set(person.source+':'+label,{source:person.source,label});
+     else skipped++;
+     continue;
+    }
     if(person.enterpriseId!==null){
      const key=person.enterpriseId;
      if(!lookups.has(key)){
@@ -40,12 +45,13 @@ export function useSpeakerRosterSource(ports:Ports,actor:()=>string|null,meeting
    const latest=draft();if(!latest||JSON.stringify(latest)!==original)throw Error('读取期间草稿已修改，已保留人工输入，请重新获取。');
    const internal=[...new Set([...latest.rosterDraftIds,...ids])],external=[...new Set([...(latest.externalRosterNames??[]),...names])];
    if(internal.length+external.length>128)throw Error('参会人超过128人，请手动选择。');
+   candidates.value=[...unverified.values()];
    const added=internal.length-latest.rosterDraftIds.length,guests=external.length-(latest.externalRosterNames??[]).length;
    if(added||guests)apply({...latest,rosterDraftIds:internal,externalRosterNames:external});
-   message.value=added||guests?`已加入草稿：${added} 位企业人员、${guests} 位外部人员。${skipped?'另有身份未核实或已停用，未加入。':''}保存后仍需确认名单。`:'未发现可新增的人工发言人标签，可手动添加参会人。';
+   message.value=added||guests?`已加入草稿：${added} 位企业人员、${guests} 位外部人员。${skipped?'另有身份未核实或已停用，未加入。':''}保存后仍需确认名单。`:candidates.value.length?'发现待核实的发言人标签，请逐一核对身份后手动添加参会人。':'未发现可新增的发言人标签，可手动添加参会人。';
   }catch(cause){if(valid())error.value=cause instanceof Error?cause.message:'发言人来源暂不可读取，请重试。';}
   finally{if(valid()){busy.value=false;controller=null;}}
  }
  const stop=watch(()=>[actor(),meeting(),active()],clear,{flush:'sync'});onScopeDispose(()=>{stop();clear();});
- return{busy,error,message,load};
+ return{busy,error,message,candidates,load};
 }

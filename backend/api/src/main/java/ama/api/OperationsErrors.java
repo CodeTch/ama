@@ -9,5 +9,5 @@ class OperationsErrors {
  @ExceptionHandler(ama.contract.MeetingContracts.Conflict.class) void conflict(HttpServletResponse r)throws IOException{BusinessErrors.write(r,409,"MEETING_CONFLICT","Original request or resource version changed");}
  @ExceptionHandler(OperationsController.TooLarge.class) void size(HttpServletResponse r)throws IOException{BusinessErrors.write(r,413,"REQUEST_TOO_LARGE","Operations request exceeds bound");}
  @ExceptionHandler({IllegalArgumentException.class,ama.contract.MinutesContracts.Failure.class}) void invalid(HttpServletResponse r)throws IOException{BusinessErrors.write(r,400,"INVALID_ARGUMENT","Invalid operations request");}
- @ExceptionHandler(Exception.class) void unavailable(HttpServletResponse r)throws IOException{BusinessErrors.write(r,503,"MEETING_UNAVAILABLE","Operations temporarily unavailable");}
+ @ExceptionHandler(Exception.class) void unavailable(Exception cause,jakarta.servlet.http.HttpServletRequest request,HttpServletResponse r)throws IOException{System.getLogger(OperationsErrors.class.getName()).log(System.Logger.Level.WARNING,"Operations unavailable: "+request.getMethod()+" "+request.getRequestURI(),cause);BusinessErrors.write(r,503,"MEETING_UNAVAILABLE","Operations temporarily unavailable");}
 }

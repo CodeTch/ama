@@ -4,7 +4,7 @@ import {RouterView,useRoute} from 'vue-router';
 import WorkspaceTopbar from './WorkspaceTopbar.vue';
 
 const route=useRoute();
-const showHeader=computed(()=>route.meta.workspaceHeader!==false);
+const showHeader=computed(()=>route.matched.length>0&&route.meta.workspaceHeader!==false);
 const pageName=computed(()=>typeof route.meta.pageName==='string'?route.meta.pageName:'');
 </script>
 
@@ -20,4 +20,5 @@ const pageName=computed(()=>typeof route.meta.pageName==='string'?route.meta.pag
 .workspace-shell-with-header :deep(.layout){min-height:calc(100vh - 56px)}
 .workspace-shell-meetings{display:flex;flex-direction:column;height:100dvh;min-height:0}
 .workspace-shell-meetings :deep(.layout){flex:1;min-height:0;overflow:auto}
+.workspace-shell :deep(.layout){scrollbar-gutter:stable}
 </style>
