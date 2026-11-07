@@ -4,7 +4,7 @@ export type PcmPart={partId:string;finalSequence:number;sampleCount:number;confi
 export type PcmRecord={schema:1;createdAt?:number;updatedAt?:number;actor:string;meetingId:string;session:RecordingSession;parts:PcmPart[];finished:boolean;archiveTaskId?:string;skipAutomaticRestore?:true};
 export class PcmRecoverySelectionRequired extends Error {readonly candidates:ReadonlyArray<{meetingId:string;sessionId:string;samples:number;parts:number}>;constructor(records:PcmRecord[]){super('存在多份缺少时间信息的旧录音，请选择要恢复的会话；原音频已保留');this.candidates=records.map(r=>({meetingId:r.meetingId,sessionId:r.session.sessionId,samples:r.parts.reduce((n,p)=>n+p.sampleCount,0),parts:r.parts.length}));}}
 /** An actor-wide ten-minute pending budget. Cursor and chunk commit together; receipts remove exact bytes only. */
-export function createPcmJournal(actor:string,options:{limitBytes?:number}={}):ChunkStore&{begin(meetingId:string,session:RecordingSession,parts?:PcmPart[]):Promise<void>;load(sid:string):Promise<PcmRecord|null>;latest(meetingId?:string):Promise<PcmRecord|null>;skipAutomaticRestore(sid:string):Promise<void>;updateSession(session:RecordingSession):Promise<void>;finish(sid:string,taskId:string):Promise<void>;reconcile(manifest:RecordingManifest):Promise<void>;markPart(sid:string,reason:NonNullable<PcmPart['endReason']>,integrity:NonNullable<PcmPart['tailIntegrity']>):Promise<void>;close():void}{
+export function createPcmJournal(actor:string,options:{limitBytes?:number}={}):ChunkStore&{begin(meetingId:string,session:RecordingSession,parts?:PcmPart[]):Promise<void>;load(sid:string):Promise<PcmRecord|null>;latest(meetingId?:string):Promise<PcmRecord|null>;skipAutomaticRestore(sid:string):Promise<void>;updateSession(session:RecordingSession):Promise<void>;finish(sid:string,taskId:string):Promise<void>;reconcile(manifest:RecordingManifest):Promise<void>;markPart(sid:string,reason:NonNullable<PcmPart['endReason']>,integrity:NonNullable<PcmPart['tailIntegrity']>):Promise<void>;stats(sid:string):Promise<{count:number;bytes:number}>;close():void}{
  const limit=options.limitBytes??19200000;if(!actor.trim()||actor.length>255||!Number.isSafeInteger(limit)||limit<1||limit>19200000)throw new TypeError('录音缓存范围或限额无效');
  let connection:Promise<IDBDatabase>|null=null;
  function database(){if(connection)return connection;connection=new Promise<IDBDatabase>((resolve,reject)=>{if(typeof indexedDB==='undefined'){reject(Error('浏览器无法使用持久录音缓存'));return;}const r=indexedDB.open('ama.pcm.recording.v1',1);r.onupgradeneeded=()=>{r.result.createObjectStore('chunks');const records=r.result.createObjectStore('records');records.createIndex('actor','actor');records.createIndex('meeting',['actor','meetingId']);r.result.createObjectStore('budgets');};r.onerror=()=>reject(Error('无法打开录音缓存，请保留当前页面'));r.onblocked=()=>reject(Error('录音缓存升级受阻，请关闭旧页面后重试'));r.onsuccess=()=>{r.result.onversionchange=()=>r.result.close();resolve(r.result);};});void connection.catch(()=>{connection=null;});return connection;}
@@ -71,7 +71,19 @@ export function createPcmJournal(actor:string,options:{limitBytes?:number}={}):C
    });
   },
   async markPart(sid,reason,integrity){await transaction('readwrite',['records'],async tx=>{const r=await record(tx,sid),part=r.parts.at(-1)!;part.endReason=reason;part.tailIntegrity=integrity;r.updatedAt=Math.max(Date.now(),(r.updatedAt??0)+1);await request(tx.objectStore('records').put(r,recordKey(sid)));});},
-  async *pending(sid){if(!recordingUuid(sid))throw new TypeError('录音编号无效');const values=await transaction('readonly',['records','chunks'],async tx=>{const raw:unknown=await request(tx.objectStore('records').get(recordKey(sid)));if(raw===undefined)return[];const r=checked(raw,sid),values=await request(tx.objectStore('chunks').getAll(range(sid),4097)) as Chunk[];if(values.length>4096)throw Error('录音缓存分片超限');return values.sort((a,b)=>r.parts.findIndex(p=>p.partId===a.partId)-r.parts.findIndex(p=>p.partId===b.partId)||a.seq-b.seq);});for(const c of values)yield copyChunk(c);},
+  async stats(sid:string){return transaction('readonly',['chunks','budgets'],async tx=>({count:await request(tx.objectStore('chunks').count(range(sid))),bytes:await budget(tx)}));},
+  async *pending(sid){
+   if(!recordingUuid(sid))throw new TypeError('录音编号无效');
+   const saved=await this.load(sid);if(!saved)return;
+   // Read small pages in capture order. A slow upload never clones the entire backlog.
+   for(const part of saved.parts){if(!part.finalSequence)continue;let after=0;
+    for(;;){const values=await transaction('readonly',['chunks'],async tx=>request(tx.objectStore('chunks').getAll(IDBKeyRange.bound([actor,sid,part.partId,after],[actor,sid,part.partId,part.finalSequence],true,false),8)) as Promise<Chunk[]>);
+     if(!values.length)break;
+     for(const c of values){after=c.seq;yield copyChunk(c);}
+     if(after>=part.finalSequence)break;
+    }
+   }
+  },
   async finish(sid,taskId){if(!recordingUuid(taskId))throw new TypeError('录音归档任务无效');await transaction('readwrite',['records','chunks'],async tx=>{const r=await record(tx,sid);if(await request(tx.objectStore('chunks').count(range(sid)))>0)throw Error('仍有未确认音频，请恢复上传');if(r.finished&&r.archiveTaskId!==taskId)throw Error('录音归档任务已变化');r.finished=true;r.archiveTaskId=taskId;r.updatedAt=Math.max(Date.now(),(r.updatedAt??0)+1);r.parts.at(-1)!.tailIntegrity??='UNKNOWN';await request(tx.objectStore('records').put(r,recordKey(sid)));});},
   close(){if(connection)void connection.then(db=>db.close()).catch(()=>{});connection=null;},
  };

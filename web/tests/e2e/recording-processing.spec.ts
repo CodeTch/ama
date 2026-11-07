@@ -24,7 +24,8 @@ async function recording(page:Page,initial:RecordingProcessing['state'],existing
  await page.route(`**/recordings/${session}/processing/retry`,route=>{retries++;state='ENHANCING';return route.fulfill({json:result()});});
  await page.route(`**/meetings/${meeting}/materials`,route=>{directories++;return route.fulfill({json:{items:[],materialSnapshotId:null,materialsPending:false,meetingRevision:'1'}});});
  await page.goto(`/meeting/${meeting}/processing`);
- await expect(page.getByText('第1段录音.wav',{exact:true})).toBeVisible();
+ // Cold Vite compilation is shared by all parallel browser projects.
+ await expect(page.getByText('第1段录音.wav',{exact:true})).toBeVisible({timeout:15000});
  return {counts:()=>({reads,parts,directories,retries,posts}),set(next:RecordingProcessing['state']){state=next;}};
 }
 

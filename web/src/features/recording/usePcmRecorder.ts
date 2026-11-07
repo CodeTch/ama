@@ -4,7 +4,8 @@ import type {Session} from '../../shared/api/business-client';
 import {ApiError} from '../../shared/api/client';
 import {createRecordingApi,recordingUuid,type RecordingSession} from './recording-api';
 import {createPcmJournal,PcmRecoverySelectionRequired,type PcmRecord} from './pcm-journal';
-import {openPcmCapture,type PcmCapture} from './browser-pcm-capture';
+import {createPcmJournalClient} from './pcm-journal-client';
+import {openPcmCapture,type PcmCapture,type CapturePipeline} from './browser-pcm-capture';
 import {createPcmPipeline} from './pcm-pipeline';
 import {connectRecordingSocket,type RecordingSocket} from './recording-socket';
 import {copyChunk,chunkKey,type Chunk} from './chunk-store';
@@ -12,8 +13,10 @@ type Sdk=ReturnType<typeof createRecordingApi>;
 type Dependencies={journal?:(actor:string)=>ReturnType<typeof createPcmJournal>;capture?:typeof openPcmCapture;connect?:typeof connectRecordingSocket;waitForRetry?:(milliseconds:number)=>Promise<void>};
 /** Application lifetime owns capture. Route disposal cannot stop it or erase unconfirmed audio. */
 export function usePcmRecorder(sdk:Sdk,identity:()=>Session|null,collectorId:string,dependencies:Dependencies={}){
+ const createJournal=dependencies.journal??(typeof Worker==='undefined'?createPcmJournal:createPcmJournalClient);
  const raw=shallowRef<PcmRecord|null>(null),phase=ref('IDLE'),error=ref<string|null>(null),connected=ref(false),pendingCount=ref(0),pendingBytes=ref(0),meetingId=ref<string|null>(null);
- let owner:string|null=null,journal:ReturnType<typeof createPcmJournal>|null=null,device:PcmCapture|null=null,pipeline:ReturnType<typeof createPcmPipeline>|null=null,socket:RecordingSocket|null=null,turn=0,busy=false,disposed=false,draining:Promise<void>|null=null,request:AbortController|null=null,renewTimer:ReturnType<typeof setTimeout>|null=null;
+ let owner:string|null=null,journal:ReturnType<typeof createPcmJournal>|null=null,device:PcmCapture|null=null,pipeline:CapturePipeline|null=null,socket:RecordingSocket|null=null,turn=0,busy=false,disposed=false,draining:Promise<void>|null=null,request:AbortController|null=null,renewTimer:ReturnType<typeof setTimeout>|null=null;
+ const operation=ref<string|null>(null),syncing=ref(false),notice=ref<string|null>(null);let syncTail:Promise<void>=Promise.resolve(),serverWritable=false;
  const recoveryCandidates=shallowRef<PcmRecoverySelectionRequired['candidates']>([]);
  const failure=shallowRef<RecordingFailure|null>(null),captureSamples=ref(0);let capturePart:string|null=null;let stage:RecordingFailure['stage']='initialize';
  let recovering:Promise<void>|null=null;
@@ -25,17 +28,17 @@ export function usePcmRecorder(sdk:Sdk,identity:()=>Session|null,collectorId:str
  function active(generation:number){return !disposed&&generation===turn&&owner!==null&&actor()===owner;}
  function check(generation:number){if(!active(generation))throw new DOMException('录音会话已变化','AbortError');}
  async function refresh(){const store=current();if(raw.value){const loaded=await store.load(raw.value.session.sessionId);if(!loaded)throw Error('录音缓存记录不可用');raw.value=loaded;}}
- async function recount(){let count=0,bytes=0;if(raw.value)for await(const c of current().pending(raw.value.session.sessionId)){count++;bytes+=c.pcm.byteLength;}pendingCount.value=count;pendingBytes.value=bytes;}
- async function command<T>(work:()=>Promise<T>){
+ async function recount(){let count=0,bytes=0;if(raw.value){const store=current();if(store.stats){({count,bytes}=await store.stats(raw.value.session.sessionId));}else for await(const c of store.pending(raw.value.session.sessionId)){count++;bytes+=c.pcm.byteLength;}}pendingCount.value=count;pendingBytes.value=bytes;}
+ async function command<T>(work:()=>Promise<T>,name='working'){
   if(recovering){
    const generation=turn;
    // A background online event must not consume the user's pause or end command.
    await recovering.catch(()=>{});check(generation);
   }
-  if(busy)throw Error('录音操作仍在进行');busy=true;error.value=null;failure.value=null;try{return await work();}catch(cause){if(cause instanceof PcmRecoverySelectionRequired)recoveryCandidates.value=cause.candidates;failure.value=recordingFailure(cause,stage);error.value=failure.value.message;if(['SAVING','AUTHORIZING'].includes(phase.value))phase.value='ERROR';if(denied(cause))await failed(cause);throw cause;}finally{busy=false;}}
+  if(busy)throw Error('录音操作仍在进行');busy=true;operation.value=name;error.value=null;failure.value=null;try{return await work();}catch(cause){if(cause instanceof DOMException&&cause.name==='AbortError')throw cause;if(cause instanceof PcmRecoverySelectionRequired)recoveryCandidates.value=cause.candidates;failure.value=recordingFailure(cause,stage);error.value=failure.value.message;if(['SAVING','AUTHORIZING'].includes(phase.value))phase.value='ERROR';if(denied(cause))await failed(cause);throw cause;}finally{busy=false;operation.value=null;}}
  function closeSocket(){socket?.close();socket=null;connected.value=false;}
- async function stopDevice(){request?.abort();request=null;const old=device;device=null;if(old)await old.release();}
- async function failed(cause:unknown){if(!owner||actor()!==owner)return;const interrupted=phase.value==='RECORDING'||phase.value==='SAVING'||stage==='cache';phase.value='ERROR';failure.value=recordingFailure(cause,stage);error.value=failure.value.message;closeSocket();await stopDevice();if(interrupted&&raw.value&&raw.value.parts.at(-1)!.tailIntegrity!=='COMPLETE'&&current().markPart)await local(async()=>{await current().markPart(raw.value!.session.sessionId,'SYSTEM','UNKNOWN');await refresh();}).catch(()=>{});}
+ async function stopDevice(){request?.abort();request=null;const old=device;device=null;if(old){await old.release();if(old.pipeline&&old.pipeline!==pipeline)old.pipeline.dispose?.();}}
+ async function failed(cause:unknown){if(!owner||actor()!==owner)return;const interrupted=phase.value==='RECORDING'||phase.value==='SAVING'||stage==='cache';phase.value='ERROR';failure.value=recordingFailure(cause,stage);error.value=failure.value.message;closeSocket();await stopDevice();if(cause instanceof Error&&cause.name==='PcmWorkerError'){pipeline?.dispose?.();pipeline=null;capturePart=null;captureSamples.value=0;}if(interrupted&&raw.value&&raw.value.parts.at(-1)!.tailIntegrity!=='COMPLETE'&&current().markPart)await local(async()=>{await current().markPart(raw.value!.session.sessionId,'SYSTEM','UNKNOWN');await refresh();}).catch(()=>{});}
  function denied(cause:unknown){return cause instanceof ApiError&&[401,403,409].includes(cause.status);}
  function suspendRenewal(){renewalVersion++;if(renewTimer)clearTimeout(renewTimer);renewTimer=null;}
  function scheduleRenew(){
@@ -81,7 +84,14 @@ export function usePcmRecorder(sdk:Sdk,identity:()=>Session|null,collectorId:str
   }catch(cause){if(active(generation)){connected.value=false;error.value=cause instanceof Error?cause.message:'录音未确认，已保留本地音频';if(denied(cause))await failed(cause);}throw cause;}};
   const flight=run();draining=flight;void flight.then(()=>{if(draining===flight)draining=null;},()=>{if(draining===flight)draining=null;});return flight;
  }
- function uploadLater(){void drain().catch(()=>{});}
+ function uploadLater(){if(!serverWritable||syncing.value)return;void drain().catch(()=>{});}
+ async function pauseServer(session:RecordingSession){await sdk.pause(session);serverWritable=false;}
+ async function resumeServer(session:RecordingSession){await sdk.resume(session);serverWritable=true;}
+ function synchronizeCaptureState(){
+  const generation=turn;syncing.value=true;
+  const flight=syncTail.catch(()=>{}).then(async()=>{if(recovering)await recovering.catch(()=>{});check(generation);if(phase.value==='PAUSED'){if(pendingCount.value&&!serverWritable)await resumeServer(raw.value!.session);await drain();check(generation);if(phase.value==='PAUSED'&&!pendingCount.value)await pauseServer(raw.value!.session);}else if(phase.value==='RECORDING'){await resumeServer(raw.value!.session);check(generation);uploadLater();}}).catch(async cause=>{if(active(generation)){error.value='连接暂不可用，音频保留在本地；请恢复上传';connected.value=false;if(denied(cause))await failed(cause);}});
+  syncTail=flight;void flight.finally(()=>{if(syncTail===flight)syncing.value=false;});return flight;
+ }
  async function claim(){
   if(!raw.value)throw Error('尚无录音会话');const generation=turn;transportChanging=true;suspendRenewal();
   try{
@@ -92,7 +102,7 @@ export function usePcmRecorder(sdk:Sdk,identity:()=>Session|null,collectorId:str
   }finally{transportChanging=false;}
   scheduleRenew();await bind();
  }
- async function recover(){await claim();await sdk.resume(raw.value!.session);await drain();if(pendingCount.value)throw Error('仍有未确认音频，请先恢复上传');if(phase.value!=='RECORDING')await sdk.pause(raw.value!.session);}
+ async function recover(){await claim();await resumeServer(raw.value!.session);await drain();if(pendingCount.value)throw Error('仍有未确认音频，请先恢复上传');if(phase.value!=='RECORDING')await pauseServer(raw.value!.session);}
  async function attach(id:string,sessionId?:string){
   if(!recordingUuid(id))throw new TypeError('会议标识无效');
   return command(async()=>{
@@ -101,7 +111,7 @@ export function usePcmRecorder(sdk:Sdk,identity:()=>Session|null,collectorId:str
    const who=actor();if(!who)throw Error('请先登录');
    await invalidate();
    if(actor()!==who||disposed)throw new DOMException('录音身份已变化','AbortError');
-   owner=who;meetingId.value=id;journal=(dependencies.journal??createPcmJournal)(who);
+   owner=who;meetingId.value=id;journal=createJournal(who);
    const generation=turn;
    const saved=sessionId?await journal.load(sessionId):await journal.latest(id);
    check(generation);
@@ -123,7 +133,7 @@ export function usePcmRecorder(sdk:Sdk,identity:()=>Session|null,collectorId:str
  async function restore(){
   const who=actor();if(!who)return null;
   if(owner===who&&device)return raw.value;
-  const generation=turn,store=(dependencies.journal??createPcmJournal)(who);
+  const generation=turn,store=createJournal(who);
   const checkScope=()=>{
    if(disposed||generation!==turn||actor()!==who)throw new DOMException('录音身份或会话已变化','AbortError');
   };
@@ -146,14 +156,14 @@ export function usePcmRecorder(sdk:Sdk,identity:()=>Session|null,collectorId:str
  }
  async function skipAutomaticRestore(sid:string){
   const who=actor();if(!who)throw Error('请先登录');
-  const store=(dependencies.journal??createPcmJournal)(who);
+  const store=createJournal(who);
   try{await store.skipAutomaticRestore(sid);}finally{if(store!==journal)store.close();}
  }
  async function initialize(){stage='initialize';if(raw.value)return;const id=meetingId.value;if(!id)throw Error('请先创建会议');const generation=turn;const known=sdk.currentForMeeting?await sdk.currentForMeeting(id):null;check(generation);const issued=known??await sdk.create(id);check(generation);
   if(known){const manifest=await sdk.manifest(known);check(generation);if(manifest.finished){const stored=await current().load(known.sessionId);if(!stored){if(manifest.parts.some(p=>p.highestContiguousSeq!==p.highestReceivedSeq))throw Error('原录音存在缺口，请保留原数据');await current().begin(id,{...known,collectorId},manifest.parts.map(p=>({partId:p.partId,finalSequence:p.highestReceivedSeq,sampleCount:p.sampleCount,confirmedSequence:p.highestContiguousSeq,confirmedSamples:p.sampleCount})));}else if(stored.meetingId!==id)throw Error('原录音缓存范围无法核对');raw.value=await current().load(known.sessionId);await recount();phase.value='ERROR';await recoverSealed();return;}}
   const claimed=await sdk.acquireWriter(issued,collectorId,crypto.randomUUID());check(generation);const manifest=await sdk.manifest(claimed);check(generation);if(manifest.finished||manifest.parts.some(p=>p.highestContiguousSeq!==p.highestReceivedSeq))throw Error('原录音存在缺口，请使用原设备恢复上传');const stored=await current().load(issued.sessionId);if(stored){if(stored.meetingId!==id||stored.finished)throw Error('原录音缓存范围无法核对');await current().updateSession(claimed);if(current().reconcile)await current().reconcile(manifest);}else await current().begin(id,claimed,manifest.parts.map(p=>({partId:p.partId,finalSequence:p.highestReceivedSeq,sampleCount:p.sampleCount,confirmedSequence:p.highestContiguousSeq,confirmedSamples:p.sampleCount})));raw.value=await current().load(issued.sessionId);await recount();scheduleRenew();await bind();}
  async function start(){return command(async()=>{
-  current();if(device||raw.value?.finished)throw Error('当前不可开启录音');
+  current();if(device||raw.value?.finished)throw Error('当前不可开启录音');if(raw.value&&(raw.value.parts.reduce((n,p)=>n+p.sampleCount,0)>=115200000||raw.value.parts.reduce((n,p)=>n+p.finalSequence,0)>=4096))throw Error('已达到录音时长或分片上限，请结束保存');if(raw.value&&raw.value.parts.length>=16&&raw.value.parts.at(-1)!.finalSequence>0)throw Error('已达到16段录音上限，请结束保存后处理');
   if(phase.value==='ERROR'&&raw.value)throw Error('请先重试保存未确认音频');
   phase.value='AUTHORIZING';
   try{
@@ -161,35 +171,45 @@ export function usePcmRecorder(sdk:Sdk,identity:()=>Session|null,collectorId:str
    const generation=turn;request=new AbortController();stage='device';
    const opened=await(dependencies.capture??openPcmCapture)(async input=>{
     check(generation);stage='cache';
-    try{if(!pipeline)throw Error('录音采样管线尚未就绪');await pipeline.process(input);captureSamples.value=pipeline.samples();}
+    try{if(!pipeline?.process)throw Error('录音采样管线尚未就绪');await pipeline.process(input);captureSamples.value=pipeline.samples();}
     catch(cause){captureSamples.value=pipeline?.samples()??captureSamples.value;await failed(cause);throw cause;}
-   },cause=>{if(active(generation)){stage='device';void failed(cause);}},request.signal);
+   },cause=>{if(active(generation)){stage='device';void failed(cause);}},request.signal,!dependencies.capture);
    if(!active(generation)){await opened.release();check(generation);}device=opened;
    // Do not consume a part merely by requesting permission. A verified empty
    // current part can be resumed after authorization failed or a reload.
    stage='transport';const session=raw.value!.session;
    if(raw.value!.parts.at(-1)!.finalSequence>0){
     if(raw.value!.parts.length>=16)throw Error('已达到16段录音上限，请结束保存后处理');
-    await sdk.pause(session);suspendRenewal();const next=await sdk.nextPart(session);
+    await pauseServer(session);suspendRenewal();const next=await sdk.nextPart(session);serverWritable=true;
     await local(async()=>{await current().updateSession(next);await refresh();});scheduleRenew();await bind();
-   }else await sdk.resume(session);
+   }else await resumeServer(session);
    capturePart=raw.value!.session.partId;captureSamples.value=0;
-   pipeline=createPcmPipeline(opened.sampleRate,async pcm=>{
+   pipeline?.dispose?.();
+   if(opened.pipeline&&opened.configure){
+    pipeline=opened.pipeline;let persisted=raw.value!.parts.at(-1)!.finalSequence;
+    await opened.configure({actor:owner!,session:{...raw.value!.session},snapshot:value=>{
+     if(!active(generation))return;captureSamples.value=value.samples;
+     if(value.pendingBudget>=15360000)notice.value='未确认音频接近本地缓存上限，请恢复上传；达到上限前会自动暂停';else if(notice.value?.startsWith('未确认音频接近'))notice.value=null;
+     if(value.persisted!==persisted){persisted=value.persisted;captureVersion++;void local(async()=>{if(!active(generation))return;await refresh();await recount();}).then(()=>{if(active(generation))uploadLater();}).catch(cause=>{if(active(generation))void failed(cause);});}
+    },limit:message=>{if(!active(generation))return;notice.value=message;phase.value='SAVING';void local(async()=>{check(generation);await refresh();await current().markPart(raw.value!.session.sessionId,'MANUAL','COMPLETE');await refresh();}).then(async()=>{await stopDevice();if(active(generation)){phase.value='INTERRUPTED';uploadLater();}}).catch(cause=>{if(active(generation))void failed(cause);});}});
+   }else pipeline=createPcmPipeline(opened.sampleRate,async pcm=>{
     check(generation);const captured={...raw.value!.session},bytes=pcm.slice(0),sha256=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');check(generation);
     await local(async()=>{
      check(generation);if(raw.value!.session.partId!==captured.partId)throw Error('录音分段已变化');
      const p=raw.value!.parts.at(-1)!;const chunk={sessionId:captured.sessionId,partId:captured.partId,seq:p.finalSequence+1,sampleStart:p.sampleCount,sampleCount:bytes.byteLength/2,sha256,pcm:bytes};
      await current().put(chunk);await refresh();pendingCount.value++;pendingBytes.value+=bytes.byteLength;captureVersion++;
     });uploadLater();
-   });stage='device';await opened.resume();check(generation);if(current().markPart)await local(async()=>{await current().markPart(raw.value!.session.sessionId,'ACTIVE','UNKNOWN');await refresh();});phase.value='RECORDING';
-  }catch(cause){await failed(cause);throw cause;}
+   });stage='device';await opened.resume();check(generation);if(current().markPart)await local(async()=>{await current().markPart(raw.value!.session.sessionId,'ACTIVE','UNKNOWN');await refresh();});notice.value=null;phase.value='RECORDING';
+  }catch(cause){if(cause instanceof DOMException&&cause.name==='AbortError'){await stopDevice();if(owner===actor()){phase.value=raw.value?'INTERRUPTED':'IDLE';notice.value='麦克风授权已取消，可重新开始或改为导入文件';}}else await failed(cause);throw cause;}
  });}
- async function pause(){return command(async()=>{current();if(phase.value!=='RECORDING'||!device)return;phase.value='SAVING';await device.pause();await pipeline?.flush();try{await drain();if(!pendingCount.value)await sdk.pause(raw.value!.session);}catch(cause){if(denied(cause)){await failed(cause);throw cause;}error.value='服务端暂停未确认，音频已保留；请恢复连接';}phase.value='PAUSED';});}
- async function resume(){return command(async()=>{current();if(phase.value!=='PAUSED'||!device)throw Error('请开启新的录音分段');await sdk.resume(raw.value!.session);await device.resume();phase.value='RECORDING';});}
- async function interrupt(){return command(async()=>{current();if(device){phase.value='SAVING';await device.pause();await pipeline?.flush();await stopDevice();}await drain();if(pendingCount.value)throw Error('请先恢复未确认音频');await sdk.pause(raw.value!.session);if(current().markPart)await local(async()=>{await current().markPart(raw.value!.session.sessionId,'MANUAL','COMPLETE');await refresh();});phase.value='INTERRUPTED';});}
+ async function captureCommand(work:()=>Promise<void>,name:string){if(recovering&&operation.value==='reconnect'){try{return await work();}catch(cause){await failed(cause);throw cause;}}return command(work,name);}
+ async function pause(){return captureCommand(async()=>{current();if(phase.value!=='RECORDING'||!device)return;phase.value='SAVING';await device.pause();await pipeline?.flush();phase.value='PAUSED';void synchronizeCaptureState();},'pause');}
+ async function resume(){return captureCommand(async()=>{current();if(phase.value!=='PAUSED'||!device)throw Error('请开启新的录音分段');await device.resume();phase.value='RECORDING';serverWritable=false;void synchronizeCaptureState();},'resume');}
+ function cancelAuthorization(){if(phase.value!=='AUTHORIZING')return;request?.abort();}
+ async function interrupt(){return command(async()=>{current();await syncTail;if(pendingCount.value&&!serverWritable)await resumeServer(raw.value!.session);if(device){phase.value='SAVING';await device.pause();await pipeline?.flush();await stopDevice();}await drain();if(pendingCount.value)throw Error('请先恢复未确认音频');await pauseServer(raw.value!.session);if(current().markPart)await local(async()=>{await current().markPart(raw.value!.session.sessionId,'MANUAL','COMPLETE');await refresh();});phase.value='INTERRUPTED';});}
  async function reconnect(){
   if(recovering)return recovering;
-  const flight=command(async()=>{current();await recover();});
+  const flight=command(async()=>{current();stage='transport';await recover();},'reconnect');
   recovering=flight;
   try{await flight;}finally{if(recovering===flight)recovering=null;}
  }
@@ -199,11 +219,11 @@ export function usePcmRecorder(sdk:Sdk,identity:()=>Session|null,collectorId:str
   const accepted=await sdk.finish({...latest,collectorId:raw.value.session.collectorId},Object.fromEntries(raw.value.parts.map(p=>[p.partId,p.finalSequence])));check(generation);
   await local(async()=>{check(generation);await current().finish(latest.sessionId,accepted.archiveTaskId);await refresh();});await stopDevice();closeSocket();if(renewTimer)clearTimeout(renewTimer);renewTimer=null;phase.value='FINISHED';return true;
  }
- async function retry(){return command(async()=>{current();if(!raw.value){await initialize();if(phase.value!=='FINISHED')phase.value='INTERRUPTED';return;}stage='transport';if(await recoverSealed())return;await claim();await sdk.resume(raw.value!.session);await drain();await pipeline?.retry();await pipeline?.flush();await drain();if(pendingCount.value)throw Error('仍有未确认音频，请恢复上传');await sdk.pause(raw.value!.session);phase.value=device?'PAUSED':'INTERRUPTED';});}
- async function finish(){return command(async()=>{current();stage='seal';if(!raw.value)throw Error('尚无录音可保存');if(device){phase.value='SAVING';await device.pause();await pipeline?.flush();await stopDevice();}await drain();if(pendingCount.value)throw Error('仍有未确认音频，请恢复上传');if(pipeline&&(!raw.value.parts.at(-1)!.endReason||raw.value.parts.at(-1)!.endReason==='ACTIVE')&&pipeline.samples()===raw.value.parts.at(-1)!.sampleCount&&current().markPart)await local(async()=>{await current().markPart(raw.value!.session.sessionId,'FINISHED','COMPLETE');await refresh();});const finals=Object.fromEntries(raw.value.parts.map(p=>[p.partId,p.finalSequence]));const accepted=await sdk.finish(raw.value.session,finals);await local(async()=>{await current().finish(raw.value!.session.sessionId,accepted.archiveTaskId);await refresh();});phase.value='FINISHED';closeSocket();if(renewTimer)clearTimeout(renewTimer);renewTimer=null;return accepted;});}
- async function invalidate(){recoveryCandidates.value=[];turn++;if(renewTimer)clearTimeout(renewTimer);renewTimer=null;closeSocket();await stopDevice();await disk;receipts.clear();journal?.close();journal=null;owner=null;raw.value=null;pipeline=null;capturePart=null;captureSamples.value=0;failure.value=null;meetingId.value=null;phase.value='IDLE';error.value=null;pendingCount.value=0;pendingBytes.value=0;}
+ async function retry(){return command(async()=>{current();if(!raw.value){await initialize();if(phase.value!=='FINISHED')phase.value='INTERRUPTED';return;}stage='transport';if(await recoverSealed())return;await claim();await resumeServer(raw.value!.session);await drain();await pipeline?.retry();await pipeline?.flush();await drain();if(pendingCount.value)throw Error('仍有未确认音频，请恢复上传');await pauseServer(raw.value!.session);phase.value=device?'PAUSED':'INTERRUPTED';});}
+ async function finish(){return command(async()=>{current();await syncTail;if(raw.value&&pendingCount.value&&!serverWritable)await resumeServer(raw.value.session);stage='seal';if(!raw.value)throw Error('尚无录音可保存');if(device){phase.value='SAVING';await device.pause();await pipeline?.flush();await stopDevice();}await drain();if(pendingCount.value)throw Error('仍有未确认音频，请恢复上传');if(pipeline&&(!raw.value.parts.at(-1)!.endReason||raw.value.parts.at(-1)!.endReason==='ACTIVE')&&pipeline.samples()===raw.value.parts.at(-1)!.sampleCount&&current().markPart)await local(async()=>{await current().markPart(raw.value!.session.sessionId,'FINISHED','COMPLETE');await refresh();});const finals=Object.fromEntries(raw.value.parts.map(p=>[p.partId,p.finalSequence]));const accepted=await sdk.finish(raw.value.session,finals);await local(async()=>{await current().finish(raw.value!.session.sessionId,accepted.archiveTaskId);await refresh();});phase.value='FINISHED';closeSocket();if(renewTimer)clearTimeout(renewTimer);renewTimer=null;return accepted;});}
+ async function invalidate(){recoveryCandidates.value=[];turn++;if(renewTimer)clearTimeout(renewTimer);renewTimer=null;closeSocket();await stopDevice();await disk;receipts.clear();journal?.close();journal=null;owner=null;raw.value=null;pipeline?.dispose?.();pipeline=null;capturePart=null;captureSamples.value=0;failure.value=null;meetingId.value=null;phase.value='IDLE';error.value=null;pendingCount.value=0;pendingBytes.value=0;notice.value=null;syncing.value=false;syncTail=Promise.resolve();serverWritable=false;}
  async function dispose(){await invalidate();disposed=true;}
  const samples=(p:{partId:string;sampleCount:number})=>p.partId===capturePart?Math.max(p.sampleCount,captureSamples.value):p.sampleCount;
  const elapsed=computed(()=>(raw.value?.parts.reduce((sum,p)=>sum+samples(p),0)??0)/16),partElapsed=computed(()=>{const p=raw.value?.parts.at(-1);return p?samples(p)/16:0;});
- return{recoveryCandidates:shallowReadonly(recoveryCandidates),failure:shallowReadonly(failure),record:shallowReadonly(raw),meetingId:shallowReadonly(meetingId),phase:shallowReadonly(phase),error:shallowReadonly(error),connected:shallowReadonly(connected),pendingCount:shallowReadonly(pendingCount),pendingBytes:shallowReadonly(pendingBytes),elapsed,partElapsed,attach,restore,skipAutomaticRestore,start,pause,resume,interrupt,reconnect,retry,finish,invalidate,dispose};
+ return{operation:shallowReadonly(operation),syncing:shallowReadonly(syncing),notice:shallowReadonly(notice),cancelAuthorization,recoveryCandidates:shallowReadonly(recoveryCandidates),failure:shallowReadonly(failure),record:shallowReadonly(raw),meetingId:shallowReadonly(meetingId),phase:shallowReadonly(phase),error:shallowReadonly(error),connected:shallowReadonly(connected),pendingCount:shallowReadonly(pendingCount),pendingBytes:shallowReadonly(pendingBytes),elapsed,partElapsed,attach,restore,skipAutomaticRestore,start,pause,resume,interrupt,reconnect,retry,finish,invalidate,dispose};
 }

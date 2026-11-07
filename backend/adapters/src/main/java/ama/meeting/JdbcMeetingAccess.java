@@ -136,7 +136,10 @@ public final class JdbcMeetingAccess implements MeetingAccess {
     public Optional<FactIdentities> tryLockFactIdentities(Actor actor,Collection<String> historical,boolean skip){
         Object holder=transaction();identitiesStarted.put(holder,true);if(rootsStarted.containsKey(holder))throw new IllegalStateException("Fact identities cannot follow a root");Objects.requireNonNull(actor);Objects.requireNonNull(historical);
         var ids=new TreeSet<String>((a,b)->Arrays.compareUnsigned(a.getBytes(StandardCharsets.UTF_8),b.getBytes(StandardCharsets.UTF_8)));ids.add(actor.enterpriseId());ids.addAll(historical);var statuses=new HashMap<String,IdentityStatus>();
-        for(String id:ids){var rows=j.query("SELECT enterprise_id,status FROM enterprise_identity WHERE enterprise_id=? FOR UPDATE"+(skip?" SKIP LOCKED":""),(row,n)->new IdentityStatus(row.getString(1),row.getString(2)),id);if(rows.isEmpty()){if(skip)return Optional.empty();throw new AccessDeniedException();}statuses.put(id,rows.getFirst());}
+        // Facts never mutate identities. Shared locks preserve status until commit while
+        // letting governance readers and archive claims for different meetings coexist.
+        // Identity disable/delete still requires an exclusive lock and waits for these readers.
+        for(String id:ids){var rows=j.query("SELECT enterprise_id,status FROM enterprise_identity WHERE enterprise_id=? FOR SHARE"+(skip?" SKIP LOCKED":""),(row,n)->new IdentityStatus(row.getString(1),row.getString(2)),id);if(rows.isEmpty()){if(skip)return Optional.empty();throw new AccessDeniedException();}statuses.put(id,rows.getFirst());}
         return Optional.of(new FactIdentities(actor.enterpriseId(),statuses));
     }
     public boolean factActorActive(FactIdentities identities){checkFact(identities);return identities.statuses.get(identities.actor).status().equals("ACTIVE");}

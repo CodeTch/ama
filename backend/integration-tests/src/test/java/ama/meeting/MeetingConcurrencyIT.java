@@ -32,10 +32,35 @@ class MeetingConcurrencyIT {
     Runtime runtime(DataSource source){
         var tx=new TransactionRunner(source);var fences=new JdbcSubjectFences(source,Set.of("MEETING"));
         var outbox=new JdbcOutbox(source,new MeetingEventReferences(source).validators());var access=new JdbcMeetingAccess(source,tx,fences);
-        var repository=new JdbcMeetingRepository(source,tx,access,fences,outbox,new JdbcAuditAdapter(source),id->{if(!id.equals("controlled-category"))throw new IllegalArgumentException("Not in test dictionary");});
+        // These fixtures have no files; use the actual current transition guard with a closed backend catalog.
+        var authority=ama.transcript.JdbcTranscriptAuthority.create(source,tx,access,(a,m,p)->{throw new ama.storage.FilePurposePolicy.Unavailable();},new ama.storage.FileBackendCatalog(source,List.of(),null),Map.of(),ama.minutes.ControlledMinutesAdmin.READ,new ama.contract.MinutesContracts.CanonicalBudget(16777216,32,1000000,4194304,250000)).authority();
+        var repository=new JdbcMeetingRepository(source,tx,access,fences,outbox,new JdbcAuditAdapter(source),id->{if(!id.equals("controlled-category"))throw new IllegalArgumentException("Not in test dictionary");},authority);
         return new Runtime(new MeetingService(repository),new RosterService(repository),access,tx);
     }
     SaveInfo info(long revision,List<String> members){return new SaveInfo(revision,"saved",null,null,null,members,List.of());}
+    @Test void independentFactReadersShareIdentityWhileRevocationStillWaits()throws Exception{
+        var runtime=runtime(actual);String one=runtime.meetings.create(actor,"fact-one","trace").id(),two=runtime.meetings.create(actor,"fact-two","trace").id();
+        var held=new CountDownLatch(1);var release=new CountDownLatch(1);var reachedRevocation=new CountDownLatch(1);
+        var revocationSource=new ProbeSource(actual,new Probe(){public void before(String sql,Map<Integer,Object> args){if(sql.startsWith("UPDATE enterprise_identity"))reachedRevocation.countDown();}});
+        try(var threads=Executors.newFixedThreadPool(2)){
+            var reader=threads.submit(()->runtime.tx.required(()->{
+                var identities=runtime.access.tryLockFactIdentities(actor,List.of(owner),false).orElseThrow();
+                var root=runtime.access.lockFactRoot(identities,one,false).orElseThrow();assertTrue(runtime.access.factAllowsBusiness(root,0,0));held.countDown();await(release);return true;
+            }));
+            try{
+                assertTrue(held.await(10,TimeUnit.SECONDS));
+                // A long governance read of one meeting must not starve a nonblocking archive claim for another.
+                runtime.tx.required(()->{
+                    var identities=runtime.access.tryLockFactIdentities(actor,List.of(owner),true).orElseThrow();
+                    var root=runtime.access.lockFactRoot(identities,two,true).orElseThrow();assertTrue(runtime.access.factAllowsBusiness(root,0,0));return null;
+                });
+                var revoked=threads.submit(()->new TransactionRunner(revocationSource).required(()->new JdbcTemplate(revocationSource).update("UPDATE enterprise_identity SET status='DISABLED' WHERE enterprise_id=?",owner)));
+                assertTrue(reachedRevocation.await(10,TimeUnit.SECONDS));assertThrows(TimeoutException.class,()->revoked.get(200,TimeUnit.MILLISECONDS));
+                release.countDown();assertTrue(reader.get(10,TimeUnit.SECONDS));assertEquals(1,revoked.get(10,TimeUnit.SECONDS));
+                runtime.tx.required(()->{var identities=runtime.access.tryLockFactIdentities(actor,List.of(),false).orElseThrow();assertFalse(runtime.access.factActorActive(identities));var root=runtime.access.lockFactRoot(identities,two,false).orElseThrow();assertFalse(runtime.access.factAllowsBusiness(root,0,0));return null;});
+            }finally{release.countDown();}
+        }
+    }
     @Test void identityDisabledWhileConfirmationWaitsCannotReceiveGrant()throws Exception{
         var reachedIdentity=new CountDownLatch(1);var heldIdentity=new CountDownLatch(1);var release=new CountDownLatch(1);
         var confirmer=new AtomicReference<Thread>();
@@ -87,7 +112,7 @@ class MeetingConcurrencyIT {
         String prefix="sort-"+UUID.randomUUID()+"-",bmp=prefix+"\uE000",nonBmp=prefix+"\uD800\uDC00";
         for(String person:List.of(bmp,nonBmp))j.update("INSERT INTO enterprise_identity(enterprise_id,display_name,status,verified_at) VALUES (?,?,'ACTIVE',UTC_TIMESTAMP(6))",person,person);
         var sqls=new ArrayList<String>();var identities=new ArrayList<String>();
-        var source=new ProbeSource(actual,new Probe(){public void before(String sql,Map<Integer,Object> args){sqls.add(sql);if(sql.contains("FROM enterprise_identity")&&sql.contains("FOR UPDATE"))identities.add((String)args.get(1));}});
+        var source=new ProbeSource(actual,new Probe(){public void before(String sql,Map<Integer,Object> args){sqls.add(sql);if(sql.startsWith("SELECT enterprise_id,status")&&sql.contains("FOR UPDATE"))identities.add((String)args.get(1));}});
         var runtime=runtime(source);String id=runtime.meetings.create(actor,"create","trace").id();sqls.clear();identities.clear();
         runtime.meetings.save(actor,id,"save",new SaveInfo(0L,"saved","controlled-category","summary",java.time.LocalDate.of(2026,10,21),List.of(nonBmp,member,bmp),List.of()),"trace");
         // U+E000 precedes U+10000 in UTF-8/binary order; Java natural UTF-16 order reverses them.
@@ -95,8 +120,8 @@ class MeetingConcurrencyIT {
         assertEquals(expected,identities);
         assertEquals(expected,j.queryForList("SELECT enterprise_id FROM enterprise_identity WHERE enterprise_id IN (?,?,?,?) ORDER BY enterprise_id COLLATE utf8mb4_0900_bin",String.class,member,owner,bmp,nonBmp));
         int lastIdentity=-1,subject=-1,root=-1,audit=-1,outbox=-1;
-        for(int i=0;i<sqls.size();i++){String sql=sqls.get(i);if(sql.contains("FROM enterprise_identity")&&sql.contains("FOR UPDATE"))lastIdentity=i;if(sql.contains("FROM task_subject"))subject=i;if(sql.startsWith("SELECT * FROM meeting WHERE"))root=i;if(sql.startsWith("INSERT INTO audit_event"))audit=i;if(sql.startsWith("INSERT INTO task_outbox("))outbox=i;}
-        assertTrue(lastIdentity<subject&&subject<root&&root<audit&&audit<outbox);
+        for(int i=0;i<sqls.size();i++){String sql=sqls.get(i);if(sql.startsWith("SELECT enterprise_id,status")&&sql.contains("FOR UPDATE"))lastIdentity=i;if(subject<0&&sql.contains("FROM task_subject")&&sql.contains("FOR UPDATE"))subject=i;if(root<0&&sql.contains("FROM meeting WHERE id=? FOR UPDATE"))root=i;if(sql.startsWith("INSERT INTO audit_event"))audit=i;if(sql.startsWith("INSERT INTO task_outbox("))outbox=i;}
+        assertTrue(lastIdentity>=0&&lastIdentity<subject&&subject<root&&root<audit&&audit<outbox,"Initial identity, subject, root, audit and outbox order: "+List.of(lastIdentity,subject,root,audit,outbox));
         assertTrue(sqls.getLast().startsWith("UPDATE task_outbox_sequence"),sqls.toString());
         System.out.println("B03 binary identity locking matched actual MySQL utf8mb4_0900_bin: ASCII then U+E000 then U+10000; final SQL="+sqls.getLast());
         assertEquals("controlled-category",j.queryForObject("SELECT category_id FROM meeting_search_projection WHERE meeting_id=?",String.class,id));

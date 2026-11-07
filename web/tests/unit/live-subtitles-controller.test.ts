@@ -32,3 +32,21 @@ test('empty subtitle polls preserve the rendered history while updating service 
   assert.equal(c.delayed.value,true);
  }finally{c.dispose();}
 });
+
+test('caught-up terminal subtitles stop polling until explicitly refreshed',async(t)=>{
+ const f=fixture(),c=useLiveSubtitles(f.api as any,f.options);t.mock.timers.enable({apis:['setTimeout']});
+ try{f.responses.push({...page([event('1',2,'stable')],'1'),state:'DONE'});c.synchronize();await c.refresh();t.mock.timers.tick(10000);await Promise.resolve();assert.deepEqual(f.calls,['0']);f.responses.push({...page([],'1'),state:'DONE'});await c.refresh();assert.deepEqual(f.calls,['0','1']);}finally{c.dispose();t.mock.timers.reset();}
+});
+test('revisions from one response are accepted atomically and never replace history partially',async()=>{
+ const f=fixture(),c=useLiveSubtitles(f.api as any,f.options);
+ try{f.responses.push(page([event('1',2,'stable')],'1'));c.synchronize();await c.refresh();const before=c.events.value;f.responses.push(page([event('2',3),event('3',2)],'3'));await c.refresh();assert.equal(c.events.value,before);assert.equal(c.cursor.value,'1');assert(c.error.value);}finally{c.dispose();}
+});
+test('recognition retry is single flight while verified captions and the reading anchor remain available',async()=>{
+ const f=fixture();let release:()=>void=()=>{},calls=0;const gate=new Promise<void>(resolve=>release=resolve);const c=useLiveSubtitles({...f.api,retry:async()=>{calls++;await gate;}} as any,f.options);
+ try{f.responses.push(page([event('1',2,'stable')],'1'));c.synchronize();await c.refresh();c.reading.following=false;c.reading.scrollTop=400;f.responses.push(page([],'1'));const first=c.retryRecognition(),second=c.retryRecognition();assert.equal(calls,1);assert.equal(c.retrying.value,true);release();await Promise.all([first,second]);assert.equal(c.retrying.value,false);assert.equal(c.cursor.value,'1');assert.equal(c.reading.following,false);assert.equal(c.reading.scrollTop,400);}finally{release();c.dispose();}
+});
+
+test('a hidden tab stops presentation polling and returns using the accepted cursor',async(t)=>{
+ const original=Object.getOwnPropertyDescriptor(globalThis,'document'),target=new EventTarget();let visibility='visible';Object.defineProperty(target,'visibilityState',{get:()=>visibility});Object.defineProperty(globalThis,'document',{configurable:true,value:target});t.mock.timers.enable({apis:['setTimeout']});const f=fixture(),c=useLiveSubtitles(f.api as any,f.options);
+ try{f.responses.push(page([event('1',2,'stable')],'1'));c.synchronize();await c.refresh();visibility='hidden';target.dispatchEvent(new Event('visibilitychange'));t.mock.timers.tick(10000);await Promise.resolve();assert.deepEqual(f.calls,['0']);assert.equal(c.events.value.length,1);f.responses.push(page([],'1'));visibility='visible';target.dispatchEvent(new Event('visibilitychange'));await c.refresh();assert.deepEqual(f.calls,['0','1']);assert.equal(c.events.value.length,1);}finally{c.dispose();t.mock.timers.reset();if(original)Object.defineProperty(globalThis,'document',original);else Reflect.deleteProperty(globalThis,'document');}
+});
